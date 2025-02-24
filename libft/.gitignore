@@ -1,0 +1,10 @@
+*.swo
+*.swp
+*.o
+a.out
+libftTester/
+libtester/
+vala/
+*.a
+*.so
+main.c

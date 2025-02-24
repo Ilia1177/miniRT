@@ -1,0 +1,6 @@
+mlx_linux/
+mlx/
+*.swo
+*.swp
+*.o
+.DS_Store
