@@ -92,30 +92,31 @@ int rt_lighton(t_circle origin, t_circle object, t_img *img)
 	}	
 	return (0);	
 }
-	int	rt_ray(t_ray ray, t_circle object, t_img *img)
-	{
-		t_vec2 pix;
 
-		int end_of_screen = 0;
-		int	object_hit = 0;
-		float step = 1;
-		pix = ray.origin;
-		while (!end_of_screen && !object_hit)
-		{
-			pix.x += step * cos(ray.angle);
-			pix.y += step * sin(ray.angle);
-			if (pix.x < 0 || pix.x > WIDTH)
-				end_of_screen = 1;
-			if (pix.y < 0 || pix.y > HEIGHT)
-				end_of_screen = 1;
-			if (dist(pix, object.pos) < object.radius)
-				object_hit = 1;
-			if (end_of_screen || object_hit)
-				break ;
-			rt_put_pixel(img, pix.x, pix.y, 0xFFFFFFFF);
-		}
-		return (0);
+int	rt_ray(t_ray ray, t_circle object, t_img *img)
+{
+	t_vec2 pix;
+
+	int end_of_screen = 0;
+	int	object_hit = 0;
+	float step = 1;
+	pix = ray.origin;
+	while (!end_of_screen && !object_hit)
+	{
+		pix.x += step * cos(ray.angle);
+		pix.y += step * sin(ray.angle);
+		if (pix.x < 0 || pix.x > WIDTH)
+			end_of_screen = 1;
+		if (pix.y < 0 || pix.y > HEIGHT)
+			end_of_screen = 1;
+		if (dist(pix, object.pos) < object.radius)
+			object_hit = 1;
+		if (end_of_screen || object_hit)
+			break ;
+		rt_put_pixel(img, pix.x, pix.y, 0xFFFFFFFF);
 	}
+	return (0);
+}
 
 
 int point_is_on_line(t_vec2 a, t_vec2 b, t_vec2 c)
