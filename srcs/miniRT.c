@@ -46,38 +46,17 @@ void	rt_clear_window(t_img *img)
 	}
 }
 
-void	rt_lighton(t_circle origin, t_circle object, t_img *img)
-{
-	int	i;
-	float	angle;
-	t_ray ray[RAY_NUMBER];
-
-	angle = (M_PI * 2) / RAY_NUMBER;
-	i = 0;
-	while (i < RAY_NUMBER)
-	{
-		ray[i].origin = origin.pos;
-		//ray[i].lenght = 550;
-		ray[i].angle = i * angle;
-		//ray[i].end.x = origin.pos.x + ray[i].lenght * (cos(ray[i].angle));
-		//ray[i].end.y = origin.pos.y + ray[i].lenght * (sin(ray[i].angle));
-		ray[i].thickness = 10;
-		rt_ray(ray[i], object, img);
-		i++;
-	}
-}
-
 int	render(t_data *scene)
 {
+	handle_input(scene);
 	rt_clear_window(&scene->img);
-	if (scene->mouse_state)
-	{
-		scene->circle.pos = scene->mouse;
-		rt_lighton(scene->circle, scene->object, &scene->img); 
-	}
-	printf("drawing\n");
-	rt_circle(scene->circle, &scene->img); 
-	rt_circle(scene->object, &scene->img);
+	//if (scene->mouse_state)
+	//{
+		//scene->circle.pos = scene->mouse;
+		//rt_lighton(scene->circle, scene->object, &scene->img); 
+	//}
+	//rt_circle(scene->circle, &scene->img); 
+	//rt_circle(scene->object, &scene->img);
 	//rt_rect(scene->rect, &scene->img);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	return (0);
@@ -85,21 +64,27 @@ int	render(t_data *scene)
 
 int	main()
 {
-t_data	scene;
-
-	scene.rect.size.x = 50;
-	scene.rect.size.y = 80;
-	scene.rect.pos.x = 200;
-	scene.rect.pos.y = 200;
-	scene.circle.radius = 30;
-	scene.circle.pos.x = 400;
-	scene.circle.pos.y = 400;
-	scene.object.radius = 70;
-	scene.object.pos.x = 500;
-	scene.object.pos.y = 500;
-
+	t_data	scene;
 	if (rt_init(&scene))
 		return (1);
+
+	scene.sphere.radius = 70;
+	scene.sphere.pos.x = 400;
+	scene.sphere.pos.y = 400;
+	scene.sphere.pos.z = 400;
+	scene.light.x = 100;
+	scene.light.y = 100;
+	scene.light.z = 100;
+	scene.camera.z = 0;
+	scene.camera.y = 0;
+	scene.camera.x = 0;
+	scene.viewport.pos.x = 1;
+	scene.viewport.pos.y = 1;
+	scene.viewport.pos.z = 1;
+	scene.viewport.size.x = 1;
+	scene.viewport.size.y = 1;
+
+
 	mlx_hook(scene.win, 2, 1L << 0, &key_press, &scene);
 	mlx_hook(scene.win, 3, 1L << 1, &key_release, &scene);
 	mlx_hook(scene.win, 4, 1L << 2, &mouse_press, &scene);

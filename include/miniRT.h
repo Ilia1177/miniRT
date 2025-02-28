@@ -24,11 +24,8 @@ typedef struct	s_vec2
 
 typedef struct	s_ray
 {
-	t_vec2		origin;
-	t_vec2		end;
-	float		angle;
-	float		thickness;
-	float		lenght;
+	t_vec3		origin;
+	t_vec3		end;
 }				t_ray;
 
 typedef	struct	s_rect
@@ -37,6 +34,13 @@ typedef	struct	s_rect
 	t_vec2		size;
 	float		angle;
 }				t_rect;
+
+typedef	struct	s_sphere
+{
+	t_vec3	pos;
+	float	radius;
+	t_ray	*light;
+}			t_sphere;
 
 typedef	struct	s_circle
 {
@@ -54,23 +58,25 @@ typedef struct	s_img
 	int		endian;
 }			t_img;
 
+typedef struct	s_viewport
+{
+	t_vec3	pos;
+	t_vec2	size;
+}				t_viewport;
 
 typedef struct	s_data
 {
-	t_rect rect;
-	t_circle circle;
-	t_circle	object;
-	t_vec2	mouse;
-	int		mouse_state;
-	int		key_state[99999];
-	void	*mlx;
-	void	*win;
-	t_img	img;
-	char	*addr;
-	int		bpp;
-	int		llen;
-	int		endian;
-}			t_data;
+	void		*mlx;
+	void		*win;
+	t_img		img;
+	t_viewport	viewport;
+	t_vec3		camera;
+	t_vec3		light;
+	t_sphere	sphere;
+	t_vec2		mouse;
+	int			mouse_state;
+	int			key_state[99999];
+}				t_data;
 
 //init.c
 int				rt_init(t_data *scene);
