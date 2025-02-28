@@ -24,8 +24,10 @@ typedef struct	s_vec2
 
 typedef struct	s_ray
 {
-	t_vec3		origin;
-	t_vec3		end;
+	t_vec2		origin;
+	t_vec2		end;
+	float		angle;
+	float		thickness;
 }				t_ray;
 
 typedef	struct	s_rect
@@ -69,10 +71,8 @@ typedef struct	s_data
 	void		*mlx;
 	void		*win;
 	t_img		img;
-	t_viewport	viewport;
-	t_vec3		camera;
-	t_vec3		light;
-	t_sphere	sphere;
+	t_circle	object;
+	t_circle	circle;
 	t_vec2		mouse;
 	int			mouse_state;
 	int			key_state[99999];
@@ -95,6 +95,7 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 
 //geo.c
-int	rt_ray(t_ray ray, t_circle object, t_img *img);
+int				rt_ray(t_ray ray, t_circle object, t_img *img);
 int				rt_circle(t_circle circle, t_img *img);
 int				rt_rect(t_rect rect, t_img *img);
+int				rt_lighton(t_circle origin, t_circle object, t_img *img);

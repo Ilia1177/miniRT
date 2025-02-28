@@ -8,8 +8,8 @@ MLX_LIB = $(MLX_DIR)/libmlx_$(UNAME).a
 CLONE = mlx
 
 ifeq ($(shell uname), Linux)
-	INCLUDES = -I/usr/include -I./mlx
-	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
+	INCLUDES = -I/usr/include -I./mlx -I./include -I./libft/include
+	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm -L./libft/bin -lft 
 else
 	INCLUDES = -I/opt/X11/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit

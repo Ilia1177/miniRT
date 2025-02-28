@@ -36,7 +36,7 @@ int	mouse_press(int keycode, int x, int y, t_data *scene)
 	scene->mouse.x = x;
 	scene->mouse.y = y;
 	scene->mouse_state = 1;
-	ft_printf("mouse pressed at x:%d, y:%d\n", x, y);
+	ft_printf("mouse pressed: %d, at x:%d, y:%d\n",scene->mouse_state, x, y);
 	return (0);
 }
 
