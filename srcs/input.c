@@ -4,6 +4,14 @@ int	handle_input(t_data *scene)
 {
 	if (scene->key_state[XK_Escape])
 		rt_shut_down(scene);
+	if (scene->key_state[XK_a])
+		scene->cam.x--;
+	if (scene->key_state[XK_w])
+		scene->cam.y--;
+	if (scene->key_state[XK_d])
+		scene->cam.x++;
+	if (scene->key_state[XK_s])
+		scene->cam.y++;
 	return (0);
 }
 

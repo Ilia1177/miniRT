@@ -4,7 +4,6 @@ int	rt_shut_down(t_data *scene)
 {
 	mlx_clear_window(scene->mlx, scene->win);
 	mlx_destroy_window(scene->mlx, scene->win);
-	//mlx_destroy_display(scene->mlx);
 	free(scene->mlx);
 	return (0);
 }
@@ -30,19 +29,18 @@ int	rt_init(t_data *scene)
 
 void	rt_clear_window(t_img *img)
 {
-	int x;
-	int y;
-	
-	y = 0;
-	while (y < HEIGHT)
+	t_vec2	pix;
+
+	pix.y = 0;
+	while (pix.y < HEIGHT)
 	{
-		x = 0;
-		while (x < WIDTH)
+		pix.x = 0;
+		while (pix.x < WIDTH)
 		{
-			rt_put_pixel(img, x, y, 0x00000000);
-			x++;
+			rt_put_pixel(img, pix, 0x00000000);
+			pix.x++;
 		}
-		y++;
+		pix.y++;
 	}
 }
 
@@ -50,14 +48,7 @@ int	render(t_data *scene)
 {
 	handle_input(scene);
 	rt_clear_window(&scene->img);
-	//if (scene->mouse_state)
-	//{
-		//scene->circle.pos = scene->mouse;
-		//rt_lighton(scene->circle, scene->object, &scene->img); 
-	//}
-	//rt_circle(scene->circle, &scene->img); 
-	//rt_circle(scene->object, &scene->img);
-	//rt_rect(scene->rect, &scene->img);
+	display_color(scene);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	return (0);
 }
@@ -68,33 +59,32 @@ int	main()
 	if (rt_init(&scene))
 		return (1);
 
-	scene.sphere.radius = 70;
-	scene.sphere.pos.x = 400;
-	scene.sphere.pos.y = 400;
-	scene.sphere.pos.z = 400;
-	scene.light.x = 100;
-	scene.light.y = 100;
-	scene.light.z = 100;
+	scene.sphere = malloc(sizeof(t_sphere) * 1);
+	scene.sphere->radius = 2;
+	scene.sphere->pos.x = 2;
+	scene.sphere->pos.y = 0;
+	scene.sphere->pos.z = 30;
+	scene.sphere->color = 0x37FF05FF;
+	scene.sphere->next = NULL;
 	scene.camera.z = 0;
 	scene.camera.y = 0;
 	scene.camera.x = 0;
+	scene.cnv.w = WIDTH;
+	scene.cnv.h = HEIGHT;
 	scene.viewport.pos.x = 1;
 	scene.viewport.pos.y = 1;
 	scene.viewport.pos.z = 1;
-	scene.viewport.size.x = 1;
-	scene.viewport.size.y = 1;
-
-
+	scene.viewport.h = 1;
+	scene.viewport.w = 1;
+	//display_color(&scene.img, scene.cam, scene.cnv, scene.viewport, &scene);
 	mlx_hook(scene.win, 2, 1L << 0, &key_press, &scene);
 	mlx_hook(scene.win, 3, 1L << 1, &key_release, &scene);
 	mlx_hook(scene.win, 4, 1L << 2, &mouse_press, &scene);
 	mlx_hook(scene.win, 5, 1L << 3, &mouse_release, &scene);
 	mlx_hook(scene.win, 6, 1L << 6, &mouse_pos, &scene);
 	mlx_hook(scene.win, 17, 1L << 2, &rt_shut_down, &scene);
-
 	mlx_loop_hook(scene.mlx, &render, &scene);
 	mlx_loop(scene.mlx);
-
-	ft_printf("yeah!\n");
+	printf("Finish!\n");
 	return (0);
 }
