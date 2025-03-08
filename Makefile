@@ -22,12 +22,13 @@ SRCS = 	miniRT.c\
 		img.c\
 		geo.c\
 		input.c\
+		light.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS = -g #-Wall -Wextra -Werror -g #-fsanitize=address
 CC = cc
 
 all :  $(LIBFT) $(MLX_LIB) $(NAME)

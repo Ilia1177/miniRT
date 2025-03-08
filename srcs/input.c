@@ -12,6 +12,14 @@ int	handle_input(t_data *scene)
 		scene->cam.x++;
 	if (scene->key_state[XK_s])
 		scene->cam.y++;
+	if (scene->key_state[XK_t])
+		scene->light->intensity += 0.1;
+	if (scene->key_state[XK_y])
+		scene->light->intensity -= 0.1;
+	if (scene->key_state[XK_g])
+		scene->sphere->specular += 1;
+	if (scene->key_state[XK_h])
+		scene->sphere->specular -= 1;
 	return (0);
 }
 
@@ -34,7 +42,6 @@ int	mouse_pos(int x, int y, t_data *scene)
 	(void)scene;
 	scene->mouse.x = x;
 	scene->mouse.y = y;
-	printf("Mouse moved to: (%d, %d)\n", x, y);
 	return (0);
 }
 
@@ -44,7 +51,6 @@ int	mouse_press(int keycode, int x, int y, t_data *scene)
 	scene->mouse.x = x;
 	scene->mouse.y = y;
 	scene->mouse_state = 1;
-	ft_printf("mouse pressed at x:%d, y:%d\n", x, y);
 	return (0);
 }
 
