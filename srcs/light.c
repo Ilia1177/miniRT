@@ -9,7 +9,25 @@ t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm)
 	return (reflection);
 }
 
-unsigned int darken_color(unsigned int color, float factor)
+unsigned int add_colors(unsigned int c1, unsigned int c2)
+{
+    unsigned int a = ((c1 >> 24) & 0xFF) + ((c2 >> 24) & 0xFF);
+    unsigned int r = ((c1 >> 16) & 0xFF) + ((c2 >> 16) & 0xFF);
+    unsigned int g = ((c1 >> 8)  & 0xFF) + ((c2 >> 8)  & 0xFF);
+    unsigned int b = (c1 & 0xFF) + (c2 & 0xFF);
+
+    if (a > 255)
+		a = 255;
+    if (r > 255)
+		r = 255;
+    if (g > 255)
+		g = 255;
+    if (b > 255)
+		b = 255;
+    return (a << 24) | (r << 16) | (g << 8) | b;
+}
+
+unsigned int mult_colors(unsigned int color, float factor)
 {
     unsigned int a = (color >> 24) & 0xFF;  // Extract Alpha
     unsigned int r = (color >> 16) & 0xFF;  // Extract Red

@@ -57,6 +57,10 @@ int	scene_init(t_data *scene)
 	scene->cam.z = 0;
 	scene->cam.y = 0;
 	scene->cam.x = 0;
+
+	scene->cam_rotation.z = 0;
+	scene->cam_rotation.y = 0;
+	scene->cam_rotation.x = 0;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.pos.x = 1;
@@ -71,6 +75,7 @@ int	scene_init(t_data *scene)
 	scene->sphere->pos.z = 20;
 	scene->sphere->color = 0xFF3255a4;
 	scene->sphere->specular = 10;
+	scene->sphere->reflective = 0.2;
 	//scene->sphere->next = NULL;
 	scene->sphere->next = malloc(sizeof(t_sphere) * 1);
 	scene->sphere->next->radius = 1;
@@ -79,6 +84,7 @@ int	scene_init(t_data *scene)
 	scene->sphere->next->pos.z = 20;
 	scene->sphere->next->color = 0xFF00838a;
 	scene->sphere->next->specular = 1000;
+	scene->sphere->next->reflective = 0.7;
 	//scene->sphere->next->next = NULL;
 	scene->sphere->next->next = malloc(sizeof(t_sphere) * 1);
 	scene->sphere->next->next->radius = 8000;

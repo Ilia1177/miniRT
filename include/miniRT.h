@@ -47,6 +47,7 @@ typedef	struct	s_sphere
 	t_vec3	pos;
 	float	radius;
 	int		specular;
+	float		reflective;
 	struct s_sphere	*next;
 }			t_sphere;
 
@@ -83,6 +84,7 @@ typedef struct	s_data
 	t_img		img;
 	t_canvas	cnv;
 	t_vec3		cam;
+	t_vec3		cam_rotation;
 	t_viewport	viewport;
 	t_light		*light;
 	t_sphere	*sphere;
@@ -108,17 +110,18 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 
 //ray
-int	throw_ray(t_vec3 dir, int t_min, int t_max, t_data *scene);
-t_vec3 get_viewport_loc(t_canvas cnv, t_viewport vp);
-void	display_color(t_data *scene);
-t_vec2 cnv_to_screen(t_canvas cnv);
-int	IntersectRaySphere(t_vec3 dir, t_sphere sphere, t_data *scene);
-int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene);
-t_sphere *get_closest_sphere(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene);
+int			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
+t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
+void		display_color(t_data *scene);
+t_vec2		cnv_to_screen(t_canvas cnv);
+int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene);
+t_sphere	*get_closest_sphere(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene);
 
 //light.c
 float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);
-unsigned int darken_color(unsigned int color, float factor);
+unsigned int mult_colors(unsigned int color, float factor);
+t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm);
+unsigned int add_colors(unsigned int c1, unsigned int c2);
 
 float	dot_product(t_vec3 a, t_vec3 b);
 float	mag_vec3(t_vec3 a);

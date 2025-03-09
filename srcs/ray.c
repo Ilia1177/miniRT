@@ -28,7 +28,14 @@ void	display_color(t_data *scene)
 		while (cnv.loc.y < cnv.h / 2)
 		{
 			vp.loc = get_viewport_loc(cnv, vp);
-			color = throw_ray(vp.loc, 1, INT_MAX, scene);
+
+		//	vp.loc.x *= scene->cam_rotation.x;
+		//	vp.loc.y *= scene->cam_rotation.y;
+		//	vp.loc.z *= scene->cam_rotation.z;
+
+
+
+			color = throw_ray(scene->cam, vp.loc, 1, INT_MAX, 2, scene);
 			pix = cnv_to_screen(cnv);
 			rt_put_pixel(&scene->img, pix, color);
 			cnv.loc.y++;
@@ -88,23 +95,33 @@ t_sphere *get_closest_sphere(t_vec3 origin, t_vec3 dir, float t_min, float t_max
 	return (closest_sphere);
 }
 
-int	throw_ray(t_vec3 dir, int t_min, int t_max, t_data *scene)
+int	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene)
 {
 	t_sphere	*sphere;
-	int			color;
+	int			reflected_color;
+	int			local_color;
 	float		luminosity;
 	t_vec3		point;
 	t_vec3		normal;
+	int			reflective;
+	t_vec3		reflected_ray;
 
-	sphere = get_closest_sphere(scene->cam, dir, t_min, t_max, scene);
+	sphere = get_closest_sphere(origin, dir, t_min, t_max, scene);
 	if (sphere == NULL)
 		return (0x00000000);
 	point = add_vec3(mult_vec3(dir, sphere->closest_t), scene->cam);
 	normal = sub_vec3(point, sphere->pos);	
 	normal = normalize_vec3(normal);
 	luminosity = compute_lighting(point, normal, mult_vec3(dir, -1), sphere->specular, scene);
-	color = darken_color(sphere->color, luminosity);
-	return (color);
+	local_color = mult_colors(sphere->color, luminosity);
+
+	if (rec <= 0 || sphere->reflective <= 0)
+		return (local_color);
+
+	reflected_ray = reflect_ray(mult_vec3(dir, -1), normal);
+	reflected_color = throw_ray(point, reflected_ray, 0.001, FLT_MAX, rec - 1, scene);
+
+	return (add_colors(mult_colors(local_color, 1 - sphere->reflective), mult_colors(reflected_color, sphere->reflective)));
 }
 
 int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene)
