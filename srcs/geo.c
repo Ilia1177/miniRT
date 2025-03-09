@@ -48,14 +48,6 @@ float	mag_vec3(t_vec3 a)
 	return (result);
 }
 
-double	dist(t_vec2 a, t_vec2 b)
-{
-	double dist;
-
-	dist = sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
-	return (dist);
-}
-
 t_vec3	sub_vec3(t_vec3 a, t_vec3 b)
 {
 	t_vec3 result;

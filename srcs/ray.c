@@ -48,14 +48,19 @@ t_vec3 get_viewport_loc(t_canvas cnv, t_viewport vp)
 	return (vp_loc);
 }
 
-t_sphere *get_closest_sphere(t_vec3 origin, t_vec3 dir, int t_min, int t_max, t_data *scene)
+//	float	closest_intersection(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene)
+//	{
+//
+//	}
+
+t_sphere *get_closest_sphere(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene)
 {
 	t_sphere	*closest_sphere;
 	t_sphere	*curr_sphere;
 	float		closest_t;
 	float		*solution;
 
-	closest_t = INT_MAX;
+	closest_t = FLT_MAX;
 	closest_sphere	= NULL;
 	curr_sphere = scene->sphere;
 	while (curr_sphere)
@@ -116,8 +121,8 @@ int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene)
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 	{
-		sphere->intersection[0] = INT_MAX;
-		sphere->intersection[1] = INT_MAX;
+		sphere->intersection[0] = FLT_MAX;
+		sphere->intersection[1] = FLT_MAX;
 		return (0);
 	}
 	sphere->intersection[0] = (-b + sqrt(discriminant)) / (2 * a);

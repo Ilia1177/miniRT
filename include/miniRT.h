@@ -5,6 +5,7 @@
 # include <X11/X.h>
 #include <math.h>
 #include <stdio.h>
+#include <float.h>
 
 #define HEIGHT 1200
 #define WIDTH 1200
@@ -113,7 +114,7 @@ void	display_color(t_data *scene);
 t_vec2 cnv_to_screen(t_canvas cnv);
 int	IntersectRaySphere(t_vec3 dir, t_sphere sphere, t_data *scene);
 int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene);
-t_sphere *get_closest_sphere(t_vec3 origin, t_vec3 dir, int t_min, int t_max, t_data *scene);
+t_sphere *get_closest_sphere(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene);
 
 //light.c
 float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);
