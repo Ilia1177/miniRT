@@ -23,12 +23,28 @@ int	skip_space(char *str)
 }
 
 // write_coordinate
+int	write_coordinate(char **line, t_vec3 *coords)
+{
+	char	*str;
+
+	str = *line;
+	str += skip_space(str);
+	coords->x = ft_strtof(str, &end);
+	if (*end != ',')
+		return (5);
+	coords->y = ft_strtof(++end, &end);
+	if (*end != ',')
+		return (5);
+	coords->z = ft_strtof(++end, &end);
+	*line = end;
+	return (0);
+}
+
 // ft_strtof
-// create_sphere
 // create_plane
 // create_cylinder
-//
 
+// create_sphere
 int create_sphere(char **line, t_data *scene)
 {
 	char		*str;
@@ -44,7 +60,6 @@ int create_sphere(char **line, t_data *scene)
 	sphere->color = get_color(str);
 	make_sphere(sphere, scene);
 	return (0);
-
 }
 
 // place_camera
