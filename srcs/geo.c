@@ -1,5 +1,14 @@
 #include <miniRT.h>
 #include <math.h>
+t_vec3 cross_vec3(t_vec3 a, t_vec3 b)
+{
+	t_vec3 product;
+
+	product.x = a.y * b.z - a.z * b.y;
+	product.y = a.z * b.x - a.x * b.z;
+	product.z = a.x * b.y - a.y * b.x;
+    return (product);
+}
 
 t_vec3	normalize_vec3(t_vec3 vec)
 {

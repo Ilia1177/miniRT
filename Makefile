@@ -8,9 +8,11 @@ MLX_LIB = $(MLX_DIR)/libmlx_$(UNAME).a
 CLONE = mlx
 
 ifeq ($(shell uname), Linux)
+	CFLAGS = -g -Wall -Wextra -Werror -g #-fsanitize=address
 	INCLUDES = -I/usr/include -I./mlx
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
+	CFLAGS = -g #-Wall -Wextra -Werror -g #-fsanitize=address
 	INCLUDES = -I/opt/X11/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit
 endif
@@ -23,12 +25,13 @@ SRCS = 	miniRT.c\
 		geo.c\
 		input.c\
 		light.c\
+		camera.c\
+		clean.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
-CFLAGS = -g #-Wall -Wextra -Werror -g #-fsanitize=address
 CC = cc
 
 all :  $(LIBFT) $(MLX_LIB) $(NAME)
@@ -41,7 +44,7 @@ $(NAME): $(OBJS)
 	$(CC) $^ $(MLX_FLAGS) -o $(NAME) #-L./libft/bin -lft
 
 $(MLX_LIB): $(CLONE) 
-		make -C $(MLX_DIR)
+	make -C $(MLX_DIR) 
 
 $(CLONE) : 
 	git clone https://github.com/42Paris/minilibx-linux.git $(CLONE)

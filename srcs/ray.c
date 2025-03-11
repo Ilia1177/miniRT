@@ -11,6 +11,10 @@ t_vec2 cnv_to_screen(t_canvas cnv)
 	return (screen);
 }
 
+void	print_vec3(t_vec3 v, char *msg)
+{
+	printf("%s{x: %f, y: %f, z:%f}\n", msg, v.x, v.y, v.z );
+}
 // throw ray for every point of the canvas
 void	display_color(t_data *scene)
 {
@@ -22,6 +26,7 @@ void	display_color(t_data *scene)
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
+	mouse_move(&scene->cam, 0.0f, -0.0f);
 	while (cnv.loc.x < cnv.w / 2)
 	{
 		cnv.loc.y = -cnv.h / 2;
@@ -29,13 +34,10 @@ void	display_color(t_data *scene)
 		{
 			vp.loc = get_viewport_loc(cnv, vp);
 
-		//	vp.loc.x *= scene->cam_rotation.x;
-		//	vp.loc.y *= scene->cam_rotation.y;
-		//	vp.loc.z *= scene->cam_rotation.z;
-
-
-
-			color = throw_ray(scene->cam, vp.loc, 1, INT_MAX, 2, scene);
+			//print_vec3(vp.loc, "Before:vp.loc");
+			vp.loc = apply_camera_rotation(scene->cam, vp.loc);
+			//print_vec3(vp.loc, "after:vp.loc");
+			color = throw_ray(scene->cam.pos, vp.loc, 1, INT_MAX, 2, scene);
 			pix = cnv_to_screen(cnv);
 			rt_put_pixel(&scene->img, pix, color);
 			cnv.loc.y++;
@@ -51,7 +53,7 @@ t_vec3 get_viewport_loc(t_canvas cnv, t_viewport vp)
 
 	vp_loc.x = cnv.loc.x * vp.w / cnv.w;
 	vp_loc.y = cnv.loc.y * vp.h / cnv.h;
-	vp_loc.z = vp.pos.z;
+	vp_loc.z = 1;
 	return (vp_loc);
 }
 
@@ -109,7 +111,7 @@ int	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_da
 	sphere = get_closest_sphere(origin, dir, t_min, t_max, scene);
 	if (sphere == NULL)
 		return (0x00000000);
-	point = add_vec3(mult_vec3(dir, sphere->closest_t), scene->cam);
+	point = add_vec3(mult_vec3(dir, sphere->closest_t), scene->cam.pos);
 	normal = sub_vec3(point, sphere->pos);	
 	normal = normalize_vec3(normal);
 	luminosity = compute_lighting(point, normal, mult_vec3(dir, -1), sphere->specular, scene);
@@ -154,7 +156,7 @@ int	IntersectRaySphere(t_vec3 dir, t_sphere sphere, t_data *scene)
 	float	discriminant;
 	t_vec3	substract;
 
-	substract = sub_vec3(scene->cam, sphere.pos);
+	substract = sub_vec3(scene->cam.pos, sphere.pos);
 	a = dot_product(dir, dir);
 	b = 2 * dot_product(substract, dir);
 	c = dot_product(substract, substract) - r * r;
