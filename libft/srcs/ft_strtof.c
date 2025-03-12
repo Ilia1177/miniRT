@@ -6,6 +6,7 @@ float	ft_strtof(char *str, char **end)
 	float	fraction;
 	int		sign;
 	int		i;
+	
 	if (!str || !*end)
 		return (0);
 	result = 0.0f;
