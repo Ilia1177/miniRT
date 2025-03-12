@@ -22,7 +22,7 @@ LIBFT = libft/bin/libft.a
 SRCS = 	miniRT.c\
 		ray.c\
 		img.c\
-		geo.c\
+		vector.c\
 		input.c\
 		light.c\
 		camera.c\

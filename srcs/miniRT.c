@@ -1,16 +1,32 @@
 #include <miniRT.h>
 
-int		rt_shut_down(t_data *scene)
+/* int		rt_shut_down(t_data *scene) */
+/* { */
+/* 	free_sphere(scene->sphere); */
+/* 	free_light(scene->light); */
+/* 	mlx_destroy_image(scene->mlx, scene->img.ptr); */
+/* 	//mlx_clear_window(scene->mlx, scene->win); */
+/* 	mlx_destroy_window(scene->mlx, scene->win); */
+/* //	mlx_destroy_display(scene->mlx); */
+/* 	free(scene->mlx); */
+/* 	exit(0); */
+/* 	return (0); */
+/* } */
+
+int	rt_shut_down(t_data *scene)
 {
-	free_sphere(scene->sphere);
-	free_light(scene->light);
-	mlx_destroy_image(scene->mlx, scene->img.ptr);
-	//mlx_clear_window(scene->mlx, scene->win);
-	mlx_destroy_window(scene->mlx, scene->win);
-//	mlx_destroy_display(scene->mlx);
-	free(scene->mlx);
+	if (scene->win)
+		mlx_destroy_window(scene->mlx, scene->win);
+	if (scene->img.ptr)
+		mlx_destroy_image(scene->mlx, scene->img.ptr);
+	if (scene->bg.ptr)
+		mlx_destroy_image(scene->mlx, scene->bg.ptr);
+	if (scene->mlx)
+	{
+		mlx_destroy_display(scene->mlx);
+		free(scene->mlx);
+	}
 	exit(0);
-	return (0);
 }
 
 int		rt_init(t_data *scene, int *status)
