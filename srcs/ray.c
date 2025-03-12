@@ -37,7 +37,7 @@ void	display_color(t_data *scene)
 			//print_vec3(vp.loc, "Before:vp.loc");
 			vp.loc = apply_camera_rotation(scene->cam, vp.loc);
 			//print_vec3(vp.loc, "after:vp.loc");
-			color = throw_ray(scene->cam.pos, vp.loc, 1, INT_MAX, 2, scene);
+			color = throw_ray(scene->cam.pos, vp.loc, 1, FLT_MAX, 2, scene);
 			pix = cnv_to_screen(cnv);
 			rt_put_pixel(&scene->img, pix, color);
 			cnv.loc.y++;
