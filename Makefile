@@ -26,6 +26,7 @@ SRCS = 	miniRT.c\
 		input.c\
 		light.c\
 		camera.c\
+		build_scene.c\
 		clean.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
@@ -41,7 +42,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(NAME): $(OBJS)
-	$(CC) $^ $(MLX_FLAGS) -o $(NAME) #-L./libft/bin -lft
+	$(CC) $^ $(MLX_FLAGS) -o $(NAME) -L./libft/bin -lft
 
 $(MLX_LIB): $(CLONE) 
 	make -C $(MLX_DIR) 

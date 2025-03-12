@@ -19,8 +19,8 @@ int	rt_shut_down(t_data *scene)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
 		mlx_destroy_image(scene->mlx, scene->img.ptr);
-	if (scene->bg.ptr)
-		mlx_destroy_image(scene->mlx, scene->bg.ptr);
+	//if (scene->bg.ptr)
+	//	mlx_destroy_image(scene->mlx, scene->bg.ptr);
 	if (scene->mlx)
 	{
 		mlx_destroy_display(scene->mlx);
@@ -170,11 +170,13 @@ int	display_scene(t_data *scene)
 	return (0);
 }
 
-int	main()
+int	main(int ac, char **av)
 {
 	int status;
 
 	t_data	scene;
+	if (ac > 1)
+		scene.map_name = av[1];
 	if (rt_init(&scene, &status))
 		return (status);
 
@@ -185,13 +187,11 @@ int	main()
 //		parse_input(input);
 //		free(input);
 //	}
-	scene_init(&scene);
-	if (!scene_init(&scene))
-	{
+	status = scene_init(&scene);
+	//if (!status)
 		//status = build_scene(&scene);
-		//printf("status: %d\n", status);
+	//printf("status: %d\n", status);
+	if (!status)
 		display_scene(&scene);
-	}
-
 	return (0);
 }

@@ -8,6 +8,9 @@
 # include <math.h>
 # include <stdio.h>
 # include <float.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 # define HEIGHT 800
 # define WIDTH 800
@@ -161,5 +164,8 @@ void	print_vec3(t_vec3 v, char *msg);
 //clean.c
 void	free_sphere(t_sphere *sphere);
 void	free_light(t_light *light);
+
+//scene
+int	build_scene(t_data *scene);
 
 #endif

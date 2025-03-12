@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/26 10:27:51 by npolack           #+#    #+#              #
-#    Updated: 2024/12/07 13:48:42 by npolack          ###   ########.fr        #
+#    Updated: 2025/03/12 19:15:01 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,6 @@ $(NAME)			:	$(OBJS) $(B_OBJS)
 $(OBJS_DIR)/%.o	: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I../include -c $< -o $@
-
 
 clean	:	
 			$(RM) $(OBJS) $(B_OBJS)
