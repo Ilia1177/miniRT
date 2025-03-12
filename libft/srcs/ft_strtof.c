@@ -1,39 +1,39 @@
 #include "../include/libft.h"
 
-float	ft_strtof(const char *str, char **end)
+float	ft_strtof(char *str, char **end)
 {
 	float	result;
+	float	fraction;
 	int		sign;
-	int		dec_point;
-	int		mantisse_size;
-	int		c;
-
+	int		i;
 	if (!str || !*end)
 		return (0);
+	result = 0.0f;
+	fraction = 1.0f;
 	sign = 1;
 	*end = str;
 	while (ft_isspace(*str))
 		str++;
-	if (*str != '-')
-		sign = 1;
+	if (*str == '-')
+	{
+		str++;
+		sign = -1;
+	}
 	else if (*str == '+')
 		str++;
-
-	dec_point = -1;
-	mantisse_size = 0;
-
-		//if (!ft_isdigit(*str) && *str != '+' && *str != '-')
-		while (*str)
+	i = -1;
+	while (ft_isdigit(str[++i]))
+		result = result * 10.0f + (str[i] - '0');
+	if (*end == str || (i == 0 && *(--end)i)) 
+		return (result);
+	else if (str[i] == '.')
+	{
+		while(ft_isdigit(str[++i]))
 		{
-			c = *str;
-			if (!ft_isdigit(c))
-			{
-				if (c != '.' || dec_point >= 0)
-					break ;
-				dec_point = mantisse_size;
-			}
-			str++;
+            fraction *= 0.1f;
+            result += (str[i] - '0') * fraction;
 		}
 	}
-	
+	*end = str + i;
+	return (result * sign);
 }

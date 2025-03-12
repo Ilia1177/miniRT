@@ -57,15 +57,14 @@ SRCS	=	ft_isspace.c	\
 			ft_putstr_fd.c	\
 			ft_putendl_fd.c	\
 			ft_putnbr_fd.c	\
-			ft_strnlen.c
+			ft_strnlen.c	\
+			ft_strtof.c		\
 
 BONUS_SRCS := $(addsuffix _bonus.c, $(BONUS_SRCS))
 BONUS_SRCS := $(addprefix ft_, $(BONUS_SRCS))
 
-OBJS_DIR	= objs
-
+OBJS_DIR	=	objs
 OBJS		=	$(SRCS:%.c=$(OBJS_DIR)/%.o)
-
 B_OBJS		=	$(BONUS_SRCS:%.c=$(OBJS_DIR)/%.o)
 
 AR 			=	ar -rcs
@@ -80,10 +79,12 @@ all				:	$(NAME)
 
 $(NAME)			:	$(OBJS) $(B_OBJS)
 					$(AR) $(NAME) $^ 
+					$(AR) $(NAME) $(OBJS)  # This ensures new .o files are added to the archive
 
 $(OBJS_DIR)/%.o	: %.c
-	@mkdir -p $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I../include -c $< -o $@
+
 
 clean	:	
 			$(RM) $(OBJS) $(B_OBJS)
