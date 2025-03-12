@@ -84,8 +84,8 @@ int	scene_init(t_data *scene)
 //	scene->cam.pos.z = 0;
 //	scene->cam.pos.y = 0;
 //	scene->cam.pos.x = 0;
-
-
+	scene->light = NULL;
+	scene->sphere = NULL;
 //	scene->cam.dir= (t_vec3){0, 0, 1};
 //	scene->cam.up = (t_vec3){0, 1, 0};
 //	scene->cam.right = (t_vec3){1, 0, 0};
@@ -163,11 +163,13 @@ int	display_scene(t_data *scene)
 	return (0);
 }
 
-int	main()
+int	main(int ac, char **av)
 {
 	int status;
 
 	t_data	scene;
+	if (ac > 1)
+		scene.map_name = av[1];
 	if (rt_init(&scene, &status))
 		return (status);
 
@@ -178,8 +180,12 @@ int	main()
 //		parse_input(input);
 //		free(input);
 //	}
-	scene_init(&scene);
-	if (!scene_init(&scene))
+//
+	status = scene_init(&scene);
+	if (!status)
+		status = build_scene(&scene);
+	printf("status: %d\n", status);
+	if (!status)
 		display_scene(&scene);
 //	mlx_hook(scene.win, 2, 1L << 0, &key_press, &scene);
 //	mlx_hook(scene.win, 3, 1L << 1, &key_release, &scene);

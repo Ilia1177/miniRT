@@ -24,5 +24,6 @@
 char	*get_next_line(int fd);
 //	gnl.utils.c
 int		ft_strnlen(const char *str, int c);
+void	gnl_clear_buffer(int fd);
 
 #endif

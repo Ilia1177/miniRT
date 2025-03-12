@@ -24,7 +24,7 @@ float	ft_strtof(char *str, char **end)
 	i = -1;
 	while (ft_isdigit(str[++i]))
 		result = result * 10.0f + (str[i] - '0');
-	if (*end == str || (i == 0 && *(--end)i)) 
+	if (*end == str || (i == 0 && *(--end))) 
 		return (result);
 	else if (str[i] == '.')
 	{

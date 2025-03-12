@@ -21,3 +21,15 @@ int	ft_strnlen(const char *str, int c)
 		str++;
 	return (str - start);
 }
+
+void	gnl_clear_buffer(int fd)
+{
+	char *line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+}

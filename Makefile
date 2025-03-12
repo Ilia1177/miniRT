@@ -26,6 +26,7 @@ SRCS = 	miniRT.c\
 		input.c\
 		light.c\
 		camera.c\
+		build_scene.c\
 		clean.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
