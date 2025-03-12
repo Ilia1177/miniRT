@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/03/12 22:09:46 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/12 22:24:38 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,9 @@ int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object)
 	t_vec3	substract;
 
 	substract = sub_vec3(origin, object->pos);
-	a = dot_product(dir, dir);
-	b = 2 * dot_product(substract, dir);
-	c = dot_product(substract, substract) - r * r;
+	a = dot_vec3(dir, dir);
+	b = 2 * dot_vec3(substract, dir);
+	c = dot_vec3(substract, substract) - r * r;
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 	{
@@ -157,4 +157,17 @@ int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object)
 	object->intersection[0] = (-b + sqrt(discriminant)) / (2 * a);
 	object->intersection[1] = (-b - sqrt(discriminant)) / (2 * a);
 	return (1);
+}
+
+t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
+{
+	t_quad	quad;
+
+	quad.a = vector_dot(dir, dir);
+	quad.b = 2.0 * vector_dot(oc, dir);
+	quad.c = vector_dot(oc, oc) - radius * radius;
+	quad.delta = quad.b * quad.b - 4 * quad.a * quad.c;
+	quad.t0 = (-quad.b - sqrtf(quad.delta)) / (2.0 * quad.a);
+	quad.t1 = (-quad.b + sqrtf(quad.delta)) / (2.0 * quad.a);
+	return (quad);
 }

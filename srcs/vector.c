@@ -13,10 +13,10 @@ t_vec3 cross_vec3(t_vec3 a, t_vec3 b)
 t_vec3	normalize_vec3(t_vec3 vec)
 {
 	t_vec3	result;
-	float	divisor;
+	float	lenght;
 
-	divisor = mag_vec3(vec);
-	result = div_vec3(vec, divisor);
+	lenght = mag_vec3(vec);
+	result = div_vec3(vec, lenght);
 	return (result);
 }
 
@@ -30,7 +30,7 @@ t_vec3	div_vec3(t_vec3 vec, float d)
 	return (result);
 }
 
-t_vec3 mult_vec3(t_vec3 vec, float a)
+t_vec3	mult_vec3(t_vec3 vec, float a)
 {
 	t_vec3	result;
 
@@ -40,7 +40,7 @@ t_vec3 mult_vec3(t_vec3 vec, float a)
 	return (result);
 }
 
-float dot_product(t_vec3 a, t_vec3 b)
+float dot_vec3(t_vec3 a, t_vec3 b)
 {
 
 	float	result;

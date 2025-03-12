@@ -40,7 +40,7 @@ t_vec3 mult_vec3(t_vec3 vec, float a)
 	return (result);
 }
 
-float dot_product(t_vec3 a, t_vec3 b)
+float dot_vec3(t_vec3 a, t_vec3 b)
 {
 
 	float	result;

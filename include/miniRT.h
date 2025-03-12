@@ -170,7 +170,7 @@ t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm);
 unsigned int add_colors(unsigned int c1, unsigned int c2);
 
 t_vec3	cross_vec3(t_vec3 a, t_vec3 b);
-float	dot_product(t_vec3 a, t_vec3 b);
+float	dot_vec3(t_vec3 a, t_vec3 b);
 float	mag_vec3(t_vec3 a);
 double	dist(t_vec2 a, t_vec2 b);
 t_vec3	sub_vec3(t_vec3 a, t_vec3 b);

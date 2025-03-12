@@ -4,7 +4,7 @@ t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm)
 {
 	t_vec3 reflection;
 
-	reflection = mult_vec3(mult_vec3(norm, 2), dot_product(norm, ray));
+	reflection = mult_vec3(mult_vec3(norm, 2), dot_vec3(norm, ray));
 	reflection = sub_vec3(reflection, ray);
 	return (reflection);
 }
@@ -75,14 +75,14 @@ float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data
 			if (!obs)
 			{
 				// Diffuse reflexion
-				n_dot_l = dot_product(norm, l_dir);
+				n_dot_l = dot_vec3(norm, l_dir);
 				if (n_dot_l > 0)
 					intensity += light->intensity * n_dot_l / (mag_vec3(norm) * mag_vec3(l_dir));
 				// Specular reflexion
 				if (specular != -1)
 				{
-					r = sub_vec3(mult_vec3(mult_vec3(norm, 2), dot_product(norm, l_dir)), l_dir);
-					r_dot_v = dot_product(r, v);
+					r = sub_vec3(mult_vec3(mult_vec3(norm, 2), dot_vec3(norm, l_dir)), l_dir);
+					r_dot_v = dot_vec3(r, v);
 					if (r_dot_v > 0)
 						intensity += light->intensity * pow(r_dot_v / (mag_vec3(r) * mag_vec3(v)), specular);
 				}
