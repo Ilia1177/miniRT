@@ -9,7 +9,7 @@ CLONE = mlx
 
 ifeq ($(shell uname), Linux)
 	CFLAGS = -g -Wall -Wextra -Werror -g #-fsanitize=address
-	INCLUDES = -I/usr/include -I./mlx
+	INCLUDES = -I/usr/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
 	CFLAGS = -g #-Wall -Wextra -Werror -g #-fsanitize=address

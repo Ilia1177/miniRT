@@ -2,24 +2,25 @@
 
 int	handle_input(t_data *scene)
 {
-	if (scene->key_state[XK_Escape])
-		rt_shut_down(scene);
-	if (scene->key_state[XK_a])
-		scene->cam.pos.z--;
-	if (scene->key_state[XK_w])
-		scene->cam.pos.z++;
-	if (scene->key_state[XK_d])
-		scene->cam.pos.x++;
-	if (scene->key_state[XK_s])
-		scene->cam.pos.x--;
-	if (scene->key_state[XK_t])
-		scene->light->intensity += 0.1;
-	if (scene->key_state[XK_y])
-		scene->light->intensity -= 0.1;
-	if (scene->key_state[XK_g])
-		scene->sphere->specular += 1;
-	if (scene->key_state[XK_h])
-		scene->sphere->specular -= 1;
+	(void)scene;
+	/* if (scene->key_state[XK_Escape]) */
+	/* 	rt_shut_down(scene); */
+	/* if (scene->key_state[XK_a]) */
+	/* 	scene->cam.pos.z--; */
+	/* if (scene->key_state[XK_w]) */
+	/* 	scene->cam.pos.z++; */
+	/* if (scene->key_state[XK_d]) */
+	/* 	scene->cam.pos.x++; */
+	/* if (scene->key_state[XK_s]) */
+	/* 	scene->cam.pos.x--; */
+	/* if (scene->key_state[XK_t]) */
+	/* 	scene->light->intensity += 0.1; */
+	/* if (scene->key_state[XK_y]) */
+	/* 	scene->light->intensity -= 0.1; */
+	/* if (scene->key_state[XK_g]) */
+	/* 	scene->sphere->specular += 1; */
+	/* if (scene->key_state[XK_h]) */
+	/* 	scene->sphere->specular -= 1; */
 	return (0);
 }
 
@@ -45,7 +46,7 @@ int	mouse_pos(int x, int y, t_data *scene)
     float delta_x = x - last_x;
     float delta_y = y - last_y;
 
-    //mouse_move(&scene->cam, delta_x, delta_y);
+    mouse_move(&scene->cam, delta_x, delta_y);
 
     last_x = x;
     last_y = y;

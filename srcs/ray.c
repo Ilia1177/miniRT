@@ -26,18 +26,17 @@ void	display_color(t_data *scene)
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
-	mouse_move(&scene->cam, 0.0f, -0.0f);
+	//mouse_move(&scene->cam, 0.0f, -0.0f);
 	while (cnv.loc.x < cnv.w / 2)
 	{
 		cnv.loc.y = -cnv.h / 2;
 		while (cnv.loc.y < cnv.h / 2)
 		{
 			vp.loc = get_viewport_loc(cnv, vp);
-
 			//print_vec3(vp.loc, "Before:vp.loc");
-			vp.loc = apply_camera_rotation(scene->cam, vp.loc);
+			//vp.loc = apply_camera_rotation(scene->cam, vp.loc);
 			//print_vec3(vp.loc, "after:vp.loc");
-			color = throw_ray(scene->cam.pos, vp.loc, 1, INT_MAX, 2, scene);
+			color = throw_ray(scene->cam.pos, vp.loc, 1, FLT_MAX, 2, scene);
 			pix = cnv_to_screen(cnv);
 			rt_put_pixel(&scene->img, pix, color);
 			cnv.loc.y++;
@@ -105,7 +104,6 @@ int	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_da
 	float		luminosity;
 	t_vec3		point;
 	t_vec3		normal;
-	int			reflective;
 	t_vec3		reflected_ray;
 
 	sphere = get_closest_sphere(origin, dir, t_min, t_max, scene);
@@ -133,6 +131,8 @@ int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene)
 	float	discriminant;
 	t_vec3	substract;
 
+	(void)scene;
+
 	substract = sub_vec3(origin, sphere->pos);
 	a = dot_product(dir, dir);
 	b = 2 * dot_product(substract, dir);
@@ -149,25 +149,25 @@ int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene)
 	return (1);
 }
 
-int	IntersectRaySphere(t_vec3 dir, t_sphere sphere, t_data *scene)
-{
-	float	r = sphere.radius;
-	float	a, b, c;
-	float	discriminant;
-	t_vec3	substract;
+/* int	IntersectRaySphere(t_vec3 dir, t_sphere sphere, t_data *scene) */
+/* { */
+/* 	float	r = sphere.radius; */
+/* 	float	a, b, c; */
+/* 	float	discriminant; */
+/* 	t_vec3	substract; */
 
-	substract = sub_vec3(scene->cam.pos, sphere.pos);
-	a = dot_product(dir, dir);
-	b = 2 * dot_product(substract, dir);
-	c = dot_product(substract, substract) - r * r;
-	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-	{
-		scene->intersec_p[0] = INT_MAX;
-		scene->intersec_p[1] = INT_MAX;
-		return (0);
-	}
-	scene->intersec_p[0] = (-b + sqrt(discriminant)) / (2 * a);
-	scene->intersec_p[1] = (-b - sqrt(discriminant)) / (2 * a);
-	return (1);
-}
+/* 	substract = sub_vec3(scene->cam.pos, sphere.pos); */
+/* 	a = dot_product(dir, dir); */
+/* 	b = 2 * dot_product(substract, dir); */
+/* 	c = dot_product(substract, substract) - r * r; */
+/* 	discriminant = b * b - 4 * a * c; */
+/* 	if (discriminant < 0) */
+/* 	{ */
+/* 		scene->intersec_p[0] = INT_MAX; */
+/* 		scene->intersec_p[1] = INT_MAX; */
+/* 		return (0); */
+/* 	} */
+/* 	scene->intersec_p[0] = (-b + sqrt(discriminant)) / (2 * a); */
+/* 	scene->intersec_p[1] = (-b - sqrt(discriminant)) / (2 * a); */
+/* 	return (1); */
+/* } */

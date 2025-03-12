@@ -183,7 +183,7 @@ int	build_scene(t_data *scene)
 		line = get_next_line(map);
 	}
 	if (status)
-		clear_gnl_buffer(map);
+		gnl_clear_buffer(map);
 	return (status);
 }
 

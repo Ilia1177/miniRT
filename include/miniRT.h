@@ -50,6 +50,11 @@ typedef struct	s_canvas
 	int			w;
 }	t_canvas;
 
+/* typedef struct s_object */
+/* { */
+/* 	type; */
+
+/* } */
 typedef	struct	s_sphere
 {
 	float	closest_t;
@@ -102,7 +107,7 @@ typedef struct	s_data
 	t_sphere	*sphere;
 	t_vec2		mouse;
 	int			mouse_state;
-	int			key_state[99999];
+	char		key_state[99999];
 }				t_data;
 
 //init.c
@@ -151,7 +156,6 @@ t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v);
 void mouse_move(t_camera *cam, float delta_x, float delta_y);
 
 // debug
-
 void	print_vec3(t_vec3 v, char *msg);
 
 //clean.c
