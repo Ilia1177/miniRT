@@ -103,34 +103,25 @@ int	scene_init(t_data *scene)
 	scene->viewport.pos.z = 1;
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;	
-	scene->sphere = malloc(sizeof(t_sphere) * 1);
-	scene->sphere->radius = 1;
-	scene->sphere->pos.x = -1;
-	scene->sphere->pos.y = 0;
-	scene->sphere->pos.z = 3;
-	//scene->sphere->color = 0xFF3255a4;
-	scene->sphere->color = 0xFF0000FF;
-	scene->sphere->specular = 10;
-	scene->sphere->reflective = 0.0f;
-	//scene->sphere->next = NULL;
-	scene->sphere->next = malloc(sizeof(t_sphere) * 1);
-	scene->sphere->next->radius = 1;
-	scene->sphere->next->pos.x = 0.5;
-	scene->sphere->next->pos.y = 0;
-	scene->sphere->next->pos.z = 4;
-	scene->sphere->next->color = 0xFFFF0000;
-	scene->sphere->next->specular = 10;
-	scene->sphere->next->reflective = 0.0f;
-	scene->sphere->next->next = NULL;
-	/* scene->sphere->next->next = malloc(sizeof(t_sphere) * 1); */
-	/* scene->sphere->next->next->radius = 5; */
-	/* scene->sphere->next->next->pos.x = -7; */
-	/* scene->sphere->next->next->pos.y = -5; */
-	/* scene->sphere->next->next->pos.z = 10; */
-	/* scene->sphere->next->next->color = 0xFFFF0000; */
-	/* scene->sphere->next->next->specular = 1000; */
-	/* scene->sphere->next->next->reflective = 1; */
-	/* scene->sphere->next->next->next = NULL; */
+	scene->objects = malloc(sizeof(t_object) * 1);
+	scene->objects->type = SPHERE;
+	scene->objects->radius = 1;
+	scene->objects->pos.x = -1.5;
+	scene->objects->pos.y = 0;
+	scene->objects->pos.z = 4;
+	scene->objects->color = 0xFF0000FF;
+	scene->objects->specular = 1000;
+	scene->objects->reflective = 0.0f;
+	scene->objects->next = malloc(sizeof(t_object) * 1);
+	scene->objects->next->type = SPHERE;
+	scene->objects->next->radius = 1;
+	scene->objects->next->pos.x = 1.5;
+	scene->objects->next->pos.y = 0;
+	scene->objects->next->pos.z = 4;
+	scene->objects->next->color = 0xFFFF0000;
+	scene->objects->next->specular = 1;
+	scene->objects->next->reflective = 0.9f;
+	scene->objects->next->next = NULL;
 
 	scene->light = malloc(sizeof(t_light) * 1);
 	scene->light->type = DIRECTIONAL;
@@ -141,12 +132,10 @@ int	scene_init(t_data *scene)
 	scene->light->next = NULL;
 	scene->light->next = malloc(sizeof(t_light) * 1);
 	scene->light->next->type = AMBIENT;
-	scene->light->next->intensity = 0.2;
+	scene->light->next->intensity = 0.5;
 	scene->light->next->dir.x = 2;
 	scene->light->next->dir.y = 2;
 	scene->light->next->dir.z = 2;
-	//scene->light->next->next = NULL;
-
 	scene->light->next->next = malloc(sizeof(t_light) * 1);
 	scene->light->next->next->type = POINT;
 	scene->light->next->next->intensity = 0.5;
@@ -179,19 +168,12 @@ int	main(int ac, char **av)
 		scene.map_name = av[1];
 	if (rt_init(&scene, &status))
 		return (status);
-
-	
-//	while (1)
-//	{
-//		input = get_next_lines(0);
-//		parse_input(input);
-//		free(input);
-//	}
 	status = scene_init(&scene);
 	//if (!status)
 		//status = build_scene(&scene);
 	//printf("status: %d\n", status);
-	if (!status)
+	if (!status){
 		display_scene(&scene);
+	}
 	return (0);
 }
