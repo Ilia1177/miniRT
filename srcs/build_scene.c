@@ -1,10 +1,8 @@
 #include <miniRT.h>
 
-
-
 int	skip_space(char *str)
 {
-	int space;
+	int	space;
 
 	space = 0;
 	while (ft_isspace(str[space]))
@@ -189,16 +187,16 @@ int	register_line_into_scene(char *line, t_data *scene)
 		else if (!ft_strncmp("cy", line, 2))
 			status = create_cylinder(&line, scene);
 		else
-			return (1);
+			return (0);
 	}
 	return (status);
 }
 
 int	build_scene(t_data *scene)
 {
-	char *line;
-	int	map;
-	int	status;
+	char	*line;
+	int		map;
+	int		status;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -218,6 +216,3 @@ int	build_scene(t_data *scene)
 		gnl_clear_buffer(map);
 	return (status);
 }
-
-
-
