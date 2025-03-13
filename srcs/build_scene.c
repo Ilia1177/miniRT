@@ -20,37 +20,56 @@ int	create_cylinder(char **line, t_data *scene)
 	return (0);
 }
 
-int	make_sphere(t_sphere data, t_data *scene)
+int	make_sphere(t_object data, t_object **objects)
 {
-	t_sphere *sphere;
+	t_object	*curr_sphere;
+	t_object	*new_sphere;
 
-	sphere = scene->sphere;
-	while (sphere)
-		sphere = sphere->next;
-	sphere = malloc(sizeof(t_sphere));
-	if (!sphere)
+	new_sphere = malloc(sizeof(t_object));
+	if (!new_sphere)
 		return (-1);
-	sphere->radius = data.radius;
-	sphere->color = data.radius;
-	sphere->pos = data.pos;
+	ft_memcpy(new_sphere, &data, sizeof(t_object));
+	new_sphere->next = NULL;
+	curr_sphere = NULL;
+	if(*objects == NULL)
+		*objects = new_sphere;
+	else
+	{
+		curr_sphere = *objects;
+		while (curr_sphere->next)
+			curr_sphere = curr_sphere->next;
+		curr_sphere->next = new_sphere;
+	}
+	print_obj(*new_sphere);
 	return (0);
 }
+
 // create_sphere
-int create_sphere(char **line, t_data *scene)
+int	create_sphere(char **line, t_data *scene)
 {
 	char		*str;
-	t_sphere	sphere;
-	int			status;.
-	char		*end;
+	t_object	sphere;
+	int			status;
+	t_rgb		color;
 
-	str = *line;
-	status = write_coordinate(&str, &sphere.pos);
-	if (!status)
-		sphere.radius = ft_strtof(str, &end);
-	sphere.specular = 500;
-	sphere.reflective = 0.3;
-	sphere.color = 0x000000FF;
-	make_sphere(sphere, scene);
+	(void)scene;
+	str = *line + 2 ;
+	sphere.type = SPHERE;
+	status = str_to_vec3(&str, &sphere.pos);
+	if (status != 0)
+		return (status);
+	status = str_to_radius(&str, &sphere.radius);
+	if (status != 0)
+		return (status);
+	sphere.specular = SPECULAR;
+	sphere.reflective = REFLECTIVE;
+	status = str_to_rgb(&str, &color);
+	if (status != 0)
+		return (status);
+	sphere.color = encode_rgb(color.r, color.g, color.b);
+	print_obj(sphere);
+	*line = str;
+	make_sphere(sphere, &scene->objects);
 	return (0);
 }
 
@@ -63,7 +82,7 @@ int	place_camera(char **line, t_data *scene)
 	str = *line;
 	str++;
 	str += skip_space(str);
-	status = write_coordinate(&str, &scene->cam.pos);
+	status = str_to_vec3(&str, &scene->cam.pos);
 	///scene->cam.yaw = 80.0f;
 	//scene->cam.pitch = 0.0f;
 	if (!status)
@@ -82,7 +101,7 @@ int	make_light(t_light light, t_data *scene)
 {
 	t_light *new_light;
 
-	new_light = scene->light;
+	new_light = scene->lights;
 	while (new_light)
 		new_light = new_light->next;
 	new_light = malloc(sizeof(t_light));
@@ -98,7 +117,7 @@ int	ambient_exist(t_data *scene)
 {
 	t_light	*light;
 
-	light = scene->light;
+	light = scene->lights;
 	while (light)
 	{
 		if (light->type == AMBIENT)
@@ -108,7 +127,7 @@ int	ambient_exist(t_data *scene)
 	return (0);
 }
 
-int	create_light(t_type type, char **line, t_data *scene)
+int	create_light(t_ltype type, char **line, t_data *scene)
 {
 	char	*str;
 	char	*end;
@@ -123,7 +142,7 @@ int	create_light(t_type type, char **line, t_data *scene)
 	if (!ft_isdigit(*str))
 		return (2);
 	else if (type == POINT)
-		status = write_coordinate(&str, &light.pos);
+		status = str_to_vec3(&str, &light.pos);
 	if (!status)
 		light.intensity = ft_strtof(str, &end);
 	if (!status && (light.intensity > 1.0f || light.intensity < 0.0f))
@@ -138,9 +157,10 @@ int	register_line_into_scene(char *line, t_data *scene)
 {
 	int	status;
 
+	printf("register line\n");
 	status = 0;
 	line += skip_space(line);
-	while (*line && !status)
+	while (line && *line && !status)
 	{
 		if (*line == 'A')
 			status = create_light(AMBIENT, &line, scene);
@@ -157,6 +177,7 @@ int	register_line_into_scene(char *line, t_data *scene)
 		else
 			return (0);
 	}
+	printf("register line: status: %d\n", status);
 	return (status);
 }
 
@@ -182,5 +203,11 @@ int	build_scene(t_data *scene)
 	}
 	if (status)
 		gnl_clear_buffer(map);
+	printf("**************************linked list**************\n");
+	while(scene->objects)
+	{
+		print_obj(*scene->objects);
+		scene->objects = scene->objects->next;
+	}
 	return (status);
 }

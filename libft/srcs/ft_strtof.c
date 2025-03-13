@@ -46,7 +46,7 @@ float	ft_strtof(char *str, char **end)
 	int		sign;
 	int		i;
 
-	if (!str || !*end)
+	if (!str || !end)
 		return (0);
 	result = 0.0f;
 	sign = 1;

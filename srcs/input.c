@@ -3,6 +3,14 @@
 int	handle_input(t_data *scene)
 {
 	(void)scene;
+	if (scene->key_state[XK_Left] == 1)
+		scene->cam.pos.x -=1;
+	if (scene->key_state[XK_Right] == 1)
+		scene->cam.pos.x +=1;
+	if (scene->key_state[XK_Down] == 1)
+		scene->cam.pos.y +=1;
+	if (scene->key_state[XK_Up] == 1)
+		scene->cam.pos.y +=1;
 	/* if (scene->key_state[XK_Escape]) */
 	/* 	rt_shut_down(scene); */
 	/* if (scene->key_state[XK_a]) */
@@ -24,17 +32,18 @@ int	handle_input(t_data *scene)
 	return (0);
 }
 
-int	key_press(int keycode, t_data *scene)
+int	key_press(int keysym, t_data *scene)
 {
-	if (keycode >= 0 && keycode < 99999)
-		scene->key_state[keycode] = 1;
+	printf("key pressed at keysym:%d", keysym);
+	if (keysym == XK_Escape)
+		rt_shut_down(scene);
+	scene->key_state[keysym] = 1;
 	return (0);
 }
 
-int	key_release(int keycode, t_data *scene)
+int	key_release(int keysym, t_data *scene)
 {
-	if (keycode >= 0 && keycode < 99999)
-		scene->key_state[keycode] = 0;
+	scene->key_state[keysym] = 0;
 	return (0);
 }
 

@@ -15,6 +15,8 @@
 # define HEIGHT 800
 # define WIDTH 800
 # define RECURSION_LIMIT 8
+# define SPECULAR 500
+# define REFLECTIVE 0.3
 
 typedef struct	s_vec3
 {
@@ -28,6 +30,13 @@ typedef struct	s_vec2
 	float		x;
 	float		y;
 }				t_vec2;
+
+typedef struct s_rgb
+{
+	int			r;
+	int			g;
+	int			b;
+}	t_rgb;
 
 typedef struct s_quad
 {
@@ -156,6 +165,9 @@ int				rt_shut_down(t_data *scene);
 //img.c
 void			rt_put_pixel(t_img *img, t_vec2 pix, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
+int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
+t_rgb			extract_rgb(int color);
+void			norm_rgb(t_rgb *c);
 
 //input.c
 int		mouse_press(int keycode, int x, int y, t_data *scene);
@@ -197,6 +209,7 @@ void mouse_move(t_camera *cam, float delta_x, float delta_y);
 
 // debug
 void	print_vec3(t_vec3 v, char *msg);
+void	print_obj(t_object obj);
 
 //clean.c
 void	free_sphere(t_sphere *sphere);
@@ -204,5 +217,14 @@ void	free_light(t_light *light);
 
 //scene
 int	build_scene(t_data *scene);
+
+//Parsing_utils.c
+int	str_to_vec3(char **line, t_vec3 *v);
+int	str_to_rgb(char **line, t_rgb *c);
+int	skip_space(char *str);
+int	str_to_radius(char **line, float *radius);
+
+//init.c
+int	scene_init(t_data *scene);
 
 #endif
