@@ -53,21 +53,21 @@ t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max,
 		t = obj->t;
 		if (intersect_object(origin, dir, obj))
 		{
-			if (obj->closest_t < closest_t)
-			{
-				closest_t = obj->closest_t;
-				closest_obj = obj;
-			}
-			/* if (t[0] >= t_min && t[0] <= t_max && t[0] < closest_t) */
-			/* { */
-			/* 	closest_t = t[0]; */
-			/* 	closest_obj = obj; */
-			/* } */
-			/* if (t[1] >= t_min && t[1] <= t_max && t[1] < closest_t) */
-			/* { */
-			/* 	closest_t = t[1]; */
-			/* 	closest_obj = obj; */
-			/* } */
+//			if (obj->closest_t < closest_t)
+//			{
+//				closest_t = obj->closest_t;
+//				closest_obj = obj;
+//			}
+			 if (t[0] >= t_min && t[0] <= t_max && t[0] < closest_t) 
+			 { 
+			 	closest_t = t[0]; 
+			 	closest_obj = obj; 
+			 } 
+			 if (t[1] >= t_min && t[1] <= t_max && t[1] < closest_t) 
+			 { 
+			 	closest_t = t[1]; 
+			 	closest_obj = obj; 
+			 }
 		}
 		obj = obj->next;
 	}
@@ -158,13 +158,15 @@ int	intersect_cylinder(t_vec3 origin, /*t_rtray ray,*/ t_vec3 dir, t_object *cyl
     y[1] = mn[1] + quad.t[1] * mn[0];
 	if ((y[0] < 0 || y[0] > cylinder->height) && (y[1] < 0 || y[1] > cylinder->height))
         return (0);
-	/* if (quad.t[0] <= 0 && quad.t[1] <= 0) */
-	/* 	return (0); */
-	/* if (quad.t[0] < quad.t[1]) */
-	/* 	cylinder->closest_t = quad.t[0]; */
-	/* else if (quad.t[1] < quad.t[0]) */
-	/* 	cylinder->closest_t = quad.t[1]; */
-    cylinder->closest_t = (y[0] >= 0 && y[0] <= cylinder->height) ? quad.t[0] : quad.t[1];
+
+	if (y[0] >= 0 && y[0] <= cylinder->height) {
+        cylinder->closest_t = quad.t[0];
+    } else {
+        cylinder->closest_t = quad.t[1];
+    }
+
+
+    //cylinder->closest_t = (y[0] >= 0 && y[0] <= cylinder->height) ? quad.t[0] : quad.t[1];
     return (1);
 }
 

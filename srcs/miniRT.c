@@ -23,7 +23,7 @@ int	rt_shut_down(t_data *scene)
 	//	mlx_destroy_image(scene->mlx, scene->bg.ptr);
 	if (scene->mlx)
 	{
-		mlx_destroy_display(scene->mlx);
+		//mlx_destroy_display(scene->mlx);
 		free(scene->mlx);
 	}
 	exit(0);
@@ -119,7 +119,7 @@ int	scene_init(t_data *scene)
 	scene->objects->next->pos.y = 0;
 	scene->objects->next->pos.z = 8;
 	scene->objects->next->color = 0xFFFF0000;
-	scene->objects->next->specular = 0;
+	scene->objects->next->specular = -1;
 	scene->objects->next->reflective = 0.0f;
 	scene->objects->next->next = NULL;
 	scene->objects->next->next = malloc(sizeof(t_object) * 1);
@@ -129,11 +129,11 @@ int	scene_init(t_data *scene)
 	scene->objects->next->next->pos.y = -2;
 	scene->objects->next->next->pos.z = 6;
 	scene->objects->next->next->orientation.z = 1;
-	scene->objects->next->next->orientation.y = 0;
+	scene->objects->next->next->orientation.y = 1;
 	scene->objects->next->next->orientation.x = 1;
 	scene->objects->next->next->height = 4;
-	scene->objects->next->next->color = 0xFF888888;
-	scene->objects->next->next->specular = 0;
+	scene->objects->next->next->color = 0xFF00FF00;
+	scene->objects->next->next->specular = -1;
 	scene->objects->next->next->reflective = 0.0f;
 	scene->objects->next->next->next = NULL;
 	/* scene->objects->next->next->next = malloc(sizeof(t_object) * 1); */
@@ -169,7 +169,7 @@ int	scene_init(t_data *scene)
 	scene->lights->next->next->intensity = 0.5f;
 	scene->lights->next->next->pos.x = 2;
 	scene->lights->next->next->pos.y = 2;
-	scene->lights->next->next->pos.z = 0;
+	scene->lights->next->next->pos.z = 5;
 	scene->lights->next->next->next = NULL;
 	return (0);
 }
