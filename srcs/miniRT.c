@@ -106,7 +106,7 @@ int	scene_init(t_data *scene)
 	scene->objects = malloc(sizeof(t_object) * 1);
 	scene->objects->type = SPHERE;
 	scene->objects->radius = 1;
-	scene->objects->pos.x = -1.5;
+	scene->objects->pos.x = -0.5;
 	scene->objects->pos.y = 0;
 	scene->objects->pos.z = 4;
 	scene->objects->color = 0xFF0000FF;
@@ -115,34 +115,36 @@ int	scene_init(t_data *scene)
 	scene->objects->next = malloc(sizeof(t_object) * 1);
 	scene->objects->next->type = SPHERE;
 	scene->objects->next->radius = 1;
-	scene->objects->next->pos.x = 1.5;
+	scene->objects->next->pos.x = 0.5;
 	scene->objects->next->pos.y = 0;
 	scene->objects->next->pos.z = 4;
 	scene->objects->next->color = 0xFFFF0000;
 	scene->objects->next->specular = 1;
-	scene->objects->next->reflective = 0.9f;
+	scene->objects->next->reflective = 0.3f;
 	scene->objects->next->next = NULL;
 
-	scene->light = malloc(sizeof(t_light) * 1);
-	scene->light->type = DIRECTIONAL;
-	scene->light->intensity = 0.3f;
-	scene->light->dir.x = -2;
-	scene->light->dir.y = 0;
-	scene->light->dir.z = -2;
-	scene->light->next = NULL;
-	scene->light->next = malloc(sizeof(t_light) * 1);
-	scene->light->next->type = AMBIENT;
-	scene->light->next->intensity = 0.5;
-	scene->light->next->dir.x = 2;
-	scene->light->next->dir.y = 2;
-	scene->light->next->dir.z = 2;
-	scene->light->next->next = malloc(sizeof(t_light) * 1);
-	scene->light->next->next->type = POINT;
-	scene->light->next->next->intensity = 0.5;
-	scene->light->next->next->pos.x = 2;
-	scene->light->next->next->pos.y = 2;
-	scene->light->next->next->pos.z = 6;
-	scene->light->next->next->next = NULL;
+	scene->lights = malloc(sizeof(t_light) * 1);
+	scene->lights->type = DIRECTIONAL;
+	scene->lights->intensity = 0.3f;
+	scene->lights->dir.x = -2;
+	scene->lights->dir.y = 0;
+	scene->lights->dir.z = -2;
+	scene->lights->next = NULL;
+	scene->lights->next = malloc(sizeof(t_light) * 1);
+	scene->lights->next->type = AMBIENT;
+	scene->lights->next->intensity = 0.5;
+	scene->lights->next->dir.x = 2;
+	scene->lights->next->dir.y = 2;
+	scene->lights->next->dir.z = 2;
+	scene->lights->next->next = malloc(sizeof(t_light) * 1);
+	scene->lights->next->next->type = POINT;
+	scene->lights->next->next->intensity = 0.5;
+	scene->lights->next->next->pos.x = 2;
+	scene->lights->next->next->pos.y = 2;
+	scene->lights->next->next->pos.z = 6;
+	scene->lights->next->next->next = NULL;
+
+	printf("objects: %p, objects->next: %p\n", scene->objects, scene->objects->next);
 	return (0);
 }
 
