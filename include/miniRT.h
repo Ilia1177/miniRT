@@ -14,6 +14,7 @@
 
 # define HEIGHT 800
 # define WIDTH 800
+# define RECURSION_LIMIT 8
 
 typedef struct	s_vec3
 {
@@ -79,21 +80,46 @@ typedef struct	s_img
 	int		endian;
 }			t_img;
 
-typedef enum e_type
+typedef enum e_ltype
 {
 	POINT,
 	AMBIENT,
 	DIRECTIONAL,
-}	t_type;
+}	t_ltype;
 
 typedef struct	s_light
 {
-	t_type			type;
+	t_ltype			type;
 	float			intensity;
 	t_vec3			pos;
 	t_vec3			dir;
 	struct s_light *next;
 }	t_light;
+
+typedef enum	e_otype
+{
+	SPHERE,
+	PLANE,
+	CYLINDER,
+}	t_otype;
+
+typedef struct	s_object
+{
+	float	intersection[2];
+	t_otype			type;
+	t_vec3			pos;	
+	int				specular;
+	float			radius;
+	float			len;
+	float			reflective;
+	float			discriminant;
+	unsigned int	color;
+
+	t_sphere		sphere;
+	//t_cylinder		cylinder;
+	//t_plane			plane;
+	struct s_object	*next;
+}	t_object;
 
 typedef struct	s_data
 {
@@ -106,8 +132,8 @@ typedef struct	s_data
 	t_camera	cam;
 	t_vec3		rotation_matrix[3];
 	t_viewport	viewport;
+	t_object	*objects;
 	t_light		*light;
-	t_sphere	*sphere;
 	t_vec2		mouse;
 	int			mouse_state;
 	char		key_state[99999];
@@ -115,7 +141,7 @@ typedef struct	s_data
 
 //init.c
 int				rt_init(t_data *scene, int *status);
-int			rt_shut_down(t_data *scene);
+int				rt_shut_down(t_data *scene);
 
 //img.c
 void			rt_put_pixel(t_img *img, t_vec2 pix, int color);
@@ -130,12 +156,12 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 
 //ray
-int			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
+unsigned int			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
 t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
-int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_sphere *sphere, t_data *scene);
-t_sphere	*get_closest_sphere(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene);
+int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object);
+t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene);
 
 //light.c
 float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);

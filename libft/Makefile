@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/26 10:27:51 by npolack           #+#    #+#              #
-#    Updated: 2024/12/07 14:27:43 by npolack          ###   ########.fr        #
+#    Updated: 2025/03/12 19:36:54 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,18 +47,12 @@ $(NAME)			:	$(OBJS) $(LIBFT)
 					cp $(LIBFT) $(NAME)
 					$(AR) $(NAME) $(OBJS)
 
-$(LIBFT)	:
+$(LIBFT)	:  
 		make -C srcs
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	mkdir -p $(dir $@)  # Creates necessary subdirectories
 	$(CC) $(CFLAGS) -c $< -o $@
-
-#$(OBJS_DIR)/%.o	 		:$(SRCS_DIR)/%.c
-#	mkdir -
-#	mkdir -p srcs/objs/ft_printf/
-#	mkdir -p srcs/objs/get_next_line/	
-#	$(CC) $(CFLAGS) -c $< -o $@
 
 test	: $(TEST_OBJS) $(NAME) 
 		$(CC) $(CFLAGS) $(TEST_OBJS) $(NAME) -Lbin -lft -o test

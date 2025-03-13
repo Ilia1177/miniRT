@@ -37,6 +37,14 @@ unsigned int mult_colors(unsigned int color, float factor)
     r = (unsigned int)(r * factor);
     g = (unsigned int)(g * factor);
     b = (unsigned int)(b * factor);
+    if (a > 255)
+		a = 255;
+    if (r > 255)
+		r = 255;
+    if (g > 255)
+		g = 255;
+    if (b > 255)
+		b = 255;
     return ((a << 24) | (r << 16) | (g << 8) | b);
 }
 
@@ -49,7 +57,7 @@ float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data
 	float		n_dot_l;
 	float		r_dot_v;
 	t_vec3		r;
-	t_sphere	*shadow_s;
+	t_object	*obs;
 
 	light = scene->light;
 	while (light)
@@ -63,8 +71,8 @@ float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data
 			else if (light->type == DIRECTIONAL)
 				l_dir = light->dir;
 
-			shadow_s = get_closest_sphere(point, l_dir, 0.001, FLT_MAX, scene);
-			if (!shadow_s)
+			obs = closest_intersect(point, l_dir, 0.001, FLT_MAX, scene);
+			if (!obs)
 			{
 				// Diffuse reflexion
 				n_dot_l = dot_product(norm, l_dir);

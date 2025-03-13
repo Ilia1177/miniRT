@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:53:23 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/12 20:53:25 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/13 09:05:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ float	ft_strtof(char *str, char **end)
 	float	result;
 	int		sign;
 	int		i;
-
+	
 	if (!str || !*end)
 		return (0);
 	result = 0.0f;
