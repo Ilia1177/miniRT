@@ -12,21 +12,29 @@
 
 #include "../include/libft.h"
 
-void	make_float(char *str, float *result, int *it)
+static void	make_float(char *str, float *result, int *it)
 {
 	float	fraction;
 	int		i;
+	int		nb_frac_digit;
 
 	i = *it;
 	fraction = 1.0f;
+	nb_frac_digit = 0;
 	while (ft_isdigit(str[++i]))
 		*result = (*result) * 10.0f + (str[i] - '0');
 	if (str[i] == '.')
 	{
 		while (ft_isdigit(str[++i]))
 		{
-			fraction *= 0.1f;
-			*result += (str[i] - '0') * fraction;
+			nb_frac_digit++;
+			*result = (*result) * 10.0f + (str[i] - '0');
+		}
+		if (nb_frac_digit)
+		{
+			while (nb_frac_digit--)
+				fraction *= 10.0f;
+			*result /= fraction;
 		}
 	}
 	*it = i;
@@ -37,7 +45,7 @@ float	ft_strtof(char *str, char **end)
 	float	result;
 	int		sign;
 	int		i;
-	
+
 	if (!str || !*end)
 		return (0);
 	result = 0.0f;
@@ -52,7 +60,7 @@ float	ft_strtof(char *str, char **end)
 	}
 	else if (*str == '+')
 		str++;
-	if (!ft_isdigit(*str) && *str != '.')
+	if (!ft_isdigit(*str) && !(*str == '.' && ft_isdigit(*(str + 1))))
 		return (result);
 	i = -1;
 	make_float(str, &result, &i);
