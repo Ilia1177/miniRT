@@ -44,8 +44,7 @@ typedef struct s_quad
 	float	b;
 	float	c;
 	float	delta;
-	float	t0;
-	float	t1;
+	float	t[2];
 }	t_quad;
 
 typedef struct	s_camera
@@ -124,14 +123,15 @@ typedef enum	e_otype
 
 typedef struct	s_object
 {
-	float	intersection[2];
+	float			t[2];
+	float			closest_t;
 	t_otype			type;
-	t_vec3			pos;	
+	t_vec3			pos;
+	t_vec3			orientation;
 	int				specular;
 	float			radius;
-	float			len;
+	float			height;
 	float			reflective;
-	float			delta;
 	unsigned int	color;
 
 	//t_sphere		sphere;
@@ -178,13 +178,16 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 
 //ray
-unsigned int			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
 t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
-int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object);
+unsigned int			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
 t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_object *obj);
+int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object);
 t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
+int	intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj);
+int intersect_cylinder(t_vec3 origin, t_vec3 dir, t_object *cylinder);
+int	intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane);
 
 //light.c
 float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);

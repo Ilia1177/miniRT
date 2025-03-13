@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/03/13 10:30:04 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/13 21:14:35 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ unsigned int	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int 
 	obj = closest_intersect(origin, dir, t_min, t_max, scene->objects);
 	if (obj == NULL)
 		return (0x00000000);
-	pt = add_vec3(mult_vec3(dir, obj->delta), scene->cam.pos);
+	pt = add_vec3(mult_vec3(dir, obj->closest_t), scene->cam.pos);
 	normal = sub_vec3(pt, obj->pos);
 	normal = normalize_vec3(normal);
 	luminosity = compute_lighting(pt, normal, mult_vec3(dir, -1), obj->specular, scene);
@@ -41,71 +41,65 @@ unsigned int	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int 
 t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_object *obj)
 {
 	t_object	*closest_obj;
-	t_object	*curr_obj;
 	float		closest_t;
-	float		*solution;
+	float		*t;
 
+	(void)t_max;
+	(void)t_min;
 	closest_t = FLT_MAX;
 	closest_obj	= NULL;
-	curr_obj = obj;
-	while (curr_obj)
+	while (obj)
 	{
-		solution = curr_obj->intersection;
-		intersect_sphere(origin, dir, curr_obj);
-			if (solution[0] >= t_min && solution[0] <= t_max)
-			{
-				if (solution[0] < closest_t)
-				{
-					closest_t = solution[0];
-					closest_obj = curr_obj;
-				}
-			}
-			if (solution[1] >= t_min && solution[1] <= t_max)
-			{
-				if (solution[1] < closest_t)
-				{
-					closest_t = solution[1];
-					closest_obj = curr_obj;
-				}
-			}
-		curr_obj = curr_obj->next;
+		t = obj->t;
+		if (intersect_object(origin, dir, obj))
+		{
+			 if (t[0] >= t_min && t[0] <= t_max && t[0] < closest_t) 
+			 { 
+			 	closest_t = t[0]; 
+			 	closest_obj = obj; 
+			 } 
+			 if (t[1] >= t_min && t[1] <= t_max && t[1] < closest_t) 
+			 { 
+			 	closest_t = t[1]; 
+			 	closest_obj = obj; 
+			 }
+		}
+		obj = obj->next;
 	}
 	if (closest_obj)
-		closest_obj->delta = closest_t;
+		closest_obj->closest_t = closest_t;
 	return (closest_obj);
 }
 
+int	intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj)
+{
+	if (obj->type == SPHERE && intersect_sphere(origin, dir, obj))
+		return (1);
+	else if (obj->type == CYLINDER && intersect_cylinder(origin, dir, obj))
+		return (1);
+	else if (obj->type == PLANE && intersect_plane(origin, dir, obj))
+		return (1);
+	return (0);
+}
 
-int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object)
+int	intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *sphere)
 {
 	t_quad	quad;
 	t_vec3	oc;
 
-	oc = sub_vec3(origin, object->pos);
-	quad = solve_quadratic(oc, dir, object->radius);
-	object->delta = quad.delta;
-	object->intersection[0] = quad.t0;
-	object->intersection[1] = quad.t1;
+	oc = sub_vec3(origin, sphere->pos);
+	quad = solve_quadratic(oc, dir, sphere->radius);
+	sphere->t[0] = quad.t[0];
+	sphere->t[1] = quad.t[1];
+	sphere->closest_t = FLT_MAX;
 	if (quad.delta < 0)
 		return (0);
-	/* float	r = object->radius; */
-	/* float	a, b, c; */
-	/* float	delta; */
-	/* t_vec3	substract; */
-
-	/* substract = sub_vec3(origin, object->pos); */
-	/* a = dot_vec3(dir, dir); */
-	/* b = 2 * dot_vec3(substract, dir); */
-	/* c = dot_vec3(substract, substract) - r * r; */
-	/* delta = b * b - 4 * a * c; */
-	/* if (delta < 0) */
-	/* { */
-	/* 	object->intersection[0] = FLT_MAX; */
-	/* 	object->intersection[1] = FLT_MAX; */
-	/* 	return (0); */
-	/* } */
-	/* object->intersection[0] = (-b + sqrt(delta)) / (2 * a); */
-	/* object->intersection[1] = (-b - sqrt(delta)) / (2 * a); */
+	if (quad.t[0] < 0 && quad.t[1] < 0)
+		return (0);
+	/* if (quad.t[0] >= 0 && quad.t[0] < quad.t[1]) */
+	/* 	sphere->closest_t = quad.t[0]; */
+	/* else if (quad.t[1] >= 0 && quad.t[1] < quad.t[0]) */
+	/* 	sphere->closest_t = quad.t[1]; */
 	return (1);
 }
 
@@ -120,12 +114,68 @@ t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
 	quad.delta = quad.b * quad.b - 4.0f * quad.a * quad.c;
 	if (quad.delta < 0)
 	{
-		quad.t0 = FLT_MAX;
-		quad.t1 = FLT_MAX;
+		quad.t[0] = FLT_MAX;
+		quad.t[1] = FLT_MAX;
 		return (quad);
 	}
 	square_root = sqrtf(quad.delta);
-	quad.t0 = (-quad.b - square_root) / (2.0f * quad.a);
-	quad.t1 = (-quad.b + square_root) / (2.0f * quad.a);
+	quad.t[0] = (-quad.b - square_root) / (2.0f * quad.a);
+	quad.t[1] = (-quad.b + square_root) / (2.0f * quad.a);
 	return (quad);
+}
+
+int	intersect_cylinder(t_vec3 origin, /*t_rtray ray,*/ t_vec3 dir, t_object *cylinder) //, float *t)
+{
+    t_quad quad;
+    t_vec3 oc;
+    t_vec3 axis;
+	float	mn[2];
+	float	y[2];
+
+	oc = sub_vec3(origin, cylinder->pos);
+    axis = normalize_vec3(cylinder->orientation);
+
+    // Projection du rayon et origine sur l'axe du cylindre
+    mn[0] = dot_vec3(dir, axis);
+    mn[1] = dot_vec3(oc, axis);
+    // Composantes perpendiculaires
+    t_vec3 d_perp = sub_vec3(dir, mult_vec3(axis, mn[0]));
+    t_vec3 o_perp = sub_vec3(oc, mult_vec3(axis, mn[1]));
+    quad = solve_quadratic(o_perp, d_perp, cylinder->radius);
+	cylinder->t[0] = quad.t[0];
+	cylinder->t[1] = quad.t[1];
+	cylinder->closest_t = FLT_MAX;
+    if (quad.delta < 0)
+		return (0);
+    // Vérification des bornes du cylindre (en hauteur)
+    y[0] = mn[1] + quad.t[0] * mn[0];
+    y[1] = mn[1] + quad.t[1] * mn[0];
+	if ((y[0] < 0 || y[0] > cylinder->height) && (y[1] < 0 || y[1] > cylinder->height))
+        return (0);
+	/* if (y[0] >= 0 && y[0] <= cylinder->height) { */
+        /* cylinder->closest_t = quad.t[0]; */
+    /* } else { */
+        /* cylinder->closest_t = quad.t[1]; */
+    /* } */
+    return (1);
+}
+
+int	intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane)
+{
+	const t_vec3	diff = sub_vec3(plane->pos, origin);
+	const float		denom = dot_vec3(plane->orientation, dir);
+
+	//t_vec3	normal = sub_vec3(pt, obj->pos);
+	//normal = normalize_vec3(normal);
+	// Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
+	if (fabs(denom) < 1e-6)
+		return (0);
+	// Calcul de l'intersection
+	//diff = (t_vec3){plane.pos.x - ray.origin.x, plane.pos.y - ray.origin.y,
+//			plane.pos.z - ray.origin.z};
+	plane->t[0] = dot_vec3(diff, normalize_vec3(plane->orientation)) / denom;
+	plane->t[1] = FLT_MAX;
+	if (plane->t[0] > 1)
+		return (1);
+	return (0);
 }
