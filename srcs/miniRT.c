@@ -105,51 +105,62 @@ int	scene_init(t_data *scene)
 	scene->viewport.w = 1;	
 	scene->objects = malloc(sizeof(t_object) * 1);
 	scene->objects->type = SPHERE;
-	scene->objects->radius = 1;
+	scene->objects->radius = 0.01;
 	scene->objects->pos.x = -1.5;
 	scene->objects->pos.y = 0;
 	scene->objects->pos.z = 8;
 	scene->objects->color = 0xFF0000FF;
-	scene->objects->specular = 0;
+	scene->objects->specular = -1;
 	scene->objects->reflective = 0.0f;
 	scene->objects->next = malloc(sizeof(t_object) * 1);
 	scene->objects->next->type = SPHERE;
-	scene->objects->next->radius = 1;
-	scene->objects->next->pos.x = 1.5;
-	scene->objects->next->pos.y = 0;
-	scene->objects->next->pos.z = 8;
+	scene->objects->next->radius = 0.08;
+	scene->objects->next->pos.x = 0;
+	scene->objects->next->pos.y = -8.5;
+	scene->objects->next->pos.z = 0;
 	scene->objects->next->color = 0xFFFF0000;
 	scene->objects->next->specular = -1;
 	scene->objects->next->reflective = 0.0f;
 	scene->objects->next->next = NULL;
 	scene->objects->next->next = malloc(sizeof(t_object) * 1);
 	scene->objects->next->next->type = CYLINDER;
-	scene->objects->next->next->radius = 0.5;
+	scene->objects->next->next->radius = 1;
 	scene->objects->next->next->pos.x = 0;
-	scene->objects->next->next->pos.y = -2;
-	scene->objects->next->next->pos.z = 6;
-	scene->objects->next->next->orientation.z = 1;
-	scene->objects->next->next->orientation.y = 1;
+	scene->objects->next->next->pos.y = 0;
+	scene->objects->next->next->pos.z = 0;
 	scene->objects->next->next->orientation.x = 1;
+	scene->objects->next->next->orientation.y = 0;
+	scene->objects->next->next->orientation.z = 0;
 	scene->objects->next->next->height = 4;
 	scene->objects->next->next->color = 0xFF00FF00;
 	scene->objects->next->next->specular = -1;
 	scene->objects->next->next->reflective = 0.0f;
 	scene->objects->next->next->next = NULL;
+
 	/* scene->objects->next->next->next = malloc(sizeof(t_object) * 1); */
 	/* scene->objects->next->next->next->type = PLANE; */
-	/* scene->objects->next->next->next->radius = 1; */
-	/* scene->objects->next->next->next->pos.x = 2; */
-	/* scene->objects->next->next->next->pos.y = -2; */
-	/* scene->objects->next->next->next->pos.z = 2; */
-	/* scene->objects->next->next->next->orientation.z = 0; */
-	/* scene->objects->next->next->next->orientation.y = 1; */
-	/* scene->objects->next->next->next->orientation.x = 0; */
+	/* scene->objects->next->next->next->radius = 0.5; */
+	/* scene->objects->next->next->next->pos.x = 0; */
+	/* scene->objects->next->next->next->pos.y = -1; */
+	/* scene->objects->next->next->next->pos.z = 0; */
+	/* scene->objects->next->next->next->orientation.z = 1; */
+	/* scene->objects->next->next->next->orientation.y = 0; */
+	/* scene->objects->next->next->next->orientation.x = 1; */
 	/* scene->objects->next->next->next->height = 4; */
-	/* scene->objects->next->next->next->color = 0xFF888800; */
-	/* scene->objects->next->next->next->specular = 0; */
+	/* scene->objects->next->next->next->color = 0xFFFFFFFF; */
+	/* scene->objects->next->next->next->specular = -1; */
 	/* scene->objects->next->next->next->reflective = 0.0f; */
 	/* scene->objects->next->next->next->next = NULL; */
+	scene->objects->next->next->next = malloc(sizeof(t_object) * 1);
+	scene->objects->next->next->next->type = PLANE;
+	scene->objects->next->next->next->radius = 1;
+	scene->objects->next->next->next->pos = (t_vec3) {0 , 0, 0};
+	scene->objects->next->next->next->orientation = (t_vec3) {0, 1, 0}; 
+	scene->objects->next->next->next->height = 2;
+	scene->objects->next->next->next->color = 0xFF888800;
+	scene->objects->next->next->next->specular = 0;
+	scene->objects->next->next->next->reflective = 0.0f;
+	scene->objects->next->next->next->next = NULL;
 	scene->lights = malloc(sizeof(t_light) * 1);
 	scene->lights->type = DIRECTIONAL;
 	scene->lights->intensity = 0.0f;
@@ -197,9 +208,6 @@ int	main(int ac, char **av)
 	if (rt_init(&scene, &status))
 		return (status);
 	status = scene_init(&scene);
-	//if (!status)
-		//status = build_scene(&scene);
-	//printf("status: %d\n", status);
 	if (!status){
 		display_scene(&scene);
 	}
