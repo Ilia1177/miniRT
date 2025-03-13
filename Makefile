@@ -27,6 +27,7 @@ SRCS = 	miniRT.c\
 		light.c\
 		camera.c\
 		clean.c\
+		canvas.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 

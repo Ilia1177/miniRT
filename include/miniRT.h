@@ -29,6 +29,16 @@ typedef struct	s_vec2
 	float		y;
 }				t_vec2;
 
+typedef struct s_quad
+{
+	float	a;
+	float	b;
+	float	c;
+	float	delta;
+	float	t0;
+	float	t1;
+}	t_quad;
+
 typedef struct	s_camera
 {
 	t_vec3 pos;
@@ -112,10 +122,10 @@ typedef struct	s_object
 	float			radius;
 	float			len;
 	float			reflective;
-	float			discriminant;
+	float			delta;
 	unsigned int	color;
 
-	t_sphere		sphere;
+	//t_sphere		sphere;
 	//t_cylinder		cylinder;
 	//t_plane			plane;
 	struct s_object	*next;
@@ -133,7 +143,7 @@ typedef struct	s_data
 	t_vec3		rotation_matrix[3];
 	t_viewport	viewport;
 	t_object	*objects;
-	t_light		*light;
+	t_light		*lights;
 	t_vec2		mouse;
 	int			mouse_state;
 	char		key_state[99999];
@@ -161,7 +171,8 @@ t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
 int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object);
-t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_data *scene);
+t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_object *obj);
+t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
 
 //light.c
 float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);

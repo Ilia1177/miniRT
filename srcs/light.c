@@ -16,14 +16,14 @@ unsigned int add_colors(unsigned int c1, unsigned int c2)
     unsigned int g = ((c1 >> 8)  & 0xFF) + ((c2 >> 8)  & 0xFF);
     unsigned int b = (c1 & 0xFF) + (c2 & 0xFF);
 
-    if (a > 255)
-		a = 255;
-    if (r > 255)
-		r = 255;
-    if (g > 255)
-		g = 255;
-    if (b > 255)
-		b = 255;
+    /* if (a > 255) */
+		/* a = 255; */
+    /* if (r > 255) */
+		/* r = 255; */
+    /* if (g > 255) */
+		/* g = 255; */
+    /* if (b > 255) */
+		/* b = 255; */
     return (a << 24) | (r << 16) | (g << 8) | b;
 }
 
@@ -37,14 +37,14 @@ unsigned int mult_colors(unsigned int color, float factor)
     r = (unsigned int)(r * factor);
     g = (unsigned int)(g * factor);
     b = (unsigned int)(b * factor);
-    if (a > 255)
-		a = 255;
-    if (r > 255)
-		r = 255;
-    if (g > 255)
-		g = 255;
-    if (b > 255)
-		b = 255;
+    /* if (a > 255) */
+		/* a = 255; */
+    /* if (r > 255) */
+		/* r = 255; */
+    /* if (g > 255) */
+		/* g = 255; */
+    /* if (b > 255) */
+		/* b = 255; */
     return ((a << 24) | (r << 16) | (g << 8) | b);
 }
 
@@ -59,7 +59,7 @@ float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data
 	t_vec3		r;
 	t_object	*obs;
 
-	light = scene->light;
+	light = scene->lights;
 	while (light)
 	{
 		if (light->type == AMBIENT)
@@ -71,7 +71,7 @@ float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data
 			else if (light->type == DIRECTIONAL)
 				l_dir = light->dir;
 
-			obs = closest_intersect(point, l_dir, 0.001, FLT_MAX, scene);
+			obs = closest_intersect(point, l_dir, 0.001, FLT_MAX, scene->objects);
 			if (!obs)
 			{
 				// Diffuse reflexion
