@@ -1,37 +1,5 @@
 #include <miniRT.h>
 
-int	skip_space(char *str)
-{
-	int	space;
-
-	space = 0;
-	while (ft_isspace(str[space]))
-		space++;
-	return (space);
-}
-
-// write_coordinate
-int	write_coordinate(char **line, t_vec3 *coords)
-{
-	char	*str;
-	char	*end;
-
-	str = *line;
-	str += skip_space(str);
-	coords->x = ft_strtof(str, &end);
-	if (*end != ',' || str == end)
-		return (5);
-	str = end + 1;
-	coords->y = ft_strtof(str, &end);
-	if (*end != ',' || str == end)
-		return (5);
-	str = end + 1;
-	coords->z = ft_strtof(str, &end);
-	if (str == end)
-		return (5);
-	*line = end;
-	return (0);
-}
 
 // ft_strtof
 // create_plane
@@ -72,7 +40,7 @@ int create_sphere(char **line, t_data *scene)
 {
 	char		*str;
 	t_sphere	sphere;
-	int			status;
+	int			status;.
 	char		*end;
 
 	str = *line;
