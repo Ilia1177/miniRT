@@ -88,59 +88,59 @@ t_vec3	init_vec3(float x, float y, float z)
 	return (v);
 }
 
-int	scene_init(t_data *scene)
-{
-	scene->cam.pos =	init_vec3(0, 0, 0);
-	scene->cam.dir =	init_vec3(0, 0, 1);
-	scene->cam.up =		init_vec3(0, 1, 0);
-	scene->cam.right =	init_vec3(1, 0, 0);
+/* int	scene_init(t_data *scene) */
+/* { */
+/* 	scene->cam.pos =	init_vec3(0, 0, 0); */
+/* 	scene->cam.dir =	init_vec3(0, 0, 1); */
+/* 	scene->cam.up =		init_vec3(0, 1, 0); */
+/* 	scene->cam.right =	init_vec3(1, 0, 0); */
 	
-	scene->cam.yaw =	89.0f;
-	scene->cam.pitch =	0.0f;
+/* 	scene->cam.yaw =	89.0f; */
+/* 	scene->cam.pitch =	0.0f; */
 	
-	scene->viewport.h = 1; 
-	scene->viewport.w = 1; 
+/* 	scene->viewport.h = 1; */ 
+/* 	scene->viewport.w = 1; */ 
 
-	scene->cnv.w = WIDTH;
-	scene->cnv.h = HEIGHT;
-	scene->viewport.pos.x = 1;
-	scene->viewport.pos.y = 1;
-	scene->viewport.pos.z = 1;
-	scene->viewport.h = 1;
-	scene->viewport.w = 1;	
-	scene->objects = malloc(sizeof(t_object) * 1);
-	scene->objects->type = SPHERE;
-	scene->objects->radius = 0.01;
-	scene->objects->pos.x = -1.5;
-	scene->objects->pos.y = 0;
-	scene->objects->pos.z = 8;
-	scene->objects->color = 0xFF0000FF;
-	scene->objects->specular = -1;
-	scene->objects->reflective = 0.0f;
-	scene->objects->next = malloc(sizeof(t_object) * 1);
-	scene->objects->next->type = SPHERE;
-	scene->objects->next->radius = 0.08;
-	scene->objects->next->pos.x = 0;
-	scene->objects->next->pos.y = -8.5;
-	scene->objects->next->pos.z = 0;
-	scene->objects->next->color = 0xFFFF0000;
-	scene->objects->next->specular = -1;
-	scene->objects->next->reflective = 0.0f;
-	scene->objects->next->next = NULL;
-	scene->objects->next->next = malloc(sizeof(t_object) * 1);
-	scene->objects->next->next->type = CYLINDER;
-	scene->objects->next->next->radius = 1;
-	scene->objects->next->next->pos.x = 0;
-	scene->objects->next->next->pos.y = 0;
-	scene->objects->next->next->pos.z = 0;
-	scene->objects->next->next->orientation.x = 1;
-	scene->objects->next->next->orientation.y = 0;
-	scene->objects->next->next->orientation.z = 0;
-	scene->objects->next->next->height = 4;
-	scene->objects->next->next->color = 0xFF00FF00;
-	scene->objects->next->next->specular = -1;
-	scene->objects->next->next->reflective = 0.0f;
-	scene->objects->next->next->next = NULL;
+/* 	scene->cnv.w = WIDTH; */
+/* 	scene->cnv.h = HEIGHT; */
+/* 	scene->viewport.pos.x = 1; */
+	/* scene->viewport.pos.y = 1; */
+	/* scene->viewport.pos.z = 1; */
+	/* scene->viewport.h = 1; */
+	/* scene->viewport.w = 1; */	
+	/* scene->objects = malloc(sizeof(t_object) * 1); */
+	/* scene->objects->type = SPHERE; */
+	/* scene->objects->radius = 0.01; */
+	/* scene->objects->pos.x = -1.5; */
+	/* scene->objects->pos.y = 0; */
+	/* scene->objects->pos.z = 8; */
+	/* scene->objects->color = 0xFF0000FF; */
+	/* scene->objects->specular = -1; */
+	/* scene->objects->reflective = 0.0f; */
+	/* scene->objects->next = malloc(sizeof(t_object) * 1); */
+	/* scene->objects->next->type = SPHERE; */
+	/* scene->objects->next->radius = 0.08; */
+	/* scene->objects->next->pos.x = 0; */
+	/* scene->objects->next->pos.y = -8.5; */
+	/* scene->objects->next->pos.z = 0; */
+	/* scene->objects->next->color = 0xFFFF0000; */
+	/* scene->objects->next->specular = -1; */
+	/* scene->objects->next->reflective = 0.0f; */
+	/* scene->objects->next->next = NULL; */
+	/* scene->objects->next->next = malloc(sizeof(t_object) * 1); */
+	/* scene->objects->next->next->type = CYLINDER; */
+	/* scene->objects->next->next->radius = 1; */
+	/* scene->objects->next->next->pos.x = 0; */
+	/* scene->objects->next->next->pos.y = 0; */
+	/* scene->objects->next->next->pos.z = 0; */
+	/* scene->objects->next->next->orientation.x = 1; */
+	/* scene->objects->next->next->orientation.y = 0; */
+	/* scene->objects->next->next->orientation.z = 0; */
+	/* scene->objects->next->next->height = 4; */
+	/* scene->objects->next->next->color = 0xFF00FF00; */
+	/* scene->objects->next->next->specular = -1; */
+	/* scene->objects->next->next->reflective = 0.0f; */
+	/* scene->objects->next->next->next = NULL; */
 
 	/* scene->objects->next->next->next = malloc(sizeof(t_object) * 1); */
 	/* scene->objects->next->next->next->type = PLANE; */
@@ -156,39 +156,39 @@ int	scene_init(t_data *scene)
 	/* scene->objects->next->next->next->specular = -1; */
 	/* scene->objects->next->next->next->reflective = 0.0f; */
 	/* scene->objects->next->next->next->next = NULL; */
-	scene->objects->next->next->next = malloc(sizeof(t_object) * 1);
-	scene->objects->next->next->next->type = PLANE;
-	scene->objects->next->next->next->radius = 1;
-	scene->objects->next->next->next->pos = (t_vec3) {0 , 0, 0};
-	scene->objects->next->next->next->orientation = (t_vec3) {0, 1, 0}; 
-	scene->objects->next->next->next->height = 2;
-	scene->objects->next->next->next->color = 0xFF888800;
-	scene->objects->next->next->next->specular = 0;
-	scene->objects->next->next->next->reflective = 0.0f;
-	scene->objects->next->next->next->next = NULL;
-	scene->lights = malloc(sizeof(t_light) * 1);
-	scene->lights->type = DIRECTIONAL;
-	scene->lights->intensity = 0.0f;
-	scene->lights->dir.x = 0;
-	scene->lights->dir.y = 2;
-	scene->lights->dir.z = 0;
-	scene->lights->next = NULL;
-	scene->lights->next = malloc(sizeof(t_light) * 1);
-	scene->lights->next->type = AMBIENT;
-	scene->lights->next->intensity = 0.3f;
-	scene->lights->next->dir.x = 2;
-	scene->lights->next->dir.y = 2;
-	scene->lights->next->dir.z = 2;
-	scene->lights->next->next = NULL;
-	scene->lights->next->next = malloc(sizeof(t_light) * 1);
-	scene->lights->next->next->type = POINT;
-	scene->lights->next->next->intensity = 0.5f;
-	scene->lights->next->next->pos.x = 2;
-	scene->lights->next->next->pos.y = 2;
-	scene->lights->next->next->pos.z = 5;
-	scene->lights->next->next->next = NULL;
-	return (0);
-}
+	/* scene->objects->next->next->next = malloc(sizeof(t_object) * 1); */
+	/* scene->objects->next->next->next->type = PLANE; */
+	/* scene->objects->next->next->next->radius = 1; */
+	/* scene->objects->next->next->next->pos = (t_vec3) {0 , 0, 0}; */
+	/* scene->objects->next->next->next->orientation = (t_vec3) {0, 1, 0}; */ 
+	/* scene->objects->next->next->next->height = 2; */
+	/* scene->objects->next->next->next->color = 0xFF888800; */
+	/* scene->objects->next->next->next->specular = 0; */
+	/* scene->objects->next->next->next->reflective = 0.0f; */
+	/* scene->objects->next->next->next->next = NULL; */
+	/* scene->lights = malloc(sizeof(t_light) * 1); */
+	/* scene->lights->type = DIRECTIONAL; */
+	/* scene->lights->intensity = 0.0f; */
+	/* scene->lights->dir.x = 0; */
+	/* scene->lights->dir.y = 2; */
+	/* scene->lights->dir.z = 0; */
+	/* scene->lights->next = NULL; */
+	/* scene->lights->next = malloc(sizeof(t_light) * 1); */
+	/* scene->lights->next->type = AMBIENT; */
+	/* scene->lights->next->intensity = 0.3f; */
+	/* scene->lights->next->dir.x = 2; */
+	/* scene->lights->next->dir.y = 2; */
+	/* scene->lights->next->dir.z = 2; */
+	/* scene->lights->next->next = NULL; */
+	/* scene->lights->next->next = malloc(sizeof(t_light) * 1); */
+	/* scene->lights->next->next->type = POINT; */
+	/* scene->lights->next->next->intensity = 0.5f; */
+	/* scene->lights->next->next->pos.x = 2; */
+	/* scene->lights->next->next->pos.y = 2; */
+	/* scene->lights->next->next->pos.z = 5; */
+	/* scene->lights->next->next->next = NULL; */
+	/* return (0); */
+/* } */
 
 int	display_scene(t_data *scene)
 {
