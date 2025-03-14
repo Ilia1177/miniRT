@@ -32,6 +32,7 @@ SRCS = 	miniRT.c\
 		parsing_utils.c\
 		ray.c\
 		vector.c\
+		color.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 

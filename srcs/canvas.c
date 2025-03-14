@@ -28,7 +28,7 @@ void	print_vec3(t_vec3 v, char *msg)
 // throw ray for every point of the canvas
 void	display_color(t_data *scene)
 {
-	unsigned int	color;
+	t_argb			color;
 	t_viewport		vp;
 	t_canvas		cnv;
 	t_vec2			pix;
@@ -47,7 +47,7 @@ void	display_color(t_data *scene)
 		//	if (color != 0)
 		//		printf("display_color: %X, pix.x: %d, pix.y: %d\n", color, (int)pix.x, (int)pix.y);
 			pix = cnv_to_screen(cnv);
-			rt_put_pixel(&scene->img, pix, color);
+			rt_put_pixel(&scene->img, pix, encode_argb(color));
 			cnv.loc.y++;
 		}
 		cnv.loc.x++;
