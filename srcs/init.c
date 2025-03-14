@@ -16,7 +16,15 @@ int	scene_init(t_data *scene)
 
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->objects = NULL;
+	scene->objects = malloc(sizeof(t_object));
+	scene->objects->type = SPHERE;
+	scene->objects->pos = (t_vec3) {0, 0, 2};
+	scene->objects->specular = -1;
+	scene->objects->radius = 2;
+	scene->objects->color = 0xFF555555;
+	scene->objects->radius = 2;
+	scene->objects->next = NULL;
+
 
 	scene->lights = malloc(sizeof(t_light) * 1);
 	scene->lights->type = DIRECTIONAL;
@@ -39,6 +47,6 @@ int	scene_init(t_data *scene)
 	scene->lights->next->next->pos.z = 6;
 	scene->lights->next->next->next = NULL;
 
-	//printf("objects: %p, objects->next: %p\n", scene->objects, scene->objects->next);
+	printf("objects: %p, objects->next: %p\n", scene->objects, scene->objects->next);
 	return (0);
 }
