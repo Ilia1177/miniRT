@@ -62,11 +62,11 @@ int	create_sphere(char **line, t_data *scene)
 	if (status != 0)
 		return (status);
 	sphere.specular = SPECULAR;
-	sphere.reflective = REFLECTIVE;
+	//sphere.reflective = REFLECTIVE; reflective is t_argb
 	status = str_to_rgb(&str, &color);
 	if (status != 0)
 		return (status);
-	sphere.color = encode_rgb(color.r, color.g, color.b);
+	//sphere.color = encode_rgb(color.r, color.g, color.b); // need Alpha chanel
 	print_obj(sphere);
 	*line = str;
 	make_sphere(sphere, &scene->objects);
@@ -138,14 +138,15 @@ int	create_light(t_ltype type, char **line, t_data *scene)
 		return (9);
 	status = 0;
 	str = *line;
+	end = str;
 	str += skip_space(str);
 	if (!ft_isdigit(*str))
 		return (2);
 	else if (type == POINT)
 		status = str_to_vec3(&str, &light.pos);
 	if (!status)
-		light.intensity = ft_strtof(str, &end);
-	if (!status && (light.intensity > 1.0f || light.intensity < 0.0f))
+		light.intensity.a = ft_strtof(str, &end);				//				intensity is t_argb
+	if (!status && (light.intensity.a > 1.0f || light.intensity.a < 0.0f))	
 		return (3);
 	if (make_light(light, scene) == -1)
 		return (-1);
