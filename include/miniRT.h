@@ -29,6 +29,14 @@ typedef struct	s_vec2
 	float		y;
 }				t_vec2;
 
+typedef struct	s_argb
+{
+	int	a;
+	int	r;
+	int	g;
+	int	b;
+}	t_argb;
+
 typedef struct s_quad
 {
 	float	a;
@@ -63,23 +71,6 @@ typedef struct	s_canvas
 	int			w;
 }	t_canvas;
 
-/* typedef struct s_object */
-/* { */
-/* 	type; */
-
-/* } */
-typedef	struct	s_sphere
-{
-	float	closest_t;
-	float	intersection[2];
-	int		color;
-	t_vec3	pos;
-	float	radius;
-	int		specular;
-	float		reflective;
-	struct s_sphere	*next;
-}			t_sphere;
-
 typedef struct	s_img
 {
 	void	*ptr;
@@ -99,7 +90,7 @@ typedef enum e_ltype
 typedef struct	s_light
 {
 	t_ltype			type;
-	float			intensity;
+	t_argb			intensity;
 	t_vec3			pos;
 	t_vec3			dir;
 	struct s_light *next;
@@ -122,12 +113,8 @@ typedef struct	s_object
 	int				specular;
 	float			radius;
 	float			height;
-	float			reflective;
-	unsigned int	color;
-
-	//t_sphere		sphere;
-	//t_cylinder		cylinder;
-	//t_plane			plane;
+	t_argb			reflective;
+	t_argb			color;
 	struct s_object	*next;
 }	t_object;
 
@@ -164,25 +151,31 @@ int		key_release(int keycode, t_data *scene);
 int		key_press(int keycode, t_data *scene);
 int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
-
-//ray
+//canvas.c
 t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
-unsigned int			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
-t_object	*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_object *obj);
-int			intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object);
-t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
-int	intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj);
-int intersect_cylinder(t_vec3 origin, t_vec3 dir, t_object *cylinder);
-int	intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane);
+
+//ray
+t_argb			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
+t_object		*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_object *obj);
+t_quad			solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
+int				intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj, float *t);
+int				intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object, float *t);
+int 			intersect_cylinder(t_vec3 origin, t_vec3 dir, t_object *cylinder, float *t);
+int				intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane);
+//color.c
+void			limit_color(t_argb *color);
+t_argb			ease_color(t_argb reflective, uint8_t factor);
+t_argb			mult_colors(t_argb color1, t_argb intensity);
+t_argb 			add_colors(t_argb c1, t_argb c2);
+unsigned int 	encode_argb(t_argb color);
 
 //light.c
-float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);
-unsigned int mult_colors(unsigned int color, float factor);
-t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm);
-unsigned int add_colors(unsigned int c1, unsigned int c2);
+t_argb			compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);
+t_vec3			reflect_ray(t_vec3 ray, t_vec3 norm);
 
+//vector.c
 t_vec3	cross_vec3(t_vec3 a, t_vec3 b);
 float	dot_vec3(t_vec3 a, t_vec3 b);
 float	mag_vec3(t_vec3 a);
@@ -194,15 +187,14 @@ t_vec3	div_vec3(t_vec3 vec, float d);
 t_vec3	mult_vec3(t_vec3 vec, float a);
 
 //camera.c
-void update_camera_vectors(t_camera *cam);
-t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v);
-void mouse_move(t_camera *cam, float delta_x, float delta_y);
+void	update_camera_vectors(t_camera *cam);
+t_vec3	apply_camera_rotation(t_camera cam, t_vec3 v);
+void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 
 // debug
 void	print_vec3(t_vec3 v, char *msg);
 
 //clean.c
-void	free_sphere(t_sphere *sphere);
 void	free_light(t_light *light);
 
 //scene

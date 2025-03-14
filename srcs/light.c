@@ -9,90 +9,70 @@ t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm)
 	return (reflection);
 }
 
-unsigned int add_colors(unsigned int c1, unsigned int c2)
+t_argb	diffuse_reflexion(t_argb intensity, t_vec3 norm, t_vec3 l_dir)// t_argb *lum)
 {
-    unsigned int a = ((c1 >> 24) & 0xFF) + ((c2 >> 24) & 0xFF);
-    unsigned int r = ((c1 >> 16) & 0xFF) + ((c2 >> 16) & 0xFF);
-    unsigned int g = ((c1 >> 8)  & 0xFF) + ((c2 >> 8)  & 0xFF);
-    unsigned int b = (c1 & 0xFF) + (c2 & 0xFF);
+	const float	n_dot_l = dot_vec3(norm, l_dir);
+	float		coeff;
+	t_argb		luminosity;
 
-    if (a > 255)
-		a = 255;
-    if (r > 255)
-		r = 255;
-    if (g > 255)
-		g = 255;
-    if (b > 255)
-		b = 255;
-    return (a << 24) | (r << 16) | (g << 8) | b;
+	luminosity = (t_argb) {0, 0, 0, 0};
+	if (n_dot_l > 0)
+	{
+		coeff = n_dot_l / (mag_vec3(norm) * mag_vec3(l_dir));
+		luminosity.a = intensity.a * coeff;
+		luminosity.r = intensity.r * coeff;
+		luminosity.g = intensity.g * coeff;
+		luminosity.b = intensity.b * coeff;
+		//luminosity = add_colors(luminosity, intensity);
+	}
+	return (luminosity);
 }
 
-unsigned int mult_colors(unsigned int color, float factor)
+t_argb	specular_reflexion(t_argb intensity, t_vec3 v, t_vec3 norm, t_vec3 l_dir, int specular)
 {
-    unsigned int a = (color >> 24) & 0xFF;  // Extract Alpha
-    unsigned int r = (color >> 16) & 0xFF;  // Extract Red
-    unsigned int g = (color >> 8)  & 0xFF;  // Extract Green
-    unsigned int b = (color)       & 0xFF;  // Extract Blue
+	const t_vec3	r = sub_vec3(mult_vec3(mult_vec3(norm, 2.0f), dot_vec3(norm, l_dir)), l_dir);
+	const float		r_dot_v = dot_vec3(r, v);
+	float			coeff;
+	t_argb			luminosity;
 
-    r = (unsigned int)(r * factor);
-    g = (unsigned int)(g * factor);
-    b = (unsigned int)(b * factor);
-    if (a > 255)
-		a = 255;
-    if (r > 255)
-		r = 255;
-    if (g > 255)
-		g = 255;
-    if (b > 255)
-		b = 255;
-    return ((a << 24) | (r << 16) | (g << 8) | b);
+	luminosity = (t_argb) {0, 0, 0, 0};
+	if (r_dot_v > 0)
+	{
+		coeff = pow(r_dot_v / (mag_vec3(r) * mag_vec3(v)), specular);
+		luminosity.a = intensity.a * coeff;
+		luminosity.r = intensity.r * coeff;	
+		luminosity.g = intensity.g * coeff; 
+		luminosity.b = intensity.b * coeff; 
+	}
+	return (luminosity);
 }
 
 // compute light at a point from all light sources
-float	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene)
+t_argb	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene)
 {
-	float 		intensity = 0.0f;
+	t_argb		intensity;
 	t_light		*light;
 	t_vec3		l_dir;
-	float		n_dot_l;
-	float		r_dot_v;
-	t_vec3		r;
-	t_object	*obstacle;
 
+	intensity = (t_argb) {0, 0, 0, 0};
 	light = scene->lights;
 	while (light)
 	{
 		if (light->type == AMBIENT)
-			intensity += light->intensity;
+			intensity = add_colors(intensity, light->intensity);
 		else
 		{
 			if (light->type == POINT)
 				l_dir = sub_vec3(light->pos, point);
 			else if (light->type == DIRECTIONAL)
 				l_dir = light->dir;
-
-			obstacle = closest_intersect(point, l_dir, 0.001f, FLT_MAX, scene->objects);
-			if (!obstacle)
+			if (!closest_intersect(point, l_dir, 0.001f, FLT_MAX, scene->objects))
 			{
-				// Diffuse reflexion
-				n_dot_l = dot_vec3(norm, l_dir);
-				if (n_dot_l > 0)
-					intensity += light->intensity * n_dot_l / (mag_vec3(norm) * mag_vec3(l_dir));
-				// Specular reflexion
-				if (specular != -1)
-				{
-					r = sub_vec3(mult_vec3(mult_vec3(norm, 2.0f), dot_vec3(norm, l_dir)), l_dir);
-					r_dot_v = dot_vec3(r, v);
-					if (r_dot_v > 0)
-						intensity += light->intensity * pow(r_dot_v / (mag_vec3(r) * mag_vec3(v)), specular);
-				}
+				intensity = add_colors(diffuse_reflexion(light->intensity, norm, l_dir), intensity);// &intensity);
+				intensity = add_colors(specular_reflexion(light->intensity, v, norm, l_dir, specular), intensity);// &intensity);
 			}
 		}
 		light = light->next;
 	}
-	if (intensity > 1)
-		intensity = 1;
-	else if (intensity < 0)
-		intensity = 0;
 	return (intensity);
 }
