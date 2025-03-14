@@ -6,16 +6,13 @@ int	scene_init(t_data *scene)
 	scene->cam.dir =	(t_vec3) {0, 0, 0};
 	scene->cam.up =		(t_vec3) {0, 0, 0};
 	scene->cam.right =	(t_vec3) {0, 0, 0};
-	
 	scene->cam.yaw =	90.0f;
 	scene->cam.pitch =	0.0f;
-
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.pos = (t_vec3) {1, 1, 1};
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;	
-
 	scene->objects = malloc(sizeof(t_object) * 1);
 	scene->objects->type = PLANE;
 	scene->objects->radius = 1;

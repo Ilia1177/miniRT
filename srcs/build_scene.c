@@ -144,10 +144,12 @@ int	create_light(t_ltype type, char **line, t_data *scene)
 		return (2);
 	else if (type == POINT)
 		status = str_to_vec3(&str, &light.pos);
+	// change have been made here
 	if (!status)
 		light.intensity.a = ft_strtof(str, &end);				//				intensity is t_argb
 	if (!status && (light.intensity.a > 1.0f || light.intensity.a < 0.0f))	
 		return (3);
+	// end of change (intensity.a)
 	if (make_light(light, scene) == -1)
 		return (-1);
 	*line = end;
