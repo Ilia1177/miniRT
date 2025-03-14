@@ -25,7 +25,7 @@ void update_camera_vectors(t_camera *cam)
 t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v)
 {
 	t_vec3 result;
-
+	
 	result.x = cam.right.x * v.x + cam.up.x * v.y + cam.dir.x * v.z;
 	result.y = cam.right.y * v.x + cam.up.y * v.y + cam.dir.y * v.z;
 	result.z = cam.right.z * v.x + cam.up.z * v.y + cam.dir.z * v.z;

@@ -19,8 +19,8 @@ int	rt_shut_down(t_data *scene)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
 		mlx_destroy_image(scene->mlx, scene->img.ptr);
-	//if (scene->bg.ptr)
-	//	mlx_destroy_image(scene->mlx, scene->bg.ptr);
+	if (scene->img.ptr)
+		mlx_destroy_image(scene->mlx, scene->img.ptr);
 	if (scene->mlx)
 	{
 		//mlx_destroy_display(scene->mlx);
@@ -90,12 +90,12 @@ int	scene_init(t_data *scene)
 	scene->cam.up =		init_vec3(0, 1, 0);
 	scene->cam.right =	init_vec3(1, 0, 0);
 	
-	scene->cam.yaw =	90.0f;
-	scene->cam.pitch =	0.0f;
-
+	//scene->cam.yaw =	75.0f;
+	//scene->cam.pitch =	0.0f;
+	//update_camera_vectors(&scene->cam);
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.pos = (t_vec3) {1, 1, 1};
+	//scene->viewport.pos = (t_vec3) {1, 1, 1};
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;	
 
@@ -107,7 +107,7 @@ int	scene_init(t_data *scene)
 	scene->objects->orientation = (t_vec3) {0, 1, 0};
 	scene->objects->color = (t_argb) {255, 20, 127, 200};
 	scene->objects->specular = 500;
-	scene->objects->reflective = (t_argb) {127, 0, 124, 124};
+	scene->objects->reflective = (t_argb) {124, 124, 124, 124};
 	scene->objects->next = NULL; 
 	scene->objects->next = malloc(sizeof(t_object) * 1);
 	scene->objects->next->type = SPHERE;
@@ -115,7 +115,7 @@ int	scene_init(t_data *scene)
 	scene->objects->next->pos = (t_vec3) {-2, 0, 5};
 	scene->objects->next->color = (t_argb) {255, 85, 189, 32};
 	scene->objects->next->specular = 500;
-	scene->objects->next->reflective = (t_argb) {0, 0, 0, 0};
+	scene->objects->next->reflective = (t_argb) {255, 255, 255, 255};
 	scene->objects->next->next = NULL;
 	scene->objects->next->next = malloc(sizeof(t_object) * 1);
 	scene->objects->next->next->type = CYLINDER;
@@ -125,7 +125,7 @@ int	scene_init(t_data *scene)
 	scene->objects->next->next->height = 2;
 	scene->objects->next->next->color = (t_argb) {255, 54, 36, 89};
 	scene->objects->next->next->specular = 500;
-	scene->objects->next->next->reflective = (t_argb) {0, 0, 0, 0};
+	scene->objects->next->next->reflective = (t_argb) {0, 255, 255, 255};
 	scene->objects->next->next->next = NULL;
 	scene->objects->next->next->next = malloc(sizeof(t_object) * 1);
 	scene->objects->next->next->next->type = CYLINDER;

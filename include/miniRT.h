@@ -49,11 +49,11 @@ typedef struct s_quad
 typedef struct	s_camera
 {
 	t_vec3 pos;
-    t_vec3 dir;   // Forward direction
-    t_vec3 right; // Right direction
-	t_vec3 up;    // Up direction
-    float yaw;   // Horizontal rotation (left/right)
-    float pitch; // Vertical rotation (up/down)
+    t_vec3 dir;   	// Forward direction
+    t_vec3 right; 	// Right direction
+	t_vec3 up;    	// Up direction
+    float yaw;   	// Horizontal rotation (left/right)
+    float pitch; 	// Vertical rotation (up/down)
 }	t_camera;
 
 typedef struct	s_viewport

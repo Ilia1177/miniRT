@@ -9,7 +9,7 @@ t_vec3 reflect_ray(t_vec3 ray, t_vec3 norm)
 	return (reflection);
 }
 
-t_argb	diffuse_reflexion(t_argb intensity, t_vec3 norm, t_vec3 l_dir)// t_argb *lum)
+t_argb	diffuse_reflex(t_argb intensity, t_vec3 norm, t_vec3 l_dir)
 {
 	const float	n_dot_l = dot_vec3(norm, l_dir);
 	float		coeff;
@@ -23,12 +23,11 @@ t_argb	diffuse_reflexion(t_argb intensity, t_vec3 norm, t_vec3 l_dir)// t_argb *
 		luminosity.r = intensity.r * coeff;
 		luminosity.g = intensity.g * coeff;
 		luminosity.b = intensity.b * coeff;
-		//luminosity = add_colors(luminosity, intensity);
 	}
 	return (luminosity);
 }
 
-t_argb	specular_reflexion(t_argb intensity, t_vec3 v, t_vec3 norm, t_vec3 l_dir, int specular)
+t_argb	specular_reflex(t_argb intensity, t_vec3 v, t_vec3 norm, t_vec3 l_dir, int specular)
 {
 	const t_vec3	r = sub_vec3(mult_vec3(mult_vec3(norm, 2.0f), dot_vec3(norm, l_dir)), l_dir);
 	const float		r_dot_v = dot_vec3(r, v);
@@ -68,8 +67,8 @@ t_argb	compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_dat
 				l_dir = light->dir;
 			if (!closest_intersect(point, l_dir, 0.001f, FLT_MAX, scene->objects))
 			{
-				intensity = add_colors(diffuse_reflexion(light->intensity, norm, l_dir), intensity);// &intensity);
-				intensity = add_colors(specular_reflexion(light->intensity, v, norm, l_dir, specular), intensity);// &intensity);
+				intensity = add_colors(diffuse_reflex(light->intensity, norm, l_dir), intensity);
+				intensity = add_colors(specular_reflex(light->intensity, v, norm, l_dir, specular), intensity);
 			}
 		}
 		light = light->next;
