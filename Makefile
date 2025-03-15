@@ -33,6 +33,7 @@ SRCS = 	miniRT.c\
 		ray.c\
 		vector.c\
 		color.c\
+		intersection.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 

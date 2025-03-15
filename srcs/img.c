@@ -1,21 +1,23 @@
 #include <miniRT.h>
 
-void	rt_put_pixel(t_img *img, t_vec2 pix, int color)
+void	rt_put_pixel(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = img->addr + ((int)pix.y * img->llen + (int)pix.x * (img->bpp / 8));
+	dst = img->addr + (y * img->llen + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
 }
 
-unsigned int	rt_get_pixel(t_img img, int x, int y)
-{
-	unsigned int	p;
+//	not in usage for now
+//	unsigned int	rt_get_pixel(t_img img, int x, int y)
+//	{
+//		unsigned int	p;
+//
+//		p = *(unsigned int *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
+//		return (p);
+//	}
 
-	p = *(unsigned int *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
-	return (p);
-}
-
+// do not use rgb, but argb instead (color.c) //
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
 	return (red << 16 | green << 8 | blue);
@@ -31,6 +33,7 @@ t_rgb	extract_rgb(int color)
 	return (rgb_color);
 }
 
+// same as limit_color(t_argb *color) --> in color.c
 void	norm_rgb(t_rgb *c)
 {
 	c->r = fmin(255, fmax(0, c->r));

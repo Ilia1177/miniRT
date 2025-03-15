@@ -26,6 +26,20 @@ void	print_vec3(t_vec3 v, char *msg)
 	printf("%s{x: %f, y: %f, z:%f}\n", msg, v.x, v.y, v.z );
 }
 
+void	color_screen(t_img *img, int x, int y, int res, t_argb color)
+{
+	int	i;
+	int	j;
+	
+	i = -1;
+	while (++i < res)
+	{
+		j = -1;
+		while (++j < res)
+			rt_put_pixel(img, x + i, y + j, encode_argb(color));
+	}
+}
+
 // throw ray for every point of the canvas
 void	display_color(t_data *scene)
 {
@@ -33,7 +47,8 @@ void	display_color(t_data *scene)
 	t_viewport		vp;
 	t_canvas		cnv;
 	t_vec2			pix;
-
+	int				j;
+	int				i;
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
@@ -45,11 +60,11 @@ void	display_color(t_data *scene)
 		{
 			vp.loc = get_viewport_loc(cnv, vp);
 			vp.loc = apply_camera_rotation(scene->cam, vp.loc);
-			color = throw_ray(scene->cam.pos, vp.loc, 1, FLT_MAX, 8, scene);
+			color = throw_ray(scene->cam.pos, vp.loc, 1, FLT_MAX, R_LIMIT, scene);
 			pix = cnv_to_screen(cnv);
-			rt_put_pixel(&scene->img, pix, encode_argb(color));
-			cnv.loc.y++;
+			color_screen(&scene->img, pix.x, pix.y, scene->res, color);
+			cnv.loc.y += scene->res;
 		}
-		cnv.loc.x++;
+		cnv.loc.x += scene->res;
 	}
 }

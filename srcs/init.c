@@ -2,6 +2,7 @@
 
 int	scene_init(t_data *scene)
 {
+	scene->res = 5;
 	scene->cam.pos =	(t_vec3) {0, 0, 0};
 	scene->cam.dir =	(t_vec3) {0, 0, 1};
 	scene->cam.up =		(t_vec3) {0, 1, 0};
@@ -9,13 +10,12 @@ int	scene_init(t_data *scene)
 	scene->cam.yaw =	90.0f;
 	scene->cam.pitch =	0.0f;
 
-
-
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.pos = (t_vec3) {1, 1, 1};
 	scene->viewport.h = 1;
-	scene->viewport.w = 1;	
+	scene->viewport.w = calc_vp_width(90.0f, 2.0);
+
 	scene->objects = malloc(sizeof(t_object) * 1);
 	scene->objects->type = PLANE;
 	scene->objects->radius = 1;
@@ -84,7 +84,11 @@ int	scene_init(t_data *scene)
 	scene->lights->next->type = DIRECTIONAL;
 	scene->lights->next->intensity = (t_argb) {255, 255, 255, 255};
 	scene->lights->next->dir = (t_vec3) {-2, 2, -2};
-	scene->lights->next->next = NULL;
+	scene->lights->next->next = malloc(sizeof(t_light));
+	scene->lights->next->next->type = AMBIENT;
+	scene->lights->next->next->intensity = (t_argb) {255, 109, 109, 109};
+	scene->lights->next->next->dir = (t_vec3) {-2, 2, -2};
+	scene->lights->next->next->next = NULL;
 	/* scene->lights->next->next = malloc(sizeof(t_light) * 1); */
 	/* scene->lights->next->next->type = POINT; */
 	/* scene->lights->next->next->intensity = (t_argb){0, 0, 0, 0}; */

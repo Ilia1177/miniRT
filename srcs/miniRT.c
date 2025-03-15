@@ -62,7 +62,7 @@ void	rt_clear_window(t_img *img)
 		pix.x = 0;
 		while (pix.x < WIDTH)
 		{
-			rt_put_pixel(img, pix, 0x00000000);
+			rt_put_pixel(img, pix.x, pix.y, 0x00000000);
 			pix.x++;
 		}
 		pix.y++;

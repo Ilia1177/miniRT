@@ -12,12 +12,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-# define HEIGHT 400
-# define WIDTH 400
-# define RECURSION_LIMIT 8
+# define HEIGHT 800
+# define WIDTH 800
+# define R_LIMIT 8 // limit to recursion (reflect ray)
 # define SPECULAR 500
-# define REFLECTIVE 0.3
-
+# define MOUSE_SENSITIVITY 0.5f
+# define RES 2
 typedef struct	s_vec3
 {
 	float		x;
@@ -129,6 +129,7 @@ typedef struct	s_object
 
 typedef struct	s_data
 {
+	char		res;
 	char		*map_name;
 	float		intersec_p[2];
 	void		*mlx;
@@ -150,7 +151,7 @@ int				rt_init(t_data *scene, int *status);
 int				rt_shut_down(t_data *scene);
 
 //img.c
-void			rt_put_pixel(t_img *img, t_vec2 pix, int color);
+void			rt_put_pixel(t_img *img, int x, int y, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
 int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
 t_rgb			extract_rgb(int color);
@@ -176,6 +177,11 @@ int				intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj, float *t);
 int				intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object, float *t);
 int 			intersect_cylinder(t_vec3 origin, t_vec3 dir, t_object *cylinder, float *t);
 int				intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane);
+
+//intersection.c
+
+t_vec3 cylinder_normal(t_vec3 pt, t_object *cylinder);
+
 //color.c
 void			limit_color(t_argb *color);
 t_argb			ease_color(t_argb reflective, uint8_t factor);
@@ -202,6 +208,7 @@ t_vec3	mult_vec3(t_vec3 vec, float a);
 void	update_camera_vectors(t_camera *cam);
 t_vec3	apply_camera_rotation(t_camera cam, t_vec3 v);
 void	mouse_move(t_camera *cam, float delta_x, float delta_y);
+float	calc_vp_width(float fov_degrees, float focal_length);
 
 // debug
 void	print_vec3(t_vec3 v, char *msg);

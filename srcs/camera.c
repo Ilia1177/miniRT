@@ -1,26 +1,21 @@
 #include <miniRT.h>
 
 // Convert yaw & pitch to direction, right, and up vectors
+// Compute new direction vector
+// Compute right vector (always perpendicular to dir and world up)
+// Compute up vector (perpendicular to dir and right)
 void update_camera_vectors(t_camera *cam)
 {
-    float rad_yaw = cam->yaw * (M_PI / 180.0f);
-    float rad_pitch = cam->pitch * (M_PI / 180.0f);
+    const float		rad_yaw = cam->yaw * (M_PI / 180.0f);
+    const float		rad_pitch = cam->pitch * (M_PI / 180.0f);
+	const t_vec3	world_up = {0, 1, 0};
 
-    // Compute new direction vector
     cam->dir.x = cos(rad_yaw) * cos(rad_pitch);
     cam->dir.y = sin(rad_pitch);
     cam->dir.z = sin(rad_yaw) * cos(rad_pitch);
     cam->dir = normalize_vec3(cam->dir);
-	//print_vec3(cam->up, "dir");
-	//
-	t_vec3 world_up = {0, 1, 0};
-    // Compute right vector (always perpendicular to dir and world up)
     cam->right = normalize_vec3(cross_vec3(world_up, cam->dir));
-	//print_vec3(cam->up, "right");
-
-    // Compute up vector (perpendicular to dir and right)
     cam->up = cross_vec3(cam->dir, cam->right);
-	//print_vec3(cam->up, "up");
 }
 
 t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v)
@@ -35,18 +30,25 @@ t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v)
 
 void mouse_move(t_camera *cam, float delta_x, float delta_y)
 {
-    float sensitivity = 0.1f; // Adjust for faster/slower rotation
+    const float	sensitivity = MOUSE_SENSITIVITY; // Adjust for faster/slower rotation
 
     // Adjust yaw and pitch
     cam->yaw += delta_x * sensitivity;
     cam->pitch -= delta_y * sensitivity; // Invert for correct movement
 
     // Clamp pitch to avoid flipping (restrict between -89° and 89°)
-    if (cam->pitch > 89.0f) cam->pitch = 89.0f;
-    if (cam->pitch < -89.0f) cam->pitch = -89.0f;
+  //  if (cam->pitch > 89.0f) cam->pitch = 89.0f;
+   // if (cam->pitch < -89.0f) cam->pitch = -89.0f;
 
     // Update camera vectors based on new angles
     update_camera_vectors(cam);
 }
 
+// Calculate viewport width from FOV and focal length
+float calc_vp_width(float fov_degrees, float focal_length)
+{
+	float	vp_width;
 
+	vp_width = 2.0 * focal_length * tan((fov_degrees / 2.0) * (M_PI / 180.0));
+	return (vp_width);
+}

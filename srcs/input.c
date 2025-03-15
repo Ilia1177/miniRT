@@ -43,6 +43,10 @@ int	handle_input(t_data *scene)
 		move_camera_left(&scene->cam, 0.5);
 	if (scene->key_state[XK_d] == 1)
 		move_camera_right(&scene->cam, 0.5);
+	if (scene->key_state[XK_o] == 1 && scene->res < 50)
+		scene->res--;
+	if (scene->key_state[XK_p] == 1 && scene->res > 1)
+		scene->res++;
 	return (0);
 }
 
@@ -68,11 +72,11 @@ int	mouse_pos(int x, int y, t_data *scene)
     float delta_x = x - last_x;
     float delta_y = y - last_y;
 
-    //mouse_move(&scene->cam, delta_x, delta_y);
+    mouse_move(&scene->cam, delta_x, delta_y);
     last_x = x;
     last_y = y;
-	scene->mouse.x = x;
-	scene->mouse.y = y;
+//	scene->mouse.x = x;
+//	scene->mouse.y = y;
 	return (0);
 }
 
