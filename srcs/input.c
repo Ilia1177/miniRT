@@ -1,42 +1,63 @@
 #include <miniRT.h>
 
+void move_camera_forward(t_camera *cam, float speed)
+{
+    cam->pos.x += cam->dir.x * speed;
+    cam->pos.y += cam->dir.y * speed;
+    cam->pos.z += cam->dir.z * speed;
+}
+void move_camera_backward(t_camera *cam, float speed)
+{
+    cam->pos.x -= cam->dir.x * speed;
+    cam->pos.y -= cam->dir.y * speed;
+    cam->pos.z -= cam->dir.z * speed;
+}
+void move_camera_right(t_camera *cam, float speed)
+{
+    cam->pos.x += cam->right.x * speed;
+    cam->pos.y += cam->right.y * speed;
+    cam->pos.z += cam->right.z * speed;
+}
+void move_camera_left(t_camera *cam, float speed)
+{
+    cam->pos.x -= cam->right.x * speed;
+    cam->pos.y -= cam->right.y * speed;
+    cam->pos.z -= cam->right.z * speed;
+}
+
 int	handle_input(t_data *scene)
 {
-//	(void)scene;
-//	 if (scene->key_state[XK_Escape]) 
-//	 	rt_shut_down(scene); 
-//	 if (scene->key_state[XK_a])
-//	 	scene->cam.yaw--; 
-//	 if (scene->key_state[XK_w])
-//	 	scene->cam.pitch++; 
-//	 if (scene->key_state[XK_d])
-//	 	scene->cam.yaw++;
-//	 if (scene->key_state[XK_s])
-//	 	scene->cam.pitch--;
-//	 printf("Key_press\n");
-//	 update_camera_vectors(&scene->cam);
-//	 if (scene->key_state[XK_t]) */
-//	 	scene->light->intensity += 0.1; */
-//	 if (scene->key_state[XK_y]) */
-//	 	scene->light->intensity -= 0.1; */
-//	 if (scene->key_state[XK_g]) */
-//	 	scene->sphere->specular += 1; */
-//	 if (scene->key_state[XK_h]) */
-//	 	scene->sphere->specular -= 1; */
+	if (scene->key_state[XK_Left] == 1)
+		scene->cam.yaw += 5;
+	if (scene->key_state[XK_Right] == 1)
+		scene->cam.yaw -= 5;
+	if (scene->key_state[XK_Down] == 1)
+		scene->cam.pitch -= 5;
+	if (scene->key_state[XK_Up] == 1)
+		scene->cam.pitch += 5;
+	if (scene->key_state[XK_w] == 1)
+		move_camera_forward(&scene->cam, 0.5);
+	if (scene->key_state[XK_s] == 1)
+		move_camera_backward(&scene->cam, 0.5);
+	if (scene->key_state[XK_a] == 1)
+		move_camera_left(&scene->cam, 0.5);
+	if (scene->key_state[XK_d] == 1)
+		move_camera_right(&scene->cam, 0.5);
 	return (0);
 }
 
-int	key_press(int keycode, t_data *scene)
+int	key_press(int keysym, t_data *scene)
 {
-	if (keycode >= 0 && keycode < 99999)
-		scene->key_state[keycode] = 1;
+	printf("key pressed at keysym:%d", keysym);
+	if (keysym == XK_Escape)
+		rt_shut_down(scene);
+	scene->key_state[keysym] = 1;
 	return (0);
 }
 
-int	key_release(int keycode, t_data *scene)
+int	key_release(int keysym, t_data *scene)
 {
-	if (keycode >= 0 && keycode < 99999)
-		scene->key_state[keycode] = 0;
+	scene->key_state[keysym] = 0;
 	return (0);
 }
 

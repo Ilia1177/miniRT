@@ -20,14 +20,18 @@ endif
 LIBFT = libft/bin/libft.a
 
 SRCS = 	miniRT.c\
-		ray.c\
+		build_scene.c\
+		camera.c\
+		canvas.c\
+		clean.c\
+		debug.c\
 		img.c\
-		vector.c\
+		init.c\
 		input.c\
 		light.c\
-		camera.c\
-		clean.c\
-		canvas.c\
+		parsing_utils.c\
+		ray.c\
+		vector.c\
 		color.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))

@@ -1,40 +1,6 @@
 #include <miniRT.h>
 
 
-
-int	skip_space(char *str)
-{
-	int space;
-
-	space = 0;
-	while (ft_isspace(str[space]))
-		space++;
-	return (space);
-}
-
-// write_coordinate
-int	write_coordinate(char **line, t_vec3 *coords)
-{
-	char	*str;
-	char	*end;
-
-	str = *line;
-	str += skip_space(str);
-	coords->x = ft_strtof(str, &end);
-	if (*end != ',' || str == end)
-		return (5);
-	str = end + 1;
-	coords->y = ft_strtof(str, &end);
-	if (*end != ',' || str == end)
-		return (5);
-	str = end + 1;
-	coords->z = ft_strtof(str, &end);
-	if (str == end)
-		return (5);
-	*line = end;
-	return (0);
-}
-
 // ft_strtof
 // create_plane
 // create_cylinder
@@ -54,37 +20,56 @@ int	create_cylinder(char **line, t_data *scene)
 	return (0);
 }
 
-int	make_sphere(t_sphere data, t_data *scene)
+int	make_sphere(t_object data, t_object **objects)
 {
-	t_sphere *sphere;
+	t_object	*curr_sphere;
+	t_object	*new_sphere;
 
-	sphere = scene->sphere;
-	while (sphere)
-		sphere = sphere->next;
-	sphere = malloc(sizeof(t_sphere));
-	if (!sphere)
+	new_sphere = malloc(sizeof(t_object));
+	if (!new_sphere)
 		return (-1);
-	sphere->radius = data.radius;
-	sphere->color = data.radius;
-	sphere->pos = data.pos;
+	ft_memcpy(new_sphere, &data, sizeof(t_object));
+	new_sphere->next = NULL;
+	curr_sphere = NULL;
+	if(*objects == NULL)
+		*objects = new_sphere;
+	else
+	{
+		curr_sphere = *objects;
+		while (curr_sphere->next)
+			curr_sphere = curr_sphere->next;
+		curr_sphere->next = new_sphere;
+	}
+	print_obj(*new_sphere);
 	return (0);
 }
+
 // create_sphere
-int create_sphere(char **line, t_data *scene)
+int	create_sphere(char **line, t_data *scene)
 {
 	char		*str;
-	t_sphere	sphere;
+	t_object	sphere;
 	int			status;
-	char		*end;
+	t_rgb		color;
 
-	str = *line;
-	status = write_coordinate(&str, &sphere.pos);
-	if (!status)
-		sphere.radius = ft_strtof(str, &end);
-	sphere.specular = 500;
-	sphere.reflective = 0.3;
-	sphere.color = 0x000000FF;
-	make_sphere(sphere, scene);
+	(void)scene;
+	str = *line + 2 ;
+	sphere.type = SPHERE;
+	status = str_to_vec3(&str, &sphere.pos);
+	if (status != 0)
+		return (status);
+	status = str_to_radius(&str, &sphere.radius);
+	if (status != 0)
+		return (status);
+	sphere.specular = SPECULAR;
+	//sphere.reflective = REFLECTIVE; reflective is t_argb
+	status = str_to_rgb(&str, &color);
+	if (status != 0)
+		return (status);
+	//sphere.color = encode_rgb(color.r, color.g, color.b); // need Alpha chanel
+	print_obj(sphere);
+	*line = str;
+	make_sphere(sphere, &scene->objects);
 	return (0);
 }
 
@@ -97,7 +82,7 @@ int	place_camera(char **line, t_data *scene)
 	str = *line;
 	str++;
 	str += skip_space(str);
-	status = write_coordinate(&str, &scene->cam.pos);
+	status = str_to_vec3(&str, &scene->cam.pos);
 	///scene->cam.yaw = 80.0f;
 	//scene->cam.pitch = 0.0f;
 	if (!status)
@@ -116,7 +101,7 @@ int	make_light(t_light light, t_data *scene)
 {
 	t_light *new_light;
 
-	new_light = scene->light;
+	new_light = scene->lights;
 	while (new_light)
 		new_light = new_light->next;
 	new_light = malloc(sizeof(t_light));
@@ -132,7 +117,7 @@ int	ambient_exist(t_data *scene)
 {
 	t_light	*light;
 
-	light = scene->light;
+	light = scene->lights;
 	while (light)
 	{
 		if (light->type == AMBIENT)
@@ -142,7 +127,7 @@ int	ambient_exist(t_data *scene)
 	return (0);
 }
 
-int	create_light(t_type type, char **line, t_data *scene)
+int	create_light(t_ltype type, char **line, t_data *scene)
 {
 	char	*str;
 	char	*end;
@@ -153,15 +138,18 @@ int	create_light(t_type type, char **line, t_data *scene)
 		return (9);
 	status = 0;
 	str = *line;
+	end = str;
 	str += skip_space(str);
 	if (!ft_isdigit(*str))
 		return (2);
 	else if (type == POINT)
-		status = write_coordinate(&str, &light.pos);
+		status = str_to_vec3(&str, &light.pos);
+	// change have been made here
 	if (!status)
-		light.intensity = ft_strtof(str, &end);
-	if (!status && (light.intensity > 1.0f || light.intensity < 0.0f))
+		light.intensity.a = ft_strtof(str, &end);				//				intensity is t_argb
+	if (!status && (light.intensity.a > 1.0f || light.intensity.a < 0.0f))	
 		return (3);
+	// end of change (intensity.a)
 	if (make_light(light, scene) == -1)
 		return (-1);
 	*line = end;
@@ -172,9 +160,10 @@ int	register_line_into_scene(char *line, t_data *scene)
 {
 	int	status;
 
+	printf("register line\n");
 	status = 0;
 	line += skip_space(line);
-	while (*line && !status)
+	while (line && *line && !status)
 	{
 		if (*line == 'A')
 			status = create_light(AMBIENT, &line, scene);
@@ -189,16 +178,17 @@ int	register_line_into_scene(char *line, t_data *scene)
 		else if (!ft_strncmp("cy", line, 2))
 			status = create_cylinder(&line, scene);
 		else
-			return (1);
+			return (0);
 	}
+	printf("register line: status: %d\n", status);
 	return (status);
 }
 
 int	build_scene(t_data *scene)
 {
-	char *line;
-	int	map;
-	int	status;
+	char	*line;
+	int		map;
+	int		status;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -216,8 +206,11 @@ int	build_scene(t_data *scene)
 	}
 	if (status)
 		gnl_clear_buffer(map);
+	printf("**************************linked list**************\n");
+	while(scene->objects)
+	{
+		print_obj(*scene->objects);
+		scene->objects = scene->objects->next;
+	}
 	return (status);
 }
-
-
-

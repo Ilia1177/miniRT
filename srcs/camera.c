@@ -12,9 +12,10 @@ void update_camera_vectors(t_camera *cam)
     cam->dir.z = sin(rad_yaw) * cos(rad_pitch);
     cam->dir = normalize_vec3(cam->dir);
 	//print_vec3(cam->up, "dir");
-
+	//
+	t_vec3 world_up = {0, 1, 0};
     // Compute right vector (always perpendicular to dir and world up)
-    cam->right = normalize_vec3(cross_vec3(cam->up, cam->dir));
+    cam->right = normalize_vec3(cross_vec3(world_up, cam->dir));
 	//print_vec3(cam->up, "right");
 
     // Compute up vector (perpendicular to dir and right)
@@ -47,3 +48,5 @@ void mouse_move(t_camera *cam, float delta_x, float delta_y)
     // Update camera vectors based on new angles
     update_camera_vectors(cam);
 }
+
+
