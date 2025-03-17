@@ -12,8 +12,8 @@ ifeq ($(shell uname), Linux)
 	INCLUDES = -I/usr/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
-	CFLAGS = -g #-Wall -Wextra -Werror -g #-fsanitize=address
-	INCLUDES = -I/opt/X11/include -I./mlx -I./libft/include -I./include
+	CFLAGS = -g -pg #-Wall -Wextra -Werror -g #-fsanitize=address
+	INCLUDES =  -I./mlx -I./libft/include -I./include# -I/opt/X11/include
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit
 endif
 
@@ -48,7 +48,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(NAME): $(OBJS)
-	$(CC) $^ $(MLX_FLAGS) -o $(NAME) -L./libft/bin -lft
+	$(CC) $^ $(MLX_FLAGS) -o $(NAME) #-L./libft/bin -lft
 
 $(MLX_LIB): $(CLONE) 
 	make -C $(MLX_DIR) 

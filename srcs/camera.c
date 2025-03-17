@@ -28,19 +28,20 @@ t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v)
     return (result);
 }
 
+// Adjust yaw and pitch
+// Clamp pitch to avoid flipping (restrict between -89° and 89°)
+// Invert for correct movement
+// Update camera vectors based on new angles
 void mouse_move(t_camera *cam, float delta_x, float delta_y)
 {
     const float	sensitivity = MOUSE_SENSITIVITY; // Adjust for faster/slower rotation
 
-    // Adjust yaw and pitch
     cam->yaw += delta_x * sensitivity;
-    cam->pitch -= delta_y * sensitivity; // Invert for correct movement
-
-    // Clamp pitch to avoid flipping (restrict between -89° and 89°)
-  //  if (cam->pitch > 89.0f) cam->pitch = 89.0f;
-   // if (cam->pitch < -89.0f) cam->pitch = -89.0f;
-
-    // Update camera vectors based on new angles
+    cam->pitch -= delta_y * sensitivity;
+    if (cam->pitch > 89.0f)
+	   	cam->pitch = 89.0f;
+    if (cam->pitch < -89.0f)
+	   	cam->pitch = -89.0f;
     update_camera_vectors(cam);
 }
 
@@ -49,6 +50,6 @@ float calc_vp_width(float fov_degrees, float focal_length)
 {
 	float	vp_width;
 
-	vp_width = 2.0 * focal_length * tan((fov_degrees / 2.0) * (M_PI / 180.0));
+	vp_width = 2.0f * focal_length * tan((fov_degrees / 2.0f) * (M_PI / 180.0f));
 	return (vp_width);
 }

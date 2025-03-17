@@ -71,8 +71,8 @@ void	rt_clear_window(t_img *img)
 
 int	render(t_data *scene)
 {
-	handle_input(scene);
 	rt_clear_window(&scene->img);
+	handle_input(scene);
 	display_color(scene);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	return (0);

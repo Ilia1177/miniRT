@@ -12,6 +12,37 @@
 
 
 #include <miniRT.h>
+t_vec3	plane_normal(t_vec3 l_dir, t_vec3 norm)
+{
+	t_vec3 normal;
+
+	if (dot_vec3(norm, l_dir) > 0.0f)
+		normal = mult_vec3(norm, -1.0f);
+	else
+		normal = norm;
+	return (normal);
+}
+
+t_vec3	sphere_normal(t_vec3 pt, t_vec3 origin, t_object *sphere, t_vec3 l_dir)
+{
+	t_vec3	normal;
+
+	normal = normalize_vec3(sub_vec3(pt, sphere->pos));
+//	if (dot_vec3(normal, l_dir) > 0)
+//		normal = mult_vec3(normal, -1);
+//t_vec3 compute_sphere_normal(t_vec3 hit_point, t_object *sphere)
+    // If the ray originated inside the sphere, flip the normal
+//    if (dot_vec3(normal, l_dir) > 0.0f)
+  //      normal = mult_vec3(normal, -1.0f);
+    float dist = dist_vec3(origin, sphere->pos);
+    if (dist < sphere->radius)
+	{
+		printf("is inside\n");
+        normal = mult_vec3(normal, -1.0f);
+	}
+
+	return (normal);
+}
 
 t_argb	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene)
 {
@@ -28,16 +59,21 @@ t_argb	throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t
 	if (obj == NULL)
 		return (local_color);
 	pt = add_vec3(mult_vec3(dir, obj->closest_t), scene->cam.pos);
+
 	if (obj->type == CYLINDER)
 		normal = cylinder_normal(pt, obj);
 	else if (obj->type == SPHERE)
-		normal = normalize_vec3(sub_vec3(pt, obj->pos));
+		normal = sphere_normal(pt, origin, obj, dir);
 	else
-		normal = normalize_vec3(obj->orientation);
+		normal = plane_normal(dir, obj->orientation);
+
 	luminosity = compute_lighting(pt, normal, mult_vec3(dir, -1), obj->specular, scene);
+	print_argb(luminosity, "luminosity");
 	local_color = mult_colors(obj->color, luminosity);
 	if (rec <= 0 || obj->reflective.a <= 0)
 		return (local_color);
+	if (dot_vec3(normal, dir) > 0)
+		normal = mult_vec3(normal, -1);
 	reflected_ray = reflect_ray(mult_vec3(dir, -1), normal);
 	reflected_color = throw_ray(pt, reflected_ray, 0.001, FLT_MAX, rec - 1, scene);
 	return (add_colors(mult_colors(local_color, ease_color(obj->reflective, 255)), mult_colors(reflected_color, obj->reflective)));
@@ -59,11 +95,11 @@ t_vec3 cylinder_normal(t_vec3 pt, t_object *cylinder)
     const t_vec3	proj_vec = mult_vec3(axis, projection);
 
     if (projection > 0 && projection < cylinder->height)
-        normal = normalize_vec3(sub_vec3(pt_to_base, proj_vec));
+		normal = normalize_vec3(sub_vec3(pt_to_base, proj_vec));
     else if (projection <= 0) 
-        normal = mult_vec3(axis, -1.0f); // Normal points opposite to the axis
+		normal = mult_vec3(axis, -1.0f); // Normal points opposite to the axis
     else
-        normal = axis; // Normal points in the direction of the axis
+		normal = axis; // Normal points in the direction of the axis
     return (normal);
 }
 

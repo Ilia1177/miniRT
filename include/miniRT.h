@@ -17,7 +17,6 @@
 # define R_LIMIT 8 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
-# define RES 2
 typedef struct	s_vec3
 {
 	float		x;
@@ -176,7 +175,7 @@ t_quad			solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
 int				intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj, float *t);
 int				intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object, float *t);
 int 			intersect_cylinder(t_vec3 origin, t_vec3 dir, t_object *cylinder, float *t);
-int				intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane);
+int				intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane, float *t);
 
 //intersection.c
 
@@ -203,6 +202,7 @@ t_vec3	add_vec3(t_vec3 a, t_vec3 b);
 t_vec3	normalize_vec3(t_vec3 vec);
 t_vec3	div_vec3(t_vec3 vec, float d);
 t_vec3	mult_vec3(t_vec3 vec, float a);
+float	dist_vec3(t_vec3 a, t_vec3 b);
 
 //camera.c
 void	update_camera_vectors(t_camera *cam);
@@ -211,6 +211,7 @@ void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float	calc_vp_width(float fov_degrees, float focal_length);
 
 // debug
+void	print_argb(t_argb color, char *msg);
 void	print_vec3(t_vec3 v, char *msg);
 void	print_obj(t_object obj);
 

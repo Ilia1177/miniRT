@@ -1,5 +1,13 @@
 #include <miniRT.h>
 #include <math.h>
+
+float dist_vec3(t_vec3 p1, t_vec3 p2)
+{
+    return sqrtf((p2.x - p1.x) * (p2.x - p1.x) +
+                 (p2.y - p1.y) * (p2.y - p1.y) +
+                 (p2.z - p1.z) * (p2.z - p1.z));
+}
+
 t_vec3 cross_vec3(t_vec3 a, t_vec3 b)
 {
 	t_vec3 product;

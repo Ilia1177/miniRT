@@ -44,9 +44,9 @@ int	handle_input(t_data *scene)
 	if (scene->key_state[XK_d] == 1)
 		move_camera_right(&scene->cam, 0.5);
 	if (scene->key_state[XK_o] == 1 && scene->res < 50)
-		scene->res--;
-	if (scene->key_state[XK_p] == 1 && scene->res > 1)
 		scene->res++;
+	if (scene->key_state[XK_p] == 1 && scene->res > 1)
+		scene->res--;
 	return (0);
 }
 
@@ -55,13 +55,15 @@ int	key_press(int keysym, t_data *scene)
 	printf("key pressed at keysym:%d", keysym);
 	if (keysym == XK_Escape)
 		rt_shut_down(scene);
-	scene->key_state[keysym] = 1;
-	return (0);
+	else if (keysym > 0 && keysym < 99999)
+		scene->key_state[keysym] = 1;
+	return (keysym);
 }
 
 int	key_release(int keysym, t_data *scene)
 {
-	scene->key_state[keysym] = 0;
+	if (keysym > 0 && keysym < 99999)
+		scene->key_state[keysym] = 0;
 	return (0);
 }
 
@@ -72,7 +74,7 @@ int	mouse_pos(int x, int y, t_data *scene)
     float delta_x = x - last_x;
     float delta_y = y - last_y;
 
-    mouse_move(&scene->cam, delta_x, delta_y);
+ //   mouse_move(&scene->cam, delta_x, delta_y);
     last_x = x;
     last_y = y;
 //	scene->mouse.x = x;
