@@ -1,26 +1,11 @@
 #include <miniRT.h>
 
-/* int		rt_shut_down(t_data *scene) */
-/* { */
-/* 	free_sphere(scene->sphere); */
-/* 	free_light(scene->light); */
-/* 	mlx_destroy_image(scene->mlx, scene->img.ptr); */
-/* 	//mlx_clear_window(scene->mlx, scene->win); */
-/* 	mlx_destroy_window(scene->mlx, scene->win); */
-/* //	mlx_destroy_display(scene->mlx); */
-/* 	free(scene->mlx); */
-/* 	exit(0); */
-/* 	return (0); */
-/* } */
-
 int	rt_shut_down(t_data *scene)
 {
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
 		mlx_destroy_image(scene->mlx, scene->img.ptr);
-	//if (scene->img.ptr)
-	//	mlx_destroy_image(scene->mlx, scene->img.ptr);
 	if (scene->mlx)
 	{
 		//mlx_destroy_display(scene->mlx);
@@ -71,21 +56,11 @@ void	rt_clear_window(t_img *img)
 
 int	render(t_data *scene)
 {
-	rt_clear_window(&scene->img);
+	//rt_clear_window(&scene->img);
 	handle_input(scene);
 	display_color(scene);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	return (0);
-}
-
-t_vec3	init_vec3(float x, float y, float z)
-{
-	t_vec3	v;
-
-	v.x = x;
-	v.y = y;
-	v.z = z;
-	return (v);
 }
 
 int	display_scene(t_data *scene)

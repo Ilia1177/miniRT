@@ -12,9 +12,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+# define T_MAX 1000
 # define HEIGHT 800
 # define WIDTH 800
-# define R_LIMIT 8 // limit to recursion (reflect ray)
+# define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
 typedef struct	s_vec3
@@ -118,10 +119,10 @@ typedef struct	s_object
 	t_otype			type;
 	t_vec3			pos;
 	t_vec3			orientation;
-	int				specular;
+	int				spec;
 	float			radius;
 	float			height;
-	t_argb			reflective;
+	t_argb			reflect;
 	t_argb			color;
 	struct s_object	*next;
 }	t_object;
@@ -172,14 +173,17 @@ t_vec2		cnv_to_screen(t_canvas cnv);
 t_argb			throw_ray(t_vec3 origin, t_vec3 dir, float t_min, float t_max, int rec, t_data *scene);
 t_object		*closest_intersect(t_vec3 origin, t_vec3 dir, float t_min, float t_max, t_object *obj);
 t_quad			solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
+//intersection.c
 int				intersect_object(t_vec3 origin, t_vec3 dir, t_object *obj, float *t);
 int				intersect_sphere(t_vec3 origin, t_vec3 dir, t_object *object, float *t);
 int 			intersect_cylinder(t_vec3 origin, t_vec3 dir, t_object *cylinder, float *t);
 int				intersect_plane(t_vec3 origin, t_vec3 dir, t_object *plane, float *t);
 
-//intersection.c
 
-t_vec3 cylinder_normal(t_vec3 pt, t_object *cylinder);
+//normal.c
+t_vec3	cylinder_normal(t_vec3 pt, t_object *cylinder);
+t_vec3	plane_normal(t_vec3 dir, t_vec3 norm);
+t_vec3	sphere_normal(t_vec3 pt, t_vec3 o, t_vec3 dir, t_object *sphere);
 
 //color.c
 void			limit_color(t_argb *color);
@@ -189,10 +193,13 @@ t_argb 			add_colors(t_argb c1, t_argb c2);
 unsigned int 	encode_argb(t_argb color);
 
 //light.c
-t_argb			compute_lighting(t_vec3 point, t_vec3 norm, t_vec3 v, int specular, t_data *scene);
-t_vec3			reflect_ray(t_vec3 ray, t_vec3 norm);
+t_argb			compute_lighting(t_vec3 pt, t_vec3 n, t_vec3 v, int spec, t_data *scene);
+t_vec3			reflect_ray(t_vec3 dir, t_vec3 norm);
+t_argb			specular_reflect(t_vec3 v, t_vec3 r, float r_dot_v, int spec, t_argb intensity);
+t_argb			diffuse_reflect(t_argb intensity, t_vec3 norm, t_vec3 l_dir, float n_dot_l);
+t_argb			reflections(t_vec3 d, t_vec3 v, t_vec3 n, t_argb intensity, int spec);
 
-//vector.c
+//vector_math.c
 t_vec3	cross_vec3(t_vec3 a, t_vec3 b);
 float	dot_vec3(t_vec3 a, t_vec3 b);
 float	mag_vec3(t_vec3 a);
@@ -204,11 +211,17 @@ t_vec3	div_vec3(t_vec3 vec, float d);
 t_vec3	mult_vec3(t_vec3 vec, float a);
 float	dist_vec3(t_vec3 a, t_vec3 b);
 
-//camera.c
+//camera_vectors.c
 void	update_camera_vectors(t_camera *cam);
 t_vec3	apply_camera_rotation(t_camera cam, t_vec3 v);
 void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float	calc_vp_width(float fov_degrees, float focal_length);
+
+//camera_move.c
+void move_camera_forward(t_camera *cam, float speed);
+void move_camera_backward(t_camera *cam, float speed);
+void move_camera_right(t_camera *cam, float speed);
+void move_camera_left(t_camera *cam, float speed);
 
 // debug
 void	print_argb(t_argb color, char *msg);

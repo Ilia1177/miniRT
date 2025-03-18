@@ -21,8 +21,6 @@ t_vec2 cnv_to_screen(t_canvas cnv)
 	return (screen);
 }
 
-
-
 void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 {
 	int	i;
@@ -44,7 +42,7 @@ void	display_color(t_data *scene)
 	t_viewport		vp;
 	t_canvas		cnv;
 	t_vec2			pix;
-	const char	res = scene->res;
+	const char		res = scene->res;
 
 	vp = scene->viewport;
 	cnv = scene->cnv;
@@ -57,7 +55,7 @@ void	display_color(t_data *scene)
 		{
 			vp.loc = get_viewport_loc(cnv, vp);
 			vp.loc = apply_camera_rotation(scene->cam, vp.loc);
-			color = throw_ray(scene->cam.pos, vp.loc, 1, 10000.0f, R_LIMIT, scene);
+			color = throw_ray(scene->cam.pos, vp.loc, 1.0f, T_MAX, R_LIMIT, scene);
 			pix = cnv_to_screen(cnv);
 			color_screen(&scene->img, pix.x, pix.y, res, color);
 			cnv.loc.y += res;

@@ -39,9 +39,15 @@ void mouse_move(t_camera *cam, float delta_x, float delta_y)
     cam->yaw += delta_x * sensitivity;
     cam->pitch -= delta_y * sensitivity;
     if (cam->pitch > 89.0f)
+	{
 	   	cam->pitch = 89.0f;
+		return ;
+	}
     if (cam->pitch < -89.0f)
+	{
 	   	cam->pitch = -89.0f;
+		return ;
+	}
     update_camera_vectors(cam);
 }
 

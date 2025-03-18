@@ -12,7 +12,7 @@ ifeq ($(shell uname), Linux)
 	INCLUDES = -I/usr/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
-	CFLAGS = -g -pg #-Wall -Wextra -Werror -g #-fsanitize=address
+	CFLAGS = -g -O0 -pg #-Wall -Wextra -Werror -g #-fsanitize=address
 	INCLUDES =  -I./mlx -I./libft/include -I./include# -I/opt/X11/include
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit
 endif
@@ -22,17 +22,19 @@ LIBFT = libft/bin/libft.a
 SRCS = 	miniRT.c\
 		build_scene.c\
 		camera.c\
+		camera_move.c\
 		canvas.c\
 		clean.c\
+		color.c\
 		debug.c\
 		img.c\
 		init.c\
 		input.c\
 		light.c\
+		normal.c\
 		parsing_utils.c\
 		ray.c\
 		vector.c\
-		color.c\
 		intersection.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
