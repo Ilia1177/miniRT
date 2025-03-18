@@ -47,11 +47,11 @@ t_argb	throw_ray(t_vec3 o, t_vec3 d, float t_min, float t_max, int rec, t_data *
 	if (obj->type == CYLINDER)
 		n = cylinder_normal(pt, obj);
 	else if (obj->type == SPHERE)
-		n = sphere_normal(pt, o, d, obj);
+		n = sphere_normal(pt, mult_vec3(d, -1), d, obj);
 	else
 		n = plane_normal(d, obj->orientation);
 
-	luminosity = compute_lighting(pt, n, mult_vec3(d, -1), obj->spec, scene);
+	luminosity = compute_lighting(obj, pt, n, mult_vec3(d, -1), obj->spec, scene);
 	local_color = mult_colors(obj->color, luminosity);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);

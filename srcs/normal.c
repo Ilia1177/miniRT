@@ -12,14 +12,16 @@ t_vec3	plane_normal(t_vec3 l_dir, t_vec3 norm)
 	return (normal);
 }
 
-t_vec3	sphere_normal(t_vec3 pt, t_vec3 origin, t_vec3 dir, t_object *sphere)
+t_vec3	sphere_normal(t_vec3 pt, t_vec3 v, t_vec3 dir, t_object *sphere)
 {
 	t_vec3	normal;
 
 //	if (dot_vec3(normal, dir) > 0.0f)
 //		normal  = mult_vec3(normal, -1);
 	normal = normalize_vec3(sub_vec3(pt, sphere->pos));
-//	if (dist_vec3(pt, sphere->pos) < sphere->radius)
+//	if (dot_vec3(v, normal) < 0)
+//		normal = mult_vec3(normal, -1);
+//	if (dist_vec3(origin, sphere->pos) < sphere->radius)
 //		normal = mult_vec3(normal, -1);
 	return (normal);
 }

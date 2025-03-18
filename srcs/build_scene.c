@@ -61,7 +61,7 @@ int	create_sphere(char **line, t_data *scene)
 	status = str_to_radius(&str, &sphere.radius);
 	if (status != 0)
 		return (status);
-	sphere.specular = SPECULAR;
+	sphere.spec = SPECULAR;
 	//sphere.reflective = REFLECTIVE; reflective is t_argb
 	status = str_to_rgb(&str, &color);
 	if (status != 0)

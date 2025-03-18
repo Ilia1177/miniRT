@@ -193,7 +193,7 @@ t_argb 			add_colors(t_argb c1, t_argb c2);
 unsigned int 	encode_argb(t_argb color);
 
 //light.c
-t_argb			compute_lighting(t_vec3 pt, t_vec3 n, t_vec3 v, int spec, t_data *scene);
+t_argb			compute_lighting(t_object *obj, t_vec3 pt, t_vec3 n, t_vec3 v, int spec, t_data *scene);
 t_vec3			reflect_ray(t_vec3 dir, t_vec3 norm);
 t_argb			specular_reflect(t_vec3 v, t_vec3 r, float r_dot_v, int spec, t_argb intensity);
 t_argb			diffuse_reflect(t_argb intensity, t_vec3 norm, t_vec3 l_dir, float n_dot_l);

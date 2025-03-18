@@ -15,10 +15,10 @@ void	print_obj(t_object obj)
 	printf("type : %d", obj.type);
 	print_vec3(obj.pos, "\tpos");
 	//printf("\tpos : %.1f, %.1f, %.1f", obj.pos.x, obj.pos.y, obj.pos.z);
-	printf(" specu : %d", obj.specular);
+	printf(" specu : %d", obj.spec);
 	printf(" radius : %.1f", obj.radius);
 	printf(" height : %.1f", obj.height);
-	print_argb(obj.reflective, "reflective");
+	print_argb(obj.reflect, "reflective");
 	print_argb(obj.color, "color");
 	printf("\n");
 }
