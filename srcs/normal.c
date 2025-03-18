@@ -41,11 +41,11 @@ t_vec3 cylinder_normal(t_vec3 pt, t_object *cylinder)
     const float		projection = dot_vec3(pt_to_base, axis);
     const t_vec3	proj_vec = mult_vec3(axis, projection);
 
-    if (projection > 0 && projection < cylinder->height)
+   // if (projection > 0 && projection < cylinder->height)
 		normal = normalize_vec3(sub_vec3(pt_to_base, proj_vec));
-    else if (projection <= 0) 
-		normal = mult_vec3(axis, -1.0f); // Normal points opposite to the axis
-    else
-		normal = axis; //Normal points in the direction of the axis
+  //  else if (projection <= 0) 
+	//	normal = mult_vec3(axis, -1.0f); // Normal points opposite to the axis
+   // else
+	//	normal = axis; //Normal points in the direction of the axis
     return (normal);
 }

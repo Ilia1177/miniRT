@@ -5,3 +5,4 @@ mlx/
 *.o
 .DS_Store
 computer_graphics_from_scratch
+miniRT

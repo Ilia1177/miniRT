@@ -12,7 +12,7 @@ int	scene_init2(t_data *scene)
 
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.pos = (t_vec3) {1, 1, 1};
+	//scene->viewport.pos = (t_vec3) {1, 1, 1};
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;
 	//scene->viewport.w = calc_vp_width(70.0f, 1.0);
@@ -63,7 +63,7 @@ int	scene_init(t_data *scene)
 
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.pos = (t_vec3) {1, 1, 1};
+	//scene->viewport.pos = (t_vec3) {1, 1, 1};
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;
 	//scene->viewport.w = calc_vp_width(70.0f, 1.0);
@@ -160,7 +160,7 @@ scene->lights = malloc(sizeof(t_light) * 1);
 scene->lights->type = POINT;
 scene->lights->intensity = (t_argb) {255, 200, 200, 200};
 scene->lights->dir = (t_vec3) {2, 2, 6};
-scene->lights->pos = (t_vec3) {0, 10, 0};
+scene->lights->pos = (t_vec3) {0, 40, 0};
 scene->lights->next = NULL;
 scene->lights->next = malloc(sizeof(t_light) * 1);
 scene->lights->next->type = AMBIENT;
@@ -171,13 +171,13 @@ scene->lights->next->next = malloc(sizeof(t_light));
 scene->lights->next->next->type = DIRECTIONAL;
 scene->lights->next->next->intensity = (t_argb) {20, 220, 220, 220};
 scene->lights->next->next->dir = (t_vec3) {-2, 0, 0};
-//scene->lights->next->next->next = NULL;
-/* scene->lights->next->next = malloc(sizeof(t_light) * 1); */
-/* scene->lights->next->next->type = POINT; */
-/* scene->lights->next->next->intensity = (t_argb){0, 0, 0, 0}; */
-/* scene->lights->next->next->pos.x = 2; */
-/* scene->lights->next->next->pos.y = 2; */
-/* scene->lights->next->next->pos.z = 1; */
-/* scene->lights->next->next->next = NULL; */
+scene->lights->next->next->next = NULL;
+scene->lights->next->next->next = malloc(sizeof(t_light) * 1); 
+scene->lights->next->next->next->type = POINT; 
+scene->lights->next->next->next->intensity = (t_argb){150, 190, 190, 190}; 
+scene->lights->next->next->next->pos.x = 0;
+scene->lights->next->next->next->pos.y = 4; 
+scene->lights->next->next->next->pos.z = 0; 
+scene->lights->next->next->next->next = NULL; 
 	return (0);
 }

@@ -3,7 +3,9 @@
 // Return reflexions of diffuse and/or specular
 // d : direction from the point -> light
 // v : vector from point -> camera
-// n : normal of the surface
+// n : normal of the surface, toward outside the shape
+// n_dot_l > 0 --> light going against the normal (~ outside of the shape)
+// n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
 t_argb	reflections(t_vec3 l, t_vec3 v, t_vec3 n, t_argb lumen, int spec)
 {
 	const float		n_dot_l = dot_vec3(n, l);
@@ -14,8 +16,8 @@ t_argb	reflections(t_vec3 l, t_vec3 v, t_vec3 n, t_argb lumen, int spec)
 
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
-	if (n_dot_l > 0 && dot_vec3(n, v) > 0)
-		diffuse = diffuse_reflect(lumen, n, l, n_dot_l);
+//	if (n_dot_l > 0) //&& (dot_vec3(n, v) < 0 && dot_vec3(l, v) > 0))
+//		diffuse = diffuse_reflect(lumen, n, l, n_dot_l);
 	if (spec != -1 && r_dot_v > 0)
 		specular = specular_reflect(v, r, r_dot_v, spec, lumen);
 	if (diffuse.a > 0 && specular.a > 0)
@@ -26,9 +28,9 @@ t_argb	reflections(t_vec3 l, t_vec3 v, t_vec3 n, t_argb lumen, int spec)
 }
 
 // More perpendicular the light is, more enlighten the point is.
-t_argb	diffuse_reflect(t_argb lumen, t_vec3 n, t_vec3 d, float n_dot_d)
+t_argb	diffuse_reflect(t_argb lumen, t_vec3 n, t_vec3 l, float n_dot_l)
 {
-	const float	coeff = n_dot_d / (mag_vec3(n) * mag_vec3(d));
+	const float	coeff = n_dot_l / (mag_vec3(n) * mag_vec3(l));
 	t_argb	luminosity;
 
 	luminosity.a = lumen.a * coeff;

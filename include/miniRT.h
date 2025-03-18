@@ -18,11 +18,14 @@
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
+
+//add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec3
 {
 	float		x;
 	float		y;
 	float		z;
+	float		w;
 }				t_vec3;
 
 typedef struct	s_vec2
@@ -38,6 +41,7 @@ typedef struct	s_rgb
 	int	b;
 }	t_rgb;
 
+//16 bytes aligned: OK
 typedef struct	s_argb
 {
 	int	a;
@@ -46,6 +50,7 @@ typedef struct	s_argb
 	int	b;
 }	t_argb;
 
+//24 bytes not aligned
 typedef struct s_quad
 {
 	float	a;
@@ -67,7 +72,7 @@ typedef struct	s_camera
 
 typedef struct	s_viewport
 {
-	t_vec3		pos;
+//	t_vec3		pos;
 	t_vec3		loc;
 	int			h;
 	int			w;
@@ -112,28 +117,37 @@ typedef enum	e_otype
 	CYLINDER,
 }	t_otype;
 
+//64 bytes aligned: OK
+typedef struct	s_ray
+{
+	t_vec3	l;
+	t_vec3	d;
+	t_vec3	v;
+	t_vec3	n;
+}	t_ray;
+
 typedef struct	s_object
 {
-	float			t[2];
-	float			closest_t;
-	t_otype			type;
-	t_vec3			pos;
-	t_vec3			orientation;
-	int				spec;
-	float			radius;
-	float			height;
+	struct s_object	*next;
 	t_argb			reflect;
 	t_argb			color;
-	struct s_object	*next;
+	t_vec3			pos;
+	t_vec3			orientation;
+	float			closest_t;
+	float			radius;
+	float			height;
+	int				spec;
+	t_otype			type;
 }	t_object;
 
 typedef struct	s_data
 {
-	char		res;
-	char		*map_name;
-	float		intersec_p[2];
+	char		key_state[99999];
 	void		*mlx;
 	void		*win;
+	char		*map_name;
+	char		res;
+	float		intersec_p[2];
 	t_img		img;
 	t_canvas	cnv;
 	t_camera	cam;
@@ -143,7 +157,6 @@ typedef struct	s_data
 	t_light		*lights;
 	t_vec2		mouse;
 	int			mouse_state;
-	char		key_state[99999];
 }				t_data;
 
 //init.c
