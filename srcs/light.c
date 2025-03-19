@@ -64,6 +64,7 @@ t_argb	compute_lighting(t_object *obj, t_vec3 pt, t_vec3 n, t_vec3 v, int spec, 
 	float		dist;
 	t_object	*shadow;
 
+	(void)obj;
 	lumen = (t_argb) {0, 0, 0, 0};
 	light = scene->lights;
 	while (light)

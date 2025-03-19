@@ -45,9 +45,9 @@ int	mouse_pos(int x, int y, t_data *scene)
 {
 	static int last_x = 0;
     static int last_y = 0;
-    float delta_x = x - last_x;
-    float delta_y = y - last_y;
-
+    //float delta_x = x - last_x;
+    //float delta_y = y - last_y;
+	(void)scene;
  //   mouse_move(&scene->cam, delta_x, delta_y);
     last_x = x;
     last_y = y;
