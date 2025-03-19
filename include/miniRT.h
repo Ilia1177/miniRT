@@ -154,7 +154,9 @@ int				rt_shut_down(t_data *scene);
 void			rt_put_pixel(t_img *img, int x, int y, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
 int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
+int				encode_img_argb(uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue);
 t_rgb			extract_rgb(int color);
+t_argb			extract_argb(int color);
 void			norm_rgb(t_rgb *c);
 
 //input.c
