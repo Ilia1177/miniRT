@@ -73,6 +73,8 @@ void	print_error_msg(int status)
 		printf("Error\nWrong number of light: only one ambient and one spot\n");
 	if (status == -6)
 		printf("Error\nWrong number of element: at least one sphere, one cylinder, one plane\n");
+	if (status == -7)
+		printf("Error\nWrong number of light: only one ambient, one point\n");
 	if (status == -109)
 		printf("Malloc error\n");
 }

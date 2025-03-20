@@ -1,6 +1,6 @@
 #include <miniRT.h>
 
-int	check_nb_elem(t_data *scene)
+int	check_nb_obj(t_data *scene)
 {
 	int			nb_sphere;
 	int			nb_plane;
@@ -23,6 +23,28 @@ int	check_nb_elem(t_data *scene)
 	}
 	if (!nb_sphere || !nb_cylinder || !nb_plane)
 		return (-6);
+	return (0);
+}
+
+int	check_nb_light(t_data *scene)
+{
+	int			nb_ambient;
+	int			nb_point;
+	t_light	*curr_light;
+
+	nb_ambient = 0;
+	nb_point = 0;
+	curr_light = scene->lights;
+	while (curr_light)
+	{
+		if (curr_light->type == AMBIENT)
+			nb_ambient++;
+		if (curr_light->type == POINT)
+			nb_point++;
+		curr_light = curr_light->next;
+	}
+	if (!nb_point || !nb_ambient)
+		return (-7);
 	return (0);
 }
 
@@ -135,7 +157,10 @@ int	build_scene(t_data *scene)
 		print_light(*it2);
 		it2 = it2->next;
 	}
-	status = check_nb_elem(scene);
+	status = check_nb_obj(scene);
+	if (status)
+		print_error_msg(status);
+	status = check_nb_light(scene);
 	if (status)
 		print_error_msg(status);
 	//return (1);
