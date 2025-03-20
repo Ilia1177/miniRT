@@ -62,15 +62,17 @@ void print_cam(t_camera camera)
 void	print_error_msg(int status)
 {
 	if (status == -1)
-		printf("Bad position arguments\n");
+		printf("Error\nBad position arguments\n");
 	if (status == -2)
-		printf("Bad rgb arguments\n");
+		printf("Error\nBad rgb arguments\n");
 	if (status == -3)
-		printf("Bad float arguments\n");
+		printf("Error\nBad float arguments\n");
 	if (status == -4)
-		printf("Bad type arguments, only A,C,L,sp,pl,cy allowed\n");
+		printf("Error\nBad type arguments, only A,C,L,sp,pl,cy allowed\n");
 	if (status == -5)
-		printf("Wrong number of light: only one ambient and one spot\n");
+		printf("Error\nWrong number of light: only one ambient and one spot\n");
+	if (status == -6)
+		printf("Error\nWrong number of element: at least one sphere, one cylinder, one plane\n");
 	if (status == -109)
 		printf("Malloc error\n");
 }

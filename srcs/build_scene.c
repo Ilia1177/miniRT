@@ -1,5 +1,31 @@
 #include <miniRT.h>
 
+int	check_nb_elem(t_data *scene)
+{
+	int			nb_sphere;
+	int			nb_plane;
+	int			nb_cylinder;
+	t_object	*curr_obj;
+
+	nb_sphere = 0;
+	nb_cylinder = 0;
+	nb_plane = 0;
+	curr_obj = scene->objects;
+	while (curr_obj)
+	{
+		if (curr_obj->type == SPHERE)
+			nb_sphere++;
+		if (curr_obj->type == CYLINDER)
+			nb_cylinder++;
+		if (curr_obj->type == PLANE)
+			nb_plane++;
+		curr_obj = curr_obj->next;
+	}
+	if (!nb_sphere || !nb_cylinder || !nb_plane)
+		return (-6);
+	return (0);
+}
+
 void	clean_obj(t_object *obj, t_otype type)
 {
 	obj->type = type;
@@ -109,6 +135,9 @@ int	build_scene(t_data *scene)
 		print_light(*it2);
 		it2 = it2->next;
 	}
+	status = check_nb_elem(scene);
+	if (status)
+		print_error_msg(status);
 	//return (1);
 	return (status);
 }
