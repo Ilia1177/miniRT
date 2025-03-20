@@ -12,6 +12,9 @@
 
 #include <miniRT.h>
 
+<<<<<<< HEAD
+int	scene_init(t_data *scene)
+=======
 int	clean_scene(t_data *scene)
 {
 	scene->res = 5;
@@ -103,6 +106,7 @@ int	scene_init2(t_data *scene)
 	return (0);
 }
 int	scene_init_old(t_data *scene)
+>>>>>>> main
 {
 	scene->res = 5;
 	scene->cam.pos =	(t_vec3) {0, 0, 0};

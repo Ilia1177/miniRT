@@ -164,8 +164,14 @@ int				rt_shut_down(t_data *scene);
 void			rt_put_pixel(t_img *img, int x, int y, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
 int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
+int				encode_img_argb(uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue);
 t_rgb			extract_rgb(int color);
+t_argb			extract_argb(int color);
+
+//norm_utils.c
 void			norm_rgb(t_rgb *c);
+void			norm_float(float *f, float min, float max);
+void			norm_int(int *num, int min, int max);
 
 //input.c
 int		mouse_press(int keycode, int x, int y, t_data *scene);
@@ -201,6 +207,7 @@ t_argb			ease_color(t_argb reflective, uint8_t factor);
 t_argb			mult_colors(t_argb color1, t_argb intensity);
 t_argb 			add_colors(t_argb c1, t_argb c2);
 unsigned int 	encode_argb(t_argb color);
+void			add_bright_argb(t_argb *color, float bright);
 
 //light.c
 t_argb			compute_lighting(t_ray *ray, t_object *obj, t_data *scene);
@@ -237,20 +244,39 @@ void move_camera_left(t_camera *cam, float speed);
 void	print_argb(t_argb color, char *msg);
 void	print_vec3(t_vec3 v, char *msg);
 void	print_obj(t_object obj);
+void	print_error_msg(int status);
+void	print_light(t_light light);
+void	print_cam(t_camera camera);
 
 //clean.c
 void	free_light(t_light *light);
+void	free_data(t_data *scene);
 
-//scene
+//build_scene.c
 int	build_scene(t_data *scene);
+void	clean_obj(t_object *obj, t_type type);
 
 //Parsing_utils.c
 int	str_to_vec3(char **line, t_vec3 *v);
 int	str_to_rgb(char **line, t_rgb *c);
 int	skip_space(char *str);
-int	str_to_radius(char **line, float *radius);
+int	str_to_float(char **line, float *radius);
+int	str_to_vecdir(char **line, t_vec3 *v);
 
 //init.c
 int	scene_init(t_data *scene);
+
+//lst_sphere.c
+int	create_sphere(char **line, t_data *scene);
+
+//lst_cylinder.c
+int	create_cylinder(char **line, t_data *scene);
+
+//lst_plane.c
+int	create_plane(char **line, t_data *scene);
+
+//lst_light.c
+int	create_light(char **line, t_data *scene, t_type type);
+int	clean_lights(t_data *scene);
 
 #endif

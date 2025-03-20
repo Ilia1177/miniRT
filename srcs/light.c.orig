@@ -17,7 +17,12 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
 	if (n_dot_l > 0)
+<<<<<<< HEAD
+		//diffuse = diffuse_reflect(lumen, ray->n, ray->d, n_dot_l);
 		diffuse = diffuse_reflect(ray, lumen, n_dot_l);
+=======
+		diffuse = diffuse_reflect(lumen, n, l, n_dot_l);
+>>>>>>> main
 	if (spec != -1 && r_dot_v > 0)
 		specular = specular_reflect(ray->v, r, r_dot_v, spec, lumen);
 	if (diffuse.a > 0 && specular.a > 0)
@@ -31,7 +36,12 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 //t_argb	diffuse_reflect(t_argb lumen, t_vec3 n, t_vec3 l, float n_dot_l)
 t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 {
+<<<<<<< HEAD
 	const float	coeff = n_dot_l / (mag_vec3(ray->n) * mag_vec3(ray->d));
+=======
+
+	const float	coeff = n_dot_l / (mag_vec3(n) * mag_vec3(l));
+>>>>>>> main
 	t_argb	luminosity;
 
 	luminosity.a = lumen.a * coeff;

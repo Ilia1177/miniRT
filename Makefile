@@ -30,18 +30,23 @@ SRCS = 	miniRT.c\
 		img.c\
 		init.c\
 		input.c\
+		intersection.c\
 		light.c\
+		lst_cylinder.c\
+		lst_light.c\
+		lst_plane.c\
+		lst_sphere.c\
+		norm_utils.c\
 		normal.c\
 		parsing_utils.c\
 		ray.c\
 		vector.c\
-		intersection.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
-CC = cc
+CC = cc 
 
 all :  $(LIBFT) $(MLX_LIB) $(NAME)
 
@@ -50,7 +55,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(NAME): $(OBJS)
-	$(CC) $^ $(MLX_FLAGS) -o $(NAME) #-L./libft/bin -lft
+	$(CC) $^ $(MLX_FLAGS) -o $(NAME) -L./libft/bin -lft
 
 $(MLX_LIB): $(CLONE) 
 	make -C $(MLX_DIR) 
