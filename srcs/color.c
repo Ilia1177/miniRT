@@ -53,3 +53,14 @@ t_argb	add_colors(t_argb color1, t_argb color2)
 	limit_color(&result);
 	return (result);
 }
+
+void	add_bright_argb(t_argb *color, float bright)
+{
+	if (bright != 0.0f)
+	{
+		color->a = 255 * bright;
+		color->r = color->r * bright;
+		color->g = color->g * bright;
+		color->b = color->g * bright;
+	}
+}

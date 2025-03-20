@@ -48,10 +48,3 @@ t_rgb	extract_rgb(int color)
 	rgb_color.b = color & 0xFF;
 	return (rgb_color);
 }
-// same as limit_color(t_argb *color) --> in color.c
-void	norm_rgb(t_rgb *c)
-{
-	c->r = fmin(255, fmax(0, c->r));
-	c->g = fmin(255, fmax(0, c->g));
-	c->b = fmin(255, fmax(0, c->b));
-}

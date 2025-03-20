@@ -87,6 +87,8 @@ int	main(int ac, char **av)
 		return (status);
 	status = scene_init(&scene);
 	if (!status)
+		status = build_scene(&scene);
+	if (!status)
 		display_scene(&scene);
 	return (0);
 }
