@@ -1,5 +1,53 @@
 #include <miniRT.h>
 
+int	check_nb_obj(t_data *scene)
+{
+	int			nb_sphere;
+	int			nb_plane;
+	int			nb_cylinder;
+	t_object	*curr_obj;
+
+	nb_sphere = 0;
+	nb_cylinder = 0;
+	nb_plane = 0;
+	curr_obj = scene->objects;
+	while (curr_obj)
+	{
+		if (curr_obj->type == SPHERE)
+			nb_sphere++;
+		if (curr_obj->type == CYLINDER)
+			nb_cylinder++;
+		if (curr_obj->type == PLANE)
+			nb_plane++;
+		curr_obj = curr_obj->next;
+	}
+	if (!nb_sphere || !nb_cylinder || !nb_plane)
+		return (-6);
+	return (0);
+}
+
+int	check_nb_light(t_data *scene)
+{
+	int			nb_ambient;
+	int			nb_point;
+	t_light	*curr_light;
+
+	nb_ambient = 0;
+	nb_point = 0;
+	curr_light = scene->lights;
+	while (curr_light)
+	{
+		if (curr_light->type == AMBIENT)
+			nb_ambient++;
+		if (curr_light->type == POINT)
+			nb_point++;
+		curr_light = curr_light->next;
+	}
+	if (!nb_point || !nb_ambient)
+		return (-7);
+	return (0);
+}
+
 void	clean_obj(t_object *obj, t_type type)
 {
 	obj->type = type;
@@ -67,29 +115,6 @@ int	ambient_exist(t_data *scene)
 	}
 	return (0);
 }
-
-//	int	create_light(char **line, t_data *scene, t_type type)
-//	{
-//		char	*str;
-//		int		status;
-//		float	f_fov;
-//		int		fov;
-//
-//		str = *line + 1;
-//		status = str_to_vec3(&str, &scene->cam.pos);
-//		if (status != 0)
-//			return (status);
-//		status = str_to_vecdir(&str, &scene->cam.dir);
-//		if (status != 0)
-//			return (status);
-//		status = str_to_float(&str, &f_fov);
-//		if (status != 0)
-//			return (status);
-//		fov = (int)f_fov;
-//		print_cam(scene->cam);
-//		*line = str + skip_space(str);
-//		return (status);
-//	}
 
 int	register_line_into_scene(char *line, t_data *scene, int status)
 {
@@ -161,6 +186,12 @@ int	build_scene(t_data *scene)
 		print_light(*it2);
 		it2 = it2->next;
 	}
+	status = check_nb_obj(scene);
+	if (status)
+		print_error_msg(status);
+	status = check_nb_light(scene);
+	if (status)
+		print_error_msg(status);
 	//return (1);
 	return (status);
 }
