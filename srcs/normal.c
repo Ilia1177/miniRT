@@ -16,6 +16,8 @@ t_vec3	sphere_normal(t_vec3 pt, t_vec3 v, t_vec3 dir, t_object *sphere)
 {
 	t_vec3	normal;
 
+	(void)v;
+	(void)dir;
 //	if (dot_vec3(normal, dir) > 0.0f)
 //		normal  = mult_vec3(normal, -1);
 	normal = normalize_vec3(sub_vec3(pt, sphere->pos));

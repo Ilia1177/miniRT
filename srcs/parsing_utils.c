@@ -72,20 +72,39 @@ int	str_to_rgb(char **line, t_rgb *c)
 	return (0);
 }
 
-int	str_to_radius(char **line, float *radius)
+int	str_to_float(char **line, float *num)
 {
 	char	*str;
 	char	*end;
 
 	str = *line;
-	*radius = ft_strtof(str, &end);
+	*num = ft_strtof(str, &end);
 	if (str == end)
 		return (-3);
 	*line = end;
 	return (0);
 }
 
-void	norm_float(float *f, float min, float max)
+int	str_to_vecdir(char **line, t_vec3 *v)
 {
-	*f = fmin(max, fmin(min, *f));
+	char	*str;
+	char	*end;
+
+	str = *line;
+	v->x = (int)ft_strtof(str, &end);
+	if (*end != ',' || str == end)
+		return (-2);
+	norm_float(&v->x, -1.0f, 1.0f);
+	str = end + 1;
+	v->y = (int)ft_strtof(str, &end);
+	if (*end != ',' || str == end)
+		return (-2);
+	norm_float(&v->y, -1.0f, 1.0f);
+	str = end + 1;
+	v->z = (int)ft_strtof(str, &end);
+	if (str == end)
+		return (-2);
+	norm_float(&v->z, -1.0f, 1.0f);
+	*line = end;
+	return (0);
 }
