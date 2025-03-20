@@ -38,7 +38,7 @@ t_argb	throw_ray(t_vec3 o, t_vec3 d, float t_min, float t_max, int rec, t_data *
 	t_vec3		n;
 	t_vec3		reflected_ray;
 	
-	local_color = (t_argb) {0, 0, 0, 0};
+	local_color = (t_argb) {255, 255, 255, 255};
 	obj = closest_intersect(o, d, t_min, t_max, scene->objects);
 	if (obj == NULL)
 		return (local_color);

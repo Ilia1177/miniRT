@@ -15,6 +15,7 @@ void update_camera_vectors(t_camera *cam)
     cam->dir.z = sin(rad_yaw) * cos(rad_pitch);
     cam->dir = normalize_vec3(cam->dir);
     cam->right = normalize_vec3(cross_vec3(world_up, cam->dir));
+    //cam->up = normalize_vec3(cross_vec3(cam->dir, cam->right));
     cam->up = cross_vec3(cam->dir, cam->right);
 }
 
