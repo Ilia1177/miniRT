@@ -15,9 +15,9 @@ int	rt_shut_down(t_data *scene)
 	exit(0);
 }
 
-int		rt_init(t_data *scene, int *status)
+int	rt_init(t_data *scene, int *status)
 {
-	int i;
+	int	i;
 
 	*status = 0;
 	scene->mlx = mlx_init();
@@ -29,7 +29,8 @@ int		rt_init(t_data *scene, int *status)
 	scene->img.ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
 	if (!status && !scene->img.ptr)
 		*status = 1;
-	scene->img.addr = mlx_get_data_addr(scene->img.ptr, &scene->img.bpp, &scene->img.llen, &scene->img.endian);
+	scene->img.addr = mlx_get_data_addr(scene->img.ptr, &scene->img.bpp,
+			&scene->img.llen, &scene->img.endian);
 	if (!status && !scene->img.addr)
 		*status = 1;
 	i = -1;
