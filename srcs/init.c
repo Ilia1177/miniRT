@@ -66,7 +66,7 @@ int	clean_scene(t_data *scene)
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.pos = (t_vec3){1, 1, 1};
+	//scene->viewport.pos = (t_vec3){1, 1, 1};
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;
 	scene->objects = NULL;

@@ -7,8 +7,8 @@
 void	clean_obj(t_object *obj, t_otype type)
 {
 	obj->type = type;
-	obj->t[0] = 0.0f;
-	obj->t[1] = 0.0f;
+//	obj->t[0] = 0.0f;
+//	obj->t[1] = 0.0f;
 	obj->closest_t = 0.0f;
 	obj->pos = (t_vec3){0, 0, 0};
 	obj->orientation = (t_vec3){0, 0, 0};
