@@ -15,29 +15,26 @@ void	clean_obj(t_object *obj, t_type type)
 	obj->color = (t_argb){0, 0, 0, 0};
 	obj->next = NULL;
 }
-
 int	place_camera(char **line, t_data *scene)
 {
-	char *str;
+	char	*str;
 	int		status;
+	float	f_fov;
+	int		fov;
 
-	str = *line;
-	str++;
-	str += skip_space(str);
+	str = *line + 1;
 	status = str_to_vec3(&str, &scene->cam.pos);
-	///scene->cam.yaw = 80.0f;
-	//scene->cam.pitch = 0.0f;
-	if (!status)
-	{
-		//status = write_coordinate(&str, &scene->cam.dir);
-		printf("3D normalized orientation vector, in range [-1,1] for each x, y, z axis:\n");
-	}
-	if (!status)
-	{
-		printf("FOV\n");
-	}
-	*line = str;
-	printf("line: %s\n", str);
+	if (status != 0)
+		return (status);
+	status = str_to_vecdir(&str, &scene->cam.dir);
+	if (status != 0)
+		return (status);
+	status = str_to_float(&str, &f_fov);
+	if (status != 0)
+		return (status);
+	fov = (int)f_fov;
+	print_cam(scene->cam);
+	*line = str + skip_space(str);
 	return (status);
 }
 
