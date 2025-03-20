@@ -8,9 +8,10 @@ int	rt_shut_down(t_data *scene)
 		mlx_destroy_image(scene->mlx, scene->img.ptr);
 	if (scene->mlx)
 	{
-		//mlx_destroy_display(scene->mlx);
+		mlx_destroy_display(scene->mlx);
 		free(scene->mlx);
 	}
+	free_data(scene);
 	exit(0);
 }
 
@@ -83,11 +84,19 @@ int	main(int ac, char **av)
 	t_data	scene;
 	if (ac > 1)
 		scene.map_name = av[1];
-	if (rt_init(&scene, &status))
-		return (status);
 	status = scene_init(&scene);
 	if (!status)
 		status = build_scene(&scene);
+	if(status)
+	{
+		free_data(&scene);
+		return(1);
+	}
+	if (rt_init(&scene, &status))
+		return (status);
+	//status = scene_init(&scene);
+   // if (!status)
+   // 	status = build_scene(&scene);
 	if (!status)
 		display_scene(&scene);
 	return (0);

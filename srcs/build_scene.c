@@ -98,8 +98,13 @@ int	build_scene(t_data *scene)
 		free(line);
 		line = get_next_line(map);
 	}
+	free(line);
+	line = NULL;
 	if (status)
+	{
 		gnl_clear_buffer(map);
+	}
+	close(map);
 	printf("**************************linked list OBJECT**************\n");
 	it = scene->objects;
 	while (it)
