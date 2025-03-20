@@ -20,7 +20,6 @@ static int	make_plane(t_object data, t_object **objects)
 			curr_plane = curr_plane->next;
 		curr_plane->next = new_plane;
 	}
-	print_obj(*new_plane);
 	return (0);
 }
 
@@ -52,7 +51,6 @@ int	create_plane(char **line, t_data *scene)
 	if (status != 0)
 		return (status);
 	plane.color = extract_argb(encode_rgb(color.r, color.g, color.b));
-	print_obj(plane);
 	*line = str + skip_space(str);
 	return (make_plane(plane, &scene->objects));
 }

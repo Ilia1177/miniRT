@@ -1,9 +1,5 @@
 #include <miniRT.h>
 
-// ft_strtof
-// create_plane
-// create_cylinder
-//
 void	clean_obj(t_object *obj, t_otype type)
 {
 	obj->type = type;
@@ -20,7 +16,6 @@ void	clean_obj(t_object *obj, t_otype type)
 	obj->next = NULL;
 }
 
-// place_camera
 int	place_camera(char **line, t_data *scene)
 {
 	char	*str;
@@ -44,12 +39,8 @@ int	place_camera(char **line, t_data *scene)
 	return (status);
 }
 
-int	register_line_into_scene(char *line, t_data *scene)
+int	register_line_into_scene(char *line, t_data *scene, int status)
 {
-	int	status;
-
-	printf("register line\n");
-	status = 0;
 	line += skip_space(line);
 	while (line && *line && !status)
 	{
@@ -70,7 +61,6 @@ int	register_line_into_scene(char *line, t_data *scene)
 		else
 			return (0);
 	}
-	printf("register line: status: %d\n", status);
 	if (status < 0)
 		print_error_msg(status);
 	return (status);
@@ -94,12 +84,17 @@ int	build_scene(t_data *scene)
 	line = get_next_line(map);
 	while (!status && line)
 	{
-		status = register_line_into_scene(line, scene);
+		status = register_line_into_scene(line, scene, status);
 		free(line);
 		line = get_next_line(map);
 	}
+	free(line);
+	line = NULL;
 	if (status)
+	{
 		gnl_clear_buffer(map);
+	}
+	close(map);
 	printf("**************************linked list OBJECT**************\n");
 	it = scene->objects;
 	while (it)

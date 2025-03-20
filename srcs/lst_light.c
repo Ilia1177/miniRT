@@ -46,14 +46,6 @@ int	clean_lights(t_data *scene)
 		(t_vec3){-2, 0, 0}, (t_vec3){0, 0, 0}, NULL};
 	if (make_light(light, &scene->lights) == -109)
 		return (-109);
-   // light = (t_light){POINT, (t_argb){255, 200, 200, 200},
-   // 	(t_vec3){0, 10, 0}, (t_vec3){2, 2, 6}, NULL};
-   // if (make_light(light, &scene->lights) == -109)
-   // 	return (-109);
-   // light = (t_light){AMBIENT, (t_argb){255, 25, 25, 25},
-   // 	(t_vec3){-4, 2, 2}, (t_vec3){0, 0, 0}, NULL};
-   // if (make_light(light, &scene->lights) == -109)
-   // 	return (-109);
 	return (0);
 }
 
@@ -66,7 +58,7 @@ int	clean_lights(t_data *scene)
 *
 *	return 0 on success or a error code
 *****************************************************************************/
-int	create_light(char **line, t_data *scene,t_ltype type)
+int	create_light(char **line, t_data *scene, t_ltype type)
 {
 	char		*str;
 	t_light		light;
@@ -91,7 +83,6 @@ int	create_light(char **line, t_data *scene,t_ltype type)
 		return (status);
 	light.intensity = extract_argb(encode_rgb(color.r, color.g, color.b));
 	add_bright_argb(&light.intensity, bright);
-	print_light(light);
 	*line = str + skip_space(str);
 	return (make_light(light, &scene->lights));
 }

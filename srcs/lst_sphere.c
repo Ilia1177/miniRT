@@ -20,7 +20,6 @@ static int	make_sphere(t_object data, t_object **objects)
 			curr_sphere = curr_sphere->next;
 		curr_sphere->next = new_sphere;
 	}
-	print_obj(*new_sphere);
 	return (0);
 }
 
@@ -53,7 +52,6 @@ int	create_sphere(char **line, t_data *scene)
 	if (status != 0)
 		return (status);
 	sphere.color = extract_argb(encode_rgb(color.r, color.g, color.b));
-	print_obj(sphere);
 	*line = str + skip_space(str);
 	if (make_sphere(sphere, &scene->objects) == -109)
 		return (-109);

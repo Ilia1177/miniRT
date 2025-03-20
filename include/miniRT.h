@@ -253,6 +253,7 @@ void	print_cam(t_camera camera);
 
 //clean.c
 void	free_light(t_light *light);
+void	free_data(t_data *scene);
 
 //build_scene.c
 int	build_scene(t_data *scene);

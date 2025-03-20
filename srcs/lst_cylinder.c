@@ -21,7 +21,6 @@ static int	make_cylinder(t_object data, t_object **objects)
 			curr_cylinder = curr_cylinder->next;
 		curr_cylinder->next = new_cylinder;
 	}
-	print_obj(*new_cylinder);
 	return (0);
 }
 
@@ -59,7 +58,6 @@ int	create_cylinder(char **line, t_data *scene)
 	if (status != 0)
 		return (status);
 	cylinder.color = extract_argb(encode_rgb(color.r, color.g, color.b));
-	print_obj(cylinder);
 	*line = str + skip_space(str);
 	return (make_cylinder(cylinder, &scene->objects));
 }
