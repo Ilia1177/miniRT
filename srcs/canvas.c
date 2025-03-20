@@ -38,6 +38,7 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 // throw ray for every point of the canvas
 void	display_color(t_data *scene)
 {
+	t_ray			ray;
 	t_argb			color;
 	t_viewport		vp;
 	t_canvas		cnv;
@@ -53,9 +54,10 @@ void	display_color(t_data *scene)
 		cnv.loc.y = -cnv.h / 2;
 		while (cnv.loc.y < cnv.h / 2)
 		{
-			vp.loc = get_viewport_loc(cnv, vp);
-			vp.loc = apply_camera_rotation(scene->cam, vp.loc);
-			color = throw_ray(scene->cam.pos, vp.loc, 1.0f, T_MAX, R_LIMIT, scene);
+			ray.o = scene->cam.pos;
+			ray.d = get_viewport_loc(cnv, vp);
+			ray.d = apply_camera_rotation(scene->cam, ray.d);
+			color = throw_ray(&ray, 1.0f, T_MAX, R_LIMIT, scene);
 			pix = cnv_to_screen(cnv);
 			color_screen(&scene->img, pix.x, pix.y, res, color);
 			cnv.loc.y += res;

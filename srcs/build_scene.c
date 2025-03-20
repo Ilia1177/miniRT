@@ -127,7 +127,7 @@ int	ambient_exist(t_data *scene)
 	return (0);
 }
 
-int	create_light(t_ltype type, char **line, t_data *scene)
+int	create_light(t_type type, char **line, t_data *scene)
 {
 	char	*str;
 	char	*end;

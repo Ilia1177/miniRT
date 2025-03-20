@@ -12,10 +12,9 @@
 
 #include <miniRT.h>
 
-t_vec3 reflect_ray(t_vec3 dir, t_vec3 norm)
+void	reflect_ray(t_ray *ray)
 {
-	t_vec3		reflection;
-	const float	n_dot_d = dot_vec3(norm, dir);
+	const float	n_dot_d = dot_vec3(ray->n, ray->v);
 
 //	if (n_dot_d < 0)
 //	{
@@ -23,41 +22,43 @@ t_vec3 reflect_ray(t_vec3 dir, t_vec3 norm)
 //		reflection = mult_vec3(mult_vec3(norm, 2), n_dot_d * -1);
 //	}
 //	else
-	reflection = mult_vec3(mult_vec3(norm, 2), n_dot_d);
-	reflection = sub_vec3(reflection, dir);
-	return (reflection);
+	ray->d = mult_vec3(mult_vec3(ray->n, 2), n_dot_d);
+	ray->d = sub_vec3(ray->d, ray->v);
 }
 
-t_argb	throw_ray(t_vec3 o, t_vec3 d, float t_min, float t_max, int rec, t_data *scene)
+//t_argb	throw_ray(t_vec3 o, t_vec3 d, float t_min, float t_max, int rec, t_data *scene)
+t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 {
 	t_object	*obj;
 	t_argb		reflected_color;
 	t_argb		local_color;
-	t_argb		luminosity;
+	t_argb		lumen;
 	t_vec3		pt;
 	t_vec3		n;
 	t_vec3		reflected_ray;
 	
-	local_color = (t_argb) {255, 255, 255, 255};
-	obj = closest_intersect(o, d, t_min, t_max, scene->objects);
+	local_color = (t_argb) {255, 0, 0, 0};
+	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
 	if (obj == NULL)
 		return (local_color);
-	pt = add_vec3(mult_vec3(d, obj->closest_t), o);
-
+	obj->pt = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
+	ray->v = mult_vec3(ray->d, -1);
+	ray->o = obj->pt;
 	if (obj->type == CYLINDER)
-		n = cylinder_normal(pt, obj);
+		cylinder_normal(ray, obj);
 	else if (obj->type == SPHERE)
-		n = sphere_normal(pt, mult_vec3(d, -1), d, obj);
+		sphere_normal(ray, obj);
 	else
-		n = plane_normal(d, obj->orientation);
-
-	luminosity = compute_lighting(obj, pt, n, mult_vec3(d, -1), obj->spec, scene);
-	local_color = mult_colors(obj->color, luminosity);
+		plane_normal(ray, obj);
+	lumen = compute_lighting(ray, obj, scene);
+	local_color = mult_colors(obj->color, lumen);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
-	reflected_ray = reflect_ray(mult_vec3(d, -1), n);
-	reflected_color = throw_ray(pt, reflected_ray, 0.001f, t_max, rec - 1, scene);
-	return (add_colors(mult_colors(local_color, ease_color(obj->reflect, 255)), mult_colors(reflected_color, obj->reflect)));
+	reflect_ray(ray);
+	reflected_color = throw_ray(ray, 0.001f, t_max, rec - 1, scene);
+	local_color = mult_colors(local_color, ease_color(obj->reflect, 255));
+	reflected_color = mult_colors(reflected_color, obj->reflect);
+	return (add_colors(local_color, reflected_color));
 }
 
 t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
