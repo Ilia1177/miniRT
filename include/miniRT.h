@@ -50,14 +50,18 @@ typedef struct	s_argb
 	int	b;
 }	t_argb;
 
+//	typedef struct s_ftab
+//	o{
+//	}
+
 //24 bytes not aligned
 typedef struct s_quad
 {
+	float	t[2];
+	float	delta;
 	float	a;
 	float	b;
 	float	c;
-	float	delta;
-	float	t[2];
 }	t_quad;
 
 typedef struct	s_camera
@@ -106,11 +110,11 @@ typedef enum e_type
 
 typedef struct	s_light
 {
-	t_type			type;
+	struct s_light	*next;
 	t_argb			intensity;
 	t_vec3			pos;
 	t_vec3			dir;
-	struct s_light *next;
+	t_type			type;
 }	t_light;
 
 //64 bytes aligned: OK
@@ -128,9 +132,9 @@ typedef struct	s_object
 	t_argb			reflect;
 	t_argb			color;
 	t_vec3			pos;
-	t_vec3			orientation;
+	t_vec3			axis;
+//	t_vec3			pt;
 	float			t;
-	t_vec3			pt;
 	float			radius;
 	float			height;
 	int				spec;
@@ -144,11 +148,11 @@ typedef struct	s_data
 	void		*win;
 	char		*map_name;
 	char		res;
-	float		intersec_p[2];
+//	float		intersec_p[2];
 	t_img		img;
 	t_canvas	cnv;
 	t_camera	cam;
-	t_vec3		rotation_matrix[3];
+//	t_vec3		rotation_matrix[3];
 	t_viewport	viewport;
 	t_object	*objects;
 	t_light		*lights;

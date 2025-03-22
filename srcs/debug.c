@@ -34,7 +34,7 @@ void	print_obj(t_object obj)
 	if (obj.type == CYLINDER)
 		printf("type : %s", "cylinder");
 	print_vec3(obj.pos, "\tpos");
-	print_vec3(obj.orientation, "\tdir");
+	print_vec3(obj.axis, "\tdir");
 	//printf("\tpos : %.1f, %.1f, %.1f", obj.pos.x, obj.pos.y, obj.pos.z);
 	printf("\tspecu : %d", obj.spec);
 	printf("\tradius : %.1f", obj.radius);

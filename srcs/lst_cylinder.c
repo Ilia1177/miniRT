@@ -45,7 +45,7 @@ int	create_cylinder(char **line, t_data *scene)
 	status = str_to_vec3(&str, &cylinder.pos);
 	if (status != 0)
 		return (status);
-	status = str_to_vecdir(&str, &cylinder.orientation);
+	status = str_to_vecdir(&str, &cylinder.axis);
 	if (status != 0)
 		return (status);
 	status = str_to_float(&str, &cylinder.radius);

@@ -26,24 +26,26 @@ void	reflect_ray(t_ray *ray)
 	ray->d = sub_vec3(ray->d, ray->v);
 }
 
-//t_argb	throw_ray(t_vec3 o, t_vec3 d, float t_min, float t_max, int rec, t_data *scene)
+// 1) find intersection between ray and object
+// 2) get the hitting point, and assign it to ray->origin
+// 3) calcul the normal of the hitting point in ray->n
+// 4) compute light at hitting point
+// 5) return color if no reflective or recursive <= 0
+// 6) reflect ray and throw new ray to get reflections
 t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 {
 	t_object	*obj;
 	t_argb		reflected_color;
 	t_argb		local_color;
 	t_argb		lumen;
-	t_vec3		pt;
-	t_vec3		n;
 	t_vec3		reflected_ray;
 	
 	local_color = (t_argb) {255, 0, 0, 0};
 	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
 	if (obj == NULL)
 		return (local_color);
-	obj->pt = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
+	ray->o = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
 	ray->v = mult_vec3(ray->d, -1);
-	ray->o = obj->pt;
 	if (obj->type == CYLINDER)
 		cylinder_normal(ray, obj);
 	else if (obj->type == SPHERE)

@@ -55,7 +55,7 @@ void	clean_obj(t_object *obj, t_type type)
 //	obj->t[1] = 0.0f;
 	obj->t = 0.0f;
 	obj->pos = (t_vec3){0, 0, 0};
-	obj->orientation = (t_vec3){0, 0, 0};
+	obj->axis = (t_vec3){0, 0, 0};
 	obj->spec = SPECULAR;
 	obj->radius = 0.0f;
 	obj->height = 0.0f;
@@ -86,22 +86,6 @@ int	place_camera(char **line, t_data *scene)
 	return (status);
 }
 
-int	make_light(t_light light, t_data *scene)
-{
-	t_light *new_light;
-
-	new_light = scene->lights;
-	while (new_light)
-		new_light = new_light->next;
-	new_light = malloc(sizeof(t_light));
-	if (!new_light)
-		return (-1);
-	new_light->intensity = light.intensity;
-	new_light->pos = light.pos;
-	//light->dir = dir;
-	//light->color = color;
-	return (0);
-}
 int	ambient_exist(t_data *scene)
 {
 	t_light	*light;
@@ -186,12 +170,12 @@ int	build_scene(t_data *scene)
 		print_light(*it2);
 		it2 = it2->next;
 	}
-	status = check_nb_obj(scene);
-	if (status)
-		print_error_msg(status);
-	status = check_nb_light(scene);
-	if (status)
-		print_error_msg(status);
+	//status = check_nb_obj(scene);
+	//if (status)
+	//	print_error_msg(status);
+	//status = check_nb_light(scene);
+	//if (status)
+	//	print_error_msg(status);
 	//return (1);
 	return (status);
 }

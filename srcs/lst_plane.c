@@ -44,7 +44,7 @@ int	create_plane(char **line, t_data *scene)
 	status = str_to_vec3(&str, &plane.pos);
 	if (status != 0)
 		return (status);
-	status = str_to_vecdir(&str, &plane.orientation);
+	status = str_to_vecdir(&str, &plane.axis);
 	if (status != 0)
 		return (status);
 	status = str_to_rgb(&str, &color);

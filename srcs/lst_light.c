@@ -18,11 +18,11 @@ static int	make_light(t_light light, t_light **lights)
 		while (curr_light->next)
 		{
 			curr_light = curr_light->next;
-			if (curr_light->type == new_light->type)
-			{
-				free(new_light);
-				return (-5);
-			}
+		//	if (curr_light->type == new_light->type)
+		//	{
+		//		free(new_light);
+		//		return (-5);
+		//	}
 		}
 		curr_light->next = new_light;
 	}
@@ -42,8 +42,8 @@ int	clean_lights(t_data *scene)
 {
 	t_light	light;
 
-	light = (t_light){DIRECTIONAL, (t_argb){20, 220, 220, 220},
-		(t_vec3){-2, 0, 0}, (t_vec3){0, 0, 0}, NULL};
+	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
+		(t_vec3){-2, 0, 0, 0}, (t_vec3){0, 0, 0, 0}, DIRECTIONAL};
 	if (make_light(light, &scene->lights) == -109)
 		return (-109);
 	return (0);
