@@ -41,6 +41,8 @@ SRCS = 	miniRT.c\
 		parsing_utils.c\
 		ray.c\
 		vector.c\
+		lst_hyperboloid.c\
+		rotation_object.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 

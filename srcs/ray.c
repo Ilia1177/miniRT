@@ -50,8 +50,10 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 		cylinder_normal(ray, obj);
 	else if (obj->type == SPHERE)
 		sphere_normal(ray, obj);
-	else
+	else if (obj->type == PLANE)
 		plane_normal(ray, obj);
+	else
+		hyperboloid_normal(ray, obj);
 	lumen = compute_lighting(ray, obj, scene);
 	local_color = mult_colors(obj->color, lumen);
 	if (rec <= 0 || obj->reflect.a <= 0)

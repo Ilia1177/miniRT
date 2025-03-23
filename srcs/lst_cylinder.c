@@ -40,6 +40,11 @@ int	create_cylinder(char **line, t_data *scene)
 	int			status;
 	t_rgb		color;
 
+	cylinder.yaw = 0.0f;
+	cylinder.pitch = 0.0f;
+	cylinder.dir = (t_vec3) {0, 0, 1};
+	cylinder.dir = (t_vec3) {0, 1, 0};
+	cylinder.dir = (t_vec3) {1, 0, 0};
 	str = *line + 2 ;
 	clean_obj(&cylinder, CYLINDER);
 	status = str_to_vec3(&str, &cylinder.pos);

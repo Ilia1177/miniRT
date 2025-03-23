@@ -39,6 +39,11 @@ int	create_sphere(char **line, t_data *scene)
 	int			status;
 	t_rgb		color;
 
+	sphere.yaw = 90.0f;
+	sphere.pitch = 0.0f;
+	sphere.dir = (t_vec3) {0, 0, 1};
+	sphere.dir = (t_vec3) {0, 1, 0};
+	sphere.dir = (t_vec3) {1, 0, 0};
 	(void)scene;
 	str = *line + 2 ;
 	clean_obj(&sphere, SPHERE);

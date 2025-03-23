@@ -1,7 +1,58 @@
 #include <miniRT.h>
 
+// translate object on z axis zith i and j
+int	handle_object_translation(t_data *scene)
+{
+	if (scene->key_state[XK_i] == 1 && scene->selected)
+		scene->selected->pos.z += 0.1;
+	if (scene->key_state[XK_k] == 1 && scene->selected)
+		scene->selected->pos.z -= 0.1;
+}
+
+int	handle_object_rotation(t_data *scene)
+{
+	if (scene->key_state[XK_h] == 1)
+	{
+		if (scene->selected)
+		{
+			//scene->selected->yaw++;
+			rotate(scene->selected);
+			//scene->selected->yaw= 0.0f;
+		}
+	}
+	if (scene->key_state[XK_g] == 1)
+	{
+		if (scene->selected)
+		{
+			//scene->selected->yaw--;
+			rotate(scene->selected);
+			//scene->selected->yaw = 0.0f;
+		}
+	}
+	if (scene->key_state[XK_b] == 1)
+	{
+		if (scene->selected)
+		{
+		//	scene->selected->pitch++;
+			rotate(scene->selected);
+		//	scene->selected->pitch = 0.0f;
+		}
+	}
+	if (scene->key_state[XK_n] == 1)
+	{
+		if (scene->selected)
+		{
+		//	scene->selected->pitch--;
+			rotate(scene->selected);
+		//	scene->selected->pitch = 0.0f;
+		}
+	}
+}
+
 int	handle_input(t_data *scene)
 {
+	handle_object_translation(scene);
+	handle_object_rotation(scene);
 	if (scene->key_state[XK_Left] == 1 ) 
 		scene->cam.yaw += 5;
 	if (scene->key_state[XK_Right] == 1)
@@ -56,12 +107,30 @@ int	mouse_pos(int x, int y, t_data *scene)
 	return (0);
 }
 
+void	select_object(t_data *scene)
+{
+	t_ray		catch_ray;
+	t_canvas	cnv;
+	t_viewport  vp;
+	t_object	*obj;
+
+	obj = NULL;
+	vp = scene->viewport;
+	cnv = scene->cnv;
+	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
+	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
+	catch_ray.d = get_viewport_loc(cnv, vp);
+	catch_ray.o = scene->cam.pos;
+	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
+}
+
 int	mouse_press(int keycode, int x, int y, t_data *scene)
 {
 	(void)keycode;
 	scene->mouse.x = x;
 	scene->mouse.y = y;
 	scene->mouse_state = 1;
+	select_object(scene);
 	return (0);
 }
 

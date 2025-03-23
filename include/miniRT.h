@@ -106,6 +106,7 @@ typedef enum e_type
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	HYPERBOL,
 }	t_type;
 
 typedef struct	s_light
@@ -133,7 +134,12 @@ typedef struct	s_object
 	t_argb			color;
 	t_vec3			pos;
 	t_vec3			axis;
-//	t_vec3			pt;
+	t_vec3			scale;
+	t_vec3			up;
+	t_vec3			dir;
+	t_vec3			right;
+	float			yaw;
+	float			pitch;
 	float			t;
 	float			radius;
 	float			height;
@@ -154,6 +160,7 @@ typedef struct	s_data
 	t_camera	cam;
 //	t_vec3		rotation_matrix[3];
 	t_viewport	viewport;
+	t_object	*selected;
 	t_object	*objects;
 	t_light		*lights;
 	t_vec2		mouse;
@@ -198,12 +205,14 @@ int				intersect_object(t_ray *ray, t_object *obj, float *t);
 int				intersect_sphere(t_ray *ray, t_object *object, float *t);
 int 			intersect_cylinder(t_ray *ray, t_object *cylinder, float *t);
 int				intersect_plane(t_ray *ray, t_object *plane, float *t);
+int				intersect_hyperboloid(t_ray *ray, t_object *hyperb, float *t);
 
 
 //normal.c
 void	cylinder_normal(t_ray *ray, t_object *cylinder);
 void	plane_normal(t_ray *ray, t_object *plane);
 void	sphere_normal(t_ray *ray, t_object *sphere);
+void hyperboloid_normal(t_ray *ray, t_object *object);
 
 //color.c
 void			limit_color(t_argb *color);
@@ -283,4 +292,9 @@ int	create_plane(char **line, t_data *scene);
 int	create_light(char **line, t_data *scene, t_type type);
 int	clean_lights(t_data *scene);
 
+int	make_hyperboloid(t_object data, t_object **objects);
+
+//rotation_object.c
+
+void	rotate(t_object *obj);
 #endif
