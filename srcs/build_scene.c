@@ -54,8 +54,11 @@ void	clean_obj(t_object *obj, t_type type)
 //	obj->t[0] = 0.0f;
 //	obj->t[1] = 0.0f;
 	obj->t = 0.0f;
-	obj->pos = (t_vec3){0, 0, 0};
-	obj->axis = (t_vec3){0, 0, 0};
+	obj->pos = (t_vec3){0, 0, 0, 0};
+	obj->axis = (t_vec3){0, 0, 0, 0};
+	obj->dir = (t_vec3){0, 0, 1, 0};
+	obj->up = (t_vec3){0, 1, 0, 0};
+	obj->right = (t_vec3){1, 0, 0, 0};
 	obj->spec = SPECULAR;
 	obj->radius = 0.0f;
 	obj->height = 0.0f;
@@ -100,11 +103,23 @@ int	ambient_exist(t_data *scene)
 	return (0);
 }
 
+int	go_to_endl(char *str)
+{
+	int	c;
+
+	c = 0;
+	while (str[c] != '\n')
+		c++;
+	return (c);
+}
+
 int	register_line_into_scene(char *line, t_data *scene, int status)
 {
 	line += skip_space(line);
 	while (line && *line && !status)
 	{
+		if (*line == '#')
+			line += go_to_endl(line);
 		if (*line == 'A')
 			status = create_light(&line, scene, AMBIENT);
 		else if (*line == 'L')
@@ -135,7 +150,7 @@ int	build_scene(t_data *scene)
 	t_object	*it;
 	t_light	*it2;
 	//added for debug
-	t_object	hyperbol;
+	//t_object	hyperbol;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);

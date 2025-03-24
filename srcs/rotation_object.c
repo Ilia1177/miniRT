@@ -16,7 +16,7 @@ void	rotate(t_object *obj)
 
     const float		rad_yaw = obj->yaw * (M_PI / 180.0f);
     const float		rad_pitch = obj->pitch * (M_PI / 180.0f);
-	const t_vec3	world_up = {0, 1, 0};
+	const t_vec3	world_up = {0, 1, 0, 0};
 
     obj->dir.x = cos(rad_yaw) * cos(rad_pitch);
     obj->dir.y = sin(rad_pitch);

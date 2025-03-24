@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/03/14 17:01:52 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:07:17 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,66 @@ void	reflect_ray(t_ray *ray)
 	ray->d = sub_vec3(ray->d, ray->v);
 }
 
+//t_argb **checkerboard(t_argb obj_color)
+//{
+//	t_argb tab_color[CBOARD_H][CBOARD_W];
+//	int	x;
+//	int y;
+//
+//	y = 0;
+//
+//	while (y < CBOARD_H)
+//	{
+//		x = 0;
+//		while (x < CBOARD_W)
+//		{
+//			if ((x + (6 * y))%2 ==0)
+//				tab_color[y][x] = obj_color;
+//			else 
+//				tab_color[y][x] = (t_argb){0, 255, 255, 255};
+//			x++;
+//		}
+//		y++;
+//	}
+//	return (tab_color);
+//}
+
+t_argb checkerboard(t_vec3 hit_point, t_argb obj_color)
+{
+	int x;
+	int	y;
+	int	z;
+	t_argb color;
+
+	x = (int)floor(hit_point.x * CBOARD_W);
+	y = (int)floor(hit_point.y * CBOARD_H);
+	z = (int)floor(hit_point.z);
+	//if ((hit_point.x <0.5f && hit_point.y <0.5f)||(hit_point.x >=0.5f && hit_point.y >=0.5f))
+	if ((x + y) % 2 == 0)
+		color = (t_argb){0, 255, 255, 255};
+	else
+		color = obj_color;
+	return (color);
+}
+
+//t_argb checkerboard_at(t_vec3 hit_point, t_argb obj_color)
+//{
+//	int x;
+//	int	y;
+//	int	z;
+//	t_argb color;
+//
+//	x = (int)floor(hit_point.x);
+//	y = (int)floor(hit_point.y);
+//	z = (int)floor(hit_point.z);
+//	//if ((hit_point.x <0.5f && hit_point.y <0.5f)||(hit_point.x >=0.5f && hit_point.y >=0.5f))
+//	if ((x + y) % 2 == 0)
+//		color = (t_argb){0, 255, 255, 255};
+//	else
+//		color = obj_color;
+//	return (color);
+//}
+
 // 1) find intersection between ray and object
 // 2) get the hitting point, and assign it to ray->origin
 // 3) calcul the normal of the hitting point in ray->n
@@ -38,7 +98,7 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	t_argb		reflected_color;
 	t_argb		local_color;
 	t_argb		lumen;
-	t_vec3		reflected_ray;
+///	t_vec3		reflected_ray;
 	
 	local_color = (t_argb) {255, 0, 0, 0};
 	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
@@ -55,7 +115,8 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	else
 		hyperboloid_normal(ray, obj);
 	lumen = compute_lighting(ray, obj, scene);
-	local_color = mult_colors(obj->color, lumen);
+	//local_color = mult_colors(obj->color, lumen);
+	local_color = mult_colors(checkerboard(ray->o,obj->color), lumen);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
 	reflect_ray(ray);

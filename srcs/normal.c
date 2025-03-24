@@ -58,9 +58,9 @@ void hyperboloid_normal(t_ray *ray, t_object *object)
     // 3. Build an orthonormal basis (U, V, W).
     t_vec3 U;
     if (fabs(W.x) > 0.001f || fabs(W.y) > 0.001f)
-        U = normalize_vec3((t_vec3){ -W.y, W.x, 0 });
+        U = normalize_vec3((t_vec3){ -W.y, W.x, 0, 0});
     else
-        U = normalize_vec3((t_vec3){ 0, 1, 0 });
+        U = normalize_vec3((t_vec3){ 0, 1, 0, 0});
     t_vec3 V = normalize_vec3(cross_vec3(W, U));
 
     // 4. Transform the point into the hyperboloid's local coordinate system.
@@ -82,7 +82,8 @@ void hyperboloid_normal(t_ray *ray, t_object *object)
     t_vec3 local_normal = {
         2.0f * local_x / a2,
         2.0f * local_y / b2,
-        -2.0f * local_z / c2
+        -2.0f * local_z / c2,
+        0
     };
 
     // 7. Transform the local normal back to world coordinates.
@@ -90,7 +91,8 @@ void hyperboloid_normal(t_ray *ray, t_object *object)
     t_vec3 world_normal = {
         U.x * local_normal.x + V.x * local_normal.y + W.x * local_normal.z,
         U.y * local_normal.x + V.y * local_normal.y + W.y * local_normal.z,
-        U.z * local_normal.x + V.z * local_normal.y + W.z * local_normal.z
+        U.z * local_normal.x + V.z * local_normal.y + W.z * local_normal.z,
+        0
     };
 
     // 8. Normalize the resulting world normal.

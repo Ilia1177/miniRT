@@ -18,6 +18,8 @@
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
+# define CBOARD_W 10
+# define CBOARD_H 10
 
 //add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec3

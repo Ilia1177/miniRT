@@ -41,9 +41,9 @@ int	create_plane(char **line, t_data *scene)
 
 	plane.yaw = 90.0f;
 	plane.pitch = 0.0f;
-	plane.dir = (t_vec3) {0, 0, 1};
-	plane.dir = (t_vec3) {0, 1, 0};
-	plane.dir = (t_vec3) {1, 0, 0};
+	//plane.dir = (t_vec3) {0, 0, 1, 0};
+	//plane.up = (t_vec3) {0, 1, 0, 0};
+	//plane.right = (t_vec3) {1, 0, 0, 0};
 	str = *line + 2 ;
 	clean_obj(&plane, PLANE);
 	status = str_to_vec3(&str, &plane.pos);

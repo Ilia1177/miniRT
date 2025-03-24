@@ -7,6 +7,15 @@ int	handle_object_translation(t_data *scene)
 		scene->selected->pos.z += 0.1;
 	if (scene->key_state[XK_k] == 1 && scene->selected)
 		scene->selected->pos.z -= 0.1;
+	if (scene->key_state[XK_l] == 1 && scene->selected)
+		scene->selected->pos.x += 0.1;
+	if (scene->key_state[XK_j] == 1 && scene->selected)
+		scene->selected->pos.x -= 0.1;
+	if (scene->key_state[XK_m] == 1 && scene->selected)
+		scene->selected->pos.y += 0.1;
+	if (scene->key_state[XK_n] == 1 && scene->selected)
+		scene->selected->pos.y -= 0.1;
+	return (0);
 }
 
 int	handle_object_rotation(t_data *scene)
@@ -47,6 +56,7 @@ int	handle_object_rotation(t_data *scene)
 		//	scene->selected->pitch = 0.0f;
 		}
 	}
+	return (0);
 }
 
 int	handle_input(t_data *scene)
@@ -69,7 +79,7 @@ int	handle_input(t_data *scene)
 		move_camera_left(&scene->cam, 0.5);
 	if (scene->key_state[XK_d] == 1)
 		move_camera_right(&scene->cam, 0.5);
-	if (scene->key_state[XK_o] == 1 && scene->res < 50)
+	if (scene->key_state[XK_o] == 1 && scene->res < 10)
 		scene->res++;
 	if (scene->key_state[XK_p] == 1 && scene->res > 1)
 		scene->res--;
@@ -120,6 +130,7 @@ void	select_object(t_data *scene)
 	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
 	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
 	catch_ray.d = get_viewport_loc(cnv, vp);
+	catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
 	catch_ray.o = scene->cam.pos;
 	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
 }

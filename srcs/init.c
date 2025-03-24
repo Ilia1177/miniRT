@@ -15,10 +15,10 @@
 int	clean_scene(t_data *scene)
 {
 	scene->res = 5;
-	scene->cam.pos = (t_vec3){0, 0, -20};
-	scene->cam.dir = (t_vec3){0, 0, 1};
-	scene->cam.up = (t_vec3){0, 1, 0};
-	scene->cam.right = (t_vec3){1, 0, 0};
+	scene->cam.pos = (t_vec3){0, 0, -20, 0};
+	scene->cam.dir = (t_vec3){0, 0, 1, 0};
+	scene->cam.up = (t_vec3){0, 1, 0, 0};
+	scene->cam.right = (t_vec3){1, 0, 0, 0};
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;

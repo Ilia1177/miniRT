@@ -8,7 +8,7 @@ void update_camera_vectors(t_camera *cam)
 {
     const float		rad_yaw = cam->yaw * (M_PI / 180.0f);
     const float		rad_pitch = cam->pitch * (M_PI / 180.0f);
-	const t_vec3	world_up = {0, 1, 0};
+	const t_vec3	world_up = {0, 1, 0, 0};
 
     cam->dir.x = cos(rad_yaw) * cos(rad_pitch);
     cam->dir.y = sin(rad_pitch);

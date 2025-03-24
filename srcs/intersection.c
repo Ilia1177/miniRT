@@ -96,7 +96,7 @@ int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 
 int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
 {
-	t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
+	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
 	//t_vec3 center = cylinder->pos;
     t_quad quad;
     t_vec3 oc, axis, d_perp, o_perp;
@@ -165,9 +165,9 @@ int intersect_hyperboloid(t_ray *ray, t_object *object, float *t)
     t_vec3 U;
     // Choose an arbitrary vector not parallel to W:
     if (fabs(W.x) > 0.001f || fabs(W.y) > 0.001f)
-        U = normalize_vec3((t_vec3){ -W.y, W.x, 0 });
+        U = normalize_vec3((t_vec3){ -W.y, W.x, 0, 0 });
     else
-        U = normalize_vec3((t_vec3){ 0, 1, 0 });
+        U = normalize_vec3((t_vec3){ 0, 1, 0, 0});
     t_vec3 V = normalize_vec3(cross_vec3(W, U));
 
     // 4. Transform the ray into the hyperboloid's local space.
