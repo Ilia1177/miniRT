@@ -88,6 +88,7 @@ int	handle_input(t_data *scene)
 
 int	key_press(int keysym, t_data *scene)
 {
+	scene->rend = 1;
 	if (keysym == XK_Escape)
 		rt_shut_down(scene);
 	else if (keysym > 0 && keysym < 99999)
@@ -97,6 +98,7 @@ int	key_press(int keysym, t_data *scene)
 
 int	key_release(int keysym, t_data *scene)
 {
+	scene->rend = 0;
 	if (keysym > 0 && keysym < 99999)
 		scene->key_state[keysym] = 0;
 	return (0);

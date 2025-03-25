@@ -18,8 +18,11 @@
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
-# define CBOARD_W 10
-# define CBOARD_H 10
+# define CBOARD_W 24
+# define CBOARD_H 24
+# define CBOARD_SCALE 0.22f
+# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
+# define ABS(x) ((x<0)*-x)+((x>0)*x)
 
 //add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec3
@@ -65,6 +68,17 @@ typedef struct s_quad
 	float	b;
 	float	c;
 }	t_quad;
+
+typedef struct  s_board
+{
+	t_argb color[CBOARD_H][CBOARD_W];
+}   t_board;
+
+typedef struct s_uv
+{
+    float u;
+    float v;
+} t_uv;
 
 typedef struct	s_camera
 {
@@ -155,6 +169,7 @@ typedef struct	s_data
 	void		*mlx;
 	void		*win;
 	char		*map_name;
+	char		rend;
 	char		res;
 //	float		intersec_p[2];
 	t_img		img;
@@ -297,6 +312,13 @@ int	clean_lights(t_data *scene);
 int	make_hyperboloid(t_object data, t_object **objects);
 
 //rotation_object.c
-
 void	rotate(t_object *obj);
+
+//text_checkerboard.c
+t_argb	pattern_color(t_ray *ray, t_object *obj);
+
+//cylinder_utils.c
+t_vec3  cy_center_to_base(t_object cy);
+t_vec3 cy_base_to_center(t_vec3 pos, t_vec3 dir, float height);
+
 #endif

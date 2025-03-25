@@ -26,6 +26,7 @@ SRCS = 	miniRT.c\
 		canvas.c\
 		clean.c\
 		color.c\
+		cylinder_utils.c\
 		debug.c\
 		img.c\
 		init.c\
@@ -40,15 +41,17 @@ SRCS = 	miniRT.c\
 		normal.c\
 		parsing_utils.c\
 		ray.c\
+		rotation_object.c\
+		text_checkerboard.c\
 		vector.c\
 		lst_hyperboloid.c\
-		rotation_object.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+DEPS = $(OBJS:%.o=%.d)
 
-CC = cc 
+CC = cc -MMD 
 
 all :  $(LIBFT) $(MLX_LIB) $(NAME)
 
@@ -80,3 +83,5 @@ fclean	: clean
 re		: fclean all
 
 .PHONY : all clean fclean re bonus
+
+-include $(DEPS)

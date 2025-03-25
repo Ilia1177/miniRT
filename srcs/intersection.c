@@ -94,7 +94,7 @@ int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 	return (0);
 }
 
-int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
+int intersect_cylinderold(t_ray *ray, t_object *cylinder, float *t)
 {
 	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
 	//t_vec3 center = cylinder->pos;
@@ -103,7 +103,7 @@ int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
     float mn[2], y[2];
 
     //oc = sub_vec3(ray->o, cylinder->pos);
-    oc = sub_vec3(ray->o, cylinder->pos);
+    oc = sub_vec3(ray->o, cy_center_to_base(*cylinder));
     axis = normalize_vec3(cylinder->axis);
 
     // Project ray direction and origin onto the cylinder's axis
@@ -150,6 +150,76 @@ int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
 		return (0); // Intersection is behind the ray's origin
     return (1);
 }
+int intersect_cylinder(t_ray *ray, t_object *cyl, float *t) {
+    t_vec3 axis = normalize_vec3(cyl->axis);
+    t_vec3 base = cy_center_to_base(*cyl); 
+    t_vec3 oc = sub_vec3(ray->o, base);
+    float mn[2], y[2];
+    t_quad quad;
+
+    // Project ray direction and origin onto the cylinder's axis
+    mn[0] = dot_vec3(ray->d, axis);       // Projection de la direction du rayon sur l'axe
+    mn[1] = dot_vec3(oc, axis);           // Projection de l'origine du rayon sur l'axe
+    t_vec3 d_perp = sub_vec3(ray->d, mult_vec3(axis, mn[0]));
+    t_vec3 o_perp = sub_vec3(oc, mult_vec3(axis, mn[1]));
+
+    quad = solve_quadratic(o_perp, d_perp, cyl->radius);
+
+    if (quad.delta < 0)
+    	return 0;
+
+    // Compute y-coordinates of intersection points along the cylinder's axis
+    y[0] = mn[1] + quad.t[0] * mn[0];
+    y[1] = mn[1] + quad.t[1] * mn[0];
+
+    // Check if intersections are within the cylinder's height
+    int valid0 = (y[0] >= 0 && y[0] <= cyl->height);
+    int valid1 = (y[1] >= 0 && y[1] <= cyl->height);
+
+    if (!valid0 && !valid1) 
+    	return 0; // Intersections hors du cylindre
+
+    // 2. Intersection avec les disques des bases
+    float t_cap[2];
+    int cap_hit = 0;
+
+    // Base inférieure
+    if (fabsf(mn[0]) > 1e-6) 
+    {
+        t_cap[0] = (-mn[1]) / mn[0]; // Intersection avec le plan z=0
+        t_vec3 hit = add_vec3(ray->o, mult_vec3(ray->d, t_cap[0]));
+        if (mag_vec3(sub_vec3(hit, base)) <= cyl->radius && t_cap[0] > 0)
+            cap_hit = 1;
+    }
+
+    // Base supérieure
+    if (fabsf(mn[0]) > 1e-6)
+    {
+        t_cap[1] = (cyl->height - mn[1]) / mn[0]; // Intersection avec le plan z=height
+        t_vec3 hit = add_vec3(ray->o, mult_vec3(ray->d, t_cap[1]));
+        t_vec3 top = add_vec3(base, mult_vec3(axis, cyl->height));
+        if (mag_vec3(sub_vec3(hit, top)) <= cyl->radius && t_cap[1] > 0)
+            if (!cap_hit || t_cap[1] < t_cap[0])
+            	cap_hit = 2;
+    }
+
+    // Combine les intersections (tube + disques)
+    float t_min = INFINITY;
+    if (valid0 && quad.t[0] > 0.001f && quad.t[0] < t_min)
+    	t_min = quad.t[0];
+    if (valid1 && quad.t[1] > 0.001f && quad.t[1] < t_min)
+    	t_min = quad.t[1];
+    if (cap_hit == 1 && t_cap[0] > 0.001f && t_cap[0] < t_min)
+    	t_min = t_cap[0];
+    if (cap_hit == 2 && t_cap[1] > 0.001f && t_cap[1] < t_min)
+    	t_min = t_cap[1];
+
+    if (t_min == INFINITY)
+    	return 0;
+    *t = t_min;
+    return 1;
+}
+
 
 int intersect_hyperboloid(t_ray *ray, t_object *object, float *t)
 {

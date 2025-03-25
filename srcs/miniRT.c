@@ -58,10 +58,26 @@ void	rt_clear_window(t_img *img)
 
 int	render(t_data *scene)
 {
-	//rt_clear_window(&scene->img);
-	handle_input(scene);
-	display_color(scene);
-	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+	static char		res;
+	static t_camera	cam;
+	/* static int		frame; */
+	/**/
+	/* frame++; */
+	/* if (frame % 500 ==0) */
+	/* { */
+	/* 	frame = 0; */
+	/* 	handle_input(scene); */
+	/* } */
+	//handle_input(scene);
+	//if (res != scene->res || ft_memcmp(&scene->cam, &cam, sizeof(t_camera)))
+	if (scene->rend)
+	{
+		handle_input(scene);
+		res = scene->res;
+		ft_memcpy(&cam, &scene->cam, sizeof(t_object));
+		display_color(scene);
+		mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+	}
 	return (0);
 }
 

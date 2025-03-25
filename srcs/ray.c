@@ -50,41 +50,6 @@ void	reflect_ray(t_ray *ray)
 //	return (tab_color);
 //}
 
-t_argb checkerboard(t_vec3 hit_point, t_argb obj_color)
-{
-	int x;
-	int	y;
-	int	z;
-	t_argb color;
-
-	x = (int)floor(hit_point.x * CBOARD_W);
-	y = (int)floor(hit_point.y * CBOARD_H);
-	z = (int)floor(hit_point.z);
-	//if ((hit_point.x <0.5f && hit_point.y <0.5f)||(hit_point.x >=0.5f && hit_point.y >=0.5f))
-	if ((x + y) % 2 == 0)
-		color = (t_argb){0, 255, 255, 255};
-	else
-		color = obj_color;
-	return (color);
-}
-
-//t_argb checkerboard_at(t_vec3 hit_point, t_argb obj_color)
-//{
-//	int x;
-//	int	y;
-//	int	z;
-//	t_argb color;
-//
-//	x = (int)floor(hit_point.x);
-//	y = (int)floor(hit_point.y);
-//	z = (int)floor(hit_point.z);
-//	//if ((hit_point.x <0.5f && hit_point.y <0.5f)||(hit_point.x >=0.5f && hit_point.y >=0.5f))
-//	if ((x + y) % 2 == 0)
-//		color = (t_argb){0, 255, 255, 255};
-//	else
-//		color = obj_color;
-//	return (color);
-//}
 
 // 1) find intersection between ray and object
 // 2) get the hitting point, and assign it to ray->origin
@@ -115,8 +80,10 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	else
 		hyperboloid_normal(ray, obj);
 	lumen = compute_lighting(ray, obj, scene);
+	//pattern_color(ray->o, obj)
 	//local_color = mult_colors(obj->color, lumen);
-	local_color = mult_colors(checkerboard(ray->o,obj->color), lumen);
+	//local_color = mult_colors(checkerboard(ray->o,obj->color), lumen);
+	local_color = mult_colors(pattern_color(ray,obj), lumen);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
 	reflect_ray(ray);
