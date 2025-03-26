@@ -21,6 +21,8 @@ void	sphere_normal(t_ray *ray, t_object *sphere)
 	ray->n = normalize_vec3(sub_vec3(ray->o, sphere->pos));
 }
 
+
+// add .
 // Normalize the cylinder's axis vector
 // Vector from the cylinder's base position to the point
 // Project pt_to_base onto the cylinder's axis
