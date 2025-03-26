@@ -150,7 +150,9 @@ int intersect_cylinderold(t_ray *ray, t_object *cylinder, float *t)
 		return (0); // Intersection is behind the ray's origin
     return (1);
 }
-int intersect_cylinder(t_ray *ray, t_object *cyl, float *t) {
+
+int intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
+{
     t_vec3 axis = normalize_vec3(cyl->axis);
     t_vec3 base = cy_center_to_base(*cyl); 
     t_vec3 oc = sub_vec3(ray->o, base);
