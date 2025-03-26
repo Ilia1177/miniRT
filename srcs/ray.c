@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/03/24 16:07:17 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/26 10:43:58 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@ void	reflect_ray(t_ray *ray)
 {
 	const float	n_dot_d = dot_vec3(ray->n, ray->v);
 
-//	if (n_dot_d < 0)
-//	{
-//		norm = mult_vec3(norm, -1);
-//		reflection = mult_vec3(mult_vec3(norm, 2), n_dot_d * -1);
-//	}
-//	else
 	ray->d = mult_vec3(mult_vec3(ray->n, 2), n_dot_d);
 	ray->d = sub_vec3(ray->d, ray->v);
 }

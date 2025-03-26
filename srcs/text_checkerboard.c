@@ -54,20 +54,20 @@ t_board	checkerboard(t_argb color1, t_argb color2)
 	return (tab);
 }
 
-t_argb	checkerboard_at(float x, float y, t_argb obj_color)
+t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 {
 	t_argb	color;
 	const t_board	tab = checkerboard(obj_color, invert_color(obj_color));
-	int		u;
-	int		v;
+	int		u2;
+	int		v2;
 
-	v = fmin(floor(y * CBOARD_H), CBOARD_H - 1);
+	v2 = fmin(floor(y * CBOARD_H), CBOARD_H - 1);
 	//printf("v = %d\t", v);
 	//u = round(x);
-	u = fmin(floor(x * CBOARD_W), CBOARD_H - 1);
+	u2 = fmin(floor(x * CBOARD_W), CBOARD_H - 1);
 	//printf("u = %d\n", u);
 	//tab = checkerboard(obj_color, CBOARD_COLOR);
-	color = tab.color[v][u];
+	color = tab.color[v2][u2];
 	return (color);
 }
 

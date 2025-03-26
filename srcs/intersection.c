@@ -13,8 +13,8 @@ t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_
 	{
 		if (intersect_object(ray, obj, &curr_t))
 		{
-			if (shadow && curr_t >= t_min && curr_t < t_max)
-				return (obj);
+				if (shadow && curr_t >= t_min && curr_t < t_max)
+					return (obj);
 			if (curr_t < closest_t && curr_t >= t_min && curr_t < t_max)
 			{
 				closest_t = curr_t;
@@ -76,6 +76,8 @@ int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 }
 
 // Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
+// 1. dot(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
+// 2 
 int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 {
 	const float denom = dot_vec3(plane->axis, ray->d);
