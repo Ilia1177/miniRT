@@ -58,8 +58,6 @@ void	rt_clear_window(t_img *img)
 
 int	render(t_data *scene)
 {
-	static char		res;
-	static t_camera	cam;
 	/* static int		frame; */
 	/**/
 	/* frame++; */
@@ -73,8 +71,6 @@ int	render(t_data *scene)
 	if (scene->rend)
 	{
 		handle_input(scene);
-		res = scene->res;
-		ft_memcpy(&cam, &scene->cam, sizeof(t_object));
 		display_color(scene);
 		mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	}

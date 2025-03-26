@@ -150,7 +150,7 @@ int	build_scene(t_data *scene)
 	t_object	*it;
 	t_light	*it2;
 	//added for debug
-	//t_object	hyperbol;
+//	t_object	hyperbol;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -175,16 +175,16 @@ int	build_scene(t_data *scene)
 	close(map);
 	printf("**************************linked list OBJECT**************\n");
 	// added for debug
-//	hyperbol.type = HYPERBOL;
-//	hyperbol.height = 5;
-//	hyperbol.pos = (t_vec3) {0, 0, 9, 0};
-//	hyperbol.axis = (t_vec3) {1, 0, 0, 0};
-//	hyperbol.scale = (t_vec3) {2, 2, 2, 0};
-//	hyperbol.color = (t_argb) {255, 255, 255, 255};
-//	hyperbol.reflect = (t_argb) {0,0,0,0};
-//	hyperbol.spec = -1;
-//	hyperbol.next = NULL;
-//	make_hyperboloid(hyperbol, &scene->objects);
+	//	hyperbol.type = HYPERBOL;
+	//	hyperbol.height = 5;
+	//	hyperbol.pos = (t_vec3) {0, 0, 9, 0};
+	//	hyperbol.axis = (t_vec3) {1, 0, 0, 0};
+	//	hyperbol.scale = (t_vec3) {2, 2, 2, 0};
+	//	hyperbol.color = (t_argb) {255, 255, 255, 255};
+	//	hyperbol.reflect = (t_argb) {0,0,0,0};
+	//	hyperbol.spec = -1;
+	//	hyperbol.next = NULL;
+	//	make_hyperboloid(hyperbol, &scene->objects);
 	it = scene->objects;
 	while (it)
 	{

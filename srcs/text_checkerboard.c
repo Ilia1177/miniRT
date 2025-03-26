@@ -61,10 +61,10 @@ t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 	int		u2;
 	int		v2;
 
-	v2 = fmin(floor(y * CBOARD_H), CBOARD_H - 1);
+	v2 = fmin(floor(v * CBOARD_H), CBOARD_H - 1);
 	//printf("v = %d\t", v);
 	//u = round(x);
-	u2 = fmin(floor(x * CBOARD_W), CBOARD_H - 1);
+	u2 = fmin(floor(u * CBOARD_W), CBOARD_H - 1);
 	//printf("u = %d\n", u);
 	//tab = checkerboard(obj_color, CBOARD_COLOR);
 	color = tab.color[v2][u2];

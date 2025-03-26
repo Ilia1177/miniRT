@@ -313,6 +313,9 @@ int	make_hyperboloid(t_object data, t_object **objects);
 
 //rotation_object.c
 void	rotate(t_object *obj);
+void	rotate_on_z(t_object *obj, float theta);
+void	rotate_on_y(t_object *obj, float theta);
+	void	rotate_on_x(t_object *obj, float theta);
 
 //text_checkerboard.c
 t_argb	pattern_color(t_ray *ray, t_object *obj);
@@ -320,5 +323,8 @@ t_argb	pattern_color(t_ray *ray, t_object *obj);
 //cylinder_utils.c
 t_vec3  cy_center_to_base(t_object cy);
 t_vec3 cy_base_to_center(t_vec3 pos, t_vec3 dir, float height);
+
+//dl_img.c
+void save_as_ppm(t_img *img, char *filename);
 
 #endif

@@ -197,7 +197,7 @@ int intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
     }
 
     // Base supérieure
-    if (fabsf(mn[0]) > 1e-6)
+    if (fabsf(mn[0]) < 1e-6)
     {
         t_cap[1] = (cyl->height - mn[1]) / mn[0]; // Intersection avec le plan z=height
         t_vec3 hit = add_vec3(ray->o, mult_vec3(ray->d, t_cap[1]));

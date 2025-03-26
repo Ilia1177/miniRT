@@ -20,42 +20,34 @@ int	handle_object_translation(t_data *scene)
 
 int	handle_object_rotation(t_data *scene)
 {
-	if (scene->key_state[XK_h] == 1)
+	if (scene->key_state[XK_z] == 1)
 	{
 		if (scene->selected)
 		{
 			//scene->selected->yaw++;
-			rotate(scene->selected);
+			rotate_on_x(scene->selected, 1.0f);
 			//scene->selected->yaw= 0.0f;
 		}
 	}
-	if (scene->key_state[XK_g] == 1)
+	if (scene->key_state[XK_x] == 1)
 	{
 		if (scene->selected)
 		{
 			//scene->selected->yaw--;
-			rotate(scene->selected);
+			rotate_on_y(scene->selected, 1.0f);
 			//scene->selected->yaw = 0.0f;
 		}
 	}
-	if (scene->key_state[XK_b] == 1)
+	if (scene->key_state[XK_c] == 1)
 	{
 		if (scene->selected)
 		{
 		//	scene->selected->pitch++;
-			rotate(scene->selected);
+			rotate_on_z(scene->selected, 1.0f);
 		//	scene->selected->pitch = 0.0f;
 		}
 	}
-	if (scene->key_state[XK_n] == 1)
-	{
-		if (scene->selected)
-		{
-		//	scene->selected->pitch--;
-			rotate(scene->selected);
-		//	scene->selected->pitch = 0.0f;
-		}
-	}
+
 	return (0);
 }
 
@@ -63,6 +55,8 @@ int	handle_input(t_data *scene)
 {
 	handle_object_translation(scene);
 	handle_object_rotation(scene);
+	//if (scene->key_state[XK_Space] == 1)
+	//	save_as_ppm(scene->img, "img.ppm");
 	if (scene->key_state[XK_Left] == 1 ) 
 		scene->cam.yaw += 5;
 	if (scene->key_state[XK_Right] == 1)
@@ -79,9 +73,9 @@ int	handle_input(t_data *scene)
 		move_camera_left(&scene->cam, 0.5);
 	if (scene->key_state[XK_d] == 1)
 		move_camera_right(&scene->cam, 0.5);
-	if (scene->key_state[XK_o] == 1 && scene->res < 10)
+	if (scene->key_state[XK_minus] == 1 && scene->res < 10)
 		scene->res++;
-	if (scene->key_state[XK_p] == 1 && scene->res > 1)
+	if (scene->key_state[XK_plus] == 1 && scene->res > 1)
 		scene->res--;
 	return (0);
 }

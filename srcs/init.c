@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/19 20:16:56 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/26 17:59:08 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int	clean_scene(t_data *scene)
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	//scene->viewport.pos = (t_vec3){1, 1, 1};
 	scene->viewport.h = 1;
-	scene->viewport.w = 1;
+	scene->viewport.w = calc_vp_width(53, 2);
 	scene->objects = NULL;
 	scene->lights = NULL;
 	return (0);
