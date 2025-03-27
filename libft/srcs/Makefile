@@ -79,11 +79,10 @@ all				:	$(NAME)
 
 $(NAME)			:	$(OBJS) $(B_OBJS)
 					$(AR) $(NAME) $^ 
-					$(AR) $(NAME) $(OBJS)  # This ensures new .o files are added to the archive
 
 $(OBJS_DIR)/%.o	: %.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I../include -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean	:	
 			$(RM) $(OBJS) $(B_OBJS)

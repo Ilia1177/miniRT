@@ -27,9 +27,10 @@ void	rotate_on_x(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
 
-	obj->right = (t_vec3) {1, 0 ,0, 0};
+	//obj->right = (t_vec3) {1, 0 ,0, 0};
 	obj->up = (t_vec3) {0, cos(theta), sin(theta), 0};
 	obj->dir = (t_vec3) {0, -sin(theta), cos(theta), 0};
+	obj->right = normalize_vec3(cross_vec3(obj->up, obj->dir));
 	change_axis(obj);
 }
 
@@ -38,8 +39,9 @@ void	rotate_on_y(t_object *obj, float theta)
 	theta = theta * (M_PI / 180.0f);
 
 	obj->right = (t_vec3) {cos(theta), 0 , -sin(theta), 0};
-	obj->up = (t_vec3) {0, 1, 0, 0};
+	//obj->up = (t_vec3) {0, 1, 0, 0};
 	obj->dir = (t_vec3) {sin(theta), 0, cos(theta), 0};
+	obj->up = normalize_vec3(cross_vec3(obj->dir, obj->right));
 	change_axis(obj);
 }
 
@@ -49,7 +51,8 @@ void	rotate_on_z(t_object *obj, float theta)
 
 	obj->right = (t_vec3) {cos(theta), sin(theta),0 , 0};
 	obj->up = (t_vec3) {-sin(theta), cos(theta), 0, 0};
-	obj->dir = (t_vec3) {0, 0, 1, 0};
+//	obj->dir = (t_vec3) {0, 0, 1, 0};
+	obj->dir = normalize_vec3(cross_vec3(obj->right, obj->up));
 	change_axis(obj);
 }
 

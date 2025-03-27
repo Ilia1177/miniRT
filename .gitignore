@@ -9,3 +9,4 @@ miniRT
 *.d
 objs/
 *.sw*
+*.ppm

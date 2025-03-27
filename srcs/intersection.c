@@ -60,13 +60,13 @@ int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 
 	oc = sub_vec3(ray->o, sphere->pos);
 	quad = solve_quadratic(oc, ray->d, sphere->radius);
-	if (quad.delta < 0)
+	if (quad.delta < 0.0f)
 		return (0);
-	else if (quad.t[0] < 0 && quad.t[1] < 0)
+	else if (quad.t[0] < 0.001f && quad.t[1] < 0.0f)
 		return (0);
-	else if (quad.t[0] > 0 && quad.t[0] < quad.t[1])
+	else if (quad.t[0] > 0.001f && quad.t[0] < quad.t[1])
 		*t = quad.t[0];
-	else if (quad.t[1] > 0)
+	else if (quad.t[1] > 0.00f)
 		*t = quad.t[1];
 //	else if (quad.t[1] > 0)
 //		*t = quad.t[1];
@@ -96,16 +96,16 @@ int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 	return (0);
 }
 
-int intersect_cylinderold(t_ray *ray, t_object *cylinder, float *t)
+int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
 {
 	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
-	//t_vec3 center = cylinder->pos;
+	t_vec3 center = cylinder->pos;
     t_quad quad;
     t_vec3 oc, axis, d_perp, o_perp;
     float mn[2], y[2];
 
     //oc = sub_vec3(ray->o, cylinder->pos);
-    oc = sub_vec3(ray->o, cy_center_to_base(*cylinder));
+    oc = sub_vec3(ray->o, center);
     axis = normalize_vec3(cylinder->axis);
 
     // Project ray direction and origin onto the cylinder's axis
@@ -153,7 +153,7 @@ int intersect_cylinderold(t_ray *ray, t_object *cylinder, float *t)
     return (1);
 }
 
-int intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
+int intersect_cylindernew(t_ray *ray, t_object *cyl, float *t)
 {
     t_vec3 axis = normalize_vec3(cyl->axis);
     t_vec3 base = cy_center_to_base(*cyl); 

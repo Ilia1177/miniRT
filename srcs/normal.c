@@ -22,7 +22,6 @@ void	sphere_normal(t_ray *ray, t_object *sphere)
 }
 
 
-// add .
 // Normalize the cylinder's axis vector
 // Vector from the cylinder's base position to the point
 // Project pt_to_base onto the cylinder's axis
@@ -32,8 +31,8 @@ void	sphere_normal(t_ray *ray, t_object *sphere)
 // Point is on the top cap
 void	cylinder_normal(t_ray *ray, t_object *cylinder)
 {
-	t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
-	//t_vec3	center = cylinder->pos;
+	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
+	t_vec3	center = cylinder->pos;
     const t_vec3	axis = normalize_vec3(cylinder->axis);
     const t_vec3	pt_to_base = sub_vec3(ray->o, center);
     const float		projection = dot_vec3(pt_to_base, axis);

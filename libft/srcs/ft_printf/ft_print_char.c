@@ -6,14 +6,14 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 20:06:31 by npolack           #+#    #+#             */
-/*   Updated: 2024/12/07 12:43:32 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/27 14:10:39 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/libft.h"
 
-int	ft_print_char(int c)
+int	ft_print_char(int fd, int c)
 {
-	write(1, &c, 1);
+	write(fd, &c, 1);
 	return (1);
 }

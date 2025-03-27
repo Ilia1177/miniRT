@@ -238,7 +238,7 @@ t_argb			ease_color(t_argb reflective, uint8_t factor);
 t_argb			mult_colors(t_argb color1, t_argb intensity);
 t_argb 			add_colors(t_argb c1, t_argb c2);
 unsigned int 	encode_argb(t_argb color);
-void			add_bright_argb(t_argb *color, float bright);
+t_argb			apply_brightness(t_argb color);
 
 //light.c
 t_argb			compute_lighting(t_ray *ray, t_object *obj, t_data *scene);

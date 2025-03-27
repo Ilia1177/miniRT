@@ -29,7 +29,7 @@ void save_as_ppm(t_img *img, char *filename)
     if (fd < 0)
         return;
     
-    dprintf(fd, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
+    ft_dprintf(fd, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
     save_pixel_data(img, WIDTH, HEIGHT, fd);
     close(fd);
 }

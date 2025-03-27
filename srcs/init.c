@@ -35,11 +35,11 @@ int	scene_init(t_data *scene)
 	//t_light	*it;
 
 	clean_scene(scene);
-	if (clean_lights(scene) == -109)
-	{
-		print_error_msg(-109);
-		return (-109);
-	}
+//	if (clean_lights(scene) == -109)
+//	{
+//		print_error_msg(-109);
+//		return (-109);
+//	}
 	//printf("**************************linked list LIGHT**************\n");
 	//it = scene->lights;
 	//while (it)

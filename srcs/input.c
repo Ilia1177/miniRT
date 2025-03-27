@@ -1,7 +1,7 @@
 #include <miniRT.h>
 
 // translate object on z axis zith i and j
-int	handle_object_translation(t_data *scene)
+void	handle_object_translation(t_data *scene)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
 		scene->selected->pos.z += 0.1;
@@ -11,52 +11,24 @@ int	handle_object_translation(t_data *scene)
 		scene->selected->pos.x += 0.1;
 	if (scene->key_state[XK_j] == 1 && scene->selected)
 		scene->selected->pos.x -= 0.1;
-	if (scene->key_state[XK_m] == 1 && scene->selected)
+	if (scene->key_state[XK_u] == 1 && scene->selected)
 		scene->selected->pos.y += 0.1;
-	if (scene->key_state[XK_n] == 1 && scene->selected)
+	if (scene->key_state[XK_o] == 1 && scene->selected)
 		scene->selected->pos.y -= 0.1;
-	return (0);
 }
 
-int	handle_object_rotation(t_data *scene)
+void	handle_object_rotation(t_data *scene)
 {
-	if (scene->key_state[XK_z] == 1)
-	{
-		if (scene->selected)
-		{
-			//scene->selected->yaw++;
-			rotate_on_x(scene->selected, 1.0f);
-			//scene->selected->yaw= 0.0f;
-		}
-	}
-	if (scene->key_state[XK_x] == 1)
-	{
-		if (scene->selected)
-		{
-			//scene->selected->yaw--;
-			rotate_on_y(scene->selected, 1.0f);
-			//scene->selected->yaw = 0.0f;
-		}
-	}
-	if (scene->key_state[XK_c] == 1)
-	{
-		if (scene->selected)
-		{
-		//	scene->selected->pitch++;
-			rotate_on_z(scene->selected, 1.0f);
-		//	scene->selected->pitch = 0.0f;
-		}
-	}
-
-	return (0);
+	if (scene->key_state[XK_z] == 1 && scene->selected)
+		rotate_on_x(scene->selected, 1.0f);
+	if (scene->key_state[XK_x] == 1 && scene->selected)
+		rotate_on_y(scene->selected, 1.0f);
+	if (scene->key_state[XK_c] == 1 && scene->selected)
+		rotate_on_z(scene->selected, 1.0f);
 }
 
-int	handle_input(t_data *scene)
+void	handle_camera_move(t_data *scene)
 {
-	handle_object_translation(scene);
-	handle_object_rotation(scene);
-	//if (scene->key_state[XK_Space] == 1)
-	//	save_as_ppm(scene->img, "img.ppm");
 	if (scene->key_state[XK_Left] == 1 ) 
 		scene->cam.yaw += 5;
 	if (scene->key_state[XK_Right] == 1)
@@ -73,9 +45,18 @@ int	handle_input(t_data *scene)
 		move_camera_left(&scene->cam, 0.5);
 	if (scene->key_state[XK_d] == 1)
 		move_camera_right(&scene->cam, 0.5);
-	if (scene->key_state[XK_minus] == 1 && scene->res < 10)
+}
+
+int	handle_input(t_data *scene)
+{
+	handle_object_translation(scene);
+	handle_object_rotation(scene);
+	handle_camera_move(scene);
+	//if (scene->key_state[XK_Space] == 1)
+	//	save_as_ppm(scene->img, "img.ppm");
+	if (scene->key_state[XK_F1] == 1 && scene->res < 10)
 		scene->res++;
-	if (scene->key_state[XK_plus] == 1 && scene->res > 1)
+	if (scene->key_state[XK_F2] == 1 && scene->res > 1)
 		scene->res--;
 	return (0);
 }

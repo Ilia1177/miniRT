@@ -6,22 +6,22 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:52:17 by npolack           #+#    #+#             */
-/*   Updated: 2024/12/07 12:43:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/27 14:22:25 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/libft.h"
 
-static void	ft_put_address(unsigned long num, char *base)
+static void	ft_put_address(int fd, unsigned long num, char *base)
 {
 	unsigned char	c;
 	unsigned long	baselen;
 
 	baselen = ft_strlen(base);
 	if (num >= baselen)
-		ft_put_address(num / baselen, base);
+		ft_put_address(fd, num / baselen, base);
 	c = base[num % baselen];
-	write(1, &c, 1);
+	write(fd, &c, 1);
 }
 
 static int	get_intlen_address(unsigned long num, unsigned long baselen)
@@ -37,7 +37,7 @@ static int	get_intlen_address(unsigned long num, unsigned long baselen)
 	return (len);
 }
 
-int	ft_print_address(unsigned long n)
+int	ft_print_address(int fd, unsigned long n)
 {
 	int	len;
 
@@ -47,7 +47,7 @@ int	ft_print_address(unsigned long n)
 		return (5);
 	}
 	len = get_intlen_address(n, 16);
-	len += ft_print_str("0x");
-	ft_put_address(n, "0123456789abcdef");
+	len += ft_print_str(fd, "0x");
+	ft_put_address(fd, n, "0123456789abcdef");
 	return (len);
 }

@@ -37,9 +37,7 @@ int	create_sphere(char **line, t_data *scene)
 	char		*str;
 	t_object	sphere;
 	int			status;
-	//t_argb		color;
 
-	(void)scene;
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
 	status = str_to_vec3(&str, &sphere.pos);
@@ -49,10 +47,8 @@ int	create_sphere(char **line, t_data *scene)
 		status = str_to_argb(&str, &sphere.color, 0);
 	if (!status)
 		status = get_options(&str, &sphere);
-//	sphere.color = extract_argb(encode_rgb(color.r, color.g, color.b));
+	if (!status)
+	   status = make_object(sphere, &scene->objects); 
 	*line = str + skip_space(str);
-	print_argb(sphere.color, "sphere color");
-	if (!status && make_object(sphere, &scene->objects) == -109)
-		return (-109);
 	return (status);
 }

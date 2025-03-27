@@ -119,19 +119,19 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 		hp = sub_vec3(hp, obj->pos);
 		uv = sphere_map(hp);
 		color = checkerboard_at(uv.u, uv.v, obj->color);
-		printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
+		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else if (obj->type == PLANE && obj->pattern)
 	{
 		color = checkerboard_plane(hp, obj);
-	    printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
+	    //printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else if (obj->type == CYLINDER && obj->pattern)
 	{
 		hp = sub_vec3(hp, obj->pos);
 		uv = cylinder_maplast(hp, normalize_vec3(obj->axis), obj->radius, obj->height);
 		color = checkerboard_at(uv.u, uv.v, obj->color);
-		printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
+		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else
 		color = obj->color;

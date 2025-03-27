@@ -48,19 +48,20 @@ t_argb	add_colors(t_argb color1, t_argb color2)
 
 	result.a = color1.a + color2.a;
 	result.r = color1.r + color2.r;
-	result.b = color1.b + color2.b;
 	result.g = color1.g + color2.g;
+	result.b = color1.b + color2.b;
 	limit_color(&result);
 	return (result);
 }
 
-void	add_bright_argb(t_argb *color, float bright)
+t_argb	apply_brightness(t_argb color)
 {
-	if (bright != 0.0f)
-	{
-		color->a = 255 * bright;
-		color->r = color->r * bright;
-		color->g = color->g * bright;
-		color->b = color->g * bright;
-	}
+	const float brightness = (float)color.a / 255;
+	t_argb		real_color;
+
+	real_color.a = 255;
+	real_color.r = color.r * brightness;
+	real_color.g = color.g * brightness;
+	real_color.b = color.b * brightness;
+	return (real_color);
 }

@@ -17,17 +17,6 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
-
-//	if (v_dot_n < 0)
-//	{
-//		ray->n = mult_vec3(ray->n, -1);
-//		if (n_dot_l > 0) //useless ?
-//			diffuse = diffuse_reflect(ray, lumen, n_dot_l);
-	//	if (spec != -1 && r_dot_v > 0)
-	//		specular = specular_reflect(ray->v, r, r_dot_v, spec, lumen);
-//	}
-	if (v_dot_n < 0)
-		ray->n = mult_vec3(ray->n, -1);	
 	if (n_dot_l > 0) //useless ?
 	{
 		diffuse = diffuse_reflect(ray, lumen, n_dot_l);
@@ -86,7 +75,7 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 	while (light)
 	{
 		if (light->type == AMBIENT)
-			lumen = add_colors(lumen, light->intensity);
+			lumen = add_colors(lumen, apply_brightness(light->intensity));
 		else
 		{
 			if (light->type == POINT)
@@ -99,8 +88,10 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 				ray->d = light->dir;
 				dist = T_MAX;
 			}
+			if (dot_vec3(ray->n, ray->v) < 0)
+				ray->n = mult_vec3(ray->n, -1);	
 			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))
-				lumen = add_colors(reflections(ray, light->intensity, obj->spec), lumen);
+				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}
 		light = light->next;
 	}

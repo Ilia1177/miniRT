@@ -30,7 +30,7 @@ SRCS		=	ft_printf/ft_printf.c\
 				get_next_line/get_next_line_bonus.c\
 				get_next_line/get_next_line_utils_bonus.c
 
-SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
+SRCS 		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		=	$(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 TEST_SRCS	=	srcs/main_test.c
 TEST_OBJS	= 	$(TEST_SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
@@ -51,13 +51,14 @@ $(LIBFT)	:
 		make -C srcs
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	mkdir -p $(dir $@)  # Creates necessary subdirectories
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test	: $(TEST_OBJS) $(NAME) 
 		$(CC) $(CFLAGS) $(TEST_OBJS) $(NAME) -Lbin -lft -o test
 		
 clean	:	
+			rm -f test
 			make clean -C srcs
 
 fclean	:	clean

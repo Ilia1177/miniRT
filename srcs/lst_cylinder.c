@@ -38,27 +38,22 @@ int	create_cylinder(char **line, t_data *scene)
 	char		*str;
 	t_object	cylinder;
 	int			status;
-	//t_argb		color;
 
 	str = *line + 2 ;
 	init_obj(&cylinder, CYLINDER);
 	status = str_to_vec3(&str, &cylinder.pos);
-	if (status != 0)
-		return (status);
-	status = str_to_vecdir(&str, &cylinder.axis);
-	if (status != 0)
-		return (status);
-	status = str_to_float(&str, &cylinder.radius);
-	if (status != 0)
-		return (status);
-	status = str_to_float(&str, &cylinder.height);
-	if (status != 0)
-		return (status);
-	status = str_to_argb(&str, &cylinder.color, 0);
-	if (status != 0)
-		return (status);
-	print_argb(cylinder.color, "cylinder color");
-//	cylinder.color = extract_argb(encode_rgb(color.r, color.g, color.b));
+	if (!status)
+		status = str_to_vecdir(&str, &cylinder.axis);
+	if (!status)
+		status = str_to_float(&str, &cylinder.radius);
+	if (!status)
+		status = str_to_float(&str, &cylinder.height);
+	if (!status)
+		status = str_to_argb(&str, &cylinder.color, 0);
+	if (!status)
+		status = make_object(cylinder, &scene->objects);
+	if (!status)
+		status = get_options(&str, &cylinder);
 	*line = str + skip_space(str);
-	return (make_object(cylinder, &scene->objects));
+	return (status);
 }
