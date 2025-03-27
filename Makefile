@@ -45,6 +45,7 @@ SRCS = 	miniRT.c\
 		text_checkerboard.c\
 		vector.c\
 		lst_hyperboloid.c\
+		dl_img.c\
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 

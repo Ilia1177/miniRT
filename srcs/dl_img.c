@@ -5,7 +5,7 @@ void save_pixel_data(t_img *img, int width, int height, int fd)
 {
     int x, y;
     int color;
-
+	int	r, g, b;
     for (y = 0; y < height; y++)
     {
         for (x = 0; x < width; x++)
