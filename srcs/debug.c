@@ -36,6 +36,7 @@ void	print_obj(t_object obj)
 	print_vec3(obj.pos, "\tpos");
 	print_vec3(obj.axis, "\tdir");
 	//printf("\tpos : %.1f, %.1f, %.1f", obj.pos.x, obj.pos.y, obj.pos.z);
+	printf("\tpattern : %d", obj.pattern);
 	printf("\tspecu : %d", obj.spec);
 	printf("\tradius : %.1f", obj.radius);
 	printf("\thight : %.1f", obj.height);
@@ -47,7 +48,7 @@ void	print_obj(t_object obj)
 void print_cam(t_camera camera)
 {
 	printf("[-----------PRINT CAM-------------]\n");
-	print_vec3(camera.pos, "\tpos");
+	print_vec3(camera.pos, "pos");
 	print_vec3(camera.dir, "\tdir");
 	print_vec3(camera.right, "\tright");
 	print_vec3(camera.up, "\tup");
@@ -75,6 +76,8 @@ void	print_error_msg(int status)
 		printf("Error\nWrong number of element: at least one sphere, one cylinder, one plane\n");
 	if (status == -7)
 		printf("Error\nWrong number of light: only one ambient, one point\n");
+	if (status == -8)
+		printf("Error\nWrong options arguments\n");
 	if (status == -109)
 		printf("Malloc error\n");
 }

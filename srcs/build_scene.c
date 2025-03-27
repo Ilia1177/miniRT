@@ -58,6 +58,7 @@ void	init_obj(t_object *obj, t_type type)
 	obj->up			= (t_vec3){0, 1, 0, 0};
 	obj->right		= (t_vec3){1, 0, 0, 0};
 	obj->spec		= SPECULAR;
+	obj->pattern	= 0;
 	obj->radius 	= 0.0f;
 	obj->height 	= 0.0f;
 	obj->reflect 	= (t_argb){0, 0, 0, 0};

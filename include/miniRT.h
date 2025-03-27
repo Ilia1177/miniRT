@@ -160,6 +160,7 @@ typedef struct	s_object
 	float			radius;
 	float			height;
 	int				spec;
+	int				pattern;
 	t_type			type;
 }	t_object;
 
@@ -292,6 +293,7 @@ int	str_to_argb(char **line, t_argb *c, int get_alpha);
 int	skip_space(char *str);
 int	str_to_float(char **line, float *radius);
 int	str_to_vecdir(char **line, t_vec3 *v);
+int	get_options(char **line, t_object *obj);
 
 int	make_object(t_object data, t_object **objects);
 //init.c

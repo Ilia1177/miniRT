@@ -132,3 +132,34 @@ int	str_to_vecdir(char **line, t_vec3 *v)
 	*line = end;
 	return (0);
 }
+/*****************************************************************************
+ 	* Get (int)pattern (int)spec (t_argb)reflect of an object for bonus part
+*****************************************************************************/
+int	get_options(char **line, t_object *obj)
+{
+	char	*str;
+	int		status;
+	char	*end;
+
+	str = *line;
+	str += skip_space(str);
+	end = str;
+	status = 0;
+	if (!ft_strncmp("-o", str, 2))
+	{
+		str = str + 2;
+		obj->pattern = (int)ft_strtof(str, &end);
+		if (!(str != end && ft_isspace(*end)))
+			status = -8;
+		str = end;
+		obj->spec = (int)ft_strtof(str, &end);
+		if (!(str != end && ft_isspace(*end)))
+			status = -8;
+		str = end;
+		status = str_to_argb(&str, &obj->reflect, 1);
+		if (status)
+			status = -8;
+		*line = str;
+	}
+	return (status);
+}

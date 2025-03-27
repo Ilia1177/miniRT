@@ -43,18 +43,16 @@ int	create_sphere(char **line, t_data *scene)
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
 	status = str_to_vec3(&str, &sphere.pos);
-	if (status != 0)
-		return (status);
-	status = str_to_float(&str, &sphere.radius);
-	if (status != 0)
-		return (status);
-	status = str_to_argb(&str, &sphere.color, 0);
-	if (status != 0)
-		return (status);
+	if (!status)
+		status = str_to_float(&str, &sphere.radius);
+	if (!status)
+		status = str_to_argb(&str, &sphere.color, 0);
+	if (!status)
+		status = get_options(&str, &sphere);
 //	sphere.color = extract_argb(encode_rgb(color.r, color.g, color.b));
 	*line = str + skip_space(str);
 	print_argb(sphere.color, "sphere color");
-	if (make_object(sphere, &scene->objects) == -109)
+	if (!status && make_object(sphere, &scene->objects) == -109)
 		return (-109);
-	return (0);
+	return (status);
 }
