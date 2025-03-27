@@ -29,7 +29,7 @@ static int	make_light(t_light light, t_light **lights)
 	return (0);
 }
 
-void	clean_light(t_light *light, t_type type)
+void	init_light(t_light *light, t_type type)
 {
 	light->type = type;
 	light->pos = (t_vec3){0, 0, 0, 0};
@@ -43,7 +43,7 @@ int	clean_lights(t_data *scene)
 	t_light	light;
 
 	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
-		(t_vec3){-2, 0, 0, 0}, (t_vec3){0, 0, 0, 0}, DIRECTIONAL};
+		(t_vec3){-2, 0, 0, 0}, (t_vec3){1, 1, 0, 0}, DIRECTIONAL};
 	if (make_light(light, &scene->lights) == -109)
 		return (-109);
 	return (0);
@@ -58,31 +58,33 @@ int	clean_lights(t_data *scene)
 *
 *	return 0 on success or a error code
 *****************************************************************************/
-	int	create_light(char **line, t_data *scene, t_type type)
-	{
-		char		*str;
-		t_light		light;
-		int			status;
-		t_rgb		color;
-		float		bright;
+int	create_light(char **line, t_data *scene, t_type type)
+{
+	char		*str;
+	t_light		light;
+	int			status;
+	//t_argb		color;
+	//float		bright;
+	//float		brightness;
 
-		str = *line + 1 ;
-		clean_light(&light, type);
-		if (type == POINT)
-		{
-			status = str_to_vec3(&str, &light.pos);
-			if (status != 0)
-				return (status);
-		}
-		status = str_to_float(&str, &bright);
+	str = *line + 1 ;
+	init_light(&light, type);
+	if (type == POINT)
+	{
+		status = str_to_vec3(&str, &light.pos);
 		if (status != 0)
 			return (status);
-		norm_float(&bright, 0, 1);
-		status = str_to_rgb(&str, &color);
-		if (status != 0)
-			return (status);
-		light.intensity = extract_argb(encode_rgb(color.r, color.g, color.b));
-		add_bright_argb(&light.intensity, bright);
-		*line = str + skip_space(str);
-		return (make_light(light, &scene->lights));
 	}
+	//status = str_to_float(&str, &bright); // what not ft_strtof ???
+	//if (status != 0)
+	//	return (status);
+	//norm_float(&bright, 0, 1);
+	status = str_to_argb(&str, &light.intensity, 1);
+	print_argb(light.intensity, "light");
+	if (status != 0)
+		return (status);
+//	light.intensity = extract_argb(encode_rgb(color.r, color.g, color.b));
+//	add_bright_argb(&light.intensity, bright);
+	*line = str + skip_space(str);
+	return (make_light(light, &scene->lights));
+}

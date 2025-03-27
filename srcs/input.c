@@ -92,7 +92,7 @@ int	key_press(int keysym, t_data *scene)
 
 int	key_release(int keysym, t_data *scene)
 {
-	scene->rend = 0;
+	//scene->rend = 0;
 	if (keysym > 0 && keysym < 99999)
 		scene->key_state[keysym] = 0;
 	return (0);

@@ -1,16 +1,15 @@
-#------- OBJECTS
-#sphere	pos						radius			color
-sp 		0,0,0	 				1				255,255,255
-#cylin	pos			axis		radius 	height	color
-cy		0,0,1 		1,1,1		2		8		255,255,255
-#plane	pos			axis						color
-pl		0,-1,0		0,1,0						255,255,255
-#hyperb	pos			axis		scale	height	color
-
-
 #------- LIGHTS
-#yellow
-L	3,3,6		0.5					255, 0, 0
+L	3,3,6		0.5					255, 255, 255
+#------- OBJECTS
+pl		0,-2,0		0,1,0						255,255,255
+#hyperb	pos			axis		scale	height	color
+#sphere	pos						radius			color
+sp 		0,0,20	 				1				255,255,255
+#cylin	pos			axis		radius 	height	color
+cy		0,0,10 		1,1,1		2		8		255,255,255
+#plane	pos			axis						color
+
+
 #fluo pink
 #L	-3,3,6		0.4					255, 72, 176 
 #purple

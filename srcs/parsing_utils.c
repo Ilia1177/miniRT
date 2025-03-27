@@ -5,7 +5,6 @@ int	skip_space(char *str)
 	int	space;
 
 	space = 0;
-	//printf("first char :%c, ascii: %d\n", str[space], str[space]);
 	while (ft_isspace(str[space]))
 		space++;
 	return (space);
@@ -41,6 +40,27 @@ int	str_to_vec3(char **line, t_vec3 *v)
 	return (0);
 }
 
+int	get_alpha(char **line, int *color, int alpha)
+{
+	char	*str;
+	char	*end;
+	float	brightness;
+
+	str = *line;
+	end = str;
+	if (alpha)
+	{
+		if (str_to_float(&str, &brightness))
+			return (-2);
+		*color = fmin(brightness, 1) * 255;
+	}
+	else
+		*color = 255;
+	str += skip_space(str);
+	*line = str;
+	return (0);
+}
+
 /*****************************************************************************
 * convert a string to a rgb
 * @return int is code -1 for error or 1 for success
@@ -50,12 +70,15 @@ int	str_to_vec3(char **line, t_vec3 *v)
 *
 * 
 *****************************************************************************/
-int	str_to_rgb(char **line, t_rgb *c)
+int	str_to_argb(char **line, t_argb *c, int alpha)
 {
 	char	*str;
 	char	*end;
 
 	str = *line;
+	end = str;
+	if (get_alpha(&str, &c->a, alpha))
+		return (-2);
 	c->r = (int)ft_strtof(str, &end);
 	if (*end != ',' || str == end)
 		return (-2);
@@ -67,7 +90,7 @@ int	str_to_rgb(char **line, t_rgb *c)
 	c->b = (int)ft_strtof(str, &end);
 	if (str == end)
 		return (-2);
-	norm_rgb(c);
+	limit_color(c);
 	*line = end;
 	return (0);
 }

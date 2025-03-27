@@ -48,24 +48,23 @@ int	check_nb_light(t_data *scene)
 	return (0);
 }
 
-void	clean_obj(t_object *obj, t_type type)
+void	init_obj(t_object *obj, t_type type)
 {
-	obj->type = type;
-//	obj->t[0] = 0.0f;
-//	obj->t[1] = 0.0f;
-	obj->t = 0.0f;
-	obj->pos = (t_vec3){0, 0, 0, 0};
-	obj->axis = (t_vec3){0, 0, 0, 0};
-	obj->dir = (t_vec3){0, 0, 1, 0};
-	obj->up = (t_vec3){0, 1, 0, 0};
-	obj->right = (t_vec3){1, 0, 0, 0};
-	obj->spec = SPECULAR;
-	obj->radius = 0.0f;
-	obj->height = 0.0f;
-	obj->reflect = (t_argb){0, 0, 0, 0};
-	obj->color = (t_argb){0, 0, 0, 0};
-	obj->next = NULL;
+	obj->type		= type;
+	obj->t 			= T_MAX;
+	obj->pos		= (t_vec3){0, 0, 0, 0};
+	obj->axis		= (t_vec3){0, 0, 0, 0};
+	obj->dir		= (t_vec3){0, 0, 1, 0};
+	obj->up			= (t_vec3){0, 1, 0, 0};
+	obj->right		= (t_vec3){1, 0, 0, 0};
+	obj->spec		= SPECULAR;
+	obj->radius 	= 0.0f;
+	obj->height 	= 0.0f;
+	obj->reflect 	= (t_argb){0, 0, 0, 0};
+	obj->color 		= (t_argb){0, 0, 0, 0};
+	obj->next		= NULL;
 }
+
 int	place_camera(char **line, t_data *scene)
 {
 	char	*str;
@@ -169,9 +168,7 @@ int	build_scene(t_data *scene)
 	free(line);
 	line = NULL;
 	if (status)
-	{
 		gnl_clear_buffer(map);
-	}
 	close(map);
 	printf("**************************linked list OBJECT**************\n");
 	// added for debug

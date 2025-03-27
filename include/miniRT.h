@@ -284,15 +284,16 @@ void	free_data(t_data *scene);
 
 //build_scene.c
 int	build_scene(t_data *scene);
-void	clean_obj(t_object *obj, t_type type);
+void	init_obj(t_object *obj, t_type type);
 
 //Parsing_utils.c
 int	str_to_vec3(char **line, t_vec3 *v);
-int	str_to_rgb(char **line, t_rgb *c);
+int	str_to_argb(char **line, t_argb *c, int get_alpha);
 int	skip_space(char *str);
 int	str_to_float(char **line, float *radius);
 int	str_to_vecdir(char **line, t_vec3 *v);
 
+int	make_object(t_object data, t_object **objects);
 //init.c
 int	scene_init(t_data *scene);
 

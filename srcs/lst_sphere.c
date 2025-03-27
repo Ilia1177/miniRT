@@ -1,6 +1,6 @@
 #include <miniRT.h>
 
-static int	make_sphere(t_object data, t_object **objects)
+int	make_object(t_object data, t_object **objects)
 {
 	t_object	*curr_sphere;
 	t_object	*new_sphere;
@@ -37,28 +37,24 @@ int	create_sphere(char **line, t_data *scene)
 	char		*str;
 	t_object	sphere;
 	int			status;
-	t_rgb		color;
+	//t_argb		color;
 
-	sphere.yaw = 90.0f;
-	sphere.pitch = 0.0f;
-	//sphere.dir = (t_vec3) {0, 0, 1, 0};
-	//sphere.up = (t_vec3) {0, 1, 0, 0};
-	//sphere.right = (t_vec3) {1, 0, 0, 0};
 	(void)scene;
 	str = *line + 2 ;
-	clean_obj(&sphere, SPHERE);
+	init_obj(&sphere, SPHERE);
 	status = str_to_vec3(&str, &sphere.pos);
 	if (status != 0)
 		return (status);
 	status = str_to_float(&str, &sphere.radius);
 	if (status != 0)
 		return (status);
-	status = str_to_rgb(&str, &color);
+	status = str_to_argb(&str, &sphere.color, 0);
 	if (status != 0)
 		return (status);
-	sphere.color = extract_argb(encode_rgb(color.r, color.g, color.b));
+//	sphere.color = extract_argb(encode_rgb(color.r, color.g, color.b));
 	*line = str + skip_space(str);
-	if (make_sphere(sphere, &scene->objects) == -109)
+	print_argb(sphere.color, "sphere color");
+	if (make_object(sphere, &scene->objects) == -109)
 		return (-109);
 	return (0);
 }
