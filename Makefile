@@ -31,6 +31,7 @@ SRCS = 	miniRT.c\
 		img.c\
 		init.c\
 		input.c\
+		inter_cyl_utils.c\
 		intersection.c\
 		light.c\
 		lst_cylinder.c\

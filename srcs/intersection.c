@@ -1,5 +1,37 @@
 #include <miniRT.h>
 
+
+/****************************************************************************
+ * check if rau intersect the cylinder
+ * first intersect the lateral surface of cylinder 
+ * second intersect the top of the cylinder add_vec3
+ * third intersect the bottom of the cylinder sub_vev3
+ ****************************************************************************/
+int	intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
+{
+	float	t_tmp;
+	float	t_min;
+	int		hit;
+	t_vec3	center;
+
+	t_tmp = INFINITY;
+	t_min = INFINITY;
+	hit = 0;
+	if (intersect_cylinder_lateral(ray, cyl, &t_tmp))
+		get_min_t(&t_min, t_tmp, &hit);
+	center = add_vec3(cyl->pos, mult_vec3(normalize_vec3(cyl->axis),
+				cyl->height / 2));
+	if (intersect_disk(ray, center, cyl, &t_tmp) && t_tmp < t_min)
+		get_min_t(&t_min, t_tmp, &hit);
+	center = sub_vec3(cyl->pos, mult_vec3(normalize_vec3(cyl->axis),
+				cyl->height / 2));
+	if (intersect_disk(ray, center, cyl, &t_tmp) && t_tmp < t_min)
+		get_min_t(&t_min, t_tmp, &hit);
+	if (hit)
+		*t = t_min;
+	return (hit);
+}
+
 t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj)
 {
 	t_object	*closest_obj;
@@ -96,7 +128,7 @@ int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 	return (0);
 }
 
-int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
+int intersect_cylinderold(t_ray *ray, t_object *cylinder, float *t)
 {
 	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
 	t_vec3 center = cylinder->pos;
@@ -153,7 +185,7 @@ int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
     return (1);
 }
 
-int intersect_cylindernew(t_ray *ray, t_object *cyl, float *t)
+int intersect_cylinderoldold(t_ray *ray, t_object *cyl, float *t)
 {
     t_vec3 axis = normalize_vec3(cyl->axis);
     t_vec3 base = cy_center_to_base(*cyl); 
@@ -188,7 +220,7 @@ int intersect_cylindernew(t_ray *ray, t_object *cyl, float *t)
     int cap_hit = 0;
 
     // Base inférieure
-    if (fabsf(mn[0]) > 1e-6) 
+    if (fabsf(mn[0]) > EPSILON) 
     {
         t_cap[0] = (-mn[1]) / mn[0]; // Intersection avec le plan z=0
         t_vec3 hit = add_vec3(ray->o, mult_vec3(ray->d, t_cap[0]));
@@ -197,7 +229,7 @@ int intersect_cylindernew(t_ray *ray, t_object *cyl, float *t)
     }
 
     // Base supérieure
-    if (fabsf(mn[0]) < 1e-6)
+    if (fabsf(mn[0]) < EPSILON)
     {
         t_cap[1] = (cyl->height - mn[1]) / mn[0]; // Intersection avec le plan z=height
         t_vec3 hit = add_vec3(ray->o, mult_vec3(ray->d, t_cap[1]));
@@ -209,13 +241,13 @@ int intersect_cylindernew(t_ray *ray, t_object *cyl, float *t)
 
     // Combine les intersections (tube + disques)
     float t_min = INFINITY;
-    if (valid0 && quad.t[0] > 0.001f && quad.t[0] < t_min)
+    if (valid0 && quad.t[0] > EPSILON && quad.t[0] < t_min)
     	t_min = quad.t[0];
-    if (valid1 && quad.t[1] > 0.001f && quad.t[1] < t_min)
+    if (valid1 && quad.t[1] > EPSILON && quad.t[1] < t_min)
     	t_min = quad.t[1];
-    if (cap_hit == 1 && t_cap[0] > 0.001f && t_cap[0] < t_min)
+    if (cap_hit == 1 && t_cap[0] > EPSILON && t_cap[0] < t_min)
     	t_min = t_cap[0];
-    if (cap_hit == 2 && t_cap[1] > 0.001f && t_cap[1] < t_min)
+    if (cap_hit == 2 && t_cap[1] > EPSILON && t_cap[1] < t_min)
     	t_min = t_cap[1];
 
     if (t_min == INFINITY)

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/03/26 10:43:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/31 16:15:08 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
 	quad.b = 2.0f * dot_vec3(oc, dir);
 	quad.c = dot_vec3(oc, oc) - radius * radius;
 	quad.delta = quad.b * quad.b - 4.0f * quad.a * quad.c;
-	if (quad.delta < 0)
+	if (quad.delta < 0) // (quad.delta<= EPSILON)
 	{
 		quad.t[0] = FLT_MAX;
 		quad.t[1] = FLT_MAX;
@@ -103,3 +103,21 @@ t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
 	quad.t[1] = (-quad.b + square_root) / (2.0f * quad.a);
 	return (quad);
 }
+
+int	solve_gen_quad(t_quad *quad)
+{
+	float	square_root;
+
+	quad->delta = quad->b * quad->b - 4.0f * quad->a * quad->c;
+	if (quad->delta < 0) // (quad.delta<= EPSILON)
+	{
+		quad->t[0] = FLT_MAX;
+		quad->t[1] = FLT_MAX;
+		return (0);
+	}
+	square_root = sqrtf(quad->delta);
+	quad->t[0] = (-quad->b - square_root) / (2.0f * quad->a);
+	quad->t[1] = (-quad->b + square_root) / (2.0f * quad->a);
+	return (1);
+}
+

@@ -11,7 +11,7 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	const float		n_dot_l = dot_vec3(ray->n, ray->d);
 	const t_vec3	r = sub_vec3(mult_vec3(mult_vec3(ray->n, 2.0f), n_dot_l), ray->d);
 	const float		r_dot_v = dot_vec3(r, ray->v);
-	const float		v_dot_n = dot_vec3(ray->v, ray->n);
+	//const float		v_dot_n = dot_vec3(ray->v, ray->n);
 	t_argb			diffuse;
 	t_argb			specular;
 

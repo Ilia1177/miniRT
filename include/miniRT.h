@@ -23,6 +23,7 @@
 # define CBOARD_SCALE 0.22f
 # define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 # define ABS(x) ((x<0)*-x)+((x>0)*x)
+# define EPSILON 1.0e-6
 
 //add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec3
@@ -218,6 +219,16 @@ t_vec2		cnv_to_screen(t_canvas cnv);
 t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
 t_object		*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj);
 t_quad			solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
+int				solve_gen_quad(t_quad *quad);
+
+//inter_utils.c
+int	intersect_disk(t_ray *ray, t_vec3 center, t_object *cyl, float *t);
+int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
+int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
+void get_min_t(float *t_min, float t_tmp, int *hit);
+int	min_pos(float *t, float t1, float t2);
+
+
 //intersection.c
 int				intersect_object(t_ray *ray, t_object *obj, float *t);
 int				intersect_sphere(t_ray *ray, t_object *object, float *t);
