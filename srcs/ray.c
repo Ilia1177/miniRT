@@ -12,7 +12,8 @@
 
 #include <miniRT.h>
 
-void	reflect_ray(t_ray *ray)
+
+void	r_reflect(t_ray *ray)
 {
 	const float	n_dot_d = dot_vec3(ray->n, ray->v);
 
@@ -20,30 +21,21 @@ void	reflect_ray(t_ray *ray)
 	ray->d = sub_vec3(ray->d, ray->v);
 }
 
-//t_argb **checkerboard(t_argb obj_color)
-//{
-//	t_argb tab_color[CBOARD_H][CBOARD_W];
-//	int	x;
-//	int y;
-//
-//	y = 0;
-//
-//	while (y < CBOARD_H)
-//	{
-//		x = 0;
-//		while (x < CBOARD_W)
-//		{
-//			if ((x + (6 * y))%2 ==0)
-//				tab_color[y][x] = obj_color;
-//			else 
-//				tab_color[y][x] = (t_argb){0, 255, 255, 255};
-//			x++;
-//		}
-//		y++;
-//	}
-//	return (tab_color);
-//}
-
+void	r_update(t_ray *ray, t_object *obj)
+{
+	//ray->o = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
+	ray->v = mult_vec3(ray->d, -1);
+	if (obj->type == CYLINDER)
+		cylinder_normal(ray, obj);
+	else if (obj->type == SPHERE)
+		sphere_normal(ray, obj);
+	else if (obj->type == PLANE)
+		plane_normal(ray, obj);
+	else
+		hyperboloid_normal(ray, obj);
+	if (dot_vec3(ray->n, ray->v) < 0)
+		ray->n = mult_vec3(ray->n, -1);	
+}
 
 // 1) find intersection between ray and object
 // 2) get the hitting point, and assign it to ray->origin
@@ -62,21 +54,15 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
 	if (obj == NULL)
 		return (local_color);
-	ray->o = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
-	ray->v = mult_vec3(ray->d, -1);
-	if (obj->type == CYLINDER)
-		cylinder_normal(ray, obj);
-	else if (obj->type == SPHERE)
-		sphere_normal(ray, obj);
-	else if (obj->type == PLANE)
-		plane_normal(ray, obj);
-	else
-		hyperboloid_normal(ray, obj);
+	r_update(ray, obj);
+//	if (obj->color.a > 0)
+//		transparency = throw_ray(r_redir(ray), t_min, t_max, rec, scene);
 	lumen = compute_lighting(ray, obj, scene);
 	local_color = mult_colors(pattern_color(ray, obj), lumen);
+//	local_color = add_colors(transparency, local_color);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
-	reflect_ray(ray);
+	r_reflect(ray);
 	reflected_color = throw_ray(ray, 0.001f, t_max, rec - 1, scene);
 	local_color = mult_colors(local_color, ease_color(obj->reflect, 255));
 	reflected_color = mult_colors(reflected_color, obj->reflect);
@@ -103,7 +89,6 @@ t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
 	quad.t[1] = (-quad.b + square_root) / (2.0f * quad.a);
 	return (quad);
 }
-
 int	solve_gen_quad(t_quad *quad)
 {
 	float	square_root;

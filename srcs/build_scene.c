@@ -52,7 +52,7 @@ void	init_obj(t_object *obj, t_type type)
 {
 	obj->type		= type;
 	obj->t 			= T_MAX;
-	obj->pos		= (t_vec3){0, 0, 0, 0};
+	obj->pos		= (t_vec3){0, 0, 0, 1};
 	obj->axis		= (t_vec3){0, 0, 0, 0};
 	obj->dir		= (t_vec3){0, 0, 1, 0};
 	obj->up			= (t_vec3){0, 1, 0, 0};

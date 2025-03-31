@@ -83,13 +83,46 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 	return (0);
 }
 
+
+int	intersect_sphere_exp(t_ray *ray, t_object *sp, float *t)
+{
+	//t_vec3 dir = apply_mat4x4(sp->i_m, ray->o);
+	t_vec3 dir = ray->d;
+	//t_vec3 o = apply_mat4x4(sp->i_m, ray->d);
+	t_vec3 o = ray->o;
+
+ 	float a = dot_vec3(dir, dir); // Should be 1 if normalized
+    float b = 2.0f * dot_vec3(o, dir);
+    float c = dot_vec3(o, o) - (sp->radius * sp->radius);
+
+	float delta = b * b - 4 * a * c;
+
+    if (delta < 0) {
+        return 0; // No intersection
+    }
+    float sqrt_disc = sqrtf(delta);
+    float t0 = (-b - sqrt_disc) / (2.0f * a);
+    float t1 = (-b + sqrt_disc) / (2.0f * a);
+
+    // Choose the closest positive intersection
+	if (t0 < 0.001f && t1 < 0.0f)
+		return (0);
+	else if (t0 > 0.001f && t0 < t1)
+		*t = t0;
+	else if (t1 > 0.00f)
+		*t = t1;
+	ray->o = add_vec3(mult_vec3(dir, *t), o);
+	//ray->o = apply_mat4x4(sp->t_m, ray->o);
+	return (1);
+
+}
 // Equation of sphere:
 // dist(p, sphere->center) = rayon^2
 int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 {
 	t_quad	quad;
 	t_vec3	oc;
-
+	
 	oc = sub_vec3(ray->o, sphere->pos);
 	quad = solve_quadratic(oc, ray->d, sphere->radius);
 	if (quad.delta < 0.0f)
@@ -128,7 +161,7 @@ int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 	return (0);
 }
 
-int intersect_cylinderold(t_ray *ray, t_object *cylinder, float *t)
+int intersect_cylinder2(t_ray *ray, t_object *cylinder, float *t)
 {
 	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
 	t_vec3 center = cylinder->pos;
@@ -255,7 +288,6 @@ int intersect_cylinderoldold(t_ray *ray, t_object *cyl, float *t)
     *t = t_min;
     return 1;
 }
-
 
 int intersect_hyperboloid(t_ray *ray, t_object *object, float *t)
 {

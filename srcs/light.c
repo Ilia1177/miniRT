@@ -88,8 +88,8 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 				ray->d = light->dir;
 				dist = T_MAX;
 			}
-			if (dot_vec3(ray->n, ray->v) < 0)
-				ray->n = mult_vec3(ray->n, -1);	
+//			if (dot_vec3(ray->n, ray->v) < 0)
+//				ray->n = mult_vec3(ray->n, -1);	
 			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))
 				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}

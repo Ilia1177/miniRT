@@ -51,9 +51,14 @@ int	create_cylinder(char **line, t_data *scene)
 	if (!status)
 		status = str_to_argb(&str, &cylinder.color, 0);
 	if (!status)
-		status = make_object(cylinder, &scene->objects);
+	{
+			cylinder.t_m = mat_generate(&cylinder);
+			//inverse_matrix(cylinder.t_m, &cylinder.i_m);
+	}
 	if (!status)
 		status = get_options(&str, &cylinder);
+	if (!status)
+		status = make_object(cylinder, &scene->objects);
 	*line = str + skip_space(str);
 	return (status);
 }

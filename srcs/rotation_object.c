@@ -27,32 +27,49 @@ void	change_axis(t_object *obj)
 void	rotate_on_x(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
+	t_matrix	mat;
+	t_matrix	Tmat;
 
-	//obj->right = (t_vec3) {1, 0 ,0, 0};
-	obj->up = (t_vec3) {0, cos(theta), sin(theta), 0};
-	obj->dir = (t_vec3) {0, -sin(theta), cos(theta), 0};
-	obj->right = normalize_vec3(cross_vec3(obj->up, obj->dir));
-	change_axis(obj);
+	mat.j = (t_vec3) {0, cos(theta), sin(theta), 0};
+	mat.k = (t_vec3) {0, -sin(theta), cos(theta), 0};
+	mat.i = normalize_vec3(cross_vec3(obj->up, obj->dir));
+	mat.p = (t_vec3) {0, 0, 0, 1};
+	
+	Tmat.i = (t_vec3) {1, 0, 0, 0}; 
+	Tmat.j = (t_vec3) {0, 1, 0, 0}; 
+	Tmat.k = (t_vec3) {0, 0, 1, 0}; 
+	Tmat.p = (t_vec3) {1, 0, 0, 1}; 
+
+	obj->axis = mat_apply(mat, obj->axis);
+	obj->t_m = mat_compose(mat, obj->t_m);
 }
 
 void	rotate_on_y(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
+	t_matrix	mat;
 
-	obj->right = (t_vec3) {cos(theta), 0 , -sin(theta), 0};
-	//obj->up = (t_vec3) {0, 1, 0, 0};
-	obj->dir = (t_vec3) {sin(theta), 0, cos(theta), 0};
-	obj->up = normalize_vec3(cross_vec3(obj->dir, obj->right));
-	change_axis(obj);
+	mat.i = (t_vec3) {cos(theta), 0, -sin(theta), 0};
+	mat.k = (t_vec3) {sin(theta), 0, cos(theta), 0};
+	mat.j = cross_vec3(mat.k, mat.i);
+	mat.p = (t_vec3) {0, 0, 0, 1};
+
+	// both are modified because of the use of axis in intersection
+	obj->axis = mat_apply(mat, obj->axis);
+	obj->t_m = mat_compose(mat, obj->t_m);
 }
+
 
 void	rotate_on_z(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
+	t_matrix	mat;
 
-	obj->right = (t_vec3) {cos(theta), sin(theta),0 , 0};
-	obj->up = (t_vec3) {-sin(theta), cos(theta), 0, 0};
-//	obj->dir = (t_vec3) {0, 0, 1, 0};
-	obj->dir = normalize_vec3(cross_vec3(obj->right, obj->up));
-	change_axis(obj);
+	mat.i = (t_vec3) {cos(theta), sin(theta), 0, 0};
+	mat.j = (t_vec3) {-sin(theta), cos(theta), 0, 0};
+	mat.k = cross_vec3(mat.i, mat.j);
+	mat.p = (t_vec3) {0, 0, 0, 1};
+
+	obj->axis = mat_apply(mat, obj->axis);
+	obj->t_m = mat_compose(mat, obj->t_m);
 }

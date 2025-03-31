@@ -45,6 +45,7 @@ void	display_color(t_data *scene)
 	t_vec2			pix;
 	const char		res = scene->res;
 
+	ray.o.w = 1;
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
