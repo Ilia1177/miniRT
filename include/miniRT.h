@@ -134,6 +134,14 @@ typedef struct	s_light
 	t_type			type;
 }	t_light;
 
+typedef struct	s_matrix
+{
+	t_vec3	i;
+	t_vec3	j;
+	t_vec3	k;
+	t_vec3	p;
+}	t_matrix;
+
 //64 bytes aligned: OK
 typedef struct	s_ray
 {
@@ -142,12 +150,17 @@ typedef struct	s_ray
 	t_vec3	o;
 	t_vec3	n;
 }	t_ray;
-
+// t_mat = matrix world space
+// i_mat = invert matrix
 typedef struct	s_object
 {
 	struct s_object	*next;
 	t_argb			reflect;
 	t_argb			color;
+	char			mat[4][4];
+	t_matrix		t_m;
+	t_matrix		i_m;
+	t_matrix		id_matrix;
 	t_vec3			pos;
 	t_vec3			axis;
 	t_vec3			scale;
@@ -185,9 +198,18 @@ typedef struct	s_data
 	int			mouse_state;
 }				t_data;
 
-//init.c
-int				rt_init(t_data *scene, int *status);
-int				rt_shut_down(t_data *scene);
+//matrix.c
+//
+
+t_vec3	mat_rotate(t_matrix mat, t_vec3 v);
+t_vec3	mat_translate(t_matrix mat, t_vec3 v);
+t_vec3	mat_apply(t_matrix mat, t_vec3 v);
+t_matrix	mat_generate(t_object *obj);
+t_matrix	mat_compose(t_matrix m2, t_matrix m1);
+	
+void	inverse_matrix(t_matrix matrix, t_matrix *inv_matrix);
+void	trans_sp_matrix(t_object *obj);
+t_vec3	apply_mat4x4(t_matrix m, t_vec3 v);
 
 //img.c
 void			rt_put_pixel(t_img *img, int x, int y, int color);
@@ -272,6 +294,8 @@ void move_camera_right(t_camera *cam, float speed);
 void move_camera_left(t_camera *cam, float speed);
 
 // debug
+//
+void print_matrix(t_matrix matrix); // for loop
 void	print_argb(t_argb color, char *msg);
 void	print_vec3(t_vec3 v, char *msg);
 void	print_obj(t_object obj);
@@ -282,6 +306,7 @@ void	print_cam(t_camera camera);
 //clean.c
 void	free_light(t_light *light);
 void	free_data(t_data *scene);
+int	rt_shut_down(t_data *scene);
 
 //build_scene.c
 int	build_scene(t_data *scene);
@@ -297,7 +322,10 @@ int	get_options(char **line, t_object *obj);
 
 int	make_object(t_object data, t_object **objects);
 //init.c
-int	scene_init(t_data *scene);
+
+int		rt_scene_tozero(t_data *scene);
+void	mlx_tozero(t_data *scene);
+int		rt_init(t_data *scene);
 
 //lst_sphere.c
 int	create_sphere(char **line, t_data *scene);

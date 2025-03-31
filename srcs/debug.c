@@ -81,3 +81,15 @@ void	print_error_msg(int status)
 	if (status == -109)
 		printf("Malloc error\n");
 }
+
+void print_matrix(t_matrix matrix)
+{ // for loop
+	print_vec3(matrix.i, "i:");
+    printf("\n");
+	print_vec3(matrix.j, "j:");
+    printf("\n");
+	print_vec3(matrix.k, "k:");
+    printf("\n");
+	print_vec3(matrix.p, "p:");
+    printf("\n");
+}

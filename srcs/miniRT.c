@@ -1,73 +1,7 @@
 #include <miniRT.h>
 
-int	rt_shut_down(t_data *scene)
-{
-	if (scene->win)
-		mlx_destroy_window(scene->mlx, scene->win);
-	if (scene->img.ptr)
-		mlx_destroy_image(scene->mlx, scene->img.ptr);
-	if (scene->mlx)
-	{
-		mlx_destroy_display(scene->mlx);
-		free(scene->mlx);
-	}
-	free_data(scene);
-	exit(0);
-}
-
-int	rt_init(t_data *scene, int *status)
-{
-	int	i;
-
-	*status = 0;
-	scene->mlx = mlx_init();
-	if (!scene->mlx)
-		*status = 1;
-	scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Ray_tracing");
-	if (!status && !scene->win)
-		*status = 1;
-	scene->img.ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
-	if (!status && !scene->img.ptr)
-		*status = 1;
-	scene->img.addr = mlx_get_data_addr(scene->img.ptr, &scene->img.bpp,
-			&scene->img.llen, &scene->img.endian);
-	if (!status && !scene->img.addr)
-		*status = 1;
-	i = -1;
-	while (++i < 99999)
-		scene->key_state[i] = 0;
-	return (*status);
-}
-
-void	rt_clear_window(t_img *img)
-{
-	t_vec2	pix;
-
-	pix.y = 0;
-	while (pix.y < HEIGHT)
-	{
-		pix.x = 0;
-		while (pix.x < WIDTH)
-		{
-			rt_put_pixel(img, pix.x, pix.y, 0x00000000);
-			pix.x++;
-		}
-		pix.y++;
-	}
-}
-
 int	render(t_data *scene)
 {
-	/* static int		frame; */
-	/**/
-	/* frame++; */
-	/* if (frame % 500 ==0) */
-	/* { */
-	/* 	frame = 0; */
-	/* 	handle_input(scene); */
-	/* } */
-	//handle_input(scene);
-	//if (res != scene->res || ft_memcmp(&scene->cam, &cam, sizeof(t_camera)))
 	if (scene->rend)
 	{
 		handle_input(scene);
@@ -93,24 +27,37 @@ int	display_scene(t_data *scene)
 int	main(int ac, char **av)
 {
 	int status;
+	t_matrix	m;
+	t_matrix	i_m;
+
+	m.i = (t_vec3) {3, 5, 4, 0};
+	m.j = (t_vec3) {2, 4, 5, 0};
+	m.k = (t_vec3) {3, 8, 5, 0};
+	m.p = (t_vec3) {0, 0, 0, 1};
+
+
+//	print_matrix(m);
+//	inverse_matrix(m, &i_m);
+//	print_matrix(i_m);
 
 	t_data	scene;
-	if (ac > 1)
+	if (ac < 1)
+		return (1);
+	else if (ac > 1)
 		scene.map_name = av[1];
-	status = scene_init(&scene);
+	status = rt_init(&scene);
 	if (!status)
 		status = build_scene(&scene);
-	if(status)
-	{
+	if (status)
 		free_data(&scene);
-		return(1);
+	else if (ac == 3)
+	{
+		scene.res = 1;
+		display_color(&scene);
+		save_as_ppm(&scene.img, av[2]);
+		rt_shut_down(&scene);
 	}
-	if (rt_init(&scene, &status))
-		return (status);
-	//status = scene_init(&scene);
-   // if (!status)
-   // 	status = build_scene(&scene);
-	if (!status)
+	else if (ac == 2)
 		display_scene(&scene);
-	return (0);
+	return (status);
 }

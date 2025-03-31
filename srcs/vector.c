@@ -25,6 +25,7 @@ t_vec3	normalize_vec3(t_vec3 vec)
 
 	lenght = mag_vec3(vec);
 	result = div_vec3(vec, lenght);
+	result.w = vec.w;
 	return (result);
 }
 
@@ -32,9 +33,13 @@ t_vec3	div_vec3(t_vec3 vec, float d)
 {
 	t_vec3	result;
 
+	result = (t_vec3) {0, 0, 0, 0};
+	if (d == 0.0f)
+		return (result);
 	result.x = vec.x / d;
 	result.y = vec.y / d;
 	result.z = vec.z / d;
+	result.w = vec.w / d;
 	return (result);
 }
 
@@ -45,6 +50,7 @@ t_vec3	mult_vec3(t_vec3 vec, float a)
 	result.x = vec.x * a;
 	result.y = vec.y * a;
 	result.z = vec.z * a;
+	result.w = vec.w * a;
 	return (result);
 }
 
@@ -53,7 +59,7 @@ float dot_vec3(t_vec3 a, t_vec3 b)
 
 	float	result;
 
-	result = a.x * b.x + a.y * b.y + a.z * b.z;
+	result = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	return (result);
 }
 
@@ -72,6 +78,7 @@ t_vec3	sub_vec3(t_vec3 a, t_vec3 b)
 	result.x = a.x - b.x;
 	result.y = a.y - b.y;
 	result.z = a.z - b.z;
+	result.w = a.w - b.w;
 	return (result);
 }
 
@@ -82,5 +89,6 @@ t_vec3	add_vec3(t_vec3 a, t_vec3 b)
 	result.x = a.x + b.x;
 	result.y = a.y + b.y;
 	result.z = a.z + b.z;
+	result.w = a.w + b.w;
 	return (result);
 }

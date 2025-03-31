@@ -40,13 +40,23 @@ int	create_sphere(char **line, t_data *scene)
 
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
+	sphere.axis = (t_vec3) {0, 0 , 1, 0};
 	status = str_to_vec3(&str, &sphere.pos);
+	sphere.pos.w = 1;
+	sphere.axis.w = 1;
 	if (!status)
 		status = str_to_float(&str, &sphere.radius);
 	if (!status)
 		status = str_to_argb(&str, &sphere.color, 0);
 	if (!status)
 		status = get_options(&str, &sphere);
+	if (!status)
+	{
+			//trans_sp_matrix(&sphere);
+			//print_matrix(sphere.t_m);
+			//inverse_matrix(sphere.t_m, &sphere.i_m);
+			//print_matrix(sphere.i_m);
+	}	
 	if (!status)
 	   status = make_object(sphere, &scene->objects); 
 	*line = str + skip_space(str);

@@ -12,10 +12,10 @@
 
 #include <miniRT.h>
 
-int	clean_scene(t_data *scene)
+int	rt_scene_tozero(t_data *scene)
 {
 	scene->res = 5;
-	scene->cam.pos = (t_vec3){0, 0, -20, 0};
+	scene->cam.pos = (t_vec3){0, 0, 0, 0};
 	scene->cam.dir = (t_vec3){0, 0, 1, 0};
 	scene->cam.up = (t_vec3){0, 1, 0, 0};
 	scene->cam.right = (t_vec3){1, 0, 0, 0};
@@ -30,22 +30,42 @@ int	clean_scene(t_data *scene)
 	return (0);
 }
 
-int	scene_init(t_data *scene)
+void	mlx_tozero(t_data *scene)
 {
-	//t_light	*it;
+	int	i;
 
-	clean_scene(scene);
-//	if (clean_lights(scene) == -109)
-//	{
-//		print_error_msg(-109);
-//		return (-109);
-//	}
-	//printf("**************************linked list LIGHT**************\n");
-	//it = scene->lights;
-	//while (it)
-	//{
-	//	print_light(*it);
-	//	it = it->next;
-	//}
-	return (0);
+	scene->mlx = NULL;
+	scene->win = NULL;
+	scene->img.ptr = NULL;
+	scene->img.addr = NULL;
+	i = -1;
+	while (++i < 99999)
+		scene->key_state[i] = 0;
+}
+
+int	rt_init(t_data *scene)
+{
+	int	i;
+	t_img	*img;
+	int		status;
+
+	status = rt_scene_tozero(scene);
+	mlx_tozero(scene);
+	img = &scene->img;
+	scene->mlx = mlx_init();
+	if (!scene->mlx)
+		status = -1;
+	else
+		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Ray_tracing");
+	if (!scene->win)
+		status = -1;
+	else if (!status)
+		img->ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
+	if (!img->ptr)
+		status = -1;
+	else if (!status)
+		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
+	if (!img->addr)
+		status = -1;
+	return (status);
 }
