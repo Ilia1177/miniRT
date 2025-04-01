@@ -115,7 +115,6 @@ void	select_object(t_data *scene)
 	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
 	catch_ray.d = get_viewport_loc(cnv, vp);
 	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
-	///catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
 	catch_ray.o = scene->cam.t_m.p;
 	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
 	if (scene->selected && scene->selected != obj)

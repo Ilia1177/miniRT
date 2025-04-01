@@ -27,6 +27,7 @@ int	display_scene(t_data *scene)
 int	main(int ac, char **av)
 {
 	int status;
+	t_matrix	m;
 
 	t_matrix	t_m;	
 	t_matrix	i_m;	

@@ -29,6 +29,7 @@ int	rt_scene_tozero(t_data *scene)
 	//scene->viewport.w = calc_vp_width(53, 2);
 	scene->objects = NULL;
 	scene->lights = NULL;
+	scene->selected = NULL;
 	return (0);
 }
 
@@ -47,7 +48,7 @@ void	mlx_tozero(t_data *scene)
 
 int	rt_init(t_data *scene)
 {
-	int	i;
+	//int	i;
 	t_img	*img;
 	int		status;
 
