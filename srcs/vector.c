@@ -15,6 +15,7 @@ t_vec3 cross_vec3(t_vec3 a, t_vec3 b)
 	product.x = a.y * b.z - a.z * b.y;
 	product.y = a.z * b.x - a.x * b.z;
 	product.z = a.x * b.y - a.y * b.x;
+	product.w = 0;
     return (product);
 }
 
@@ -59,7 +60,7 @@ float dot_vec3(t_vec3 a, t_vec3 b)
 
 	float	result;
 
-	result = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+	result = a.x * b.x + a.y * b.y + a.z * b.z; //+ a.w * b.w;
 	return (result);
 }
 
