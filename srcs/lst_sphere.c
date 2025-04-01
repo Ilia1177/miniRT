@@ -51,13 +51,6 @@ int	create_sphere(char **line, t_data *scene)
 	if (!status)
 		status = get_options(&str, &sphere);
 	if (!status)
-	{
-			//trans_sp_matrix(&sphere);
-			//print_matrix(sphere.t_m);
-			//inverse_matrix(sphere.t_m, &sphere.i_m);
-			//print_matrix(sphere.i_m);
-	}	
-	if (!status)
 	   status = make_object(sphere, &scene->objects); 
 	*line = str + skip_space(str);
 	return (status);
