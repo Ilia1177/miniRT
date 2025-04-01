@@ -1,16 +1,5 @@
 #include <miniRT.h>
 
-t_vec3	mat_translate(t_matrix mat, t_vec3 v)
-{
-	t_vec3	res;
-	
-	res.x = v.x + mat.p.x;
-	res.y = v.y + mat.p.y;
-	res.z = v.z + mat.p.z;
-	res.w = v.w;
-	return (res);
-}
-
 t_matrix	mat_compose(t_matrix m2, t_matrix m1)
 {
 	t_matrix		res;

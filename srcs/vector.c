@@ -40,7 +40,7 @@ t_vec3	div_vec3(t_vec3 vec, float d)
 	result.x = vec.x / d;
 	result.y = vec.y / d;
 	result.z = vec.z / d;
-	result.w = vec.w / d;
+	result.w = 0;
 	return (result);
 }
 
@@ -51,7 +51,7 @@ t_vec3	mult_vec3(t_vec3 vec, float a)
 	result.x = vec.x * a;
 	result.y = vec.y * a;
 	result.z = vec.z * a;
-	result.w = vec.w * a;
+	result.w = 0;
 	return (result);
 }
 
