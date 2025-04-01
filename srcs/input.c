@@ -102,6 +102,7 @@ void	select_object(t_data *scene)
 	t_object	*obj;
 
 	obj = NULL;
+	scene->selected = NULL;
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
