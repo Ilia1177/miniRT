@@ -85,6 +85,14 @@ int	place_camera(char **line, t_data *scene)
 		return (status);
 	fov = (int)f_fov;
 	print_cam(scene->cam);
+	printf("\n");
+	scene->cam.t_m.k = normalize_vec3(scene->cam.dir);
+	scene->cam.t_m.i = cross_vec3((t_vec3) {0, 1, 0, 0}, scene->cam.t_m.k);
+	scene->cam.t_m.j = cross_vec3(scene->cam.t_m.k, scene->cam.t_m.i);
+	scene->cam.t_m.p = scene->cam.pos;
+	scene->cam.t_m.p.w = 1;
+	scene->cam.i_m = mat_inverse(scene->cam.t_m);
+
 	*line = str + skip_space(str);
 	return (status);
 }

@@ -49,15 +49,15 @@ void	display_color(t_data *scene)
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
-	update_camera_vectors(&scene->cam);
+	//update_camera_vectors(&scene->cam);
 	while (cnv.loc.x < cnv.w / 2)
 	{
 		cnv.loc.y = -cnv.h / 2;
 		while (cnv.loc.y < cnv.h / 2)
 		{
-			ray.o = scene->cam.pos;
+			ray.o = scene->cam.t_m.p;
 			ray.d = get_viewport_loc(cnv, vp);
-			ray.d = apply_camera_rotation(scene->cam, ray.d);
+			ray.d = normalize_vec3(mat_apply(scene->cam.t_m, ray.d));
 			color = throw_ray(&ray, 1.0f, T_MAX, R_LIMIT, scene);
 			pix = cnv_to_screen(cnv);
 			color_screen(&scene->img, pix.x, pix.y, res, color);

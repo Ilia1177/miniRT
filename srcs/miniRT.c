@@ -27,18 +27,21 @@ int	display_scene(t_data *scene)
 int	main(int ac, char **av)
 {
 	int status;
-	t_matrix	m;
-	t_matrix	i_m;
 
-	m.i = (t_vec3) {3, 5, 4, 0};
-	m.j = (t_vec3) {2, 4, 5, 0};
-	m.k = (t_vec3) {3, 8, 5, 0};
-	m.p = (t_vec3) {0, 0, 0, 1};
+	t_matrix	t_m;	
+	t_matrix	i_m;	
+	float theta = 80 * (M_PI / 180.0f);
+	
+	t_m.i = (t_vec3) {1, 0, 0, 0};
+	t_m.j = (t_vec3) {0, cos(theta), sin(theta), 0};
+	t_m.k = (t_vec3) {0, -sin(theta), cos(theta), 0};
+	t_m.p = (t_vec3) {9, 4, 23, 1};
 
-
-//	print_matrix(m);
-//	inverse_matrix(m, &i_m);
-//	print_matrix(i_m);
+	printf("transformation matrix\n");
+	print_matrix(t_m);
+	printf("inverse matrix\n");
+	i_m = mat_inverse(t_m);
+	print_matrix(i_m);
 
 	t_data	scene;
 	if (ac < 1)

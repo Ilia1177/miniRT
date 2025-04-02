@@ -2,7 +2,7 @@
 
 void	print_vec3(t_vec3 v, char *msg)
 {
-	printf("%s{x: %.1f, y: %.1f, z:%.1f}", msg, v.x, v.y, v.z);
+	printf("%s{x: %.3f, y: %.3f, z:%.3f, w: %.3f}\n", msg, v.x, v.y, v.z, v.w);
 }
 
 void	print_argb(t_argb color, char *msg)
@@ -85,11 +85,7 @@ void	print_error_msg(int status)
 void print_matrix(t_matrix matrix)
 { // for loop
 	print_vec3(matrix.i, "i:");
-    printf("\n");
 	print_vec3(matrix.j, "j:");
-    printf("\n");
 	print_vec3(matrix.k, "k:");
-    printf("\n");
 	print_vec3(matrix.p, "p:");
-    printf("\n");
 }

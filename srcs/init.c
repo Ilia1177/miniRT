@@ -24,7 +24,8 @@ int	rt_scene_tozero(t_data *scene)
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.h = 1;
-	scene->viewport.w = calc_vp_width(53, 2);
+	scene->viewport.w = 1; 
+	//scene->viewport.w = calc_vp_width(53, 2);
 	scene->objects = NULL;
 	scene->lights = NULL;
 	return (0);

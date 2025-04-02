@@ -1,55 +1,49 @@
 #include <miniRT.h>
 
-// Convert yaw & pitch to direction, right, and up vectors
-// Compute new direction vector
-// Compute right vector (always perpendicular to dir and world up)
-// Compute up vector (perpendicular to dir and right)
-void update_camera_vectors(t_camera *cam)
+void	rotate_x(t_camera *cam, float theta)
 {
-    const float		rad_yaw = cam->yaw * (M_PI / 180.0f);
-    const float		rad_pitch = cam->pitch * (M_PI / 180.0f);
-	const t_vec3	world_up = {0, 1, 0, 0};
+	theta = theta * (M_PI / 180.0f);
+	t_matrix	r;
 
-    cam->dir.x = cos(rad_yaw) * cos(rad_pitch);
-    cam->dir.y = sin(rad_pitch);
-    cam->dir.z = sin(rad_yaw) * cos(rad_pitch);
-    cam->dir = normalize_vec3(cam->dir);
-    cam->right = normalize_vec3(cross_vec3(world_up, cam->dir));
-    //cam->up = normalize_vec3(cross_vec3(cam->dir, cam->right));
-    cam->up = cross_vec3(cam->dir, cam->right);
-}
-
-t_vec3 apply_camera_rotation(t_camera cam, t_vec3 v)
-{
-	t_vec3 result;
+//	mat.j = normalize_vec3((t_vec3) {0, cos(theta), sin(theta), 0});
+//	mat.k = normalize_vec3((t_vec3) {0, -sin(theta), cos(theta), 0});
+	r.j = normalize_vec3((t_vec3) {0, cos(theta), sin(theta), 0});
+	r.k = normalize_vec3((t_vec3) {0, -sin(theta), cos(theta), 0});
+	r.i = normalize_vec3(cross_vec3(r.j, r.k));
+	r.p = (t_vec3) {0, 0, 0, 1};
 	
-	result.x = cam.right.x * v.x + cam.up.x * v.y + cam.dir.x * v.z;
-	result.y = cam.right.y * v.x + cam.up.y * v.y + cam.dir.y * v.z;
-	result.z = cam.right.z * v.x + cam.up.z * v.y + cam.dir.z * v.z;
-    return (result);
+	printf("cam R_x matrix\n");
+	print_matrix(r);
+	printf("cam T matrix\n");
+	print_matrix(cam->t_m);
+	cam->t_m = mat_compose(r, cam->t_m);
+	printf("cam T composed matrix\n");
+	print_matrix(cam->t_m);
+	printf("calc camera inverse t\n");
+	cam->i_m = mat_inverse(cam->t_m);
+	print_matrix(cam->i_m);
 }
 
-// Adjust yaw and pitch
-// Clamp pitch to avoid flipping (restrict between -89° and 89°)
-// Invert for correct movement
-// Update camera vectors based on new angles
-void mouse_move(t_camera *cam, float delta_x, float delta_y)
+void	rotate_y(t_camera *cam, float theta)
 {
-    const float	sensitivity = MOUSE_SENSITIVITY; // Adjust for faster/slower rotation
+	theta = theta * (M_PI / 180.0f);
+	t_matrix	r;
 
-    cam->yaw += delta_x * sensitivity;
-    cam->pitch -= delta_y * sensitivity;
-    if (cam->pitch > 89.0f)
-	{
-	   	cam->pitch = 89.0f;
-		return ;
-	}
-    if (cam->pitch < -89.0f)
-	{
-	   	cam->pitch = -89.0f;
-		return ;
-	}
-    update_camera_vectors(cam);
+	r.i = normalize_vec3((t_vec3) {cos(theta), 0, -sin(theta), 0});
+	r.k = normalize_vec3((t_vec3) {sin(theta), 0, cos(theta), 0});
+	r.j = normalize_vec3(cross_vec3(r.k, r.i));
+	r.p = (t_vec3) {0, 0, 0, 1};
+
+	printf("cam R_y matrix\n");
+	print_matrix(r);
+	printf("cam T matrix\n");
+	print_matrix(cam->t_m);
+	cam->t_m = mat_compose(r, cam->t_m);
+	printf("cam T composed matrix\n");
+	print_matrix(cam->t_m);
+	printf("calc camera inverse t\n");
+	cam->i_m = mat_inverse(cam->t_m);
+	print_matrix(cam->i_m);
 }
 
 // Calculate viewport width from FOV and focal length

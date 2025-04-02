@@ -24,6 +24,7 @@ void	r_reflect(t_ray *ray)
 void	r_update(t_ray *ray, t_object *obj)
 {
 	ray->o = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
+	ray->o = mat_apply(obj->t_m, ray->o);
 	ray->v = mult_vec3(ray->d, -1);
 	if (obj->type == CYLINDER)
 		cylinder_normal(ray, obj);

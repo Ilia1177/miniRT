@@ -22,8 +22,9 @@
 # define CBOARD_H 24
 # define CBOARD_SCALE 0.22f
 # define CBOARD_COLOR (t_argb){0, 255, 255, 255}
-# define ABS(x) ((x<0)*-x)+((x>0)*x)
-# define EPSILON 1.0e-6
+# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
+//# define EPSILON 1.0e-6
+# define EPSILON 0.001f
 
 //add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec3
@@ -39,6 +40,14 @@ typedef struct	s_vec2
 	float		x;
 	float		y;
 }				t_vec2;
+
+typedef struct	s_matrix
+{
+	t_vec3	i;
+	t_vec3	j;
+	t_vec3	k;
+	t_vec3	p;
+}	t_matrix;
 
 typedef struct	s_rgb
 {
@@ -83,6 +92,8 @@ typedef struct s_uv
 
 typedef struct	s_camera
 {
+	t_matrix	t_m;
+	t_matrix	i_m;
 	t_vec3 pos;
     t_vec3 dir;   	// Forward direction
     t_vec3 right; 	// Right direction
@@ -135,13 +146,6 @@ typedef struct	s_light
 	t_type			type;
 }	t_light;
 
-typedef struct	s_matrix
-{
-	t_vec3	i;
-	t_vec3	j;
-	t_vec3	k;
-	t_vec3	p;
-}	t_matrix;
 
 //64 bytes aligned: OK
 typedef struct	s_ray
@@ -199,6 +203,10 @@ typedef struct	s_data
 	int			mouse_state;
 }				t_data;
 
+//camera move
+//
+void	rotate_y(t_camera *cam, float theta);
+void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 //
 
@@ -207,8 +215,9 @@ t_vec3	mat_translate(t_matrix mat, t_vec3 v);
 t_vec3	mat_apply(t_matrix mat, t_vec3 v);
 t_matrix	mat_generate(t_object *obj);
 t_matrix	mat_compose(t_matrix m2, t_matrix m1);
+t_matrix	mat_transpose(t_matrix m);
 	
-void	inverse_matrix(t_matrix matrix, t_matrix *inv_matrix);
+t_matrix	mat_inverse(t_matrix matrix);
 void	trans_sp_matrix(t_object *obj);
 t_vec3	apply_mat4x4(t_matrix m, t_vec3 v);
 

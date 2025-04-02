@@ -4,17 +4,17 @@
 void	handle_object_translation(t_data *scene)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
-		scene->selected->pos.z += 0.1;
+		scene->selected->t_m.p.z += 0.1;
 	if (scene->key_state[XK_k] == 1 && scene->selected)
-		scene->selected->pos.z -= 0.1;
+		scene->selected->t_m.p.z -= 0.1;
 	if (scene->key_state[XK_l] == 1 && scene->selected)
-		scene->selected->pos.x += 0.1;
+		scene->selected->t_m.p.x += 0.1;
 	if (scene->key_state[XK_j] == 1 && scene->selected)
-		scene->selected->pos.x -= 0.1;
+		scene->selected->t_m.p.x -= 0.1;
 	if (scene->key_state[XK_u] == 1 && scene->selected)
-		scene->selected->pos.y += 0.1;
+		scene->selected->t_m.p.y += 0.1;
 	if (scene->key_state[XK_o] == 1 && scene->selected)
-		scene->selected->pos.y -= 0.1;
+		scene->selected->t_m.p.y -= 0.1;
 }
 
 void	handle_object_rotation(t_data *scene)
@@ -29,14 +29,16 @@ void	handle_object_rotation(t_data *scene)
 
 void	handle_camera_move(t_data *scene)
 {
-	if (scene->key_state[XK_Left] == 1 ) 
-		scene->cam.yaw += 5;
+	if (scene->key_state[XK_Left] == 1) 
+		rotate_y(&scene->cam, 1.0f);
 	if (scene->key_state[XK_Right] == 1)
-		scene->cam.yaw -= 5;
-	if (scene->key_state[XK_Down] == 1 && scene->cam.pitch > -85.0f)
-		scene->cam.pitch -= 5;
-	if (scene->key_state[XK_Up] == 1 && scene->cam.pitch < 85.0f)
-		scene->cam.pitch += 5;
+		rotate_y(&scene->cam, -1.0f);
+	if (scene->key_state[XK_Down] == 1)
+		rotate_x(&scene->cam, -1.0f);
+	if (scene->key_state[XK_Up] == 1)
+		rotate_x(&scene->cam, 1.0f);
+
+
 	if (scene->key_state[XK_w] == 1)
 		move_camera_forward(&scene->cam, 0.5);
 	if (scene->key_state[XK_s] == 1)
@@ -100,16 +102,20 @@ void	select_object(t_data *scene)
 	t_canvas	cnv;
 	t_viewport  vp;
 	t_object	*obj;
+	//static t_argb last_color;
 
-	obj = NULL;
+	obj = scene->selected;
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
 	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
 	catch_ray.d = get_viewport_loc(cnv, vp);
-	catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
+	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
+	///catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
 	catch_ray.o = scene->cam.pos;
 	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
+	if (scene->selected)
+		scene->selected->color = (t_argb) {255, 255, 255, 255};
 }
 
 int	mouse_press(int keycode, int x, int y, t_data *scene)
