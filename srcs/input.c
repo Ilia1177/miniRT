@@ -31,12 +31,16 @@ void	handle_camera_move(t_data *scene)
 {
 	if (scene->key_state[XK_Left] == 1) 
 		rotate_y(&scene->cam, 1.0f);
+		//scene->cam.yaw--;
 	if (scene->key_state[XK_Right] == 1)
 		rotate_y(&scene->cam, -1.0f);
-	if (scene->key_state[XK_Down] == 1)
+		//scene->cam.yaw++;
+	if (scene->key_state[XK_Down] == 1 && scene->cam.pitch < 89.0f)
 		rotate_x(&scene->cam, -1.0f);
-	if (scene->key_state[XK_Up] == 1)
+		//scene->cam.pitch++;
+	if (scene->key_state[XK_Up] == 1 && scene->cam.pitch > -89.0f)
 		rotate_x(&scene->cam, 1.0f);
+		//scene->cam.pitch--;
 
 
 	if (scene->key_state[XK_w] == 1)

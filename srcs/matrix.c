@@ -9,6 +9,27 @@ float dot_vec4(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
+t_matrix	mat_rotate(t_matrix m1, t_matrix m2)
+{
+	t_matrix res;
+	const t_matrix	transposed = mat_transpose(m2);
+
+	res.i.x = dot_vec4(m1.i, transposed.i);
+	res.i.y = dot_vec4(m1.i, transposed.j);
+	res.i.z = dot_vec4(m1.i, transposed.k);
+	res.i.w = dot_vec4(m1.i, transposed.p);
+	res.j.x = dot_vec4(m1.j, transposed.i);
+	res.j.y = dot_vec4(m1.j, transposed.j);
+	res.j.z = dot_vec4(m1.j, transposed.k);
+	res.j.w = dot_vec4(m1.j, transposed.p);
+	res.k.x = dot_vec4(m1.k, transposed.i);
+	res.k.y = dot_vec4(m1.k, transposed.j);
+	res.k.z = dot_vec4(m1.k, transposed.k);
+	res.k.w = dot_vec4(m1.k, transposed.p);
+	res.p = m1.p;
+	return (res);
+}
+
 t_matrix	mat_compose_SAVE(t_matrix m2, t_matrix m1)
 {
 	t_matrix		res;

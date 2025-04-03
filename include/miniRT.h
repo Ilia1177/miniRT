@@ -12,8 +12,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-# define T_MAX 1000
-# define HEIGHT 800
+# define T_MAX 1600
+# define HEIGHT 1600
 # define WIDTH 800
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
@@ -210,7 +210,7 @@ void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 //
 
-t_vec3	mat_rotate(t_matrix mat, t_vec3 v);
+t_matrix	mat_rotate(t_matrix m1, t_matrix m2);
 t_vec3	mat_translate(t_matrix mat, t_vec3 v);
 t_vec3	mat_apply(t_matrix mat, t_vec3 v);
 t_matrix	mat_generate(t_object *obj);
