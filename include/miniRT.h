@@ -13,8 +13,8 @@
 #include <fcntl.h>
 
 # define T_MAX 1600
-# define HEIGHT 1600
-# define WIDTH 800
+# define HEIGHT 400
+# define WIDTH 400
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f

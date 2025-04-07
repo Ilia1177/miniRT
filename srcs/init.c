@@ -14,6 +14,7 @@
 
 int	rt_scene_tozero(t_data *scene)
 {
+	scene->selected = NULL;
 	scene->res = 5;
 	scene->cam.pos = (t_vec3){0, 0, 0, 0};
 	scene->cam.dir = (t_vec3){0, 0, 1, 0};

@@ -49,7 +49,7 @@ void	display_color(t_data *scene)
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
-	update_camera_vectors(&scene->cam);
+//	update_camera_vectors(&scene->cam);
 	while (cnv.loc.x < cnv.w / 2)
 	{
 		cnv.loc.y = -cnv.h / 2;

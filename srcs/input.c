@@ -106,7 +106,7 @@ void	select_object(t_data *scene)
 	t_canvas	cnv;
 	t_viewport  vp;
 	t_object	*obj;
-	//static t_argb last_color;
+	static t_argb last_color;
 
 	obj = scene->selected;
 	vp = scene->viewport;
@@ -116,10 +116,22 @@ void	select_object(t_data *scene)
 	catch_ray.d = get_viewport_loc(cnv, vp);
 	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
 	///catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
-	catch_ray.o = scene->cam.pos;
+	catch_ray.o = scene->cam.t_m.p;
 	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
-	if (scene->selected)
+	if (scene->selected && scene->selected != obj)
+	{
+		if (obj)
+			obj->color = last_color;
+		last_color = scene->selected->color;
 		scene->selected->color = (t_argb) {255, 255, 255, 255};
+	}
+	else if (scene->selected && scene->selected == obj)
+	{
+		scene->selected->color = last_color;
+		scene->selected = NULL;
+		obj = NULL;
+	}
+
 }
 
 int	mouse_press(int keycode, int x, int y, t_data *scene)

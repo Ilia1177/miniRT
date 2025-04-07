@@ -26,35 +26,10 @@ t_matrix	mat_rotate(t_matrix m1, t_matrix m2)
 	res.k.y = dot_vec4(m1.k, transposed.j);
 	res.k.z = dot_vec4(m1.k, transposed.k);
 	res.k.w = dot_vec4(m1.k, transposed.p);
+	res.i = normalize_vec3(res.i);
+	res.j = normalize_vec3(res.j);
+	res.k = normalize_vec3(res.k);
 	res.p = m1.p;
-	return (res);
-}
-
-t_matrix	mat_compose_SAVE(t_matrix m2, t_matrix m1)
-{
-	t_matrix		res;
-	const t_vec3	x = {m2.i.x, m2.j.x, m2.k.x, m2.p.x};
-	const t_vec3	y = {m2.i.y, m2.j.y, m2.k.y, m2.p.y};
-	const t_vec3	z = {m2.i.z, m2.j.z, m2.k.z, m2.p.z};
-	const t_vec3	w = {m2.i.w, m2.j.w, m2.k.w, m2.p.w};
-
-	res.i.x = dot_vec3(m1.i, x);
-	res.i.y = dot_vec3(m1.i, y);
-	res.i.z = dot_vec3(m1.i, z);
-	res.i.w = dot_vec3(m1.i, w);
-	res.j.x = dot_vec3(m1.j, x);
-	res.j.y = dot_vec3(m1.j, y);
-	res.j.z = dot_vec3(m1.j, z);
-	res.j.w = dot_vec3(m1.j, w);
-	res.k.x = dot_vec3(m1.k, x);
-	res.k.y = dot_vec3(m1.k, y);
-	res.k.z = dot_vec3(m1.k, z);
-	res.k.w = dot_vec3(m1.k, w);
-	res.p.x = dot_vec3(m1.p, x);
-	res.p.y = dot_vec3(m1.p, y);
-	res.p.z = dot_vec3(m1.p, z);
-	res.p.w = dot_vec3(m1.p, w);
-	res.p.w = 1; 
 	return (res);
 }
 
@@ -110,17 +85,19 @@ t_matrix	mat_transpose(t_matrix m)
 	return (transposed);
 }
 
+
+
 // Apply the matrix on a vector
 t_vec3	mat_apply(t_matrix mat, t_vec3 v)
 {
 	const t_matrix	transposed = mat_transpose(mat);
 	t_vec3			res;
 
-	res.x = dot_vec3(v, mat.i);
-	res.y = dot_vec3(v, mat.j);
-	res.z = dot_vec3(v, mat.k);
-//	res.w = dot_vec3(v, mat.p);
-	res.w = v.w;
+	res.x = dot_vec4(v, mat.i);
+	res.y = dot_vec4(v, mat.j);
+	res.z = dot_vec4(v, mat.k);
+	res.w = dot_vec4(v, mat.p);
+//	res.w = v.w;
 	return (res);
 }
 
