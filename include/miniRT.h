@@ -113,6 +113,8 @@ typedef struct	s_img
 	int		bpp;
 	int		llen;
 	int		endian;
+	int		w;
+	int		h;	
 }			t_img;
 
 typedef enum e_type
@@ -175,12 +177,14 @@ typedef struct	s_object
 	float			height;
 	int				spec;
 	int				pattern;
+	char			*path;
+	t_img			*img;
+	int				opt;
 	t_type			type;
 }	t_object;
 
 typedef struct	s_data
 {
-	char		key_state[99999];
 	void		*mlx;
 	void		*win;
 	char		*map_name;
@@ -188,6 +192,7 @@ typedef struct	s_data
 	char		res;
 //	float		intersec_p[2];
 	t_img		img;
+	//t_img		earth;
 	t_canvas	cnv;
 	t_camera	cam;
 //	t_vec3		rotation_matrix[3];
@@ -197,6 +202,7 @@ typedef struct	s_data
 	t_light		*lights;
 	t_vec2		mouse;
 	int			mouse_state;
+	char		key_state[99999];
 }				t_data;
 
 //matrix.c
@@ -360,7 +366,11 @@ void	rotate_on_y(t_object *obj, float theta);
 	void	rotate_on_x(t_object *obj, float theta);
 
 //text_checkerboard.c
-t_argb	pattern_color(t_ray *ray, t_object *obj);
+t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene);
+
+//text_img
+t_argb	text_img_at(float u, float v, t_img *img);
+t_img	*text_img(t_data *scene, char *path);
 
 //cylinder_utils.c
 t_vec3  cy_center_to_base(t_object cy);

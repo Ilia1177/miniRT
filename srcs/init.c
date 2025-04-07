@@ -37,8 +37,9 @@ void	mlx_tozero(t_data *scene)
 
 	scene->mlx = NULL;
 	scene->win = NULL;
-	scene->img.ptr = NULL;
-	scene->img.addr = NULL;
+	//ft_bzero(&scene->img,sizeof(t_img));
+	//scene->img.ptr = NULL;
+	//scene->img.addr = NULL;
 	i = -1;
 	while (++i < 99999)
 		scene->key_state[i] = 0;

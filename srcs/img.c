@@ -9,13 +9,13 @@ void	rt_put_pixel(t_img *img, int x, int y, int color)
 }
 
 //	not in usage for now
-	unsigned int	rt_get_pixel(t_img img, int x, int y)
-	{
-		unsigned int	p;
+unsigned int	rt_get_pixel(t_img img, int x, int y)
+{
+	unsigned int	p;
 
-		p = *(unsigned int *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
-		return (p);
-	}
+	p = *(unsigned int *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
+	return (p);
+}
 
 // do not use rgb, but argb instead (color.c) //
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)

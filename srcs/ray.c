@@ -58,7 +58,7 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 //	if (obj->color.a > 0)
 //		transparency = throw_ray(r_redir(ray), t_min, t_max, rec, scene);
 	lumen = compute_lighting(ray, obj, scene);
-	local_color = mult_colors(pattern_color(ray, obj), lumen);
+	local_color = mult_colors(pattern_color(ray, obj, scene), lumen);
 //	local_color = add_colors(transparency, local_color);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
