@@ -50,6 +50,7 @@ int	check_nb_light(t_data *scene)
 
 void	init_obj(t_object *obj, t_type type)
 {
+	ft_bzero(obj, sizeof(t_object));
 	obj->type		= type;
 	obj->t 			= T_MAX;
 	obj->pos		= (t_vec3){0, 0, 0, 1};
@@ -58,11 +59,12 @@ void	init_obj(t_object *obj, t_type type)
 	obj->up			= (t_vec3){0, 1, 0, 0};
 	obj->right		= (t_vec3){1, 0, 0, 0};
 	obj->spec		= SPECULAR;
-	obj->pattern	= 0;
-	obj->radius 	= 0.0f;
-	obj->height 	= 0.0f;
-	obj->reflect 	= (t_argb){0, 0, 0, 0};
-	obj->color 		= (t_argb){0, 0, 0, 0};
+	//scene->earth = text_img(scene);
+   // obj->pattern	= 0;
+   // obj->radius 	= 0.0f;
+   // obj->height 	= 0.0f;
+   // obj->reflect 	= (t_argb){0, 0, 0, 0};
+   // obj->color 		= (t_argb){0, 0, 0, 0};
 	obj->next		= NULL;
 }
 

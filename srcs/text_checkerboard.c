@@ -71,18 +71,27 @@ t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 	return (color);
 }
 
-t_uv	sphere_map(t_vec3 point)
+t_uv	sphere_map(t_vec3 point, float radius)
 {
 	t_uv		uv;
-	const float	theta = atan2(point.x, point.z);
-	const float	radius = mag_vec3(point);
-	const float	phi = acos(point.y / radius);
+	/* const float	theta = atan2(point.x, point.z); */
+	/* const float	radius = mag_vec3(point); */
+	/* const float	phi = acos(point.y / radius); */
+	/* const float	raw_u = theta / (2 * M_PI); */
+	/**/
+	/* uv.u = 1 - (raw_u + 0.5); */
+	/* uv.u = ABS(uv.u); */
+	/* uv.v = 1 - phi / M_PI; */
+	/* uv.v = ABS(uv.v); */
+	const float	theta = atan2(point.z, point.x);
+	//const float	radius = mag_vec3(point);
+	const float	phi = asin(point.y / radius);
 	const float	raw_u = theta / (2 * M_PI);
 
-	uv.u = 1 - (raw_u + 0.5);
-	uv.u = ABS(uv.u);
-	uv.v = 1 - phi / M_PI;
-	uv.v = ABS(uv.v);
+	uv.u = raw_u + 0.5f;
+	uv.u = fabs(uv.u);
+	uv.v = 0.5f - phi / M_PI;
+	uv.v = fabs(uv.v);
 	return (uv);
 }
 
@@ -106,19 +115,23 @@ t_uv cylinder_maplast(t_vec3 point, t_vec3 axis, float radius, float height)
 
     return uv;
 }
-
-t_argb	pattern_color(t_ray *ray, t_object *obj)
+/*****************************************************************************
+ 	* hp = hit point
+******************************************************************************/
+t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 {
 	t_uv	uv;
 	t_argb	color;
 	t_vec3	hp;
 
 	hp = mat_apply(obj->i_m, ray->o);
+	(void)scene;
 	if (obj->type == SPHERE && obj->pattern)
 	{
 		hp = sub_vec3(hp, obj->pos);
-		uv = sphere_map(hp);
-		color = checkerboard_at(uv.u, uv.v, obj->color);
+		uv = sphere_map(hp, obj->radius);
+		//color = checkerboard_at(uv.u, uv.v, obj->color);
+		color = text_img_at(uv.u, uv.v, obj->img);
 		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else if (obj->type == PLANE && obj->pattern)

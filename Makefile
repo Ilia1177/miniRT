@@ -44,6 +44,7 @@ SRCS = 	miniRT.c\
 		ray.c\
 		rotation_object.c\
 		text_checkerboard.c\
+		text_img.c\
 		vector.c\
 		lst_hyperboloid.c\
 		dl_img.c\
