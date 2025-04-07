@@ -128,6 +128,7 @@ int	str_to_vecdir(char **line, t_vec3 *v)
 	if (str == end)
 		return (-2);
 	norm_float(&v->z, -1.0f, 1.0f);
+	v->w = 0;
 	*v = normalize_vec3(*v);
 	*line = end;
 	return (0);

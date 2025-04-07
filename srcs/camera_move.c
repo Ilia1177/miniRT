@@ -2,20 +2,6 @@
 
 void translate_camera_local(t_camera *camera, float dx, float dy, float dz)
 {
-
-    // Extract camera's local axes
-    t_vec3 right = camera->t_m.i;
-    t_vec3 up = camera->t_m.j;
-    t_vec3 forward = camera->t_m.k;
-
-    // Compute world-space translation
-//    t_vec3 world_move = add_vec3(
-//		add_vec3(
-//            mult_vec3(right, dx),
-//            mult_vec3(up, dy)
-//        ),
-//        mult_vec3(forward, dz)
-//    );
 	t_vec3 world_z = mat_apply(camera->t_m, (t_vec3) {0, 0, 1, 0});
 	t_vec3 world_x = mat_apply(camera->t_m, (t_vec3) {1, 0, 0, 0});
 	t_vec3 world_y = mat_apply(camera->t_m, (t_vec3) {0, 1, 0, 0});
@@ -24,17 +10,17 @@ void translate_camera_local(t_camera *camera, float dx, float dy, float dz)
 	world_y = mult_vec3(world_y, dy);
 	
 	t_vec3 world_move = add_vec3(world_x, add_vec3(world_y, world_z));
-	printf("translate: T matrix before\n");
+	printf("translate: t matrix before\n");
 	print_matrix(camera->t_m);
 
-    // Apply translation to camera's position
+    // apply translation to camera's position
     camera->t_m.p = add_vec3(camera->t_m.p, world_move);
 
-	printf("translate: T matrix after\n");
+	printf("translate: t matrix after\n");
 	print_matrix(camera->t_m);
-    // Update inverse matrix (for ray transformations)
+    // update inverse matrix (for ray transformations)
     camera->i_m = mat_inverse(camera->t_m);
-	printf("translate: I matrix\n");
+	printf("translate: i matrix\n");
 	print_matrix(camera->t_m);
 }
 

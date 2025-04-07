@@ -13,6 +13,10 @@ t_vec3 compose_quater(t_vec3 after, t_vec3 before)
     return q;
 }
 
+//t_matrix	mat_make_rotation(float rx, float ry, t_matrix mat)
+//{
+	
+//}
 void	rotate_on_x(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);

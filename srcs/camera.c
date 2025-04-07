@@ -1,6 +1,6 @@
 #include <miniRT.h>
 
-void update_camera_vectors(t_camera *cam)
+void update_camera_rotation(t_camera *cam)
 {
 	const float         rad_yaw = cam->yaw * (M_PI / 180.0f);
 	const float         rad_pitch = cam->pitch * (M_PI / 180.0f);
@@ -11,7 +11,7 @@ void update_camera_vectors(t_camera *cam)
 	r.k.y = sin(rad_pitch);
 	r.k.z = sin(rad_yaw) * cos(rad_pitch);
 	r.k.w = 0;
-//	r.k = normalize_vec3(r.k);
+	r.k = normalize_vec3(r.k);
 	r.i = cross_vec3(world_up, r.k);
 	r.j = cross_vec3(r.k, r.i);
 	r.p = (t_vec3) {0,0,0,1};
@@ -19,33 +19,28 @@ void update_camera_vectors(t_camera *cam)
 	cam->t_m.i = r.i;
 	cam->t_m.j = r.j;
 	cam->t_m.k = r.k;
-	//cam->t_m = mat_compose(cam->t_m, r);
-	//cam->t_m = mat_rotate(r, cam->t_m);
-//	cam->t_m.k = normalize_vec3(add_vec3(cam->t_m.k, r.k));
-//	cam->t_m.i = normalize_vec3(cross_vec3(world_up, cam->t_m.k)); 
-//	cam->t_m.j = normalize_vec3(cross_vec3(cam->t_m.k, cam->t_m.i));
-	//cam->t_m = mat_compose(cam->t_m, r);
 	print_matrix(cam->t_m);
 	cam->i_m = mat_inverse(cam->t_m);
 }
 
+//NOT USED !!
 void	rotate_x(t_camera *cam, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
 	t_matrix	r;
-	const t_vec3 up = {0, 1, 0, 0};
-	//r.j = normalize_vec3((t_vec3) {0, cos(theta), sin(theta), 0});
+	//const t_vec3 up = {0, 1, 0, 0};
+	r.j = normalize_vec3((t_vec3) {0, cos(theta), sin(theta), 0});
 	r.k = normalize_vec3((t_vec3) {0, -sin(theta), cos(theta), 0});
-	//r.i = normalize_vec3(cross_vec3(r.j, r.k));	
+	r.i = normalize_vec3(cross_vec3(r.j, r.k));	
 
-	r.i = cross_vec3(up, r.k);
-	r.j = cross_vec3(r.k, r.i);
+	//r.i = cross_vec3(up, r.k);
+	//r.j = cross_vec3(r.k, r.i);
 	r.p = (t_vec3) {0, 0, 0, 1};
 
-	printf("cam T matrix\n");
+	printf("cam T initial transformation matrix\n");
 	print_matrix(cam->t_m);
-	//cam->t_m = mat_compose(r, cam->t_m);
-	cam->t_m = mat_rotate(cam->t_m, r);
+	cam->t_m = mat_compose(r, cam->t_m);
+	//cam->t_m = mat_rotate(cam->t_m, r);
 	printf("cam T composed matrix\n");
 	print_matrix(cam->t_m);
 	printf("calc camera inverse t\n");
@@ -53,20 +48,21 @@ void	rotate_x(t_camera *cam, float theta)
 	print_matrix(cam->i_m);
 }
 
+//NOT USED !!
 void	rotate_y(t_camera *cam, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
 	t_matrix	r;
-	const t_vec3 up = {0, 1, 0, 0};
+	//const t_vec3 up = {0, 1, 0, 0};
 
-	//r.i = normalize_vec3((t_vec3) {cos(theta), 0, -sin(theta), 0});
+	r.i = normalize_vec3((t_vec3) {cos(theta), 0, -sin(theta), 0});
 	r.k = normalize_vec3((t_vec3) {sin(theta), 0, cos(theta), 0});
-	r.i = cross_vec3(up, r.k);
+	//r.i = cross_vec3(up, r.k);
 	r.j = cross_vec3(r.k, r.i);
 	//r.j = normalize_vec3(cross_vec3(r.k, r.i));
 	r.p = (t_vec3) {0, 0, 0, 1};
 
-	//cam->t_m = mat_compose(r , cam->t_m);
+	cam->t_m = mat_compose(r , cam->t_m);
 	cam->t_m = mat_rotate(cam->t_m, r);
 	printf("cam T composed matrix\n");
 	print_matrix(cam->t_m);

@@ -113,7 +113,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 	t_argb	color;
 	t_vec3	hp;
 
-	hp = ray->o;
+	hp = mat_apply(obj->i_m, ray->o);
 	if (obj->type == SPHERE && obj->pattern)
 	{
 		hp = sub_vec3(hp, obj->pos);
@@ -128,7 +128,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 	}
 	else if (obj->type == CYLINDER && obj->pattern)
 	{
-		hp = sub_vec3(hp, obj->pos);
+		//hp = sub_vec3(hp, obj->pos);
 		uv = cylinder_maplast(hp, normalize_vec3(obj->axis), obj->radius, obj->height);
 		color = checkerboard_at(uv.u, uv.v, obj->color);
 		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);

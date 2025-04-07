@@ -30,17 +30,13 @@ void	handle_object_rotation(t_data *scene)
 void	handle_camera_move(t_data *scene)
 {
 	if (scene->key_state[XK_Left] == 1) 
-		rotate_y(&scene->cam, 1.0f);
-		//scene->cam.yaw--;
+		scene->cam.yaw++;
 	if (scene->key_state[XK_Right] == 1)
-		rotate_y(&scene->cam, -1.0f);
-		//scene->cam.yaw++;
+		scene->cam.yaw--;
 	if (scene->key_state[XK_Down] == 1 && scene->cam.pitch < 89.0f)
-		rotate_x(&scene->cam, -1.0f);
-		//scene->cam.pitch++;
+		scene->cam.pitch--;
 	if (scene->key_state[XK_Up] == 1 && scene->cam.pitch > -89.0f)
-		rotate_x(&scene->cam, 1.0f);
-		//scene->cam.pitch--;
+		scene->cam.pitch++;
 
 
 	if (scene->key_state[XK_w] == 1)
@@ -113,7 +109,7 @@ void	select_object(t_data *scene)
 	cnv = scene->cnv;
 	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
 	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
-	catch_ray.d = get_viewport_loc(cnv, vp);
+	catch_ray.d = throught_vp(cnv, vp);
 	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
 	catch_ray.o = scene->cam.t_m.p;
 	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
