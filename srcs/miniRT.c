@@ -27,10 +27,20 @@ int	display_scene(t_data *scene)
 int	main(int ac, char **av)
 {
 	int status;
+	t_matrix	m;
 	t_data	scene;
+	//t_matrix	i_m;
 
 	ft_bzero(&scene, sizeof(t_data));
+	m.i = (t_vec3) {3, 5, 4, 0};
+	m.j = (t_vec3) {2, 4, 5, 0};
+	m.k = (t_vec3) {3, 8, 5, 0};
+	m.p = (t_vec3) {0, 0, 0, 1};
 
+
+//	print_matrix(m);
+//	inverse_matrix(m, &i_m);
+//	print_matrix(i_m);
 
 	if (ac < 1)
 		return (1);

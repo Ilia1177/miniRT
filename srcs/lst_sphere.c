@@ -2,29 +2,23 @@
 
 int	make_object(t_object data, t_object **objects)
 {
-	t_object	*curr_object;
-	t_object	*new_object;
+	t_object	*curr_sphere;
+	t_object	*new_sphere;
 
-	new_object = malloc(sizeof(t_object));
-	if (!new_object)
+	new_sphere = malloc(sizeof(t_object));
+	if (!new_sphere)
 		return (-109);
-	ft_memcpy(new_object, &data, sizeof(t_object));
-	new_object->t_m = mat_generate(new_object);
-	new_object->i_m = mat_inverse(new_object->t_m);
-	printf("transform matrix of %d:\n", data.type);
-	print_matrix(new_object->t_m);
-	printf("iverted matrix of %d:\n", data.type);
-	print_matrix(new_object->i_m);
-	new_object->next = NULL;
-	curr_object = NULL;
+	ft_memcpy(new_sphere, &data, sizeof(t_object));
+	new_sphere->next = NULL;
+	curr_sphere = NULL;
 	if (*objects == NULL)
-		*objects = new_object;
+		*objects = new_sphere;
 	else
 	{
-		curr_object = *objects;
-		while (curr_object->next)
-			curr_object = curr_object->next;
-		curr_object->next = new_object;
+		curr_sphere = *objects;
+		while (curr_sphere->next)
+			curr_sphere = curr_sphere->next;
+		curr_sphere->next = new_sphere;
 	}
 	return (0);
 }
@@ -49,7 +43,7 @@ int	create_sphere(char **line, t_data *scene)
 	sphere.axis = (t_vec3){0, 0, 1, 0};
 	status = str_to_vec3(&str, &sphere.pos);
 	sphere.pos.w = 1;
-	sphere.axis.w = 0;
+	sphere.axis.w = 1;
 	if (!status)
 		status = str_to_float(&str, &sphere.radius);
 	if (!status)

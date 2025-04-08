@@ -248,6 +248,7 @@ int		mouse_pos(int x, int y, t_data *scene);
 t_vec3		throught_vp(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
+t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 
 //ray
 t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
@@ -305,6 +306,7 @@ t_vec3	mult_vec3(t_vec3 vec, float a);
 float	dist_vec3(t_vec3 a, t_vec3 b);
 
 //camera_vectors.c
+void	update_camera_vectors(t_camera *cam);
 void	update_camera_rotation(t_camera *cam);
 t_vec3	apply_camera_rotation(t_camera cam, t_vec3 v);
 void	mouse_move(t_camera *cam, float delta_x, float delta_y);
