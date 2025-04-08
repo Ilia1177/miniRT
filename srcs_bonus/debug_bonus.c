@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 void	print_vec3(t_vec3 v, char *msg)
 {

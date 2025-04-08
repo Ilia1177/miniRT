@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ray.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/07 21:42:35 by npolack          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <miniRT.h>
-
+#include <miniRT_bonus.h>
 
 void	r_reflect(t_ray *ray)
 {
@@ -34,6 +21,7 @@ void	r_update(t_ray *ray, t_object *obj)
 		plane_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
+	ray->n = mat_apply(obj->t_m, ray->n);
 	if (dot_vec3(ray->n, ray->v) < 0)
 		ray->n = mult_vec3(ray->n, -1);	
 }

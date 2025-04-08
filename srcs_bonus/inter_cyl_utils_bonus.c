@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 int	min_pos(float *t, float t1, float t2)
 {

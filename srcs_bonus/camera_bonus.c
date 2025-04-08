@@ -1,11 +1,11 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 void update_camera_rotation(t_camera *cam)
 {
 	const float         rad_yaw = cam->yaw * (M_PI / 180.0f);
 	const float         rad_pitch = cam->pitch * (M_PI / 180.0f);
-		const t_vec3    world_up = {0, 1, 0, 0};
-	t_matrix	r;
+	const t_vec3		world_up = {0, 1, 0, 0};
+	t_matrix			r;
 
 	r.k.x = cos(rad_yaw) * cos(rad_pitch);
 	r.k.y = sin(rad_pitch);
@@ -14,12 +14,10 @@ void update_camera_rotation(t_camera *cam)
 	r.k = normalize_vec3(r.k);
 	r.i = cross_vec3(world_up, r.k);
 	r.j = cross_vec3(r.k, r.i);
-	r.p = (t_vec3) {0,0,0,1};
  
 	cam->t_m.i = r.i;
 	cam->t_m.j = r.j;
 	cam->t_m.k = r.k;
-	print_matrix(cam->t_m);
 	cam->i_m = mat_inverse(cam->t_m);
 }
 

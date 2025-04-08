@@ -1,5 +1,5 @@
 
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 // same as limit_color(t_argb *color) --> in color.c
 void	norm_rgb(t_rgb *c)

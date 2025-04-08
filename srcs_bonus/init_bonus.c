@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 int	rt_scene_tozero(t_data *scene)
 {

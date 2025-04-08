@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 int	render(t_data *scene)
 {

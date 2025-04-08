@@ -1,5 +1,5 @@
 
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 //	static int	make_cylinder(t_object data, t_object **objects)
 //	{

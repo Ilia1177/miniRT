@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 
 void save_pixel_data(t_img *img, int width, int height, int fd)

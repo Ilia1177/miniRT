@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 // Helper function to check if a wall intersection is within the cylinder's height
 void check_tube(float t, t_vec3 origin, t_vec3 dir, float height, float *t_min)

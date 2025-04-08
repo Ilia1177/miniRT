@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 // translate object on z axis zith i and j
 void	handle_object_translation(t_data *scene)
@@ -37,16 +37,14 @@ void	handle_camera_move(t_data *scene)
 		scene->cam.pitch--;
 	if (scene->key_state[XK_Up] == 1 && scene->cam.pitch > -89.0f)
 		scene->cam.pitch++;
-
-
 	if (scene->key_state[XK_w] == 1)
-		move_camera_forward(&scene->cam, 0.5);
+		translate_camera(&scene->cam, 0, 0, 0.5f);
 	if (scene->key_state[XK_s] == 1)
-		move_camera_backward(&scene->cam, 0.5);
+		translate_camera(&scene->cam, 0, 0, -0.5f);
 	if (scene->key_state[XK_a] == 1)
-		move_camera_left(&scene->cam, 0.5);
+		translate_camera(&scene->cam, -0.5f, 0, 0);
 	if (scene->key_state[XK_d] == 1)
-		move_camera_right(&scene->cam, 0.5);
+		translate_camera(&scene->cam, 0.5f, 0, 0);
 }
 
 int	handle_input(t_data *scene)

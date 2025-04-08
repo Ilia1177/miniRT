@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 float dot_vec4(t_vec3 a, t_vec3 b)
 {

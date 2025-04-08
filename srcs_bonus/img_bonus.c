@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 void	rt_put_pixel(t_img *img, int x, int y, int color)
 {

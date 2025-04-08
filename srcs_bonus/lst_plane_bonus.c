@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 /*****************************************************************************
 *  Check if the map file corresponding to the correct format

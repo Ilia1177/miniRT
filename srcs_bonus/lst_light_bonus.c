@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 static int	make_light(t_light light, t_light **lights)
 {

@@ -23,8 +23,8 @@
 # define CBOARD_SCALE 0.22f
 # define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 # define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
-//# define EPSILON 1.0e-6
-# define EPSILON 0.001f
+# define EPSILON 1.0e-6
+//# define EPSILON 0.001f
 
 //add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec3
@@ -314,13 +314,9 @@ void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float	calc_vp_width(float fov_degrees, float focal_length);
 
 //camera_move.c
-void move_camera_forward(t_camera *cam, float speed);
-void move_camera_backward(t_camera *cam, float speed);
-void move_camera_right(t_camera *cam, float speed);
-void move_camera_left(t_camera *cam, float speed);
+void translate_camera(t_camera *camera, float dx, float dy, float dz);
 
 // debug
-//
 void print_matrix(t_matrix matrix); // for loop
 void	print_argb(t_argb color, char *msg);
 void	print_vec3(t_vec3 v, char *msg);

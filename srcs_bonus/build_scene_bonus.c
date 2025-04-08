@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 int	check_nb_obj(t_data *scene)
 {

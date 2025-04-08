@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 // Return reflexions of diffuse and/or specular
 // d : direction from the point -> light

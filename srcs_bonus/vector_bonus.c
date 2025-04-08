@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 #include <math.h>
 
 float dist_vec3(t_vec3 p1, t_vec3 p2)

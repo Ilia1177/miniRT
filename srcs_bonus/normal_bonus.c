@@ -1,16 +1,23 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
-void	plane_normal(t_ray *ray, t_object *plane)
+void	plane_normal(t_ray *ray, t_object *pl)
 {
-	if (dot_vec3(plane->axis, ray->d) > 0.0f)
-		ray->n = mult_vec3(plane->axis, -1.0f);
+	const t_vec3	axis = {0, 0, 1, 0};
+	const t_vec3	dir = mat_apply(pl->i_m, ray->d);
+
+	if (dot_vec3(axis, dir) < EPSILON)
+		ray->n = mult_vec3(axis, -1.0f);
 	else
-		ray->n = plane->axis;
+		ray->n = axis;
+	print_vec3(ray->n, "plane normal:");
 }
 
-void	sphere_normal(t_ray *ray, t_object *sphere)
+void	sphere_normal(t_ray *ray, t_object *sp)
 {
-	ray->n = normalize_vec3(sub_vec3(ray->o, sphere->pos));
+	const t_vec3	origin = mat_apply(sp->i_m, ray->o);
+	const t_vec3	zero_v = {0, 0, 0, 0};
+
+	ray->n = normalize_vec3(sub_vec3(zero_v, origin));
 }
 
 void	cylinder_normal(t_ray *ray, t_object *cylinder)

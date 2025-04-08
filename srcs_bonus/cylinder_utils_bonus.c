@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 t_vec3 cy_center_to_base(t_object cyl)
 {

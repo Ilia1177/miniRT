@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 // not used
 t_vec3 compose_quater(t_vec3 after, t_vec3 before)
@@ -13,10 +13,6 @@ t_vec3 compose_quater(t_vec3 after, t_vec3 before)
     return q;
 }
 
-//t_matrix	mat_make_rotation(float rx, float ry, t_matrix mat)
-//{
-	
-//}
 void	rotate_on_x(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
@@ -28,10 +24,8 @@ void	rotate_on_x(t_object *obj, float theta)
 	mat.i = (t_vec3) {1, 0, 0, 0};
 	mat.p = (t_vec3) {0, 0, 0, 1};
 	
-	//obj->axis = mat_apply(mat, obj->axis);
 	obj->t_m = mat_compose(mat, obj->t_m);
 	obj->i_m = mat_inverse(obj->t_m);
-	print_matrix(obj->t_m);
 }
 
 void	rotate_on_y(t_object *obj, float theta)

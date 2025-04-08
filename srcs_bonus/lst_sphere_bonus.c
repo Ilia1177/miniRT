@@ -1,4 +1,4 @@
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 int	make_object(t_object data, t_object **objects)
 {
