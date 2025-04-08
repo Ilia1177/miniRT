@@ -181,8 +181,6 @@ typedef struct	s_object
 	float			height;
 	int				spec;
 	int				pattern;
-	char			*path;
-	t_img			*img;
 	int				opt;
 	t_type			type;
 }	t_object;
@@ -196,7 +194,6 @@ typedef struct	s_data
 	char		res;
 //	float		intersec_p[2];
 	t_img		img;
-	//t_img		earth;
 	t_canvas	cnv;
 	t_camera	cam;
 //	t_vec3		rotation_matrix[3];
@@ -344,7 +341,6 @@ int	str_to_argb(char **line, t_argb *c, int get_alpha);
 int	skip_space(char *str);
 int	str_to_float(char **line, float *radius);
 int	str_to_vecdir(char **line, t_vec3 *v);
-int	get_options(char **line, t_object *obj);
 
 int	make_object(t_object data, t_object **objects);
 //init.c
@@ -372,14 +368,8 @@ int	make_hyperboloid(t_object data, t_object **objects);
 void	rotate(t_object *obj);
 void	rotate_on_z(t_object *obj, float theta);
 void	rotate_on_y(t_object *obj, float theta);
-	void	rotate_on_x(t_object *obj, float theta);
+void	rotate_on_x(t_object *obj, float theta);
 
-//text_checkerboard.c
-t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene);
-
-//text_img
-t_argb	text_img_at(float u, float v, t_img *img);
-t_img	*text_img(t_data *scene, char *path);
 
 //cylinder_utils.c
 t_vec3  cy_center_to_base(t_object cy);

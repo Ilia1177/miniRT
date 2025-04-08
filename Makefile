@@ -46,8 +46,6 @@ SRCS = 	miniRT\
 		parsing_utils\
 		ray\
 		rotation_object\
-		text_checkerboard\
-		text_img\
 		vector\
 		lst_hyperboloid\
 		dl_img\

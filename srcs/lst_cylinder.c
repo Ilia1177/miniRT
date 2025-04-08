@@ -56,8 +56,6 @@ int	create_cylinder(char **line, t_data *scene)
 			//inverse_matrix(cylinder.t_m, &cylinder.i_m);
 	}
 	if (!status)
-		status = get_options(&str, &cylinder);
-	if (!status)
 		status = make_object(cylinder, &scene->objects);
 	*line = str + skip_space(str);
 	return (status);

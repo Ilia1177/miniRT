@@ -55,12 +55,6 @@ int	create_sphere(char **line, t_data *scene)
 	if (!status)
 		status = str_to_argb(&str, &sphere.color, 0);
 	if (!status)
-		status = get_options(&str, &sphere);
-	if (sphere.path)
-		sphere.img = text_img(scene, sphere.path);
-	if (sphere.path && !sphere.img)
-		return (-9);
-	if (!status)
 		status = make_object(sphere, &scene->objects);
 	*line = str + skip_space(str);
 	return (status);

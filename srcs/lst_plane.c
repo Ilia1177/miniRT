@@ -27,8 +27,6 @@ int	create_plane(char **line, t_data *scene)
 	if (status != 0)
 		return (status);
 	if (!status)
-		status = get_options(&str, &plane);
-	if (!status)
 		status = make_object(plane, &scene->objects);
 	*line = str + skip_space(str);
 	return (status);
