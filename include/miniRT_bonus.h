@@ -1,5 +1,5 @@
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef MINIRT_BONUS_H
+# define MINIRT_BONUS_H
 # include <mlx.h>
 # include <libft.h>
 # include <X11/keysym.h>

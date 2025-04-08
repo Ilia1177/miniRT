@@ -1,8 +1,11 @@
 NAME = miniRT
+NAME_BONUS = Hazardous_miniRT
 
 UNAME = $(shell uname)
 SRCS_DIR = srcs
+SRCS_BONUS_DIR = srcs_bonus
 OBJS_DIR = objs
+OBJS_BONUS_DIR = objs_bonus
 MLX_DIR = mlx
 MLX_LIB = $(MLX_DIR)/libmlx_$(UNAME).a
 CLONE = mlx
@@ -19,52 +22,99 @@ endif
 
 LIBFT = libft/bin/libft.a
 
-SRCS = 	miniRT.c\
-		build_scene.c\
-		camera.c\
-		camera_move.c\
-		canvas.c\
-		clean.c\
-		color.c\
-		cylinder_utils.c\
-		debug.c\
-		img.c\
-		init.c\
-		input.c\
-		inter_cyl_utils.c\
-		intersection.c\
-		light.c\
-		lst_cylinder.c\
-		lst_light.c\
-		lst_plane.c\
-		lst_sphere.c\
-		norm_utils.c\
-		normal.c\
-		parsing_utils.c\
-		ray.c\
-		rotation_object.c\
-		text_checkerboard.c\
-		text_img.c\
-		vector.c\
-		lst_hyperboloid.c\
-		dl_img.c\
-		matrix.c\
+SRCS = 	miniRT\
+		build_scene\
+		camera\
+		camera_move\
+		canvas\
+		clean\
+		color\
+		cylinder_utils\
+		debug\
+		img\
+		init\
+		input\
+		inter_cyl_utils\
+		intersection\
+		light\
+		lst_cylinder\
+		lst_light\
+		lst_plane\
+		lst_sphere\
+		norm_utils\
+		normal\
+		parsing_utils\
+		ray\
+		rotation_object\
+		text_checkerboard\
+		text_img\
+		vector\
+		lst_hyperboloid\
+		dl_img\
+		matrix\
 
+SRCS_BONUS = 	miniRT\
+		build_scene\
+		camera\
+		camera_move\
+		canvas\
+		clean\
+		color\
+		cylinder_utils\
+		debug\
+		img\
+		init\
+		input\
+		inter_cyl_utils\
+		intersection\
+		light\
+		lst_cylinder\
+		lst_light\
+		lst_plane\
+		lst_sphere\
+		norm_utils\
+		normal\
+		parsing_utils\
+		ray\
+		rotation_object\
+		text_checkerboard\
+		text_img\
+		vector\
+		lst_hyperboloid\
+		dl_img\
+		matrix\
+
+SRCS := $(addsuffix .c, $(SRCS))
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
+
+SRCS_BONUS := $(addsuffix _bonus.c, $(SRCS_BONUS))
+SRCS_BONUS := $(addprefix $(SRCS_BONUS_DIR)/, $(SRCS_BONUS))
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 DEPS = $(OBJS:%.o=%.d)
+
+OBJS_BONUS = $(SRCS_BONUS:$(SRCS_BONUS_DIR)/%.c=$(OBJS_BONUS_DIR)/%.o)
+DEPS_BONUS = $(OBJS_BONUS:%.o=%.d)
 
 CC = cc -MMD 
 
 all :  $(LIBFT) $(MLX_LIB) $(NAME)
 
+bonus :  $(LIBFT) $(MLX_LIB) $(NAME_BONUS)
+
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
+$(OBJS_BONUS_DIR)/%.o: $(SRCS_BONUS_DIR)/%.c
+	mkdir -p $(OBJS_BONUS_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
+
 $(NAME): $(OBJS)
 	$(CC) $^ $(MLX_FLAGS) -o $(NAME) -L./libft/bin -lft
+
+$(NAME_BONUS): $(OBJS_BONUS)
+	$(CC) $^ $(MLX_FLAGS) -o $(NAME_BONUS) -L./libft/bin -lft
 
 $(MLX_LIB): $(CLONE) 
 	make -C $(MLX_DIR) 
@@ -76,13 +126,15 @@ $(LIBFT) :
 	make -C libft
 
 clean	:
+	@echo "Cleaning object files..."
 	-make clean -C libft
 	-make clean -C $(MLX_DIR)
-	-rm -fr $(OBJS_DIR)
+	@rm -rf $(OBJS_DIR) $(OBJS_BONUS_DIR) 2>/dev/null || true
 
 fclean	: clean
+	@echo "Full cleaning..."
 	-make fclean -C libft
-	-rm $(NAME)
+	@rm -f $(NAME) $(NAME_BONUS) 2>/dev/null || true
 
 re		: fclean all
 
