@@ -2,12 +2,9 @@
 
 int	render(t_data *scene)
 {
-	if (scene->rend)
-	{
 		handle_input(scene);
 		display_color(scene);
 		mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-	}
 	return (0);
 }
 

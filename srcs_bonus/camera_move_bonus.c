@@ -13,4 +13,6 @@ void translate_camera(t_camera *camera, float dx, float dy, float dz)
 	world_move = add_vec3(world_x, add_vec3(world_y, world_z));
     camera->t_m.p = add_vec3(camera->t_m.p, world_move);
     camera->i_m = mat_inverse(camera->t_m);
+	printf("---- translate CAM ----\n");
+	print_matrix(camera->t_m);
 }

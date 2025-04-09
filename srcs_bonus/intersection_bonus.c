@@ -1,5 +1,81 @@
 #include <miniRT_bonus.h>
+int	intersect_sphere_WORLD(t_ray *ray, t_object *sp, float *t)
+{
+	const t_vec3	origin = sub_vec3(ray->o, sp->t_m.p);
+	const t_vec3	dir = ray->d;
+	const t_quad	quad = solve_quadratic(origin, dir, sp->radius);
 
+	if (quad.delta < EPSILON)
+		return (0);
+	else if (quad.t[0] < EPSILON && quad.t[1] < EPSILON)
+		return (0);
+	else if (quad.t[0] > EPSILON && quad.t[0] < quad.t[1])
+		*t = quad.t[0];
+	else if (quad.t[1] > EPSILON)
+		*t = quad.t[1];
+	else
+		printf("other\n");
+//	else if (quad.t[1] > 0)
+//		*t = quad.t[1];
+//	else
+//		*t = quad.t[0];
+//	ray->o = add_vec3(mult_vec3(dir, *t), origin);
+//	ray->o = mat_apply(sp->t_m, ray->o);
+	return (1);
+}
+int intersect_sphere_LOCAL(t_ray *ray, t_object *sp, float *t)
+{
+    // Transform ray to sphere's local space (accounting for transformations)
+    t_vec3 local_origin = ray->o;  // Apply inverse transform to origin
+    t_vec3 local_dir = normalize_vec3(ray->d);  // Direction (no translation)
+
+    // Sphere equation: ||P - center||² = radius² → ||local_origin + t*local_dir||² = sp->radius²
+    float a = dot_vec3(local_dir, local_dir);                     // Always 1 if direction is normalized
+    float b = 2.0f * dot_vec3(local_origin, local_dir);
+    float c = dot_vec3(local_origin, local_origin) - sp->radius * sp->radius;
+
+    t_quad quad = solve_quadratic(local_origin, local_dir, sp->radius);  // Compute t0 and t1
+
+    if (quad.delta < EPSILON)
+        return (0);  // No intersection
+
+    // Handle precision issues near zero
+    quad.t[0] = fmaxf(quad.t[0], EPSILON);
+    quad.t[1] = fmaxf(quad.t[1], EPSILON);
+
+    // Find the smallest valid t
+    if (quad.t[0] < quad.t[1] && quad.t[0] > EPSILON)
+        *t = quad.t[0];
+    else if (quad.t[1] > EPSILON)
+        *t = quad.t[1];
+    else
+        return (0);  // Both intersections behind the ray
+
+    // Transform intersection point back to world space (if needed)
+    //t_vec3 local_hit = add_vec3(local_origin, mult_vec3(local_dir, *t));
+    //ray->hit_point = mat_apply(sp->transform, local_hit);  // Apply forward transform
+
+    return (1);
+}
+int	intersect_plane_WORLD(t_ray *ray, t_object *pl, float *t)
+{
+	const float	denom = dot_vec3(pl->t_m.k, ray->d);
+	t_vec3 diff;
+	float			inter;
+
+	if (fabs(denom) < EPSILON)
+		return (0);
+	diff = sub_vec3(pl->t_m.p, ray->o);
+	inter = dot_vec3(diff, pl->t_m.k) / denom;
+	if (inter > EPSILON)
+	{
+		*t = inter;
+	//	ray->o = add_vec3(mult_vec3(dir, *t), origin);
+	//	ray->o = mat_apply(pl->t_m, ray->o);
+		return (1);
+	}
+	return (0);
+}
 // Helper function to check if a wall intersection is within the cylinder's height
 void check_tube(float t, t_vec3 origin, t_vec3 dir, float height, float *t_min)
 {
@@ -33,19 +109,21 @@ void check_cap(float cap_z, t_vec3 origin, t_vec3 dir, float radius, float *t_mi
     }
 }
 
+/*******************************************************************************
 // 1. Transform ray to object space
 // 2. Calculate coefficients for the infinite cylinder equation
 // 3. Cylinder is aligned along Z-axis in object space
 // 4. Project direction and origin onto the plane perpendicular to the cylinder's axis
 // 5. Check intersections with the cylinder walls (within height range)
 // 6. Check intersections with the end caps (z=0 and z=height)
+*******************************************************************************/
 int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
 {
-    t_vec3 origin = mat_apply(cylinder->i_m, ray->o);
-    t_vec3 dir = mat_apply(cylinder->i_m, ray->d);
-    t_vec3 axis = (t_vec3){0, 0, 1, 0};  
-    t_vec3 d_proj = sub_vec3(dir, mult_vec3(axis, dot_vec3(dir, axis)));
-    t_vec3 o_proj = sub_vec3(origin, mult_vec3(axis, dot_vec3(origin, axis)));
+    const t_vec3 origin = ray->o;
+    const t_vec3 dir = ray->d;
+    const t_vec3 axis = (t_vec3){0, 0, 1, 0};  
+    const t_vec3 d_proj = sub_vec3(dir, mult_vec3(axis, dot_vec3(dir, axis)));
+    const t_vec3 o_proj = sub_vec3(origin, mult_vec3(axis, dot_vec3(origin, axis)));
     const float a = dot_vec3(d_proj, d_proj);
     const float b = 2 * dot_vec3(d_proj, o_proj);
     const float c = dot_vec3(o_proj, o_proj) - (cylinder->radius * cylinder->radius);
@@ -68,7 +146,6 @@ int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
     }
     return 0;
 }
-
 
 t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj)
 {
@@ -106,27 +183,29 @@ t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_
 // d = direction of the ray
 int	intersect_object(t_ray *ray, t_object *obj, float *t)
 {
-	if (obj->type == SPHERE && intersect_sphere(ray, obj, t))
-		return (1);
-	else if (obj->type == CYLINDER && intersect_cylinder(ray, obj, t))
-		return (1);
-	else if (obj->type == PLANE && intersect_plane(ray, obj, t))
-		return (1);
-	else if (obj->type == HYPERBOL && intersect_hyperboloid(ray, obj, t))
-		return (1);
-	return (0);
-}
+	t_ray	local_ray;
+	int		intersect;
 
+	intersect = 0;
+	local_ray.d = normalize_vec3(mat_apply(obj->i_m, ray->d));
+	local_ray.o = mat_apply(obj->i_m, ray->o);
+	if (obj->type == SPHERE && intersect_sphere(&local_ray, obj, t))
+		intersect = 1;
+	else if (obj->type == CYLINDER && intersect_cylinder(&local_ray, obj, t))
+		intersect = 1;
+	else if (obj->type == PLANE && intersect_plane(&local_ray, obj, t))
+		intersect = 1;
+	else if (obj->type == HYPERBOL && intersect_hyperboloid(&local_ray, obj, t))
+		intersect = 1;
+	return (intersect);
+}
 // Equation of sphere:
 // dist(p, sphere->center) = rayon^2
 int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
 {
-	t_quad			quad;
-	const t_vec3	origin = mat_apply(sp->i_m, ray->o);
-	t_vec3	dir = mat_apply(sp->i_m, ray->d);
+	const t_quad	quad = solve_quadratic(ray->o, ray->d, sp->radius);
 
-	quad = solve_quadratic(origin, dir, sp->radius);
-	if (quad.delta < 0.0f)
+	if (quad.delta < EPSILON)
 		return (0);
 	else if (quad.t[0] < EPSILON && quad.t[1] < EPSILON)
 		return (0);
@@ -134,20 +213,24 @@ int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
 		*t = quad.t[0];
 	else if (quad.t[1] > EPSILON)
 		*t = quad.t[1];
+
 //	else if (quad.t[1] > 0)
 //		*t = quad.t[1];
 //	else
 //		*t = quad.t[0];
+//	ray->o = add_vec3(mult_vec3(dir, *t), origin);
+//	ray->o = mat_apply(sp->t_m, ray->o);
 	return (1);
 }
 
 // Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
 // 1. dot_vec3(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
-// 2 
 int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 {
-	const t_vec3	origin = mat_apply(pl->i_m, ray->o);
-	const t_vec3	dir = mat_apply(pl->i_m, ray->d);
+	//const t_vec3	origin = mat_apply(pl->i_m, ray->o);
+	//const t_vec3	dir = mat_apply(pl->i_m, ray->d);
+	const t_vec3	origin = ray->o;
+	const t_vec3	dir = ray->d;
 	float			inter;
 
 	if (fabs(dir.z) < EPSILON)
@@ -156,6 +239,8 @@ int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 	if (inter > EPSILON)
 	{
 		*t = inter;
+		ray->hp = add_vec3(mult_vec3(dir, *t), origin);
+		ray->hp = mat_apply(pl->t_m, ray->o);
 		return (1);
 	}
 	return (0);

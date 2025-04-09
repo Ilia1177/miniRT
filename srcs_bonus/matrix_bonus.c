@@ -9,7 +9,6 @@ float dot_vec4(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
-
 t_matrix	mat_rotate(t_matrix m1, t_matrix m2)
 {
 	t_matrix res;
@@ -36,6 +35,7 @@ t_matrix	mat_rotate(t_matrix m1, t_matrix m2)
 
 t_matrix	mat_compose(t_matrix m1, t_matrix m2)
 {
+	printf("MAT_COMPOSE\n");
 	t_matrix		res;
 	t_matrix		transposed = mat_transpose(m2);
 	
@@ -110,7 +110,8 @@ t_vec3	mat_apply(t_matrix mat, t_vec3 v)
 	return (res);
 }
 
-t_matrix mat_inverse2(t_matrix mat) {
+t_matrix mat_tinverse(t_matrix mat)
+{
     t_matrix inv;
 
     // Transpose the rotation part (i, j, k -> columns)

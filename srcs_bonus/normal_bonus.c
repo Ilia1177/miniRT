@@ -2,71 +2,40 @@
 
 void	plane_normal(t_ray *ray, t_object *pl)
 {
-	const t_vec3	axis = {0, 0, 1, 0};
-	const t_vec3	dir = mat_apply(pl->i_m, ray->d);
-
-	if (dot_vec3(axis, dir) < EPSILON)
-		ray->n = mult_vec3(axis, -1.0f);
-	else
-		ray->n = axis;
-	print_vec3(ray->n, "plane normal:");
+	ray->n = normalize_vec3(pl->t_m.k);
 }
 
 void	sphere_normal(t_ray *ray, t_object *sp)
 {
-	const t_vec3	origin = mat_apply(sp->i_m, ray->o);
-	const t_vec3	zero_v = {0, 0, 0, 0};
-
-	ray->n = normalize_vec3(sub_vec3(zero_v, origin));
+	ray->n = normalize_vec3(sub_vec3(ray->o, sp->t_m.p));
 }
 
-void	cylinder_normal(t_ray *ray, t_object *cylinder)
+/*******************************************************************************
+* 1. Transform hit point to object space
+* 2. Calculate normal in object space
+* 3. Check if we're hitting an end cap
+* 4. End cap normal depends on which cap we hit
+* 5. Transform normal back to world space using inverse transpose matrix
+*******************************************************************************/
+void	cylinder_normal(t_ray *ray, t_object *cy)
 {
-    // Transform hit point to object space
-    t_vec3 obj_hit = mat_apply(cylinder->i_m, ray->o);
-    
-    // Calculate normal in object space
+    t_vec3 hit_pt = mat_apply(cy->i_m, ray->o);
     t_vec3 normal_obj;
-    const float eps = 1e-6;
     
-    // Check if we're hitting an end cap
-    if (fabsf(obj_hit.z) < EPSILON || fabsf(obj_hit.z - cylinder->height) < eps) {
-        // End cap normal depends on which cap we hit
-        normal_obj = (t_vec3){0, 0, (obj_hit.z < eps) ? -1.0f : 1.0f, 0};
-    } else {
-        // Cylinder body normal (radial direction)
-        normal_obj = (t_vec3){obj_hit.x, obj_hit.y, 0, 0};
+   if (fabsf(hit_pt.z) < EPSILON || fabsf(hit_pt.z - cy->height) < EPSILON)
+   {
+	   if (hit_pt.z < EPSILON)
+			normal_obj = (t_vec3){0, 0, -1.0f, 0};
+	   else
+			normal_obj = (t_vec3){0, 0, 1.0f, 0};
+   }
+   else
+   {
+        normal_obj = (t_vec3){hit_pt.x, hit_pt.y, 0, 0};
         normal_obj = normalize_vec3(normal_obj);
-    }
-    // Transform normal back to world space using inverse transpose matrix
-    t_matrix inv_transpose = mat_transpose(cylinder->i_m);
-    t_vec3 normal_world = mat_apply(inv_transpose, normal_obj);
-    ray->n = normalize_vec3(normal_world);
-}
-
-// Normalize the cylinder's axis vector
-// Vector from the cylinder's base position to the point
-// Project pt_to_base onto the cylinder's axis
-// Check if the point is on the curved surface or the end caps
-// Point is on the curved surface
-// Point is on the bottom cap
-// Point is on the top cap
-void	_OLD_unsed_function(t_ray *ray, t_object *cylinder)
-{
-	//t_vec3	center = sub_vec3(cylinder->pos, mult_vec3(cylinder->axis, cylinder->height/2));
-	t_vec3	center = cylinder->pos;
-    const t_vec3	axis = normalize_vec3(cylinder->axis);
-    const t_vec3	pt_to_base = sub_vec3(ray->o, center);
-    const float		projection = dot_vec3(pt_to_base, axis);
-    const t_vec3	proj_vec = mult_vec3(axis, projection);
-
-	if (projection > 0.001f && projection < cylinder->height)
-		ray->n = normalize_vec3(sub_vec3(pt_to_base, proj_vec));
-	else if (projection <= 0.001f) 
-		ray->n = mult_vec3(axis, -1.0f); // Normal points opposite to the axis
-	else
-	   ray->n = axis; //Normal points in the direction of the axis
-//	ray->n = compute_normal(ray->o, cylinder);
+   }	
+   t_vec3 normal_world = mat_apply(cy->t_m, normal_obj);
+   ray->n = normalize_vec3(normal_world);
 }
 
 void hyperboloid_normal(t_ray *ray, t_object *object)

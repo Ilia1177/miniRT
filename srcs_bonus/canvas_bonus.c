@@ -32,7 +32,11 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 	{
 		j = -1;
 		while (++j < res)
+		{
+		//	print_argb(color, "color argb:");
+		//	printf("color :%x\n", encode_argb(color));
 			rt_put_pixel(img, x + i, y + j, encode_argb(color));
+		}
 	}
 }
 
@@ -51,7 +55,7 @@ void	display_color(t_data *scene)
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
-	update_camera_rotation(&scene->cam);
+	//update_camera_rotation(&scene->cam);
 	while (cnv.loc.x < cnv.w / 2)
 	{
 		cnv.loc.y = -cnv.h / 2;

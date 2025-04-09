@@ -32,7 +32,7 @@ static int	make_light(t_light light, t_light **lights)
 void	init_light(t_light *light, t_type type)
 {
 	light->type = type;
-	light->pos = (t_vec3){0, 0, 0, 0};
+	light->pos = (t_vec3){0, 0, 0, 1};
 	light->dir = (t_vec3){0, 0, 0, 0};
 	light->intensity = (t_argb){0, 0, 0, 0};
 	light->next = NULL;

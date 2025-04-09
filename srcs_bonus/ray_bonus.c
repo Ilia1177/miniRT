@@ -7,11 +7,12 @@ void	r_reflect(t_ray *ray)
 	ray->d = mult_vec3(mult_vec3(ray->n, 2), n_dot_d);
 	ray->d = sub_vec3(ray->d, ray->v);
 }
-
+// 1. Compute new origin of ray = hit point in world space
+// 2. Get the vector to camera
+// 3. Compute normal of object
 void	r_update(t_ray *ray, t_object *obj)
 {
 	ray->o = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
-	ray->o = mat_apply(obj->t_m, ray->o);
 	ray->v = mult_vec3(ray->d, -1);
 	if (obj->type == CYLINDER)
 		cylinder_normal(ray, obj);
@@ -21,17 +22,19 @@ void	r_update(t_ray *ray, t_object *obj)
 		plane_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
-	ray->n = mat_apply(obj->t_m, ray->n);
 	if (dot_vec3(ray->n, ray->v) < 0)
 		ray->n = mult_vec3(ray->n, -1);	
 }
 
-// 1) find intersection between ray and object
-// 2) get the hitting point, and assign it to ray->origin
-// 3) calcul the normal of the hitting point in ray->n
-// 4) compute light at hitting point
-// 5) return color if no reflective or recursive <= 0
-// 6) reflect ray and throw new ray to get reflections
+/*******************************************************************************
+* 1) find intersection between ray and object
+* 1.2. Compute t (distance on the rat->d);
+* 2) get the hitting point, and assign it to ray->origin
+* 3) calcul the normal of the hitting point in ray->n
+* 4) compute light at hitting point
+* 5) return color if no reflective or recursive <= 0
+* 6) reflect ray and throw new ray to get reflections
+*******************************************************************************/
 t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 {
 	t_object	*obj;
@@ -64,7 +67,7 @@ t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
 	quad.b = 2.0f * dot_vec3(oc, dir);
 	quad.c = dot_vec3(oc, oc) - radius * radius;
 	quad.delta = quad.b * quad.b - 4.0f * quad.a * quad.c;
-	if (quad.delta < 0.001f) // (quad.delta<= EPSILON)
+	if (quad.delta <= EPSILON)
 	{
 		quad.t[0] = FLT_MAX;
 		quad.t[1] = FLT_MAX;
@@ -80,7 +83,7 @@ int	solve_gen_quad(t_quad *quad)
 	float	square_root;
 
 	quad->delta = quad->b * quad->b - 4.0f * quad->a * quad->c;
-	if (quad->delta < 0.001f) // (quad.delta<= EPSILON)
+	if (quad->delta <= EPSILON)
 	{
 		quad->t[0] = FLT_MAX;
 		quad->t[1] = FLT_MAX;

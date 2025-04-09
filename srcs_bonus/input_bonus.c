@@ -1,20 +1,32 @@
 #include <miniRT_bonus.h>
-
+void	mrt_translate(t_object *obj, float dx, float dy, float dz)
+{
+	obj->t_m.p.x += dx;
+	obj->t_m.p.y += dy;
+	obj->t_m.p.z += dz;
+	obj->i_m = mat_inverse(obj->t_m);
+	printf("---- translate OBJ ----\n");
+	print_matrix(obj->t_m);
+}
+void	mrt_rotate(t_object *obj, float dx, float dy, float dz)
+{
+	return ;
+}
 // translate object on z axis zith i and j
 void	handle_object_translation(t_data *scene)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
-		scene->selected->t_m.p.z += 0.1;
+		mrt_translate(scene->selected, 0.0f, 0.0f, 0.1f);
 	if (scene->key_state[XK_k] == 1 && scene->selected)
-		scene->selected->t_m.p.z -= 0.1;
+		mrt_translate(scene->selected, 0.0f, 0.0f, -0.1f);
 	if (scene->key_state[XK_l] == 1 && scene->selected)
-		scene->selected->t_m.p.x += 0.1;
+		mrt_translate(scene->selected, 0.1f, 0.0f, 0.0f);
 	if (scene->key_state[XK_j] == 1 && scene->selected)
-		scene->selected->t_m.p.x -= 0.1;
+		mrt_translate(scene->selected, -0.1f, 0.0f, 0.0f);
 	if (scene->key_state[XK_u] == 1 && scene->selected)
-		scene->selected->t_m.p.y += 0.1;
+		mrt_translate(scene->selected, 0.0f, 0.1f, 0.0f);
 	if (scene->key_state[XK_o] == 1 && scene->selected)
-		scene->selected->t_m.p.y -= 0.1;
+		mrt_translate(scene->selected, 0, -0.1f, 0.0f);
 }
 
 void	handle_object_rotation(t_data *scene)
@@ -26,23 +38,37 @@ void	handle_object_rotation(t_data *scene)
 	if (scene->key_state[XK_c] == 1 && scene->selected)
 		rotate_on_z(scene->selected, 1.0f);
 }
+void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
+{
+	(void)dz;
+	if (cam->pitch + dx < 89.0f && cam->pitch + dx > -89.0f)
+		cam->pitch += dx;
+	cam->yaw += dy;
+	update_camera_rotation(cam);
+	printf("----- CAM matrix yaw: %f, pitch: %f-----\n", cam->yaw, cam->pitch);
+	print_matrix(cam->t_m);
+}
 
 void	handle_camera_move(t_data *scene)
 {
 	if (scene->key_state[XK_Left] == 1) 
-		scene->cam.yaw++;
+		rotate_camera(&scene->cam, 0, 1.0f, 0);
 	if (scene->key_state[XK_Right] == 1)
-		scene->cam.yaw--;
-	if (scene->key_state[XK_Down] == 1 && scene->cam.pitch < 89.0f)
-		scene->cam.pitch--;
-	if (scene->key_state[XK_Up] == 1 && scene->cam.pitch > -89.0f)
-		scene->cam.pitch++;
+		rotate_camera(&scene->cam, 0, -1.0f, 0);
+	if (scene->key_state[XK_Down] == 1)
+		rotate_camera(&scene->cam, -1.0f, 0, 0);
+	if (scene->key_state[XK_Up] == 1) 
+		rotate_camera(&scene->cam, 1.0f, 0, 0);
+	if (scene->key_state[XK_e] == 1)
+		translate_camera(&scene->cam, 0.0f, -0.5f, 0.0f);
+	if (scene->key_state[XK_q] == 1)
+		translate_camera(&scene->cam, 0.0f, 0.5f, 0.0f);
 	if (scene->key_state[XK_w] == 1)
-		translate_camera(&scene->cam, 0, 0, 0.5f);
+		translate_camera(&scene->cam, 0.0f, 0.0f, 0.5f);
 	if (scene->key_state[XK_s] == 1)
-		translate_camera(&scene->cam, 0, 0, -0.5f);
+		translate_camera(&scene->cam, 0.0f, 0.0f, -0.5f);
 	if (scene->key_state[XK_a] == 1)
-		translate_camera(&scene->cam, -0.5f, 0, 0);
+		translate_camera(&scene->cam, -0.5f, 0.0f, 0.0f);
 	if (scene->key_state[XK_d] == 1)
 		translate_camera(&scene->cam, 0.5f, 0, 0);
 }

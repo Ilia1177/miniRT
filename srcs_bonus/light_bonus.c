@@ -1,17 +1,18 @@
 #include <miniRT_bonus.h>
 
+/*******************************************************************************
 // Return reflexions of diffuse and/or specular
 // d : direction from the point -> light
 // v : vector from point -> camera
 // n : normal of the surface, toward outside the shape
 // n_dot_l > 0 --> light going against the normal (~ outside of the shape)
 // n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
+*******************************************************************************/
 t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 {
 	const float		n_dot_l = dot_vec3(ray->n, ray->d);
 	const t_vec3	r = sub_vec3(mult_vec3(mult_vec3(ray->n, 2.0f), n_dot_l), ray->d);
 	const float		r_dot_v = dot_vec3(r, ray->v);
-	//const float		v_dot_n = dot_vec3(ray->v, ray->n);
 	t_argb			diffuse;
 	t_argb			specular;
 
@@ -62,7 +63,6 @@ t_argb	specular_reflect(t_vec3 v, t_vec3 r, float r_dot_v, int spec, t_argb lume
 // Compute light coming at a point from all light sources
 // 1) get the direction of the light form point to light (ray->o to light->pos)
 // 2) if v_dot_n < 0 we are looking the inside the object, -> reverse n
-// 3) 
 t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 {
 	t_argb		lumen;
@@ -88,8 +88,6 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 				ray->d = light->dir;
 				dist = T_MAX;
 			}
-//			if (dot_vec3(ray->n, ray->v) < 0)
-//				ray->n = mult_vec3(ray->n, -1);	
 			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))
 				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}

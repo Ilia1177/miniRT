@@ -1,29 +1,6 @@
 
 #include <miniRT_bonus.h>
 
-//	static int	make_cylinder(t_object data, t_object **objects)
-//	{
-//		t_object	*curr_cylinder;
-//		t_object	*new_cylinder;
-//
-//		new_cylinder = malloc(sizeof(t_object));
-//		if (!new_cylinder)
-//			return (-109);
-//		ft_memcpy(new_cylinder, &data, sizeof(t_object));
-//		new_cylinder->next = NULL;
-//		curr_cylinder = NULL;
-//		if (*objects == NULL)
-//			*objects = new_cylinder;
-//		else
-//		{
-//			curr_cylinder = *objects;
-//			while (curr_cylinder->next)
-//				curr_cylinder = curr_cylinder->next;
-//			curr_cylinder->next = new_cylinder;
-//		}
-//		return (0);
-//	}
-//
 /*****************************************************************************
 *  Check if the map file corresponding to the correct format
 *  cylinder is sp		0.0,0.0,0.0		1.0			10,20,255
