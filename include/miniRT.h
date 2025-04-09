@@ -181,8 +181,6 @@ typedef struct	s_object
 	float			height;
 	int				spec;
 	int				pattern;
-	char			*path;
-	t_img			*img;
 	int				opt;
 	t_type			type;
 }	t_object;
@@ -196,7 +194,6 @@ typedef struct	s_data
 	char		res;
 //	float		intersec_p[2];
 	t_img		img;
-	//t_img		earth;
 	t_canvas	cnv;
 	t_camera	cam;
 //	t_vec4		rotation_matrix[3];
@@ -251,6 +248,7 @@ int		mouse_pos(int x, int y, t_data *scene);
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
+t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 
 //ray
 t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
@@ -308,6 +306,7 @@ t_vec4	mult_vec4(t_vec4 vec, float a);
 float	dist_vec4(t_vec4 a, t_vec4 b);
 
 //camera_vectors.c
+void	update_camera_vectors(t_camera *cam);
 void	update_camera_rotation(t_camera *cam);
 t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
 void	mouse_move(t_camera *cam, float delta_x, float delta_y);
@@ -343,8 +342,12 @@ int	str_to_vec4(char **line, t_vec4 *v);
 int	str_to_argb(char **line, t_argb *c, int get_alpha);
 int	skip_space(char *str);
 int	str_to_float(char **line, float *radius);
+<<<<<<< HEAD
 int	str_to_vecdir(char **line, t_vec4 *v);
 int	get_options(char **line, t_object *obj);
+=======
+int	str_to_vecdir(char **line, t_vec3 *v);
+>>>>>>> jm-test
 
 int	make_object(t_object data, t_object **objects);
 //init.c
@@ -372,14 +375,8 @@ int	make_hyperboloid(t_object data, t_object **objects);
 void	rotate(t_object *obj);
 void	rotate_on_z(t_object *obj, float theta);
 void	rotate_on_y(t_object *obj, float theta);
-	void	rotate_on_x(t_object *obj, float theta);
+void	rotate_on_x(t_object *obj, float theta);
 
-//text_checkerboard.c
-t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene);
-
-//text_img
-t_argb	text_img_at(float u, float v, t_img *img);
-t_img	*text_img(t_data *scene, char *path);
 
 //cylinder_utils.c
 t_vec4  cy_center_to_base(t_object cy);
