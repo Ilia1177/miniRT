@@ -8,10 +8,10 @@ void	mrt_translate(t_object *obj, float dx, float dy, float dz)
 	printf("---- translate OBJ ----\n");
 	print_mat4(obj->t_m);
 }
-void	mrt_rotate(t_object *obj, float dx, float dy, float dz)
-{
-	return ;
-}
+//	void	mrt_rotate(t_object *obj, float dx, float dy, float dz)
+//	{
+//		return ;
+//	}
 // translate object on z axis zith i and j
 void	handle_object_translation(t_data *scene)
 {

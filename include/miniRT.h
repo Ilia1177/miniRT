@@ -27,13 +27,13 @@
 # define EPSILON 0.001f
 
 //add w for the structure to be aligned on 16 bytes properly;
-typedef struct	s_vec4
+typedef struct	s_vec3
 {
 	float		x;
 	float		y;
 	float		z;
 	float		w;
-}				t_vec4;
+}				t_vec3;
 
 typedef struct	s_vec2
 {
@@ -43,11 +43,11 @@ typedef struct	s_vec2
 
 typedef struct	s_matrix
 {
-	t_vec4	i;
-	t_vec4	j;
-	t_vec4	k;
-	t_vec4	p;
-}	t_mat4;
+	t_vec3	i;
+	t_vec3	j;
+	t_vec3	k;
+	t_vec3	p;
+}	t_matrix;
 
 typedef struct	s_rgb
 {
@@ -92,20 +92,20 @@ typedef struct s_uv
 
 typedef struct	s_camera
 {
-	t_mat4	t_m;
-	t_mat4	i_m;
-	t_vec4 pos;
-    t_vec4 dir;   	// Forward direction
-    t_vec4 right; 	// Right direction
-	t_vec4 up;    	// Up direction
+	t_matrix	t_m;
+	t_matrix	i_m;
+	t_vec3 pos;
+    t_vec3 dir;   	// Forward direction
+    t_vec3 right; 	// Right direction
+	t_vec3 up;    	// Up direction
     float yaw;   	// Horizontal rotation (left/right)
     float pitch; 	// Vertical rotation (up/down)
 }	t_camera;
 
 typedef struct	s_viewport
 {
-//	t_vec4		pos;
-	t_vec4		loc;
+//	t_vec3		pos;
+	t_vec3		loc;
 	int			h;
 	int			w;
 }	t_viewport;
@@ -143,8 +143,8 @@ typedef struct	s_light
 {
 	struct s_light	*next;
 	t_argb			intensity;
-	t_vec4			pos;
-	t_vec4			dir;
+	t_vec3			pos;
+	t_vec3			dir;
 	t_type			type;
 }	t_light;
 
@@ -152,10 +152,10 @@ typedef struct	s_light
 //64 bytes aligned: OK
 typedef struct	s_ray
 {
-	t_vec4	v;
-	t_vec4	d;
-	t_vec4	o;
-	t_vec4	n;
+	t_vec3	v;
+	t_vec3	d;
+	t_vec3	o;
+	t_vec3	n;
 }	t_ray;
 // t_mat = matrix world space
 // i_mat = invert matrix
@@ -165,15 +165,15 @@ typedef struct	s_object
 	t_argb			reflect;
 	t_argb			color;
 	char			mat[4][4];
-	t_mat4		t_m;
-	t_mat4		i_m;
-	t_mat4		id_matrix;
-	t_vec4			pos;
-	t_vec4			axis;
-	t_vec4			scale;
-	t_vec4			up;
-	t_vec4			dir;
-	t_vec4			right;
+	t_matrix		t_m;
+	t_matrix		i_m;
+	t_matrix		id_matrix;
+	t_vec3			pos;
+	t_vec3			axis;
+	t_vec3			scale;
+	t_vec3			up;
+	t_vec3			dir;
+	t_vec3			right;
 	float			yaw;
 	float			pitch;
 	float			t;
@@ -196,7 +196,7 @@ typedef struct	s_data
 	t_img		img;
 	t_canvas	cnv;
 	t_camera	cam;
-//	t_vec4		rotation_matrix[3];
+//	t_vec3		rotation_matrix[3];
 	t_viewport	viewport;
 	t_object	*selected;
 	t_object	*objects;
@@ -213,16 +213,16 @@ void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 //
 
-t_mat4	mat_rotate(t_mat4 m1, t_mat4 m2);
-t_vec4	mat_translate(t_mat4 mat, t_vec4 v);
-t_vec4	mat_apply(t_mat4 mat, t_vec4 v);
-t_mat4	mat_generate(t_object *obj);
-t_mat4	mat_compose(t_mat4 m2, t_mat4 m1);
-t_mat4	mat_transpose(t_mat4 m);
+t_matrix	mat_rotate(t_matrix m1, t_matrix m2);
+t_vec3	mat_translate(t_matrix mat, t_vec3 v);
+t_vec3	mat_apply(t_matrix mat, t_vec3 v);
+t_matrix	mat_generate(t_object *obj);
+t_matrix	mat_compose(t_matrix m2, t_matrix m1);
+t_matrix	mat_transpose(t_matrix m);
 	
-t_mat4	mat_inverse(t_mat4 matrix);
+t_matrix	mat_inverse(t_matrix matrix);
 void	trans_sp_matrix(t_object *obj);
-t_vec4	apply_mat4x4(t_mat4 m, t_vec4 v);
+t_vec3	apply_mat4x4(t_matrix m, t_vec3 v);
 
 //img.c
 void			rt_put_pixel(t_img *img, int x, int y, int color);
@@ -245,7 +245,7 @@ int		key_press(int keycode, t_data *scene);
 int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 //canvas.c
-t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
+t_vec3		throught_vp(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
 t_vec2		cnv_to_screen(t_canvas cnv);
 t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
@@ -253,11 +253,11 @@ t_vec3		get_viewport_loc(t_canvas cnv, t_viewport vp);
 //ray
 t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
 t_object		*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj);
-t_quad			solve_quadratic(t_vec4 oc, t_vec4 dir, float radius);
+t_quad			solve_quadratic(t_vec3 oc, t_vec3 dir, float radius);
 int				solve_gen_quad(t_quad *quad);
 
 //inter_utils.c
-int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
+int	intersect_disk(t_ray *ray, t_vec3 center, t_object *cyl, float *t);
 int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
 int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
 void get_min_t(float *t_min, float t_tmp, int *hit);
@@ -289,26 +289,26 @@ t_argb			apply_brightness(t_argb color);
 //light.c
 t_argb			compute_lighting(t_ray *ray, t_object *obj, t_data *scene);
 void			reflect_ray(t_ray *ray);
-t_argb			specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb intensity);
+t_argb			specular_reflect(t_vec3 v, t_vec3 r, float r_dot_v, int spec, t_argb intensity);
 t_argb			diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
 t_argb			reflections(t_ray *ray, t_argb intensity, int spec);
 
 //vector_math.c
-t_vec4	cross_vec4(t_vec4 a, t_vec4 b);
-float	dot_vec4(t_vec4 a, t_vec4 b);
-float	mag_vec4(t_vec4 a);
+t_vec3	cross_vec3(t_vec3 a, t_vec3 b);
+float	dot_vec3(t_vec3 a, t_vec3 b);
+float	mag_vec3(t_vec3 a);
 double	dist(t_vec2 a, t_vec2 b);
-t_vec4	sub_vec4(t_vec4 a, t_vec4 b);
-t_vec4	add_vec4(t_vec4 a, t_vec4 b);
-t_vec4	normalize_vec4(t_vec4 vec);
-t_vec4	div_vec4(t_vec4 vec, float d);
-t_vec4	mult_vec4(t_vec4 vec, float a);
-float	dist_vec4(t_vec4 a, t_vec4 b);
+t_vec3	sub_vec3(t_vec3 a, t_vec3 b);
+t_vec3	add_vec3(t_vec3 a, t_vec3 b);
+t_vec3	normalize_vec3(t_vec3 vec);
+t_vec3	div_vec3(t_vec3 vec, float d);
+t_vec3	mult_vec3(t_vec3 vec, float a);
+float	dist_vec3(t_vec3 a, t_vec3 b);
 
 //camera_vectors.c
 void	update_camera_vectors(t_camera *cam);
 void	update_camera_rotation(t_camera *cam);
-t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
+t_vec3	apply_camera_rotation(t_camera cam, t_vec3 v);
 void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float	calc_vp_width(float fov_degrees, float focal_length);
 
@@ -320,9 +320,9 @@ void move_camera_left(t_camera *cam, float speed);
 
 // debug
 //
-void print_mat4(t_mat4 matrix); // for loop
+void print_matrix(t_matrix matrix); // for loop
 void	print_argb(t_argb color, char *msg);
-void	print_vec4(t_vec4 v, char *msg);
+void	print_vec3(t_vec3 v, char *msg);
 void	print_obj(t_object obj);
 void	print_error_msg(int status);
 void	print_light(t_light light);
@@ -338,16 +338,12 @@ int	build_scene(t_data *scene);
 void	init_obj(t_object *obj, t_type type);
 
 //Parsing_utils.c
-int	str_to_vec4(char **line, t_vec4 *v);
+int	str_to_vec3(char **line, t_vec3 *v);
 int	str_to_argb(char **line, t_argb *c, int get_alpha);
 int	skip_space(char *str);
 int	str_to_float(char **line, float *radius);
-<<<<<<< HEAD
-int	str_to_vecdir(char **line, t_vec4 *v);
-int	get_options(char **line, t_object *obj);
-=======
 int	str_to_vecdir(char **line, t_vec3 *v);
->>>>>>> jm-test
+int	get_options(char **line, t_object *obj);
 
 int	make_object(t_object data, t_object **objects);
 //init.c
@@ -379,8 +375,8 @@ void	rotate_on_x(t_object *obj, float theta);
 
 
 //cylinder_utils.c
-t_vec4  cy_center_to_base(t_object cy);
-t_vec4 cy_base_to_center(t_vec4 pos, t_vec4 dir, float height);
+t_vec3  cy_center_to_base(t_object cy);
+t_vec3 cy_base_to_center(t_vec3 pos, t_vec3 dir, float height);
 
 //dl_img.c
 void save_as_ppm(t_img *img, char *filename);

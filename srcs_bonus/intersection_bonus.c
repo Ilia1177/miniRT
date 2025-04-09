@@ -157,6 +157,7 @@ int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 	const t_vec4	dir = ray->d;
 	float			inter;
 
+	(void)pl;
 	if (fabs(dir.z) < EPSILON)
 		return (0);
 	inter = -origin.z / dir.z;

@@ -8,9 +8,9 @@
 # include <math.h>
 # include <stdio.h>
 # include <float.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 # define T_MAX 1600
 # define HEIGHT 800
