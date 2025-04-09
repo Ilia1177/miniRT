@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <miniRT.h>
 
 void	free_light(t_light *light)
 {
