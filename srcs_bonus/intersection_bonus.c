@@ -1,89 +1,14 @@
 #include <miniRT_bonus.h>
-int	intersect_sphere_WORLD(t_ray *ray, t_object *sp, float *t)
-{
-	const t_vec4	origin = sub_vec4(ray->o, sp->t_m.p);
-	const t_vec4	dir = ray->d;
-	const t_quad	quad = solve_quadratic(origin, dir, sp->radius);
 
-	if (quad.delta < EPSILON)
-		return (0);
-	else if (quad.t[0] < EPSILON && quad.t[1] < EPSILON)
-		return (0);
-	else if (quad.t[0] > EPSILON && quad.t[0] < quad.t[1])
-		*t = quad.t[0];
-	else if (quad.t[1] > EPSILON)
-		*t = quad.t[1];
-	else
-		printf("other\n");
-//	else if (quad.t[1] > 0)
-//		*t = quad.t[1];
-//	else
-//		*t = quad.t[0];
-//	ray->o = add_vec4(mult_vec4(dir, *t), origin);
-//	ray->o = mat_apply(sp->t_m, ray->o);
-	return (1);
-}
-int intersect_sphere_LOCAL(t_ray *ray, t_object *sp, float *t)
-{
-    // Transform ray to sphere's local space (accounting for transformations)
-    t_vec4 local_origin = ray->o;  // Apply inverse transform to origin
-    t_vec4 local_dir = normalize_vec4(ray->d);  // Direction (no translation)
-
-    // Sphere equation: ||P - center||² = radius² → ||local_origin + t*local_dir||² = sp->radius²
-    float a = dot_vec4(local_dir, local_dir);                     // Always 1 if direction is normalized
-    float b = 2.0f * dot_vec4(local_origin, local_dir);
-    float c = dot_vec4(local_origin, local_origin) - sp->radius * sp->radius;
-
-    t_quad quad = solve_quadratic(local_origin, local_dir, sp->radius);  // Compute t0 and t1
-
-    if (quad.delta < EPSILON)
-        return (0);  // No intersection
-
-    // Handle precision issues near zero
-    quad.t[0] = fmaxf(quad.t[0], EPSILON);
-    quad.t[1] = fmaxf(quad.t[1], EPSILON);
-
-    // Find the smallest valid t
-    if (quad.t[0] < quad.t[1] && quad.t[0] > EPSILON)
-        *t = quad.t[0];
-    else if (quad.t[1] > EPSILON)
-        *t = quad.t[1];
-    else
-        return (0);  // Both intersections behind the ray
-
-    // Transform intersection point back to world space (if needed)
-    //t_vec4 local_hit = add_vec4(local_origin, mult_vec4(local_dir, *t));
-    //ray->hit_point = mat_apply(sp->transform, local_hit);  // Apply forward transform
-
-    return (1);
-}
-int	intersect_plane_WORLD(t_ray *ray, t_object *pl, float *t)
-{
-	const float	denom = dot_vec4(pl->t_m.k, ray->d);
-	t_vec4 diff;
-	float			inter;
-
-	if (fabs(denom) < EPSILON)
-		return (0);
-	diff = sub_vec4(pl->t_m.p, ray->o);
-	inter = dot_vec4(diff, pl->t_m.k) / denom;
-	if (inter > EPSILON)
-	{
-		*t = inter;
-	//	ray->o = add_vec4(mult_vec4(dir, *t), origin);
-	//	ray->o = mat_apply(pl->t_m, ray->o);
-		return (1);
-	}
-	return (0);
-}
 // Helper function to check if a wall intersection is within the cylinder's height
 void check_tube(float t, t_vec4 origin, t_vec4 dir, float height, float *t_min)
 {
 	float	z;
+	t_vec4	hit_point;
 
     if (t > EPSILON)
 	{
-		t_vec4 hit_point = add_vec4(origin, mult_vec4(dir, t));
+		hit_point = add_vec4(origin, mult_vec4(dir, t));
         z = dot_vec4(hit_point, (t_vec4){0, 0, 1, 0}); // Project onto cylinder's axis
         if (z >= 0 && z <= height) 
             *t_min = fminf(*t_min, t);
@@ -199,6 +124,7 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 		intersect = 1;
 	return (intersect);
 }
+
 // Equation of sphere:
 // dist(p, sphere->center) = rayon^2
 int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
@@ -227,8 +153,6 @@ int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
 // 1. dot_vec4(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
 int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 {
-	//const t_vec4	origin = mat_apply(pl->i_m, ray->o);
-	//const t_vec4	dir = mat_apply(pl->i_m, ray->d);
 	const t_vec4	origin = ray->o;
 	const t_vec4	dir = ray->d;
 	float			inter;

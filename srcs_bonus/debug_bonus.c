@@ -1,39 +1,5 @@
 #include <miniRT_bonus.h>
-void draw_line(t_img *img, t_vec4 start, t_vec4 end)
-{
-    int x1 = start.x;
-    int y1 = start.y;
-    int x2 = end.x;
-    int y2 = end.y;
 
-    int dx = abs(x2 - x1);
-    int dy = -abs(y2 - y1);
-    int sx = x1 < x2 ? 1 : -1;
-    int sy = y1 < y2 ? 1 : -1;
-    int err = dx + dy;
-
-    while (1)
-    {
-        rt_put_pixel(img, x1, y1, 0);
-        if (x1 == x2 && y1 == y2)
-            break;
-        int e2 = 2 * err;
-        if (e2 >= dy)
-        {
-            if (x1 == x2)
-                break;
-            err += dy;
-            x1 += sx;
-        }
-        if (e2 <= dx)
-        {
-            if (y1 == y2)
-                break;
-            err += dx;
-            y1 += sy;
-        }
-    }
-}
 void	print_vec4(t_vec4 v, char *msg)
 {
 	printf("%s{x: %.3f, y: %.3f, z:%.3f, w: %.3f}\n", msg, v.x, v.y, v.z, v.w);
@@ -116,7 +82,7 @@ void	print_error_msg(int status)
 		printf("Malloc error\n");
 }
 
-void print_matrix(t_matrix matrix)
+void print_mat4(t_mat4 matrix)
 { // for loop
 	print_vec4(matrix.i, "i:");
 	print_vec4(matrix.j, "j:");

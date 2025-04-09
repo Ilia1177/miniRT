@@ -2,9 +2,12 @@
 
 float dist_vec4(t_vec4 p1, t_vec4 p2)
 {
-    return sqrtf((p2.x - p1.x) * (p2.x - p1.x) +
-                 (p2.y - p1.y) * (p2.y - p1.y) +
-                 (p2.z - p1.z) * (p2.z - p1.z));
+	float	dist;
+
+	dist = (p2.x - p1.x) * (p2.x - p1.x) +
+		(p2.y - p1.y) * (p2.y - p1.y) +
+        (p2.z - p1.z) * (p2.z - p1.z);
+    return (sqrtf(dist));
 }
 
 t_vec4 cross_vec4(t_vec4 a, t_vec4 b)
@@ -25,7 +28,7 @@ t_vec4	normalize_vec4(t_vec4 vec)
 
 	lenght = mag_vec4(vec);
 	result = div_vec4(vec, lenght);
-	result.w = vec.w;
+	result.w = 0;
 	return (result);
 }
 
@@ -54,14 +57,14 @@ t_vec4	mult_vec4(t_vec4 vec, float a)
 	return (result);
 }
 
-//float dot_vec4(t_vec4 a, t_vec4 b)
-//{
-//
-//	float	result;
-//
-//	result = a.x * b.x + a.y * b.y + a.z * b.z;  //+ a.w * b.w;
-//	return (result);
-//}
+float dot_vec4(t_vec4 a, t_vec4 b)
+{
+
+	float	result;
+
+	result = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+	return (result);
+}
 
 float	mag_vec4(t_vec4 a)
 {

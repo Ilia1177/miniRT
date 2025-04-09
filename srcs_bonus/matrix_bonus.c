@@ -1,43 +1,34 @@
 #include <miniRT_bonus.h>
 
-float dot_vec4(t_vec4 a, t_vec4 b)
-{
+//	t_mat4	mat_rotate(t_mat4 m1, t_mat4 m2)
+//	{
+//		t_mat4 res;
+//		const t_mat4	transposed = mat_transpose(m2);
+//
+//		res.i.x = dot_vec4(m1.i, transposed.i);
+//		res.i.y = dot_vec4(m1.i, transposed.j);
+//		res.i.z = dot_vec4(m1.i, transposed.k);
+//		res.i.w = dot_vec4(m1.i, transposed.p);
+//		res.j.x = dot_vec4(m1.j, transposed.i);
+//		res.j.y = dot_vec4(m1.j, transposed.j);
+//		res.j.z = dot_vec4(m1.j, transposed.k);
+//		res.j.w = dot_vec4(m1.j, transposed.p);
+//		res.k.x = dot_vec4(m1.k, transposed.i);
+//		res.k.y = dot_vec4(m1.k, transposed.j);
+//		res.k.z = dot_vec4(m1.k, transposed.k);
+//		res.k.w = dot_vec4(m1.k, transposed.p);
+//		res.i = normalize_vec4(res.i);
+//		res.j = normalize_vec4(res.j);
+//		res.k = normalize_vec4(res.k);
+//		res.p = m1.p;
+//		return (res);
+//	}
 
-	float	result;
-
-	result = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
-	return (result);
-}
-
-t_matrix	mat_rotate(t_matrix m1, t_matrix m2)
-{
-	t_matrix res;
-	const t_matrix	transposed = mat_transpose(m2);
-
-	res.i.x = dot_vec4(m1.i, transposed.i);
-	res.i.y = dot_vec4(m1.i, transposed.j);
-	res.i.z = dot_vec4(m1.i, transposed.k);
-	res.i.w = dot_vec4(m1.i, transposed.p);
-	res.j.x = dot_vec4(m1.j, transposed.i);
-	res.j.y = dot_vec4(m1.j, transposed.j);
-	res.j.z = dot_vec4(m1.j, transposed.k);
-	res.j.w = dot_vec4(m1.j, transposed.p);
-	res.k.x = dot_vec4(m1.k, transposed.i);
-	res.k.y = dot_vec4(m1.k, transposed.j);
-	res.k.z = dot_vec4(m1.k, transposed.k);
-	res.k.w = dot_vec4(m1.k, transposed.p);
-	res.i = normalize_vec4(res.i);
-	res.j = normalize_vec4(res.j);
-	res.k = normalize_vec4(res.k);
-	res.p = m1.p;
-	return (res);
-}
-
-t_matrix	mat_compose(t_matrix m1, t_matrix m2)
+t_mat4	mat_compose(t_mat4 m1, t_mat4 m2)
 {
 	printf("MAT_COMPOSE\n");
-	t_matrix		res;
-	t_matrix		transposed = mat_transpose(m2);
+	t_mat4		res;
+	t_mat4		transposed = mat_transpose(m2);
 	
 	res.i.x = dot_vec4(m1.i, transposed.i);
 	res.i.y = dot_vec4(m1.i, transposed.j);
@@ -59,9 +50,9 @@ t_matrix	mat_compose(t_matrix m1, t_matrix m2)
 }
 
 // Make a transform matrix from axis and position of object
-t_matrix	mat_generate(t_object *obj)
+t_mat4	mat_generate(t_object *obj)
 {
-	t_matrix		trans_mat;
+	t_mat4		trans_mat;
 	t_vec4	world_up = (t_vec4) {0, 1, 0, 0};
 
     // Adjust the world_up vector if the axis and world_up are parallel
@@ -75,9 +66,9 @@ t_matrix	mat_generate(t_object *obj)
 	return (trans_mat);
 }
 
-t_matrix	mat_transpose(t_matrix m)
+t_mat4	mat_transpose(t_mat4 m)
 {
-	t_matrix	transposed;
+	t_mat4	transposed;
 
 	transposed.i = (t_vec4) {m.i.x, m.j.x, m.k.x, m.p.x};
 	transposed.j = (t_vec4) {m.i.y, m.j.y, m.k.y, m.p.y};
@@ -86,12 +77,10 @@ t_matrix	mat_transpose(t_matrix m)
 	return (transposed);
 }
 
-
-
 // Apply the matrix on a vector
-t_vec4	mat_apply(t_matrix mat, t_vec4 v)
+t_vec4	mat_apply(t_mat4 mat, t_vec4 v)
 {
-	const t_matrix	transposed = mat_transpose(mat);
+	const t_mat4	transposed = mat_transpose(mat);
 	t_vec4			res;
 
 	res.x = dot_vec4(v, transposed.i);
@@ -110,28 +99,7 @@ t_vec4	mat_apply(t_matrix mat, t_vec4 v)
 	return (res);
 }
 
-t_matrix mat_tinverse(t_matrix mat)
-{
-    t_matrix inv;
-
-    // Transpose the rotation part (i, j, k -> columns)
-    inv.i.x = mat.i.x; inv.j.x = mat.i.y; inv.k.x = mat.i.z;
-    inv.i.y = mat.j.x; inv.j.y = mat.j.y; inv.k.y = mat.j.z;
-    inv.i.z = mat.k.x; inv.j.z = mat.k.y; inv.k.z = mat.k.z;
-
-    // Compute inverse translation: -R^T * T
-    float tx = mat.i.w, ty = mat.j.w, tz = mat.k.w;
-    inv.i.w = -(inv.i.x * tx + inv.i.y * ty + inv.i.z * tz);
-    inv.j.w = -(inv.j.x * tx + inv.j.y * ty + inv.j.z * tz);
-    inv.k.w = -(inv.k.x * tx + inv.k.y * ty + inv.k.z * tz);
-
-    // p row remains (0,0,0,1)
-    inv.p = (t_vec4){0, 0, 0, 1};
-
-    return inv;
-}
-
-static float mat_determinant(t_matrix m)
+static float mat_determinant(t_mat4 m)
 {
     float det =
         m.i.x * (m.j.y * (m.k.z * m.p.w - m.k.w * m.p.z) - m.j.z * (m.k.y * m.p.w - m.k.w * m.p.y) + m.j.w * (m.k.y * m.p.z - m.k.z * m.p.y))
@@ -141,9 +109,9 @@ static float mat_determinant(t_matrix m)
     return det;
 }
 
-t_matrix adjugate(t_matrix m)
+static t_mat4 adjugate(t_mat4 m)
 {
-    t_matrix adj;
+    t_mat4 adj;
 
     // Compute each cofactor for the adjugate matrix (transposed cofactor matrix)
     // Row i (cofactors for original column 1)
@@ -173,7 +141,7 @@ t_matrix adjugate(t_matrix m)
     return adj;
 }
 
-t_matrix mat_inverse(t_matrix m)
+t_mat4 mat_inverse(t_mat4 m)
 {
     float det = mat_determinant(m);
     if (det < EPSILON)
@@ -182,10 +150,10 @@ t_matrix mat_inverse(t_matrix m)
         return m; // Return original matrix if not invertible
     }
 
-    t_matrix adj = adjugate(m);
+    t_mat4 adj = adjugate(m);
     float inv_det = 1.0f / det;
 
-    t_matrix inv;
+    t_mat4 inv;
     inv.i.x = adj.i.x * inv_det;
     inv.i.y = adj.i.y * inv_det;
     inv.i.z = adj.i.z * inv_det;
@@ -208,25 +176,26 @@ t_matrix mat_inverse(t_matrix m)
 
     return inv;
 }
-t_mat4 mat4_inverse(t_mat4 m)
+t_mat4 mat_inverse2(t_mat4 m)
 {
     t_mat4 inv;
     
+	inv = mat_transpose(m);
     // Transpose rotation (inverse of orthogonal matrix)
-    inv.i.x = m.i.x;  // Column 0 becomes row 0
-    inv.i.y = m.j.x;  // Column 1 becomes row 0
-    inv.i.z = m.k.x;  // Column 2 becomes row 0
-    inv.i.w = 0.0f;
-
-    inv.j.x = m.i.y;  // Column 0 becomes row 1
-    inv.j.y = m.j.y;
-    inv.j.z = m.k.y;
-    inv.j.w = 0.0f;
-
-    inv.k.x = m.i.z;  // Column 0 becomes row 2
-    inv.k.y = m.j.z;
-    inv.k.z = m.k.z;
-    inv.k.w = 0.0f;
+//    inv.i.x = m.i.x;  // Column 0 becomes row 0
+//    inv.i.y = m.j.x;  // Column 1 becomes row 0
+//    inv.i.z = m.k.x;  // Column 2 becomes row 0
+//    inv.i.w = 0.0f;
+//
+//    inv.j.x = m.i.y;  // Column 0 becomes row 1
+//    inv.j.y = m.j.y;
+//    inv.j.z = m.k.y;
+//    inv.j.w = 0.0f;
+//
+//    inv.k.x = m.i.z;  // Column 0 becomes row 2
+//    inv.k.y = m.j.z;
+//    inv.k.z = m.k.z;
+//    inv.k.w = 0.0f;
 
     // Compute inverse translation: -(transposed_rotation * translation)
     inv.p.x = -(m.i.x * m.p.x + m.j.x * m.p.y + m.k.x * m.p.z);

@@ -12,9 +12,9 @@ int	make_object(t_object data, t_object **objects)
 	new_object->t_m = mat_generate(new_object);
 	new_object->i_m = mat_inverse(new_object->t_m);
 	printf("transform matrix of %d:\n", data.type);
-	print_matrix(new_object->t_m);
+	print_mat4(new_object->t_m);
 	printf("iverted matrix of %d:\n", data.type);
-	print_matrix(new_object->i_m);
+	print_mat4(new_object->i_m);
 	new_object->next = NULL;
 	curr_object = NULL;
 	if (*objects == NULL)

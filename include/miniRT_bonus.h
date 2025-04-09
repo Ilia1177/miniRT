@@ -47,7 +47,7 @@ typedef struct	s_matrix
 	t_vec4	j;
 	t_vec4	k;
 	t_vec4	p;
-}	t_matrix;
+}	t_mat4;
 
 typedef struct	s_rgb
 {
@@ -86,8 +86,8 @@ typedef struct s_uv
 
 typedef struct	s_camera
 {
-	t_matrix	t_m;
-	t_matrix	i_m;
+	t_mat4	t_m;
+	t_mat4	i_m;
 	t_vec4 pos;
     t_vec4 dir;   	// Forward direction
     t_vec4 right; 	// Right direction
@@ -159,9 +159,9 @@ typedef struct	s_object
 	t_argb			reflect;
 	t_argb			color;
 	char			mat[4][4];
-	t_matrix		t_m;
-	t_matrix		i_m;
-	t_matrix		id_matrix;
+	t_mat4		t_m;
+	t_mat4		i_m;
+	t_mat4		id_matrix;
 	t_vec4			pos;
 	t_vec4			axis;
 	t_vec4			scale;
@@ -210,18 +210,18 @@ void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 //
 
-t_matrix mat_transpose_inverse(t_matrix mat);
-t_matrix	mat_rotate(t_matrix m1, t_matrix m2);
-t_vec4	mat_translate(t_matrix mat, t_vec4 v);
-t_vec4	mat_apply(t_matrix mat, t_vec4 v);
-t_matrix	mat_generate(t_object *obj);
-t_matrix	mat_compose(t_matrix m2, t_matrix m1);
-t_matrix	mat_transpose(t_matrix m);
+t_mat4 mat_transpose_inverse(t_mat4 mat);
+t_mat4	mat_rotate(t_mat4 m1, t_mat4 m2);
+t_vec4	mat_translate(t_mat4 mat, t_vec4 v);
+t_vec4	mat_apply(t_mat4 mat, t_vec4 v);
+t_mat4	mat_generate(t_object *obj);
+t_mat4	mat_compose(t_mat4 m2, t_mat4 m1);
+t_mat4	mat_transpose(t_mat4 m);
 	
-t_matrix	mat_inverse(t_matrix matrix);
-t_matrix	mat_tinverse(t_matrix matrix);
+t_mat4	mat_inverse(t_mat4 matrix);
+t_mat4	mat_tinverse(t_mat4 matrix);
 void	trans_sp_matrix(t_object *obj);
-t_vec4	apply_mat4x4(t_matrix m, t_vec4 v);
+t_vec4	apply_mat4x4(t_mat4 m, t_vec4 v);
 
 //img.c
 void			rt_put_pixel(t_img *img, int x, int y, int color);
@@ -312,10 +312,11 @@ float	calc_vp_width(float fov_degrees, float focal_length);
 
 //camera_move.c
 void translate_camera(t_camera *camera, float dx, float dy, float dz);
+void rotate_camera(t_camera *camera, float dx, float dy, float dz);
 
 // debug
 void draw_line(t_img *img, t_vec4 start, t_vec4 end);
-void print_matrix(t_matrix matrix); // for loop
+void print_mat4(t_mat4 matrix); // for loop
 void	print_argb(t_argb color, char *msg);
 void	print_vec4(t_vec4 v, char *msg);
 void	print_obj(t_object obj);

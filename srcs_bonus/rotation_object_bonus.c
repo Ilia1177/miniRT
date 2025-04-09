@@ -16,7 +16,7 @@ t_vec4 compose_quater(t_vec4 after, t_vec4 before)
 void	rotate_on_x(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
-	t_matrix	mat;
+	t_mat4	mat;
 
 	mat.j = (t_vec4) {0, cos(theta), sin(theta), 0};
 	mat.k = (t_vec4) {0, -sin(theta), cos(theta), 0};
@@ -31,7 +31,7 @@ void	rotate_on_x(t_object *obj, float theta)
 void	rotate_on_y(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
-	t_matrix	mat;
+	t_mat4	mat;
 
 	mat.i = (t_vec4) {cos(theta), 0, -sin(theta), 0};
 	mat.k = (t_vec4) {sin(theta), 0, cos(theta), 0};
@@ -43,13 +43,13 @@ void	rotate_on_y(t_object *obj, float theta)
 //	obj->axis = mat_apply(mat, obj->axis);
 	obj->t_m = mat_compose(mat, obj->t_m);
 	obj->i_m = mat_inverse(obj->t_m);
-	print_matrix(obj->t_m);
+	print_mat4(obj->t_m);
 }
 
 void	rotate_on_z(t_object *obj, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
-	t_matrix	mat;
+	t_mat4	mat;
 
 	mat.i = (t_vec4) {cos(theta), sin(theta), 0, 0};
 	mat.j = (t_vec4) {-sin(theta), cos(theta), 0, 0};
@@ -60,5 +60,5 @@ void	rotate_on_z(t_object *obj, float theta)
 	//obj->axis = mat_apply(mat, obj->axis);
 	obj->t_m = mat_compose(mat, obj->t_m);
 	obj->i_m = mat_inverse(obj->t_m);
-	print_matrix(obj->t_m);
+	print_mat4(obj->t_m);
 }

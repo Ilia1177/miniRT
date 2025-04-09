@@ -1,5 +1,5 @@
 #include <miniRT_bonus.h>
-//
+
 // get location of the point in the viemport from canvas'location
 t_vec4 throught_vp(t_canvas cnv, t_viewport vp)
 {

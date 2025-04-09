@@ -123,6 +123,7 @@ clean	:
 	-make clean -C libft
 	-make clean -C $(MLX_DIR)
 	-rm -fr $(OBJS_DIR)
+	-rm -fr $(BONUS_OBJS_DIR)
 
 fclean	: clean
 	-make fclean -C libft

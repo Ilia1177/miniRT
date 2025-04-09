@@ -6,7 +6,7 @@ void	mrt_translate(t_object *obj, float dx, float dy, float dz)
 	obj->t_m.p.z += dz;
 	obj->i_m = mat_inverse(obj->t_m);
 	printf("---- translate OBJ ----\n");
-	print_matrix(obj->t_m);
+	print_mat4(obj->t_m);
 }
 void	mrt_rotate(t_object *obj, float dx, float dy, float dz)
 {
@@ -37,16 +37,6 @@ void	handle_object_rotation(t_data *scene)
 		rotate_on_y(scene->selected, 1.0f);
 	if (scene->key_state[XK_c] == 1 && scene->selected)
 		rotate_on_z(scene->selected, 1.0f);
-}
-void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
-{
-	(void)dz;
-	if (cam->pitch + dx < 89.0f && cam->pitch + dx > -89.0f)
-		cam->pitch += dx;
-	cam->yaw += dy;
-	update_camera_rotation(cam);
-	printf("----- CAM matrix yaw: %f, pitch: %f-----\n", cam->yaw, cam->pitch);
-	print_matrix(cam->t_m);
 }
 
 void	handle_camera_move(t_data *scene)
