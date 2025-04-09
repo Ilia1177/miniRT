@@ -1,9 +1,9 @@
 #include <miniRT.h>
 //
 // get location of the point in the viemport from canvas'location
-t_vec3 throught_vp(t_canvas cnv, t_viewport vp)
+t_vec4 throught_vp(t_canvas cnv, t_viewport vp)
 {
-	t_vec3 dir;
+	t_vec4 dir;
 
 	dir.x = cnv.loc.x * vp.w / cnv.w;
 	dir.y = cnv.loc.y * vp.h / cnv.h;
@@ -59,7 +59,7 @@ void	display_color(t_data *scene)
 		{
 			ray.o = scene->cam.t_m.p;
 			ray.d = throught_vp(cnv, vp);
-			ray.d = normalize_vec3(mat_apply(scene->cam.t_m, ray.d));
+			ray.d = normalize_vec4(mat_apply(scene->cam.t_m, ray.d));
 			color = throw_ray(&ray, 1.0f, T_MAX, R_LIMIT, scene);
 			pix = cnv_to_screen(cnv);
 			color_screen(&scene->img, pix.x, pix.y, res, color);

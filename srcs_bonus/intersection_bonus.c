@@ -1,8 +1,8 @@
 #include <miniRT_bonus.h>
 int	intersect_sphere_WORLD(t_ray *ray, t_object *sp, float *t)
 {
-	const t_vec3	origin = sub_vec3(ray->o, sp->t_m.p);
-	const t_vec3	dir = ray->d;
+	const t_vec4	origin = sub_vec4(ray->o, sp->t_m.p);
+	const t_vec4	dir = ray->d;
 	const t_quad	quad = solve_quadratic(origin, dir, sp->radius);
 
 	if (quad.delta < EPSILON)
@@ -19,20 +19,20 @@ int	intersect_sphere_WORLD(t_ray *ray, t_object *sp, float *t)
 //		*t = quad.t[1];
 //	else
 //		*t = quad.t[0];
-//	ray->o = add_vec3(mult_vec3(dir, *t), origin);
+//	ray->o = add_vec4(mult_vec4(dir, *t), origin);
 //	ray->o = mat_apply(sp->t_m, ray->o);
 	return (1);
 }
 int intersect_sphere_LOCAL(t_ray *ray, t_object *sp, float *t)
 {
     // Transform ray to sphere's local space (accounting for transformations)
-    t_vec3 local_origin = ray->o;  // Apply inverse transform to origin
-    t_vec3 local_dir = normalize_vec3(ray->d);  // Direction (no translation)
+    t_vec4 local_origin = ray->o;  // Apply inverse transform to origin
+    t_vec4 local_dir = normalize_vec4(ray->d);  // Direction (no translation)
 
     // Sphere equation: ||P - center||² = radius² → ||local_origin + t*local_dir||² = sp->radius²
-    float a = dot_vec3(local_dir, local_dir);                     // Always 1 if direction is normalized
-    float b = 2.0f * dot_vec3(local_origin, local_dir);
-    float c = dot_vec3(local_origin, local_origin) - sp->radius * sp->radius;
+    float a = dot_vec4(local_dir, local_dir);                     // Always 1 if direction is normalized
+    float b = 2.0f * dot_vec4(local_origin, local_dir);
+    float c = dot_vec4(local_origin, local_origin) - sp->radius * sp->radius;
 
     t_quad quad = solve_quadratic(local_origin, local_dir, sp->radius);  // Compute t0 and t1
 
@@ -52,46 +52,46 @@ int intersect_sphere_LOCAL(t_ray *ray, t_object *sp, float *t)
         return (0);  // Both intersections behind the ray
 
     // Transform intersection point back to world space (if needed)
-    //t_vec3 local_hit = add_vec3(local_origin, mult_vec3(local_dir, *t));
+    //t_vec4 local_hit = add_vec4(local_origin, mult_vec4(local_dir, *t));
     //ray->hit_point = mat_apply(sp->transform, local_hit);  // Apply forward transform
 
     return (1);
 }
 int	intersect_plane_WORLD(t_ray *ray, t_object *pl, float *t)
 {
-	const float	denom = dot_vec3(pl->t_m.k, ray->d);
-	t_vec3 diff;
+	const float	denom = dot_vec4(pl->t_m.k, ray->d);
+	t_vec4 diff;
 	float			inter;
 
 	if (fabs(denom) < EPSILON)
 		return (0);
-	diff = sub_vec3(pl->t_m.p, ray->o);
-	inter = dot_vec3(diff, pl->t_m.k) / denom;
+	diff = sub_vec4(pl->t_m.p, ray->o);
+	inter = dot_vec4(diff, pl->t_m.k) / denom;
 	if (inter > EPSILON)
 	{
 		*t = inter;
-	//	ray->o = add_vec3(mult_vec3(dir, *t), origin);
+	//	ray->o = add_vec4(mult_vec4(dir, *t), origin);
 	//	ray->o = mat_apply(pl->t_m, ray->o);
 		return (1);
 	}
 	return (0);
 }
 // Helper function to check if a wall intersection is within the cylinder's height
-void check_tube(float t, t_vec3 origin, t_vec3 dir, float height, float *t_min)
+void check_tube(float t, t_vec4 origin, t_vec4 dir, float height, float *t_min)
 {
 	float	z;
 
     if (t > EPSILON)
 	{
-		t_vec3 hit_point = add_vec3(origin, mult_vec3(dir, t));
-        z = dot_vec3(hit_point, (t_vec3){0, 0, 1, 0}); // Project onto cylinder's axis
+		t_vec4 hit_point = add_vec4(origin, mult_vec4(dir, t));
+        z = dot_vec4(hit_point, (t_vec4){0, 0, 1, 0}); // Project onto cylinder's axis
         if (z >= 0 && z <= height) 
             *t_min = fminf(*t_min, t);
     }
 }
 
 // Helper function to check intersections with the end caps
-void check_cap(float cap_z, t_vec3 origin, t_vec3 dir, float radius, float *t_min)
+void check_cap(float cap_z, t_vec4 origin, t_vec4 dir, float radius, float *t_min)
 {
 	float	t;
 	float	x;
@@ -104,7 +104,7 @@ void check_cap(float cap_z, t_vec3 origin, t_vec3 dir, float radius, float *t_mi
 	{
         x = origin.x + t * dir.x;
         y = origin.y + t * dir.y;
-        if (x*x + y*y <= radius*radius)
+        if (x * x + y * y <= radius * radius)
             *t_min = fminf(*t_min, t);
     }
 }
@@ -119,14 +119,14 @@ void check_cap(float cap_z, t_vec3 origin, t_vec3 dir, float radius, float *t_mi
 *******************************************************************************/
 int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
 {
-    const t_vec3 origin = ray->o;
-    const t_vec3 dir = ray->d;
-    const t_vec3 axis = (t_vec3){0, 0, 1, 0};  
-    const t_vec3 d_proj = sub_vec3(dir, mult_vec3(axis, dot_vec3(dir, axis)));
-    const t_vec3 o_proj = sub_vec3(origin, mult_vec3(axis, dot_vec3(origin, axis)));
-    const float a = dot_vec3(d_proj, d_proj);
-    const float b = 2 * dot_vec3(d_proj, o_proj);
-    const float c = dot_vec3(o_proj, o_proj) - (cylinder->radius * cylinder->radius);
+    const t_vec4 origin = ray->o;
+    const t_vec4 dir = ray->d;
+    const t_vec4 axis = (t_vec4){0, 0, 1, 0};  
+    const t_vec4 d_proj = sub_vec4(dir, mult_vec4(axis, dot_vec4(dir, axis)));
+    const t_vec4 o_proj = sub_vec4(origin, mult_vec4(axis, dot_vec4(origin, axis)));
+    const float a = dot_vec4(d_proj, d_proj);
+    const float b = 2 * dot_vec4(d_proj, o_proj);
+    const float c = dot_vec4(o_proj, o_proj) - (cylinder->radius * cylinder->radius);
     float discriminant = b * b - 4 * a * c;
 
     if (discriminant < 0)
@@ -187,7 +187,7 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 	int		intersect;
 
 	intersect = 0;
-	local_ray.d = normalize_vec3(mat_apply(obj->i_m, ray->d));
+	local_ray.d = normalize_vec4(mat_apply(obj->i_m, ray->d));
 	local_ray.o = mat_apply(obj->i_m, ray->o);
 	if (obj->type == SPHERE && intersect_sphere(&local_ray, obj, t))
 		intersect = 1;
@@ -218,19 +218,19 @@ int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
 //		*t = quad.t[1];
 //	else
 //		*t = quad.t[0];
-//	ray->o = add_vec3(mult_vec3(dir, *t), origin);
+//	ray->o = add_vec4(mult_vec4(dir, *t), origin);
 //	ray->o = mat_apply(sp->t_m, ray->o);
 	return (1);
 }
 
 // Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
-// 1. dot_vec3(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
+// 1. dot_vec4(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
 int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 {
-	//const t_vec3	origin = mat_apply(pl->i_m, ray->o);
-	//const t_vec3	dir = mat_apply(pl->i_m, ray->d);
-	const t_vec3	origin = ray->o;
-	const t_vec3	dir = ray->d;
+	//const t_vec4	origin = mat_apply(pl->i_m, ray->o);
+	//const t_vec4	dir = mat_apply(pl->i_m, ray->d);
+	const t_vec4	origin = ray->o;
+	const t_vec4	dir = ray->d;
 	float			inter;
 
 	if (fabs(dir.z) < EPSILON)
@@ -239,8 +239,6 @@ int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 	if (inter > EPSILON)
 	{
 		*t = inter;
-		ray->hp = add_vec3(mult_vec3(dir, *t), origin);
-		ray->hp = mat_apply(pl->t_m, ray->o);
 		return (1);
 	}
 	return (0);
@@ -249,33 +247,33 @@ int	intersect_plane(t_ray *ray, t_object *pl, float *t)
 int intersect_hyperboloid(t_ray *ray, t_object *object, float *t)
 {
     // 1. Compute the hyperboloid's axis (W) and total height h.
-    t_vec3 W = normalize_vec3(object->axis);
+    t_vec4 W = normalize_vec4(object->axis);
     float h = object->height;
 
     // 2. Compute the hyperboloid's center.
     // Here we assume object->pos is the top, so the center is halfway down the axis.
-    t_vec3 center = sub_vec3(object->pos, mult_vec3(W, h * 0.5f));
+    t_vec4 center = sub_vec4(object->pos, mult_vec4(W, h * 0.5f));
 
     // 3. Build an orthonormal basis (U, V, W).
-    t_vec3 U;
+    t_vec4 U;
     // Choose an arbitrary vector not parallel to W:
     if (fabs(W.x) > 0.001f || fabs(W.y) > 0.001f)
-        U = normalize_vec3((t_vec3){ -W.y, W.x, 0, 0 });
+        U = normalize_vec4((t_vec4){ -W.y, W.x, 0, 0 });
     else
-        U = normalize_vec3((t_vec3){ 0, 1, 0, 0});
-    t_vec3 V = normalize_vec3(cross_vec3(W, U));
+        U = normalize_vec4((t_vec4){ 0, 1, 0, 0});
+    t_vec4 V = normalize_vec4(cross_vec4(W, U));
 
     // 4. Transform the ray into the hyperboloid's local space.
     // Compute oc = ray origin relative to center.
-    t_vec3 oc = sub_vec3(ray->o, center);
+    t_vec4 oc = sub_vec4(ray->o, center);
     // Local coordinates for origin:
-    float ox = dot_vec3(oc, U);
-    float oy = dot_vec3(oc, V);
-    float oz = dot_vec3(oc, W);
+    float ox = dot_vec4(oc, U);
+    float oy = dot_vec4(oc, V);
+    float oz = dot_vec4(oc, W);
     // Local coordinates for direction:
-    float dx = dot_vec3(ray->d, U);
-    float dy = dot_vec3(ray->d, V);
-    float dz = dot_vec3(ray->d, W);
+    float dx = dot_vec4(ray->d, U);
+    float dy = dot_vec4(ray->d, V);
+    float dz = dot_vec4(ray->d, W);
 
     // 5. Get hyperboloid scale factors: a, b, c.
     float a = object->scale.x;

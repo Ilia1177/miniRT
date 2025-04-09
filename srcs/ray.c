@@ -15,17 +15,17 @@
 
 void	r_reflect(t_ray *ray)
 {
-	const float	n_dot_d = dot_vec3(ray->n, ray->v);
+	const float	n_dot_d = dot_vec4(ray->n, ray->v);
 
-	ray->d = mult_vec3(mult_vec3(ray->n, 2), n_dot_d);
-	ray->d = sub_vec3(ray->d, ray->v);
+	ray->d = mult_vec4(mult_vec4(ray->n, 2), n_dot_d);
+	ray->d = sub_vec4(ray->d, ray->v);
 }
 
 void	r_update(t_ray *ray, t_object *obj)
 {
-	ray->o = add_vec3(mult_vec3(ray->d, obj->t), ray->o);
+	ray->o = add_vec4(mult_vec4(ray->d, obj->t), ray->o);
 	ray->o = mat_apply(obj->t_m, ray->o);
-	ray->v = mult_vec3(ray->d, -1);
+	ray->v = mult_vec4(ray->d, -1);
 	if (obj->type == CYLINDER)
 		cylinder_normal(ray, obj);
 	else if (obj->type == SPHERE)
@@ -34,8 +34,8 @@ void	r_update(t_ray *ray, t_object *obj)
 		plane_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
-	if (dot_vec3(ray->n, ray->v) < 0)
-		ray->n = mult_vec3(ray->n, -1);	
+	if (dot_vec4(ray->n, ray->v) < 0)
+		ray->n = mult_vec4(ray->n, -1);	
 }
 
 // 1) find intersection between ray and object
@@ -67,14 +67,14 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	return (add_colors(local_color, reflected_color));
 }
 
-t_quad	solve_quadratic(t_vec3 oc, t_vec3 dir, float radius)
+t_quad	solve_quadratic(t_vec4 oc, t_vec4 dir, float radius)
 {
 	t_quad	quad;
 	float	square_root;
 
-	quad.a = dot_vec3(dir, dir);
-	quad.b = 2.0f * dot_vec3(oc, dir);
-	quad.c = dot_vec3(oc, oc) - radius * radius;
+	quad.a = dot_vec4(dir, dir);
+	quad.b = 2.0f * dot_vec4(oc, dir);
+	quad.c = dot_vec4(oc, oc) - radius * radius;
 	quad.delta = quad.b * quad.b - 4.0f * quad.a * quad.c;
 	if (quad.delta < 0.001f) // (quad.delta<= EPSILON)
 	{

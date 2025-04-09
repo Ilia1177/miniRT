@@ -4,17 +4,17 @@ void update_camera_rotation(t_camera *cam)
 {
 	const float         rad_yaw = cam->yaw * (M_PI / 180.0f);
 	const float         rad_pitch = cam->pitch * (M_PI / 180.0f);
-		const t_vec3    world_up = {0, 1, 0, 0};
+		const t_vec4    world_up = {0, 1, 0, 0};
 	t_matrix	r;
 
 	r.k.x = cos(rad_yaw) * cos(rad_pitch);
 	r.k.y = sin(rad_pitch);
 	r.k.z = sin(rad_yaw) * cos(rad_pitch);
 	r.k.w = 0;
-	r.k = normalize_vec3(r.k);
-	r.i = cross_vec3(world_up, r.k);
-	r.j = cross_vec3(r.k, r.i);
-	r.p = (t_vec3) {0,0,0,1};
+	r.k = normalize_vec4(r.k);
+	r.i = cross_vec4(world_up, r.k);
+	r.j = cross_vec4(r.k, r.i);
+	r.p = (t_vec4) {0,0,0,1};
  
 	cam->t_m.i = r.i;
 	cam->t_m.j = r.j;
@@ -28,14 +28,14 @@ void	rotate_x(t_camera *cam, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
 	t_matrix	r;
-	//const t_vec3 up = {0, 1, 0, 0};
-	r.j = normalize_vec3((t_vec3) {0, cos(theta), sin(theta), 0});
-	r.k = normalize_vec3((t_vec3) {0, -sin(theta), cos(theta), 0});
-	r.i = normalize_vec3(cross_vec3(r.j, r.k));	
+	//const t_vec4 up = {0, 1, 0, 0};
+	r.j = normalize_vec4((t_vec4) {0, cos(theta), sin(theta), 0});
+	r.k = normalize_vec4((t_vec4) {0, -sin(theta), cos(theta), 0});
+	r.i = normalize_vec4(cross_vec4(r.j, r.k));	
 
-	//r.i = cross_vec3(up, r.k);
-	//r.j = cross_vec3(r.k, r.i);
-	r.p = (t_vec3) {0, 0, 0, 1};
+	//r.i = cross_vec4(up, r.k);
+	//r.j = cross_vec4(r.k, r.i);
+	r.p = (t_vec4) {0, 0, 0, 1};
 
 	printf("cam T initial transformation matrix\n");
 	print_matrix(cam->t_m);
@@ -53,14 +53,14 @@ void	rotate_y(t_camera *cam, float theta)
 {
 	theta = theta * (M_PI / 180.0f);
 	t_matrix	r;
-	//const t_vec3 up = {0, 1, 0, 0};
+	//const t_vec4 up = {0, 1, 0, 0};
 
-	r.i = normalize_vec3((t_vec3) {cos(theta), 0, -sin(theta), 0});
-	r.k = normalize_vec3((t_vec3) {sin(theta), 0, cos(theta), 0});
-	//r.i = cross_vec3(up, r.k);
-	r.j = cross_vec3(r.k, r.i);
-	//r.j = normalize_vec3(cross_vec3(r.k, r.i));
-	r.p = (t_vec3) {0, 0, 0, 1};
+	r.i = normalize_vec4((t_vec4) {cos(theta), 0, -sin(theta), 0});
+	r.k = normalize_vec4((t_vec4) {sin(theta), 0, cos(theta), 0});
+	//r.i = cross_vec4(up, r.k);
+	r.j = cross_vec4(r.k, r.i);
+	//r.j = normalize_vec4(cross_vec4(r.k, r.i));
+	r.p = (t_vec4) {0, 0, 0, 1};
 
 	cam->t_m = mat_compose(r , cam->t_m);
 	cam->t_m = mat_rotate(cam->t_m, r);

@@ -11,7 +11,7 @@ t_argb	invert_color(t_argb color)
 	return (new_color);
 }
 
-t_argb	checkerboard_plane(t_vec3 hit_point, t_object *obj)
+t_argb	checkerboard_plane(t_vec4 hit_point, t_object *obj)
 {
 	int		x;
 	int		y;
@@ -71,11 +71,11 @@ t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 	return (color);
 }
 
-t_uv	sphere_map(t_vec3 point, float radius)
+t_uv	sphere_map(t_vec4 point, float radius)
 {
 	t_uv		uv;
 	/* const float	theta = atan2(point.x, point.z); */
-	/* const float	radius = mag_vec3(point); */
+	/* const float	radius = mag_vec4(point); */
 	/* const float	phi = acos(point.y / radius); */
 	/* const float	raw_u = theta / (2 * M_PI); */
 	/**/
@@ -84,7 +84,7 @@ t_uv	sphere_map(t_vec3 point, float radius)
 	/* uv.v = 1 - phi / M_PI; */
 	/* uv.v = ABS(uv.v); */
 	const float	theta = atan2(point.z, point.x);
-	//const float	radius = mag_vec3(point);
+	//const float	radius = mag_vec4(point);
 	const float	phi = asin(point.y / radius);
 	const float	raw_u = theta / (2 * M_PI);
 
@@ -95,7 +95,7 @@ t_uv	sphere_map(t_vec3 point, float radius)
 	return (uv);
 }
 
-t_uv cylinder_maplast(t_vec3 point, t_vec3 axis, float radius, float height)
+t_uv cylinder_maplast(t_vec4 point, t_vec4 axis, float radius, float height)
 {
     t_uv uv;
     float scale;
@@ -103,11 +103,11 @@ t_uv cylinder_maplast(t_vec3 point, t_vec3 axis, float radius, float height)
     scale = 0.1f;
     
     // 1. Projection verticale (V)
-    float h = dot_vec3(point, axis); // Position le long de l'axe
+    float h = dot_vec4(point, axis); // Position le long de l'axe
     uv.v = fmodf(fabs(h / height * scale*4.0f), 1.0f);
 
     // 2. Projection horizontale (U) - version corrigée
-    t_vec3 radial = sub_vec3(point, mult_vec3(axis, h));
+    t_vec4 radial = sub_vec4(point, mult_vec4(axis, h));
     float theta = atan2(radial.z, radial.x);
     
     // Compensation de la courbure
@@ -122,13 +122,13 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 {
 	t_uv	uv;
 	t_argb	color;
-	t_vec3	hp;
+	t_vec4	hp;
 
 	hp = mat_apply(obj->i_m, ray->o);
 	(void)scene;
 	if (obj->type == SPHERE && obj->pattern)
 	{
-		hp = sub_vec3(hp, obj->pos);
+		hp = sub_vec4(hp, obj->pos);
 		uv = sphere_map(hp, obj->radius);
 		//color = checkerboard_at(uv.u, uv.v, obj->color);
 		color = text_img_at(uv.u, uv.v, obj->img);
@@ -141,8 +141,8 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 	}
 	else if (obj->type == CYLINDER && obj->pattern)
 	{
-		//hp = sub_vec3(hp, obj->pos);
-		uv = cylinder_maplast(hp, normalize_vec3(obj->axis), obj->radius, obj->height);
+		//hp = sub_vec4(hp, obj->pos);
+		uv = cylinder_maplast(hp, normalize_vec4(obj->axis), obj->radius, obj->height);
 		color = checkerboard_at(uv.u, uv.v, obj->color);
 		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}

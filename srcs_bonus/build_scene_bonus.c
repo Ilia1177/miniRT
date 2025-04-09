@@ -53,11 +53,11 @@ void	init_obj(t_object *obj, t_type type)
 	ft_bzero(obj, sizeof(t_object));
 	obj->type		= type;
 	obj->t 			= T_MAX;
-	obj->pos		= (t_vec3){0, 0, 0, 1};
-	obj->axis		= (t_vec3){0, 0, 0, 0};
-	obj->dir		= (t_vec3){0, 0, 1, 0};
-	obj->up			= (t_vec3){0, 1, 0, 0};
-	obj->right		= (t_vec3){1, 0, 0, 0};
+	obj->pos		= (t_vec4){0, 0, 0, 1};
+	obj->axis		= (t_vec4){0, 0, 0, 0};
+	obj->dir		= (t_vec4){0, 0, 1, 0};
+	obj->up			= (t_vec4){0, 1, 0, 0};
+	obj->right		= (t_vec4){1, 0, 0, 0};
 	obj->spec		= SPECULAR;
 	//scene->earth = text_img(scene);
    // obj->pattern	= 0;
@@ -76,7 +76,7 @@ int	place_camera(char **line, t_data *scene)
 	int		fov;
 
 	str = *line + 1;
-	status = str_to_vec3(&str, &scene->cam.pos);
+	status = str_to_vec4(&str, &scene->cam.pos);
 	if (status != 0)
 		return (status);
 	status = str_to_vecdir(&str, &scene->cam.dir);
@@ -88,9 +88,9 @@ int	place_camera(char **line, t_data *scene)
 	fov = (int)f_fov;
 	print_cam(scene->cam);
 	printf("\n");
-	scene->cam.t_m.k = normalize_vec3(scene->cam.dir);
-	scene->cam.t_m.i = cross_vec3((t_vec3) {0, 1, 0, 0}, scene->cam.t_m.k);
-	scene->cam.t_m.j = cross_vec3(scene->cam.t_m.k, scene->cam.t_m.i);
+	scene->cam.t_m.k = normalize_vec4(scene->cam.dir);
+	scene->cam.t_m.i = cross_vec4((t_vec4) {0, 1, 0, 0}, scene->cam.t_m.k);
+	scene->cam.t_m.j = cross_vec4(scene->cam.t_m.k, scene->cam.t_m.i);
 	scene->cam.t_m.p = scene->cam.pos;
 	scene->cam.t_m.p.w = 1;
 	scene->cam.i_m = mat_inverse(scene->cam.t_m);
@@ -185,9 +185,9 @@ int	build_scene(t_data *scene)
 	// added for debug
 	//	hyperbol.type = HYPERBOL;
 	//	hyperbol.height = 5;
-	//	hyperbol.pos = (t_vec3) {0, 0, 9, 0};
-	//	hyperbol.axis = (t_vec3) {1, 0, 0, 0};
-	//	hyperbol.scale = (t_vec3) {2, 2, 2, 0};
+	//	hyperbol.pos = (t_vec4) {0, 0, 9, 0};
+	//	hyperbol.axis = (t_vec4) {1, 0, 0, 0};
+	//	hyperbol.scale = (t_vec4) {2, 2, 2, 0};
 	//	hyperbol.color = (t_argb) {255, 255, 255, 255};
 	//	hyperbol.reflect = (t_argb) {0,0,0,0};
 	//	hyperbol.spec = -1;

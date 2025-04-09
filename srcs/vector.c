@@ -1,16 +1,16 @@
 #include <miniRT.h>
 #include <math.h>
 
-float dist_vec3(t_vec3 p1, t_vec3 p2)
+float dist_vec4(t_vec4 p1, t_vec4 p2)
 {
     return sqrtf((p2.x - p1.x) * (p2.x - p1.x) +
                  (p2.y - p1.y) * (p2.y - p1.y) +
                  (p2.z - p1.z) * (p2.z - p1.z));
 }
 
-t_vec3 cross_vec3(t_vec3 a, t_vec3 b)
+t_vec4 cross_vec4(t_vec4 a, t_vec4 b)
 {
-	t_vec3 product;
+	t_vec4 product;
 
 	product.x = a.y * b.z - a.z * b.y;
 	product.y = a.z * b.x - a.x * b.z;
@@ -19,22 +19,22 @@ t_vec3 cross_vec3(t_vec3 a, t_vec3 b)
     return (product);
 }
 
-t_vec3	normalize_vec3(t_vec3 vec)
+t_vec4	normalize_vec4(t_vec4 vec)
 {
-	t_vec3	result;
+	t_vec4	result;
 	float	lenght;
 
-	lenght = mag_vec3(vec);
-	result = div_vec3(vec, lenght);
+	lenght = mag_vec4(vec);
+	result = div_vec4(vec, lenght);
 	result.w = vec.w;
 	return (result);
 }
 
-t_vec3	div_vec3(t_vec3 vec, float d)
+t_vec4	div_vec4(t_vec4 vec, float d)
 {
-	t_vec3	result;
+	t_vec4	result;
 
-	result = (t_vec3) {0, 0, 0, 0};
+	result = (t_vec4) {0, 0, 0, 0};
 	if (d == 0.0f)
 		return (result);
 	result.x = vec.x / d;
@@ -44,9 +44,9 @@ t_vec3	div_vec3(t_vec3 vec, float d)
 	return (result);
 }
 
-t_vec3	mult_vec3(t_vec3 vec, float a)
+t_vec4	mult_vec4(t_vec4 vec, float a)
 {
-	t_vec3	result;
+	t_vec4	result;
 
 	result.x = vec.x * a;
 	result.y = vec.y * a;
@@ -55,7 +55,7 @@ t_vec3	mult_vec3(t_vec3 vec, float a)
 	return (result);
 }
 
-float dot_vec3(t_vec3 a, t_vec3 b)
+float dot_vec4(t_vec4 a, t_vec4 b)
 {
 
 	float	result;
@@ -64,7 +64,7 @@ float dot_vec3(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
-float	mag_vec3(t_vec3 a)
+float	mag_vec4(t_vec4 a)
 {
 	float	result;
 
@@ -72,9 +72,9 @@ float	mag_vec3(t_vec3 a)
 	return (result);
 }
 
-t_vec3	sub_vec3(t_vec3 a, t_vec3 b)
+t_vec4	sub_vec4(t_vec4 a, t_vec4 b)
 {
-	t_vec3 result;
+	t_vec4 result;
 
 	result.x = a.x - b.x;
 	result.y = a.y - b.y;
@@ -83,9 +83,9 @@ t_vec3	sub_vec3(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
-t_vec3	add_vec3(t_vec3 a, t_vec3 b)
+t_vec4	add_vec4(t_vec4 a, t_vec4 b)
 {
-	t_vec3 result;
+	t_vec4 result;
 
 	result.x = a.x + b.x;
 	result.y = a.y + b.y;

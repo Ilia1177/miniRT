@@ -17,7 +17,7 @@ int	create_plane(char **line, t_data *scene)
 
 	str = *line + 2 ;
 	init_obj(&plane, PLANE);
-	status = str_to_vec3(&str, &plane.pos);
+	status = str_to_vec4(&str, &plane.pos);
 	if (status != 0)
 		return (status);
 	status = str_to_vecdir(&str, &plane.axis);

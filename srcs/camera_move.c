@@ -2,19 +2,19 @@
 
 void translate_camera_local(t_camera *camera, float dx, float dy, float dz)
 {
-	t_vec3 world_z = mat_apply(camera->t_m, (t_vec3) {0, 0, 1, 0});
-	t_vec3 world_x = mat_apply(camera->t_m, (t_vec3) {1, 0, 0, 0});
-	t_vec3 world_y = mat_apply(camera->t_m, (t_vec3) {0, 1, 0, 0});
-	world_z = mult_vec3(world_z, dz);
-	world_x = mult_vec3(world_x, dx);
-	world_y = mult_vec3(world_y, dy);
+	t_vec4 world_z = mat_apply(camera->t_m, (t_vec4) {0, 0, 1, 0});
+	t_vec4 world_x = mat_apply(camera->t_m, (t_vec4) {1, 0, 0, 0});
+	t_vec4 world_y = mat_apply(camera->t_m, (t_vec4) {0, 1, 0, 0});
+	world_z = mult_vec4(world_z, dz);
+	world_x = mult_vec4(world_x, dx);
+	world_y = mult_vec4(world_y, dy);
 	
-	t_vec3 world_move = add_vec3(world_x, add_vec3(world_y, world_z));
+	t_vec4 world_move = add_vec4(world_x, add_vec4(world_y, world_z));
 	printf("translate: t matrix before\n");
 	print_matrix(camera->t_m);
 
     // apply translation to camera's position
-    camera->t_m.p = add_vec3(camera->t_m.p, world_move);
+    camera->t_m.p = add_vec4(camera->t_m.p, world_move);
 
 	printf("translate: t matrix after\n");
 	print_matrix(camera->t_m);

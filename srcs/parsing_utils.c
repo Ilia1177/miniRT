@@ -19,7 +19,7 @@ int	skip_space(char *str)
 *
 * 
 *****************************************************************************/
-int	str_to_vec3(char **line, t_vec3 *v)
+int	str_to_vec4(char **line, t_vec4 *v)
 {
 	char	*str;
 	char	*end;
@@ -108,7 +108,7 @@ int	str_to_float(char **line, float *num)
 	return (0);
 }
 
-int	str_to_vecdir(char **line, t_vec3 *v)
+int	str_to_vecdir(char **line, t_vec4 *v)
 {
 	char	*str;
 	char	*end;
@@ -129,7 +129,7 @@ int	str_to_vecdir(char **line, t_vec3 *v)
 		return (-2);
 	norm_float(&v->z, -1.0f, 1.0f);
 	v->w = 0;
-	*v = normalize_vec3(*v);
+	*v = normalize_vec4(*v);
 	*line = end;
 	return (0);
 }

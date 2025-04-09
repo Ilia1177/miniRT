@@ -1,6 +1,6 @@
 #include <miniRT_bonus.h>
 
-float dot_vec4(t_vec3 a, t_vec3 b)
+float dot_vec4(t_vec4 a, t_vec4 b)
 {
 
 	float	result;
@@ -26,9 +26,9 @@ t_matrix	mat_rotate(t_matrix m1, t_matrix m2)
 	res.k.y = dot_vec4(m1.k, transposed.j);
 	res.k.z = dot_vec4(m1.k, transposed.k);
 	res.k.w = dot_vec4(m1.k, transposed.p);
-	res.i = normalize_vec3(res.i);
-	res.j = normalize_vec3(res.j);
-	res.k = normalize_vec3(res.k);
+	res.i = normalize_vec4(res.i);
+	res.j = normalize_vec4(res.j);
+	res.k = normalize_vec4(res.k);
 	res.p = m1.p;
 	return (res);
 }
@@ -62,14 +62,14 @@ t_matrix	mat_compose(t_matrix m1, t_matrix m2)
 t_matrix	mat_generate(t_object *obj)
 {
 	t_matrix		trans_mat;
-	t_vec3	world_up = (t_vec3) {0, 1, 0, 0};
+	t_vec4	world_up = (t_vec4) {0, 1, 0, 0};
 
     // Adjust the world_up vector if the axis and world_up are parallel
-	if (dot_vec3(obj->axis, world_up) == 1.0f || dot_vec3(obj->axis, world_up) == -1.0f)
-		world_up = (t_vec3){1, 0, 0, 0}; // Use a different reference vector (e.g., X-axis)
+	if (dot_vec4(obj->axis, world_up) == 1.0f || dot_vec4(obj->axis, world_up) == -1.0f)
+		world_up = (t_vec4){1, 0, 0, 0}; // Use a different reference vector (e.g., X-axis)
 	trans_mat.k = obj->axis;
-	trans_mat.i = cross_vec3(world_up, trans_mat.k);
-	trans_mat.j = cross_vec3(trans_mat.k, trans_mat.i);
+	trans_mat.i = cross_vec4(world_up, trans_mat.k);
+	trans_mat.j = cross_vec4(trans_mat.k, trans_mat.i);
 	trans_mat.p = obj->pos;
 	trans_mat.p.w = 1;
 	return (trans_mat);
@@ -79,20 +79,20 @@ t_matrix	mat_transpose(t_matrix m)
 {
 	t_matrix	transposed;
 
-	transposed.i = (t_vec3) {m.i.x, m.j.x, m.k.x, m.p.x};
-	transposed.j = (t_vec3) {m.i.y, m.j.y, m.k.y, m.p.y};
-	transposed.k = (t_vec3) {m.i.z, m.j.z, m.k.z, m.p.z};
-	transposed.p = (t_vec3) {m.i.w, m.j.w, m.k.w, m.p.w};
+	transposed.i = (t_vec4) {m.i.x, m.j.x, m.k.x, m.p.x};
+	transposed.j = (t_vec4) {m.i.y, m.j.y, m.k.y, m.p.y};
+	transposed.k = (t_vec4) {m.i.z, m.j.z, m.k.z, m.p.z};
+	transposed.p = (t_vec4) {m.i.w, m.j.w, m.k.w, m.p.w};
 	return (transposed);
 }
 
 
 
 // Apply the matrix on a vector
-t_vec3	mat_apply(t_matrix mat, t_vec3 v)
+t_vec4	mat_apply(t_matrix mat, t_vec4 v)
 {
 	const t_matrix	transposed = mat_transpose(mat);
-	t_vec3			res;
+	t_vec4			res;
 
 	res.x = dot_vec4(v, transposed.i);
 	res.y = dot_vec4(v, transposed.j);
@@ -100,7 +100,7 @@ t_vec3	mat_apply(t_matrix mat, t_vec3 v)
 	res.w = dot_vec4(v, transposed.p);
 	if(v.w == 0.0f)
 	{
-		res = normalize_vec3(res);
+		res = normalize_vec4(res);
 		res.w = 0.0f;
 	}
 	else if (v.w == 1.0f)
@@ -126,7 +126,7 @@ t_matrix mat_tinverse(t_matrix mat)
     inv.k.w = -(inv.k.x * tx + inv.k.y * ty + inv.k.z * tz);
 
     // p row remains (0,0,0,1)
-    inv.p = (t_vec3){0, 0, 0, 1};
+    inv.p = (t_vec4){0, 0, 0, 1};
 
     return inv;
 }
@@ -205,6 +205,34 @@ t_matrix mat_inverse(t_matrix m)
     inv.p.y = adj.p.y * inv_det;
     inv.p.z = adj.p.z * inv_det;
     inv.p.w = adj.p.w * inv_det;
+
+    return inv;
+}
+t_mat4 mat4_inverse(t_mat4 m)
+{
+    t_mat4 inv;
+    
+    // Transpose rotation (inverse of orthogonal matrix)
+    inv.i.x = m.i.x;  // Column 0 becomes row 0
+    inv.i.y = m.j.x;  // Column 1 becomes row 0
+    inv.i.z = m.k.x;  // Column 2 becomes row 0
+    inv.i.w = 0.0f;
+
+    inv.j.x = m.i.y;  // Column 0 becomes row 1
+    inv.j.y = m.j.y;
+    inv.j.z = m.k.y;
+    inv.j.w = 0.0f;
+
+    inv.k.x = m.i.z;  // Column 0 becomes row 2
+    inv.k.y = m.j.z;
+    inv.k.z = m.k.z;
+    inv.k.w = 0.0f;
+
+    // Compute inverse translation: -(transposed_rotation * translation)
+    inv.p.x = -(m.i.x * m.p.x + m.j.x * m.p.y + m.k.x * m.p.z);
+    inv.p.y = -(m.i.y * m.p.x + m.j.y * m.p.y + m.k.y * m.p.z);
+    inv.p.z = -(m.i.z * m.p.x + m.j.z * m.p.y + m.k.z * m.p.z);
+    inv.p.w = 1.0f;
 
     return inv;
 }

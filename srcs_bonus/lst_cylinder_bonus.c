@@ -18,7 +18,7 @@ int	create_cylinder(char **line, t_data *scene)
 
 	str = *line + 2 ;
 	init_obj(&cylinder, CYLINDER);
-	status = str_to_vec3(&str, &cylinder.pos);
+	status = str_to_vec4(&str, &cylinder.pos);
 	if (!status)
 		status = str_to_vecdir(&str, &cylinder.axis);
 	if (!status)

@@ -1,6 +1,6 @@
 #include <miniRT.h>
 
-void	print_vec3(t_vec3 v, char *msg)
+void	print_vec4(t_vec4 v, char *msg)
 {
 	printf("%s{x: %.3f, y: %.3f, z:%.3f, w: %.3f}\n", msg, v.x, v.y, v.z, v.w);
 }
@@ -19,8 +19,8 @@ void	print_light(t_light light)
 	if (light.type == DIRECTIONAL)
 		printf("type : %s", "directionnal");
 	print_argb(light.intensity, "\tintensity");
-	print_vec3(light.pos, "\tpos");
-	print_vec3(light.dir, "\tdir");
+	print_vec4(light.pos, "\tpos");
+	print_vec4(light.dir, "\tdir");
 	printf("\n");
 }
 
@@ -33,8 +33,8 @@ void	print_obj(t_object obj)
 		printf("type : %s", "plan");
 	if (obj.type == CYLINDER)
 		printf("type : %s", "cylinder");
-	print_vec3(obj.pos, "\tpos");
-	print_vec3(obj.axis, "\tdir");
+	print_vec4(obj.pos, "\tpos");
+	print_vec4(obj.axis, "\tdir");
 	//printf("\tpos : %.1f, %.1f, %.1f", obj.pos.x, obj.pos.y, obj.pos.z);
 	printf("\tpattern : %d", obj.pattern);
 	printf("\tspecu : %d", obj.spec);
@@ -48,10 +48,10 @@ void	print_obj(t_object obj)
 void print_cam(t_camera camera)
 {
 	printf("[-----------PRINT CAM-------------]\n");
-	print_vec3(camera.pos, "pos");
-	print_vec3(camera.dir, "\tdir");
-	print_vec3(camera.right, "\tright");
-	print_vec3(camera.up, "\tup");
+	print_vec4(camera.pos, "pos");
+	print_vec4(camera.dir, "\tdir");
+	print_vec4(camera.right, "\tright");
+	print_vec4(camera.up, "\tup");
 	printf("\tyaw : %.1f", camera.yaw);
 	printf("\tpitch : %.1f\n", camera.pitch);
 }
@@ -84,8 +84,8 @@ void	print_error_msg(int status)
 
 void print_matrix(t_matrix matrix)
 { // for loop
-	print_vec3(matrix.i, "i:");
-	print_vec3(matrix.j, "j:");
-	print_vec3(matrix.k, "k:");
-	print_vec3(matrix.p, "p:");
+	print_vec4(matrix.i, "i:");
+	print_vec4(matrix.j, "j:");
+	print_vec4(matrix.k, "k:");
+	print_vec4(matrix.p, "p:");
 }
