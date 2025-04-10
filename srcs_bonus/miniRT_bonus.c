@@ -27,8 +27,6 @@ int	main(int ac, char **av)
 	t_data	scene;
 
 	ft_bzero(&scene, sizeof(t_data));
-
-
 	if (ac < 1)
 		return (1);
 	else if (ac > 1)

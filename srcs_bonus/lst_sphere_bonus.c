@@ -1,5 +1,23 @@
 #include <miniRT_bonus.h>
 
+static void	make_matrix(t_object data, t_object *new)
+{
+	//const float	scale = data.radius;
+	const float	scale = 1;
+
+	new->t_m = mat_orthogonal(data.t_m.k);
+	new->t_m.p = data.t_m.p;
+	if (data.type == SPHERE)
+		new->i_m = mat_scale(&new->t_m, scale, scale, scale);
+	else if (data.type == CYLINDER)
+		new->i_m = mat_scale(&new->t_m, scale, scale, data.height);
+	else if (data.type == PLANE)
+		new->i_m = mat_scale(&new->t_m, 1, 1, 1);
+	else if (data.type == HYPERBOL)
+		new->i_m = mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
+
+}
+
 int	make_object(t_object data, t_object **objects)
 {
 	t_object	*curr_object;
@@ -9,13 +27,9 @@ int	make_object(t_object data, t_object **objects)
 	if (!new_object)
 		return (-109);
 	ft_memcpy(new_object, &data, sizeof(t_object));
-	new_object->t_m = mat_orthogonal(data.t_m.k);
-	new_object->t_m.p = data.t_m.p;
-	new_object->i_m = mat_inverse(new_object->t_m);
+	make_matrix(data, new_object);
 	printf("\nMAKE OBJECT: transform matrix of %d:\n", data.type);
 	print_mat4(new_object->t_m);
-	printf("MAKE OBJECT: inverted matrix of %d:\n", data.type);
-	print_mat4(new_object->i_m);
 	new_object->next = NULL;
 	curr_object = NULL;
 	if (*objects == NULL)
@@ -48,7 +62,7 @@ int	create_sphere(char **line, t_data *scene)
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
 	sphere.t_m.k = (t_vec4){0, 0, 1, 0};
-	status = str_to_vec4(&str, &sphere.t_m.p);
+	status = str_to_vec4(&str, &sphere.t_m.p, 1.0f);
 	if (!status)
 		status = str_to_float(&str, &sphere.radius);
 	if (!status)

@@ -33,6 +33,8 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 	t_ray	local_ray;
 	int		intersect;
 
+	ray->o.w = 1;
+	ray->d.w = 0;
 	intersect = 0;
 	local_ray.d = normalize_vec4(mat_apply(obj->i_m, ray->d));
 	local_ray.o = mat_apply(obj->i_m, ray->o);
@@ -44,6 +46,11 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 		intersect = 1;
 	else if (obj->type == HYPERBOL && intersect_hyperboloid(&local_ray, obj, t))
 		intersect = 1;
+	if (intersect)
+	{
+		//ray->o = add_vec4(mult_vec4(local_ray.d, obj->t), local_ray.o);
+		//ray->o = mat_apply(obj->t_m, ray->o);
+	}
 	return (intersect);
 }
 

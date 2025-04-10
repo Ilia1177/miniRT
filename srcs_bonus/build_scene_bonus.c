@@ -67,18 +67,17 @@ int	place_camera(char **line, t_data *scene)
 	t_vec4	pos;
 
 	str = *line + 1;
-	status = str_to_vec4(&str, &pos);
-	pos.w = 1;
+	status = str_to_vec4(&str, &pos, 1.0f);
 	if (status != 0)
 		return (status);
 	status = str_to_vecdir(&str, &scene->cam.t_m.k);
 	if (status != 0)
 		return (status);
 	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k));
-	printf("cam matrix\n");
-	print_mat4(scene->cam.t_m);
 	scene->cam.t_m.p = pos;
 	status = str_to_float(&str, &f_fov);
+	printf("cam matrix\n");
+	print_mat4(scene->cam.t_m);
 	if (status != 0)
 		return (status);
 	fov = (int)f_fov;
@@ -139,9 +138,31 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 		else
 			return (0);
 	}
-	if (status < 0)
-		print_error_msg(status);
+	print_error_msg(status);
 	return (status);
+}
+
+void	print_all(t_data *scene)
+{
+	t_object	*obj;
+	t_light		*light;
+
+	printf("**************************linked list OBJECT**************\n");
+	obj = scene->objects;
+	while (obj)
+	{
+		print_obj(*obj);
+		obj = obj->next;
+	}
+	printf("**************************linked list LIGHT**************\n");
+	light = scene->lights;
+	while (light)
+	{
+		print_light(*light);
+		light = light->next;
+	}
+	printf("****************************CAMERA **********************\n");
+	print_cam(scene->cam);
 }
 
 int	build_scene(t_data *scene)
@@ -149,8 +170,6 @@ int	build_scene(t_data *scene)
 	char		*line;
 	int			map;
 	int			status;
-	t_object	*it;
-	t_light	*it2;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -171,22 +190,8 @@ int	build_scene(t_data *scene)
 	if (status)
 		gnl_clear_buffer(map);
 	close(map);
-	printf("**************************linked list OBJECT**************\n");
-	it = scene->objects;
-	while (it)
-	{
-		print_obj(*it);
-		it = it->next;
-	}
-
-	printf("**************************linked list LIGHT**************\n");
-	it2 = scene->lights;
-	while (it2)
-	{
-		print_light(*it2);
-		it2 = it2->next;
-	}
-	//status = check_nb_obj(scene);
+	print_all(scene);
+		//status = check_nb_obj(scene);
 	//if (status)
 	//	print_error_msg(status);
 	//status = check_nb_light(scene);

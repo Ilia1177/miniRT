@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:58:41 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/10 14:58:49 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:58:16 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,23 @@ static void check_cap(float cap_z, t_vec4 origin, t_vec4 dir, float radius, floa
 int intersect_cylinder(t_ray *ray, t_object *cy, float *t)
 {
 	float			t_min;
-	const t_vec4	axis = (t_vec4){0, 0, 1, 0};
-	const t_vec4	d_proj = sub_vec4(ray->d, mult_vec4(axis, dot_vec3(ray->d, axis)));
-	const t_vec4	o_proj = sub_vec4(ray->o, mult_vec4(axis, dot_vec3(ray->o, axis)));
+	const t_vec4	a = (t_vec4){0, 0, 1, 0};
+	const t_vec4	d_pro = sub_vec4(ray->d, mult_vec4(a, dot_vec3(ray->d, a)));
+	const t_vec4	o_pro = sub_vec4(ray->o, mult_vec4(a, dot_vec3(ray->o, a)));
 	t_quad			equation;
+	const float		r = 1; //cy->radius;
+	const float		h = mag_vec4(cy->t_m.k); // cy->height
 
-	equation.a = dot_vec3(d_proj, d_proj);
-	equation.b = 2 * dot_vec3(d_proj, o_proj);
-	equation.c = dot_vec3(o_proj, o_proj) - (cy->radius * cy->radius);
+	equation.a = dot_vec3(d_pro, d_pro);
+	equation.b = 2 * dot_vec3(d_pro, o_pro);
+	equation.c = dot_vec3(o_pro, o_pro) - (r * r);
 	if (!solve_quadratic(&equation))
 		return (0);
 	t_min = INFINITY;
-	check_tube(equation.t[0], ray->o, ray->d, cy->height, &t_min);
-	check_tube(equation.t[1], ray->o, ray->d, cy->height, &t_min);
-	check_cap(0, ray->o, ray->d, cy->radius, &t_min);
-	check_cap(cy->height, ray->o, ray->d, cy->radius, &t_min);
+	check_tube(equation.t[0], ray->o, ray->d, h, &t_min);
+	check_tube(equation.t[1], ray->o, ray->d, h, &t_min);
+	check_cap(0, ray->o, ray->d, r, &t_min);
+	check_cap(h, ray->o, ray->d, r, &t_min);
 	if (t_min < INFINITY)
 	{
 		*t = t_min;

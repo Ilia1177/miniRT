@@ -7,7 +7,7 @@ void	print_vec4(t_vec4 v, char *msg)
 
 void	print_argb(t_argb color, char *msg)
 {
-	printf("%s: a: %d, r: %d, g: %d, b %d",msg, color.a, color.r, color.g, color.b);
+	printf("%s: a: %d, r: %d, g: %d, b %d\n",msg, color.a, color.r, color.g, color.b);
 }
 
 void	print_light(t_light light)
@@ -41,12 +41,13 @@ void	print_obj(t_object obj)
 	printf("\thight : %.1f", obj.height);
 	print_argb(obj.reflect, "\treflective");
 	print_argb(obj.color, "\tcolor");
+	print_vec4(obj.scale, "scale:");
 	printf("\n");
 }
 
 void print_cam(t_camera camera)
 {
-	printf("[-----------PRINT CAM-------------]\n");
+	printf("camera :\n");
 	print_mat4(camera.t_m);
 	printf("\tyaw : %.1f", camera.yaw);
 	printf("\tpitch : %.1f\n", camera.pitch);
@@ -76,12 +77,10 @@ void	print_error_msg(int status)
 		printf("Error\nWrong options arguments\n");
 	if (status == -109)
 		printf("Malloc error\n");
-	if (status)
-		exit(0); /// to delete (for debug)
 }
 
 void print_mat4(t_mat4 matrix)
-{ // for loop
+{ 
 	print_vec4(matrix.i, "i:");
 	print_vec4(matrix.j, "j:");
 	print_vec4(matrix.k, "k:");

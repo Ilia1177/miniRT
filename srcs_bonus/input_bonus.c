@@ -6,12 +6,19 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:00:48 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/10 14:11:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/10 22:42:20 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <miniRT_bonus.h>
+
+void	handle_object_transformation(t_data *scene)
+{
+	if (scene->key_state[XK_m] == 1 && scene->selected)
+		scene->selected->i_m = mat_scale(&scene->selected->t_m, 1.5f, 1.5f, 1.5f);
+	if (scene->key_state[XK_n] == 1 && scene->selected)
+		scene->selected->i_m = mat_scale(&scene->selected->t_m, 0.5f, 0.5f, 0.5f);
+}
 
 void	handle_object_translation(t_data *scene)
 {
@@ -41,25 +48,37 @@ void	handle_object_rotation(t_data *scene)
 
 void	handle_camera_move(t_data *scene)
 {
+	const float speed = 2.0f;
+
 	if (scene->key_state[XK_Left] == 1) 
-		rotate_camera(&scene->cam, 0, 1.0f, 0);
+	//	scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, speed, 0);
+		rotate_camera(&scene->cam, 0, speed, 0);
 	if (scene->key_state[XK_Right] == 1)
-		rotate_camera(&scene->cam, 0, -1.0f, 0);
+//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, -speed, 0);
+		rotate_camera(&scene->cam, 0, -speed, 0);
 	if (scene->key_state[XK_Down] == 1)
-		rotate_camera(&scene->cam, -1.0f, 0, 0);
+//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, -speed, 0, 0);
+		rotate_camera(&scene->cam, -speed, 0, 0);
 	if (scene->key_state[XK_Up] == 1) 
-		rotate_camera(&scene->cam, 1.0f, 0, 0);
+//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, speed, 0, 0);
+		rotate_camera(&scene->cam, speed, 0, 0);
 	if (scene->key_state[XK_e] == 1)
-		translate_camera(&scene->cam, 0.0f, -0.5f, 0.0f);
+//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, -speed, 0);
+		translate_camera(&scene->cam, 0.0f, -speed, 0.0f);
 	if (scene->key_state[XK_q] == 1)
-		translate_camera(&scene->cam, 0.0f, 0.5f, 0.0f);
+//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, -speed, 0);
+		translate_camera(&scene->cam, 0.0f, 0.5, 0.0f);
 	if (scene->key_state[XK_w] == 1)
+//		scene->cam.i_m = mat_translate(&scene->cam.t_m, 0, 0, 0.5f);
 		translate_camera(&scene->cam, 0.0f, 0.0f, 0.5f);
 	if (scene->key_state[XK_s] == 1)
+//		scene->cam.i_m = mat_translate(&scene->cam.t_m, 0, 0, -0.5f);
 		translate_camera(&scene->cam, 0.0f, 0.0f, -0.5f);
 	if (scene->key_state[XK_a] == 1)
+//		scene->cam.i_m = mat_translate(&scene->cam.t_m, -0.5f, 0, 0);
 		translate_camera(&scene->cam, -0.5f, 0.0f, 0.0f);
 	if (scene->key_state[XK_d] == 1)
+//		scene->cam.i_m = mat_translate(&scene->cam.t_m, 0.5f, 0, 0);
 		translate_camera(&scene->cam, 0.5f, 0, 0);
 }
 
@@ -67,6 +86,7 @@ int	handle_input(t_data *scene)
 {
 	handle_object_translation(scene);
 	handle_object_rotation(scene);
+	handle_object_transformation(scene);
 	handle_camera_move(scene);
 	if (scene->key_state[XK_space] == 1)
 		save_as_ppm(&scene->img, "img.ppm");
@@ -130,7 +150,9 @@ void	select_object(t_data *scene)
 		if (obj)
 			obj->color = last_color;
 		last_color = scene->selected->color;
-		scene->selected->color = (t_argb) {255, 255, 255, 255};
+		scene->selected->color = invert_color(scene->selected->color);
+		printf("selection transform matrix:\n");
+		print_mat4(scene->selected->t_m);
 	}
 	else if (scene->selected && scene->selected == obj)
 	{
@@ -138,7 +160,11 @@ void	select_object(t_data *scene)
 		scene->selected = NULL;
 		obj = NULL;
 	}
-
+	else if (!scene->selected && obj)
+	{
+		obj->color = last_color;
+		obj = NULL;
+	}
 }
 
 int	mouse_press(int keycode, int x, int y, t_data *scene)

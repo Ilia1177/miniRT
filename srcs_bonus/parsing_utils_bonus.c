@@ -19,7 +19,7 @@ int	skip_space(char *str)
 *
 * 
 *****************************************************************************/
-int	str_to_vec4(char **line, t_vec4 *v)
+int	str_to_vec4(char **line, t_vec4 *v, float w)
 {
 	char	*str;
 	char	*end;
@@ -36,6 +36,7 @@ int	str_to_vec4(char **line, t_vec4 *v)
 	v->z = ft_strtof(str, &end);
 	if (str == end)
 		return (-1);
+	v->w = w;
 	*line = end;
 	return (0);
 }

@@ -71,7 +71,7 @@ int	create_light(char **line, t_data *scene, t_type type)
 	init_light(&light, type);
 	if (type == POINT)
 	{
-		status = str_to_vec4(&str, &light.pos);
+		status = str_to_vec4(&str, &light.pos, 1.0f);
 		if (status != 0)
 			return (status);
 	}
@@ -80,7 +80,6 @@ int	create_light(char **line, t_data *scene, t_type type)
 	//	return (status);
 	//norm_float(&bright, 0, 1);
 	status = str_to_argb(&str, &light.intensity, 1);
-	print_argb(light.intensity, "light");
 	if (status != 0)
 		return (status);
 //	light.intensity = extract_argb(encode_rgb(color.r, color.g, color.b));

@@ -203,6 +203,8 @@ typedef struct	s_data
 void	rotate_y(t_camera *cam, float theta);
 void	rotate_x(t_camera *cam, float theta);
 //matrix.c
+
+t_mat4	mat_scale(t_mat4 *m, float sx, float sy, float sz);
 //
 
 t_mat4	mat_orthogonal(t_vec4 dir);
@@ -331,7 +333,7 @@ int	build_scene(t_data *scene);
 void	init_obj(t_object *obj, t_type type);
 
 //Parsing_utils.c
-int	str_to_vec4(char **line, t_vec4 *v);
+int	str_to_vec4(char **line, t_vec4 *v, float w);
 int	str_to_argb(char **line, t_argb *c, int get_alpha);
 int	skip_space(char *str);
 int	str_to_float(char **line, float *radius);
