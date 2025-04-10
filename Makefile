@@ -58,13 +58,14 @@ SRCS_BONUS = 	miniRT\
 		canvas\
 		clean\
 		color\
-		cylinder_utils\
 		debug\
 		img\
 		init\
 		input\
-		inter_cyl_utils\
 		intersection\
+		intersect_cylinder\
+		intersect_sphere\
+		intersect_plane\
 		light\
 		lst_cylinder\
 		lst_light\

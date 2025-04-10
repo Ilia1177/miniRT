@@ -40,12 +40,12 @@ void	cylinder_normal(t_ray *ray, t_object *cy)
 void hyperboloid_normal(t_ray *ray, t_object *object)
 {
     // 1. Compute the hyperboloid's axis (W) and total height.
-    t_vec4 W = normalize_vec4(object->axis);
+    t_vec4 W = normalize_vec4(object->t_m.k);
     float h = object->height;
 
     // 2. Compute the hyperboloid's center.
     // (Assuming object->pos is the top, the center is at half the height down along W)
-    t_vec4 center = sub_vec4(object->pos, mult_vec4(W, h * 0.5f));
+    t_vec4 center = sub_vec4(object->t_m.p, mult_vec4(W, h * 0.5f));
 
     // 3. Build an orthonormal basis (U, V, W).
     t_vec4 U;

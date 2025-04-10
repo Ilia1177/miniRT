@@ -26,16 +26,15 @@ void	print_light(t_light light)
 
 void	print_obj(t_object obj)
 {
-	//printf("-----------PRINT OBJ-------------\n");
 	if (obj.type == SPHERE)
-		printf("type : %s", "sphere");
+		printf("type : sphere\n");
 	if (obj.type == PLANE)
-		printf("type : %s", "plan");
+		printf("type : plan\n");
 	if (obj.type == CYLINDER)
-		printf("type : %s", "cylinder");
-	print_vec4(obj.pos, "\tpos");
-	print_vec4(obj.axis, "\tdir");
-	//printf("\tpos : %.1f, %.1f, %.1f", obj.pos.x, obj.pos.y, obj.pos.z);
+		printf("type : cylinder\n");
+	if (obj.type == HYPERBOL)
+		printf("type : hyperboloid\n");
+	print_mat4(obj.t_m);
 	printf("\tpattern : %d", obj.pattern);
 	printf("\tspecu : %d", obj.spec);
 	printf("\tradius : %.1f", obj.radius);
@@ -48,10 +47,7 @@ void	print_obj(t_object obj)
 void print_cam(t_camera camera)
 {
 	printf("[-----------PRINT CAM-------------]\n");
-	print_vec4(camera.pos, "pos");
-	print_vec4(camera.dir, "\tdir");
-	print_vec4(camera.right, "\tright");
-	print_vec4(camera.up, "\tup");
+	print_mat4(camera.t_m);
 	printf("\tyaw : %.1f", camera.yaw);
 	printf("\tpitch : %.1f\n", camera.pitch);
 }
@@ -80,6 +76,8 @@ void	print_error_msg(int status)
 		printf("Error\nWrong options arguments\n");
 	if (status == -109)
 		printf("Malloc error\n");
+	if (status)
+		exit(0); /// to delete (for debug)
 }
 
 void print_mat4(t_mat4 matrix)

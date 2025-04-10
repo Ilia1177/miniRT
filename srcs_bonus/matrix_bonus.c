@@ -1,34 +1,123 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   matrix_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 13:10:37 by npolack           #+#    #+#             */
+/*   Updated: 2025/04/10 16:57:53 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
-//	t_mat4	mat_rotate(t_mat4 m1, t_mat4 m2)
-//	{
-//		t_mat4 res;
-//		const t_mat4	transposed = mat_transpose(m2);
-//
-//		res.i.x = dot_vec4(m1.i, transposed.i);
-//		res.i.y = dot_vec4(m1.i, transposed.j);
-//		res.i.z = dot_vec4(m1.i, transposed.k);
-//		res.i.w = dot_vec4(m1.i, transposed.p);
-//		res.j.x = dot_vec4(m1.j, transposed.i);
-//		res.j.y = dot_vec4(m1.j, transposed.j);
-//		res.j.z = dot_vec4(m1.j, transposed.k);
-//		res.j.w = dot_vec4(m1.j, transposed.p);
-//		res.k.x = dot_vec4(m1.k, transposed.i);
-//		res.k.y = dot_vec4(m1.k, transposed.j);
-//		res.k.z = dot_vec4(m1.k, transposed.k);
-//		res.k.w = dot_vec4(m1.k, transposed.p);
-//		res.i = normalize_vec4(res.i);
-//		res.j = normalize_vec4(res.j);
-//		res.k = normalize_vec4(res.k);
-//		res.p = m1.p;
-//		return (res);
-//	}
+t_mat4	mat_init_id(void)
+{
+	t_mat4	id;
+
+	id.i = (t_vec4) {1, 0, 0, 0};
+	id.j = (t_vec4) {0, 1, 0, 0};
+	id.k = (t_vec4) {0, 0, 1, 0};
+	id.p = (t_vec4) {0, 0, 0, 1};
+	return (id);
+}
+t_mat4	mat_orthogonal(t_vec4 dir)
+{
+	t_mat4	orthogonal;
+	const t_vec4	up = {0, 1, 0, 0};
+	t_vec4	normalized_dir;
+	float	mag;
+
+	orthogonal = mat_init_id();
+	mag = mag_vec4(dir);
+	if (mag < EPSILON)
+		return (orthogonal);
+	normalized_dir = normalize_vec4(dir);
+	orthogonal.k = normalized_dir;
+
+	float dir_dot_up = dot_vec3(normalized_dir, up);
+
+	// Check if direction is colinear with up using epsilon
+	if (fabsf(dir_dot_up) >= 1.0f - EPSILON)
+		orthogonal.i = cross_vec4((t_vec4){1, 0, 0, 0}, normalized_dir);
+	else
+		orthogonal.i = cross_vec4(up, normalized_dir);
+	orthogonal.i = normalize_vec4(orthogonal.i); // Normalize i
+
+	// Compute j as k cross i to ensure orthogonality
+	orthogonal.j = cross_vec4(orthogonal.k, orthogonal.i);
+	orthogonal.p = (t_vec4) { 0, 0, 0, 1 };
+	return (orthogonal);
+}
+t_mat4	mat_orthogonal2(t_vec4 dir)
+{
+	t_mat4	orthogonal;
+	const t_vec4	up = {0, 1, 0, 0};
+	const float		dir_dot_up = dot_vec3(normalize_vec4(dir), up);
+ 
+	orthogonal = mat_init_id();
+	if (mag_vec4(dir) < EPSILON)
+		return (orthogonal);
+	orthogonal.k = dir;
+	if (dir_dot_up == 1.0f || dir_dot_up == -1.0f)
+		orthogonal.i = cross_vec4((t_vec4) {1, 0, 0, 0}, normalize_vec4(dir));
+	else
+		orthogonal.i = cross_vec4(up, normalize_vec4(dir));
+	orthogonal.j = cross_vec4(orthogonal.k, orthogonal.j);
+	return (orthogonal);
+}
+
+t_mat4	mat_scale(t_mat4 *m, float sx, float sy, float sz)
+{
+	t_mat4 inverse;
+
+	m->i = mult_vec4(m->i, sx);
+	m->j = mult_vec4(m->j, sy);
+	m->k = mult_vec4(m->k, sz);
+	inverse = mat_inverse(*m);
+	return (inverse);
+}
+
+t_mat4	mat_translate(t_mat4 *m, float dx, float dy, float dz)
+{
+	t_mat4	inverse;
+
+	m->p.x += dx;
+	m->p.y += dy;
+	m->p.z += dz;
+	inverse = mat_inverse(*m);
+	return (inverse);
+}
+
+t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz)
+{
+	const	float	tx = dx * (M_PI / 180.0f);
+	const	float	ty = dy * (M_PI / 180.0f);
+	const	float	tz = dz * (M_PI / 180.0f);
+	t_mat4	r;
+
+	r.p = (t_vec4) {0, 0, 0, 1};
+	r.j = normalize_vec4((t_vec4) {0, cos(tx), sin(tx), 0});
+	r.k = normalize_vec4((t_vec4) {0, -sin(tx), cos(tx), 0});
+	r.i = normalize_vec4((t_vec4) {1, 0, 0, 0});
+	*m = mat_compose(r, *m);
+	r.i = normalize_vec4((t_vec4) {cos(ty), 0, -sin(ty), 0});
+	r.k = normalize_vec4((t_vec4) {sin(ty), 0, cos(ty), 0});
+	r.j = normalize_vec4((t_vec4) {0, 1, 0, 0});
+	*m = mat_compose(r, *m);
+	r.i = normalize_vec4((t_vec4) {cos(tz), sin(tz), 0, 0});
+	r.j = normalize_vec4((t_vec4) {-sin(tz), cos(tz), 0, 0});
+	r.k = normalize_vec4((t_vec4) {0, 0, 1, 0});
+	*m = mat_compose(r, *m);
+	print_mat4(*m);
+	return (mat_inverse(*m));
+}
 
 t_mat4	mat_compose(t_mat4 m1, t_mat4 m2)
 {
-	printf("MAT_COMPOSE\n");
-	t_mat4		res;
-	t_mat4		transposed = mat_transpose(m2);
+	t_mat4			res;
+	const t_mat4	transposed = mat_transpose(m2);
 	
 	res.i.x = dot_vec4(m1.i, transposed.i);
 	res.i.y = dot_vec4(m1.i, transposed.j);
@@ -50,21 +139,24 @@ t_mat4	mat_compose(t_mat4 m1, t_mat4 m2)
 }
 
 // Make a transform matrix from axis and position of object
-t_mat4	mat_generate(t_object *obj)
-{
-	t_mat4		trans_mat;
-	t_vec4	world_up = (t_vec4) {0, 1, 0, 0};
-
-    // Adjust the world_up vector if the axis and world_up are parallel
-	if (dot_vec4(obj->axis, world_up) == 1.0f || dot_vec4(obj->axis, world_up) == -1.0f)
-		world_up = (t_vec4){1, 0, 0, 0}; // Use a different reference vector (e.g., X-axis)
-	trans_mat.k = obj->axis;
-	trans_mat.i = cross_vec4(world_up, trans_mat.k);
-	trans_mat.j = cross_vec4(trans_mat.k, trans_mat.i);
-	trans_mat.p = obj->pos;
-	trans_mat.p.w = 1;
-	return (trans_mat);
-}
+// Adjust the world_up vector if the axis and world_up are parallel
+//	t_mat4	mat_generate(t_object *obj)
+//	{
+//		t_mat4		trans_mat;
+//		t_vec4		world_up;
+//	   
+//		world_up = (t_vec4) {0, 1, 0, 0};
+//		if (dot_vec3(obj->axis, world_up) == 1.0f)
+//			world_up = (t_vec4){1, 0, 0, 0};
+//		else if (dot_vec3(obj->axis, world_up) == -1.0f)
+//			world_up = (t_vec4){1, 0, 0, 0};
+//		trans_mat.k = normalize_vec4(obj->axis);
+//		trans_mat.i = normalize_vec4(cross_vec4(world_up, trans_mat.k));
+//		trans_mat.j = normalize_vec4(cross_vec4(trans_mat.k, trans_mat.i));
+//		trans_mat.p = obj->pos;
+//		trans_mat.p.w = 1;
+//		return (trans_mat);
+//	}
 
 t_mat4	mat_transpose(t_mat4 m)
 {
@@ -87,28 +179,35 @@ t_vec4	mat_apply(t_mat4 mat, t_vec4 v)
 	res.y = dot_vec4(v, transposed.j);
 	res.z = dot_vec4(v, transposed.k);
 	res.w = dot_vec4(v, transposed.p);
-	if(v.w == 0.0f)
-	{
-		res = normalize_vec4(res);
-		res.w = 0.0f;
-	}
-	else if (v.w == 1.0f)
-	{
-		res.w = 1.0f;
-	}
 	return (res);
 }
 
 static float mat_determinant(t_mat4 m)
 {
     float det =
-        m.i.x * (m.j.y * (m.k.z * m.p.w - m.k.w * m.p.z) - m.j.z * (m.k.y * m.p.w - m.k.w * m.p.y) + m.j.w * (m.k.y * m.p.z - m.k.z * m.p.y))
-      - m.i.y * (m.j.x * (m.k.z * m.p.w - m.k.w * m.p.z) - m.j.z * (m.k.x * m.p.w - m.k.w * m.p.x) + m.j.w * (m.k.x * m.p.z - m.k.z * m.p.x))
-      + m.i.z * (m.j.x * (m.k.y * m.p.w - m.k.w * m.p.y) - m.j.y * (m.k.x * m.p.w - m.k.w * m.p.x) + m.j.w * (m.k.x * m.p.y - m.k.y * m.p.x))
-      - m.i.w * (m.j.x * (m.k.y * m.p.z - m.k.z * m.p.y) - m.j.y * (m.k.x * m.p.z - m.k.z * m.p.x) + m.j.z * (m.k.x * m.p.y - m.k.y * m.p.x));
+        m.i.x * (m.j.y * (m.k.z * m.p.w - m.k.w * m.p.z) - m.j.z *
+		(m.k.y * m.p.w - m.k.w * m.p.y) + m.j.w * (m.k.y * m.p.z - m.k.z * m.p.y))
+      - m.i.y * (m.j.x * (m.k.z * m.p.w - m.k.w * m.p.z) - m.j.z *
+		(m.k.x * m.p.w - m.k.w * m.p.x) + m.j.w * (m.k.x * m.p.z - m.k.z * m.p.x))
+      + m.i.z * (m.j.x * (m.k.y * m.p.w - m.k.w * m.p.y) - m.j.y *
+		(m.k.x * m.p.w - m.k.w * m.p.x) + m.j.w * (m.k.x * m.p.y - m.k.y * m.p.x))
+      - m.i.w * (m.j.x * (m.k.y * m.p.z - m.k.z * m.p.y) - m.j.y *
+		(m.k.x * m.p.z - m.k.z * m.p.x) + m.j.z * (m.k.x * m.p.y - m.k.y * m.p.x));
     return det;
 }
 
+//	static float cofactor(t_mat4 m)
+//	{
+//		t_vec4 cofact;
+//    cofact.x =  m.j.y*(m.k.z*m.p.w - m.k.w*m.p.z) - m.j.z*(m.k.y*m.p.w - m.k.w*m.p.y) + m.j.w*(m.k.y*m.p.z - m.k.z*m.p.y);
+//    cofact.y = -m.i.y*(m.k.z*m.p.w - m.k.w*m.p.z) + m.i.z*(m.k.y*m.p.w - m.k.w*m.p.y) - m.i.w*(m.k.y*m.p.z - m.k.z*m.p.y);
+//    cofact.z =  m.i.y*(m.j.z*m.p.w - m.j.w*m.p.z) - m.i.z*(m.j.y*m.p.w - m.j.w*m.p.y) + m.i.w*(m.j.y*m.p.z - m.j.z*m.p.y);
+//    cofact.w = -m.i.y*(m.j.z*m.k.w - m.j.w*m.k.z) + m.i.z*(m.j.y*m.k.w - m.j.w*m.k.y) - m.i.w*(m.j.y*m.k.z - m.j.z*m.k.y);
+
+//		(void)m;
+//		cofact = 0;
+//		return (cofact);
+//	}
 static t_mat4 adjugate(t_mat4 m)
 {
     t_mat4 adj;
@@ -146,10 +245,9 @@ t_mat4 mat_inverse(t_mat4 m)
     float det = mat_determinant(m);
     if (det < EPSILON)
 	{
-        printf("Matrix is not invertible\n");
-        return m; // Return original matrix if not invertible
+        ft_printf("Matrix is not invertible\n");
+        return (m);
     }
-
     t_mat4 adj = adjugate(m);
     float inv_det = 1.0f / det;
 

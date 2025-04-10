@@ -2,7 +2,7 @@
 
 void	r_reflect(t_ray *ray)
 {
-	const float	n_dot_d = dot_vec4(ray->n, ray->v);
+	const float	n_dot_d = dot_vec3(ray->n, ray->v);
 
 	ray->d = mult_vec4(mult_vec4(ray->n, 2), n_dot_d);
 	ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
@@ -22,7 +22,7 @@ void	r_update(t_ray *ray, t_object *obj)
 		plane_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
-	if (dot_vec4(ray->n, ray->v) < 0)
+	if (dot_vec3(ray->n, ray->v) < 0)
 		ray->n = mult_vec4(ray->n, -1);	
 }
 
@@ -42,6 +42,7 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	t_argb		local_color;
 	t_argb		lumen;
 
+	(void)rec;
 	local_color = (t_argb) {0, 0, 0, 0};
 	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
 	if (obj == NULL)
@@ -58,27 +59,7 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	return (add_colors(local_color, reflected_color));
 }
 
-t_quad	solve_quadratic(t_vec4 oc, t_vec4 dir, float radius)
-{
-	t_quad	quad;
-	float	square_root;
-
-	quad.a = dot_vec4(dir, dir);
-	quad.b = 2.0f * dot_vec4(oc, dir);
-	quad.c = dot_vec4(oc, oc) - radius * radius;
-	quad.delta = quad.b * quad.b - 4.0f * quad.a * quad.c;
-	if (quad.delta <= EPSILON)
-	{
-		quad.t[0] = FLT_MAX;
-		quad.t[1] = FLT_MAX;
-		return (quad);
-	}
-	square_root = sqrtf(quad.delta);
-	quad.t[0] = (-quad.b - square_root) / (2.0f * quad.a);
-	quad.t[1] = (-quad.b + square_root) / (2.0f * quad.a);
-	return (quad);
-}
-int	solve_gen_quad(t_quad *quad)
+int	solve_quadratic(t_quad *quad)
 {
 	float	square_root;
 

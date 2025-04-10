@@ -1,13 +1,26 @@
-#include <miniRT_bonus.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 11:44:41 by npolack           #+#    #+#             */
+/*   Updated: 2025/04/10 12:10:26 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-float dist_vec4(t_vec4 p1, t_vec4 p2)
+#include <libft.h>
+
+float dist_vec3(t_vec4 p1, t_vec4 p2)
 {
 	float	dist;
 
 	dist = (p2.x - p1.x) * (p2.x - p1.x) +
 		(p2.y - p1.y) * (p2.y - p1.y) +
         (p2.z - p1.z) * (p2.z - p1.z);
-    return (sqrtf(dist));
+	dist = ft_sqrtf(dist);
+    return (dist);
 }
 
 t_vec4 cross_vec4(t_vec4 a, t_vec4 b)
@@ -26,7 +39,9 @@ t_vec4	normalize_vec4(t_vec4 vec)
 	t_vec4	result;
 	float	lenght;
 
-	lenght = mag_vec4(vec);
+	lenght = mag_vec3(vec);
+	if (lenght < 0.001f)
+		lenght = 1.0f;
 	result = div_vec4(vec, lenght);
 	result.w = 0;
 	return (result);
@@ -79,7 +94,7 @@ float	mag_vec4(t_vec4 a)
 {
 	float	result;
 
-	result = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
+	result = ft_sqrtf(ft_powf(a.x, 2) + ft_powf(a.y, 2) + ft_powf(a.z, 2));
 	return (result);
 }
 

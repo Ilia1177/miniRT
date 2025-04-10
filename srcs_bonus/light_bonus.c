@@ -1,21 +1,22 @@
 #include <miniRT_bonus.h>
 
 /*******************************************************************************
-// Return reflexions of diffuse and/or specular
-// d : direction from the point -> light
-// v : vector from point -> camera
-// n : normal of the surface, toward outside the shape
-// n_dot_l > 0 --> light going against the normal (~ outside of the shape)
-// n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
+* Return reflexions of diffuse and/or specular
+* d : direction from the point -> light
+* v : vector from point -> camera
+* n : normal of the surface, toward outside the shape
+* n_dot_l > 0 --> light going against the normal (~ outside of the shape)
+* n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
 *******************************************************************************/
 t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 {
-	const float		n_dot_l = dot_vec4(ray->n, ray->d);
+	const float		n_dot_l = dot_vec3(ray->n, ray->d);
 	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), n_dot_l), ray->d);
-	const float		r_dot_v = dot_vec4(r, ray->v);
+	const float		r_dot_v = dot_vec3(r, ray->v);
 	t_argb			diffuse;
 	t_argb			specular;
 
+	(void)spec;
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
 	if (n_dot_l > 0) //useless ?
@@ -50,7 +51,7 @@ t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 // more the specular, better the shiny 
 t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lumen)
 {
-	const float		coeff = pow(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
+	const float		coeff = powf(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
 	t_argb			luminosity;
 
 	luminosity.a = lumen.a * coeff;

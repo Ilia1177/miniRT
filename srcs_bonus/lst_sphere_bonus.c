@@ -9,11 +9,12 @@ int	make_object(t_object data, t_object **objects)
 	if (!new_object)
 		return (-109);
 	ft_memcpy(new_object, &data, sizeof(t_object));
-	new_object->t_m = mat_generate(new_object);
+	new_object->t_m = mat_orthogonal(data.t_m.k);
+	new_object->t_m.p = data.t_m.p;
 	new_object->i_m = mat_inverse(new_object->t_m);
-	printf("transform matrix of %d:\n", data.type);
+	printf("\nMAKE OBJECT: transform matrix of %d:\n", data.type);
 	print_mat4(new_object->t_m);
-	printf("iverted matrix of %d:\n", data.type);
+	printf("MAKE OBJECT: inverted matrix of %d:\n", data.type);
 	print_mat4(new_object->i_m);
 	new_object->next = NULL;
 	curr_object = NULL;
@@ -46,10 +47,8 @@ int	create_sphere(char **line, t_data *scene)
 
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
-	sphere.axis = (t_vec4){0, 0, 1, 0};
-	status = str_to_vec4(&str, &sphere.pos);
-	sphere.pos.w = 1;
-	sphere.axis.w = 0;
+	sphere.t_m.k = (t_vec4){0, 0, 1, 0};
+	status = str_to_vec4(&str, &sphere.t_m.p);
 	if (!status)
 		status = str_to_float(&str, &sphere.radius);
 	if (!status)

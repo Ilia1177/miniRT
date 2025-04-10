@@ -1,78 +1,6 @@
 #include <miniRT_bonus.h>
 
-// Helper function to check if a wall intersection is within the cylinder's height
-void check_tube(float t, t_vec4 origin, t_vec4 dir, float height, float *t_min)
-{
-	float	z;
-	t_vec4	hit_point;
-
-    if (t > EPSILON)
-	{
-		hit_point = add_vec4(origin, mult_vec4(dir, t));
-        z = dot_vec4(hit_point, (t_vec4){0, 0, 1, 0}); // Project onto cylinder's axis
-        if (z >= 0 && z <= height) 
-            *t_min = fminf(*t_min, t);
-    }
-}
-
-// Helper function to check intersections with the end caps
-void check_cap(float cap_z, t_vec4 origin, t_vec4 dir, float radius, float *t_min)
-{
-	float	t;
-	float	x;
-	float	y;
-
-    if (fabsf(dir.z) < EPSILON)
-		return;
-    t = (cap_z - origin.z) / dir.z;
-    if (t > EPSILON)
-	{
-        x = origin.x + t * dir.x;
-        y = origin.y + t * dir.y;
-        if (x * x + y * y <= radius * radius)
-            *t_min = fminf(*t_min, t);
-    }
-}
-
-/*******************************************************************************
-// 1. Transform ray to object space
-// 2. Calculate coefficients for the infinite cylinder equation
-// 3. Cylinder is aligned along Z-axis in object space
-// 4. Project direction and origin onto the plane perpendicular to the cylinder's axis
-// 5. Check intersections with the cylinder walls (within height range)
-// 6. Check intersections with the end caps (z=0 and z=height)
-*******************************************************************************/
-int intersect_cylinder(t_ray *ray, t_object *cylinder, float *t)
-{
-    const t_vec4 origin = ray->o;
-    const t_vec4 dir = ray->d;
-    const t_vec4 axis = (t_vec4){0, 0, 1, 0};  
-    const t_vec4 d_proj = sub_vec4(dir, mult_vec4(axis, dot_vec4(dir, axis)));
-    const t_vec4 o_proj = sub_vec4(origin, mult_vec4(axis, dot_vec4(origin, axis)));
-    const float a = dot_vec4(d_proj, d_proj);
-    const float b = 2 * dot_vec4(d_proj, o_proj);
-    const float c = dot_vec4(o_proj, o_proj) - (cylinder->radius * cylinder->radius);
-    float discriminant = b * b - 4 * a * c;
-
-    if (discriminant < 0)
-		return 0;
-    float sqrt_disc = sqrtf(discriminant);
-    float t1 = (-b - sqrt_disc) / (2 * a);
-    float t2 = (-b + sqrt_disc) / (2 * a);
-    float t_min = INFINITY;
-    check_tube(t1, origin, dir, cylinder->height, &t_min);
-    check_tube(t2, origin, dir, cylinder->height, &t_min);
-    check_cap(0, origin, dir, cylinder->radius, &t_min);
-    check_cap(cylinder->height, origin, dir, cylinder->radius, &t_min);
-    if (t_min < INFINITY)
-	{
-        *t = t_min;
-        return 1;
-    }
-    return 0;
-}
-
-t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj)
+t_object	*closest_intersect(t_ray *ray, int shw, float t_min, float t_max, t_object *obj)
 {
 	t_object	*closest_obj;
 	float		closest_t;
@@ -80,12 +8,12 @@ t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_
 
 	closest_t = t_max;
 	curr_t = t_max;
-	closest_obj	= NULL;
+	closest_obj = NULL;
 	while (obj)
 	{
 		if (intersect_object(ray, obj, &curr_t))
 		{
-			if (shadow && curr_t >= t_min && curr_t < t_max)
+			if (shw && curr_t >= t_min && curr_t < t_max)
 				return (obj);
 			if (curr_t < closest_t && curr_t >= t_min && curr_t < t_max)
 			{
@@ -100,12 +28,6 @@ t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_
 	return (closest_obj);
 }
 
-// ray equation p = o + t * d;
-// with :
-// p = point
-// o = origin of the ray
-// t = coeff on direction
-// d = direction of the ray
 int	intersect_object(t_ray *ray, t_object *obj, float *t)
 {
 	t_ray	local_ray;
@@ -125,59 +47,74 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 	return (intersect);
 }
 
-// Equation of sphere:
-// dist(p, sphere->center) = rayon^2
-int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
-{
-	const t_quad	quad = solve_quadratic(ray->o, ray->d, sp->radius);
-
-	if (quad.delta < EPSILON)
-		return (0);
-	else if (quad.t[0] < EPSILON && quad.t[1] < EPSILON)
-		return (0);
-	else if (quad.t[0] > EPSILON && quad.t[0] < quad.t[1])
-		*t = quad.t[0];
-	else if (quad.t[1] > EPSILON)
-		*t = quad.t[1];
-
-//	else if (quad.t[1] > 0)
-//		*t = quad.t[1];
-//	else
-//		*t = quad.t[0];
-//	ray->o = add_vec4(mult_vec4(dir, *t), origin);
-//	ray->o = mat_apply(sp->t_m, ray->o);
-	return (1);
-}
-
-// Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
-// 1. dot_vec4(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
-int	intersect_plane(t_ray *ray, t_object *pl, float *t)
-{
-	const t_vec4	origin = ray->o;
-	const t_vec4	dir = ray->d;
-	float			inter;
-
-	(void)pl;
-	if (fabs(dir.z) < EPSILON)
-		return (0);
-	inter = -origin.z / dir.z;
-	if (inter > EPSILON)
-	{
-		*t = inter;
-		return (1);
-	}
-	return (0);
-}
-
 int intersect_hyperboloid(t_ray *ray, t_object *object, float *t)
 {
+    // Extract hyperboloid parameters
+    float a = object->scale.x;
+    float b = object->scale.y;
+    float c = object->scale.z;
+    float radius = object->radius;
+    float half_height = object->height * 0.5f;
+
+    // Ray origin and direction in hyperboloid's local space
+    float ox = ray->o.x;
+    float oy = ray->o.y;
+    float oz = ray->o.z;
+    float dx = ray->d.x;
+    float dy = ray->d.y;
+    float dz = ray->d.z;
+
+    // Precompute squared terms
+    float a2 = a * a;
+    float b2 = b * b;
+    float c2 = c * c;
+    float r2 = radius * radius;
+
+    // Quadratic coefficients for (x²/a² + y²/b² - z²/c² = r²)
+    float A = (dx*dx)/a2 + (dy*dy)/b2 - (dz*dz)/c2;
+    float B = 2.0f * ((ox*dx)/a2 + (oy*dy)/b2 - (oz*dz)/c2);
+    float C = (ox*ox)/a2 + (oy*oy)/b2 - (oz*oz)/c2 - r2;
+
+    // Solve quadratic equation
+    float discriminant = B*B - 4.0f*A*C;
+    if (discriminant < 0)
+        return 0;
+
+    float sqrt_disc = sqrtf(discriminant);
+    float t0 = (-B - sqrt_disc) / (2.0f * A);
+    float t1 = (-B + sqrt_disc) / (2.0f * A);
+
+    // Find valid intersections within height bounds
+    float t_candidate = FLT_MAX;
+    float z_hit;
+
+    if (t0 > 0.001f) {
+        z_hit = oz + t0 * dz;
+        if (fabs(z_hit) <= half_height)
+            t_candidate = t0;
+    }
+    if (t1 > 0.001f && t1 < t_candidate) {
+        z_hit = oz + t1 * dz;
+        if (fabs(z_hit) <= half_height)
+            t_candidate = t1;
+    }
+
+    if (t_candidate == FLT_MAX)
+        return 0;
+
+    *t = t_candidate;
+    return 1;
+}
+int intersect_hyperboloidi2(t_ray *ray, t_object *object, float *t)
+{
     // 1. Compute the hyperboloid's axis (W) and total height h.
-    t_vec4 W = normalize_vec4(object->axis);
+    t_vec4 W = normalize_vec4(object->t_m.k);
+
     float h = object->height;
 
     // 2. Compute the hyperboloid's center.
     // Here we assume object->pos is the top, so the center is halfway down the axis.
-    t_vec4 center = sub_vec4(object->pos, mult_vec4(W, h * 0.5f));
+    t_vec4 center = sub_vec4(object->t_m.p, mult_vec4(W, h * 0.5f));
 
     // 3. Build an orthonormal basis (U, V, W).
     t_vec4 U;
@@ -192,13 +129,13 @@ int intersect_hyperboloid(t_ray *ray, t_object *object, float *t)
     // Compute oc = ray origin relative to center.
     t_vec4 oc = sub_vec4(ray->o, center);
     // Local coordinates for origin:
-    float ox = dot_vec4(oc, U);
-    float oy = dot_vec4(oc, V);
-    float oz = dot_vec4(oc, W);
+    float ox = dot_vec3(oc, U);
+    float oy = dot_vec3(oc, V);
+    float oz = dot_vec3(oc, W);
     // Local coordinates for direction:
-    float dx = dot_vec4(ray->d, U);
-    float dy = dot_vec4(ray->d, V);
-    float dz = dot_vec4(ray->d, W);
+    float dx = dot_vec3(ray->d, U);
+    float dy = dot_vec3(ray->d, V);
+    float dz = dot_vec3(ray->d, W);
 
     // 5. Get hyperboloid scale factors: a, b, c.
     float a = object->scale.x;

@@ -18,20 +18,15 @@ int	create_cylinder(char **line, t_data *scene)
 
 	str = *line + 2 ;
 	init_obj(&cylinder, CYLINDER);
-	status = str_to_vec4(&str, &cylinder.pos);
+	status = str_to_vec4(&str, &cylinder.t_m.p);
 	if (!status)
-		status = str_to_vecdir(&str, &cylinder.axis);
+		status = str_to_vecdir(&str, &cylinder.t_m.k);
 	if (!status)
 		status = str_to_float(&str, &cylinder.radius);
 	if (!status)
 		status = str_to_float(&str, &cylinder.height);
 	if (!status)
 		status = str_to_argb(&str, &cylinder.color, 0);
-	if (!status)
-	{
-			cylinder.t_m = mat_generate(&cylinder);
-			//inverse_matrix(cylinder.t_m, &cylinder.i_m);
-	}
 	if (!status)
 		status = get_options(&str, &cylinder);
 	if (!status)

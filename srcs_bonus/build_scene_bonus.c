@@ -53,19 +53,9 @@ void	init_obj(t_object *obj, t_type type)
 	ft_bzero(obj, sizeof(t_object));
 	obj->type		= type;
 	obj->t 			= T_MAX;
-	obj->pos		= (t_vec4){0, 0, 0, 1};
-	obj->axis		= (t_vec4){0, 0, 0, 0};
-	obj->dir		= (t_vec4){0, 0, 1, 0};
-	obj->up			= (t_vec4){0, 1, 0, 0};
-	obj->right		= (t_vec4){1, 0, 0, 0};
+	obj->t_m		= mat_init_id();
+	obj->i_m		= mat_inverse(obj->t_m);
 	obj->spec		= SPECULAR;
-	//scene->earth = text_img(scene);
-   // obj->pattern	= 0;
-   // obj->radius 	= 0.0f;
-   // obj->height 	= 0.0f;
-   // obj->reflect 	= (t_argb){0, 0, 0, 0};
-   // obj->color 		= (t_argb){0, 0, 0, 0};
-	obj->next		= NULL;
 }
 
 int	place_camera(char **line, t_data *scene)
@@ -74,27 +64,27 @@ int	place_camera(char **line, t_data *scene)
 	int		status;
 	float	f_fov;
 	int		fov;
+	t_vec4	pos;
 
 	str = *line + 1;
-	status = str_to_vec4(&str, &scene->cam.pos);
+	status = str_to_vec4(&str, &pos);
+	pos.w = 1;
 	if (status != 0)
 		return (status);
-	status = str_to_vecdir(&str, &scene->cam.dir);
+	status = str_to_vecdir(&str, &scene->cam.t_m.k);
 	if (status != 0)
 		return (status);
+	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k));
+	printf("cam matrix\n");
+	print_mat4(scene->cam.t_m);
+	scene->cam.t_m.p = pos;
 	status = str_to_float(&str, &f_fov);
 	if (status != 0)
 		return (status);
 	fov = (int)f_fov;
 	print_cam(scene->cam);
 	printf("\n");
-	scene->cam.t_m.k = normalize_vec4(scene->cam.dir);
-	scene->cam.t_m.i = cross_vec4((t_vec4) {0, 1, 0, 0}, scene->cam.t_m.k);
-	scene->cam.t_m.j = cross_vec4(scene->cam.t_m.k, scene->cam.t_m.i);
-	scene->cam.t_m.p = scene->cam.pos;
-	scene->cam.t_m.p.w = 1;
 	scene->cam.i_m = mat_inverse(scene->cam.t_m);
-
 	*line = str + skip_space(str);
 	return (status);
 }
@@ -118,7 +108,7 @@ int	go_to_endl(char *str)
 	int	c;
 
 	c = 0;
-	while (str[c] != '\n')
+	while (str[c] != '\n' && str[c])
 		c++;
 	return (c);
 }
@@ -142,6 +132,8 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 			status = create_plane(&line, scene);
 		else if (!ft_strncmp("cy", line, 2))
 			status = create_cylinder(&line, scene);
+		else if (!ft_strncmp("hy", line, 2))
+			status = create_hyperboloid(&line, scene);
 		else if (ft_strcmp("\n", line))
 			status = -4;
 		else
@@ -159,8 +151,6 @@ int	build_scene(t_data *scene)
 	int			status;
 	t_object	*it;
 	t_light	*it2;
-	//added for debug
-//	t_object	hyperbol;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -182,17 +172,6 @@ int	build_scene(t_data *scene)
 		gnl_clear_buffer(map);
 	close(map);
 	printf("**************************linked list OBJECT**************\n");
-	// added for debug
-	//	hyperbol.type = HYPERBOL;
-	//	hyperbol.height = 5;
-	//	hyperbol.pos = (t_vec4) {0, 0, 9, 0};
-	//	hyperbol.axis = (t_vec4) {1, 0, 0, 0};
-	//	hyperbol.scale = (t_vec4) {2, 2, 2, 0};
-	//	hyperbol.color = (t_argb) {255, 255, 255, 255};
-	//	hyperbol.reflect = (t_argb) {0,0,0,0};
-	//	hyperbol.spec = -1;
-	//	hyperbol.next = NULL;
-	//	make_hyperboloid(hyperbol, &scene->objects);
 	it = scene->objects;
 	while (it)
 	{

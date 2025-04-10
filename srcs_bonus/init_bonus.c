@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/26 17:59:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:31:31 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@ int	rt_scene_tozero(t_data *scene)
 {
 	scene->selected = NULL;
 	scene->res = 5;
-	scene->cam.pos = (t_vec4){0, 0, 0, 0};
-	scene->cam.dir = (t_vec4){0, 0, 1, 0};
-	scene->cam.up = (t_vec4){0, 1, 0, 0};
-	scene->cam.right = (t_vec4){1, 0, 0, 0};
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;

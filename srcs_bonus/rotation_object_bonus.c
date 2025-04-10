@@ -22,9 +22,10 @@ void	rotate_on_x(t_object *obj, float theta)
 	mat.k = (t_vec4) {0, -sin(theta), cos(theta), 0};
 //	mat.i = normalize_vec4(cross_vec4(obj->up, obj->dir));
 	mat.i = (t_vec4) {1, 0, 0, 0};
-	mat.p = (t_vec4) {0, 0, 0, 1};
+	mat.p = obj->t_m.p;
 	
-	obj->t_m = mat_compose(mat, obj->t_m);
+	//obj->t_m = mat_compose(mat, obj->t_m);
+	obj->t_m = mat;
 	obj->i_m = mat_inverse(obj->t_m);
 }
 
@@ -37,11 +38,13 @@ void	rotate_on_y(t_object *obj, float theta)
 	mat.k = (t_vec4) {sin(theta), 0, cos(theta), 0};
 //	mat.j = normalize_vec4(cross_vec4(mat.k, mat.i));
 	mat.j = (t_vec4) {0, 1, 0, 0};
-	mat.p = (t_vec4) {0, 0, 0, 1};
+	mat.p = obj->t_m.p;
 
 	// both are modified because of the use of axis in intersection
 //	obj->axis = mat_apply(mat, obj->axis);
-	obj->t_m = mat_compose(mat, obj->t_m);
+	//obj->t_m = mat_compose(mat, obj->t_m);
+	
+	obj->t_m = mat;
 	obj->i_m = mat_inverse(obj->t_m);
 	print_mat4(obj->t_m);
 }
@@ -55,10 +58,11 @@ void	rotate_on_z(t_object *obj, float theta)
 	mat.j = (t_vec4) {-sin(theta), cos(theta), 0, 0};
 //	mat.k = normalize_vec4(cross_vec4(mat.i, mat.j));
 	mat.k = (t_vec4) {0, 0, 1, 0};
-	mat.p = (t_vec4) {0, 0, 0, 1};
+	mat.p = obj->t_m.p;
 
 	//obj->axis = mat_apply(mat, obj->axis);
-	obj->t_m = mat_compose(mat, obj->t_m);
+	//obj->t_m = mat_compose(mat, obj->t_m);
+	obj->t_m = mat;
 	obj->i_m = mat_inverse(obj->t_m);
 	print_mat4(obj->t_m);
 }

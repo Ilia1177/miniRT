@@ -23,8 +23,8 @@
 # define CBOARD_SCALE 0.22f
 # define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 # define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
-# define EPSILON 1.0e-6
-//# define EPSILON 0.001f
+//# define EPSILON 1.0e-6
+# define EPSILON 0.001f
 
 //add w for the structure to be aligned on 16 bytes properly;
 typedef struct	s_vec4
@@ -88,12 +88,8 @@ typedef struct	s_camera
 {
 	t_mat4	t_m;
 	t_mat4	i_m;
-	t_vec4 pos;
-    t_vec4 dir;   	// Forward direction
-    t_vec4 right; 	// Right direction
-	t_vec4 up;    	// Up direction
-    float yaw;   	// Horizontal rotation (left/right)
-    float pitch; 	// Vertical rotation (up/down)
+    float yaw;
+	float pitch;
 }	t_camera;
 
 typedef struct	s_viewport
@@ -159,17 +155,16 @@ typedef struct	s_object
 	t_argb			reflect;
 	t_argb			color;
 	char			mat[4][4];
-	t_mat4		t_m;
-	t_mat4		i_m;
-	t_mat4		id_matrix;
-	t_vec4			pos;
-	t_vec4			axis;
+	t_mat4			t_m;
+	t_mat4			i_m;
+	//t_vec4			pos;
+	//t_vec4			axis;
 	t_vec4			scale;
-	t_vec4			up;
-	t_vec4			dir;
-	t_vec4			right;
-	float			yaw;
-	float			pitch;
+	//t_vec4			up;
+	//t_vec4			dir;
+	//t_vec4			right;
+	//float			yaw;
+	//float			pitch;
 	float			t;
 	float			radius;
 	float			height;
@@ -210,18 +205,19 @@ void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 //
 
+t_mat4	mat_orthogonal(t_vec4 dir);
 t_mat4 mat_transpose_inverse(t_mat4 mat);
-t_mat4	mat_rotate(t_mat4 m1, t_mat4 m2);
-t_vec4	mat_translate(t_mat4 mat, t_vec4 v);
+t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz);
+t_mat4	mat_translate(t_mat4 *m, float dx, float dy, float dz);
 t_vec4	mat_apply(t_mat4 mat, t_vec4 v);
 t_mat4	mat_generate(t_object *obj);
 t_mat4	mat_compose(t_mat4 m2, t_mat4 m1);
 t_mat4	mat_transpose(t_mat4 m);
 	
+t_mat4	mat_init_id(void);
 t_mat4	mat_inverse(t_mat4 matrix);
 t_mat4	mat_tinverse(t_mat4 matrix);
 void	trans_sp_matrix(t_object *obj);
-t_vec4	apply_mat4x4(t_mat4 m, t_vec4 v);
 
 //img.c
 void			rt_put_pixel(t_img *img, int x, int y, int color);
@@ -251,7 +247,7 @@ t_vec2		cnv_to_screen(t_canvas cnv);
 //ray
 t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
 t_object		*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj);
-t_quad			solve_quadratic(t_vec4 oc, t_vec4 dir, float radius);
+int				solve_quadratic(t_quad *quad);
 int				solve_gen_quad(t_quad *quad);
 
 //inter_utils.c
@@ -295,6 +291,7 @@ t_argb			reflections(t_ray *ray, t_argb intensity, int spec);
 //vector_math.c
 t_vec4	cross_vec4(t_vec4 a, t_vec4 b);
 float	dot_vec4(t_vec4 a, t_vec4 b);
+float	dot_vec3(t_vec4 a, t_vec4 b);
 float	mag_vec4(t_vec4 a);
 double	dist(t_vec2 a, t_vec2 b);
 t_vec4	sub_vec4(t_vec4 a, t_vec4 b);
@@ -361,7 +358,7 @@ int	create_plane(char **line, t_data *scene);
 int	create_light(char **line, t_data *scene, t_type type);
 int	clean_lights(t_data *scene);
 
-int	make_hyperboloid(t_object data, t_object **objects);
+int	create_hyperboloid(char **line, t_data *scene);
 
 //rotation_object.c
 void	rotate(t_object *obj);

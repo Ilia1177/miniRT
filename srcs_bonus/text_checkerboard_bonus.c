@@ -9,7 +9,7 @@ t_argb	checkerboard_plane(t_vec4 hit_point, t_object *obj)
 
 	x = floor(hit_point.x * CBOARD_SCALE);
 	z = floor(hit_point.z * CBOARD_SCALE);
-	if (fabs(obj->axis.y)> 0.9f)
+	if (fabs(obj->t_m.k.y)> 0.9f)
 		y = z;
 	else
 		y = floor(hit_point.y * CBOARD_SCALE) + z;
@@ -92,7 +92,7 @@ t_uv cylinder_maplast(t_vec4 point, t_vec4 axis, float radius, float height)
     scale = 0.1f;
     
     // 1. Projection verticale (V)
-    float h = dot_vec4(point, axis); // Position le long de l'axe
+    float h = dot_vec3(point, axis); // Position le long de l'axe
     uv.v = fmodf(fabs(h / height * scale*4.0f), 1.0f);
 
     // 2. Projection horizontale (U) - version corrigée
@@ -117,7 +117,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 	(void)scene;
 	if (obj->type == SPHERE && obj->pattern)
 	{
-		hp = sub_vec4(hp, obj->pos);
+		hp = sub_vec4(hp, obj->t_m.p);
 		uv = sphere_map(hp, obj->radius);
 		//color = checkerboard_at(uv.u, uv.v, obj->color);
 		color = text_img_at(uv.u, uv.v, obj->img);

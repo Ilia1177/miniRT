@@ -1,42 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 14:00:48 by npolack           #+#    #+#             */
+/*   Updated: 2025/04/10 14:11:19 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include <miniRT_bonus.h>
-void	mrt_translate(t_object *obj, float dx, float dy, float dz)
-{
-	obj->t_m.p.x += dx;
-	obj->t_m.p.y += dy;
-	obj->t_m.p.z += dz;
-	obj->i_m = mat_inverse(obj->t_m);
-	printf("---- translate OBJ ----\n");
-	print_mat4(obj->t_m);
-}
-//	void	mrt_rotate(t_object *obj, float dx, float dy, float dz)
-//	{
-//		return ;
-//	}
-// translate object on z axis zith i and j
+
 void	handle_object_translation(t_data *scene)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
-		mrt_translate(scene->selected, 0.0f, 0.0f, 0.1f);
+		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, 0, 0.1f);
 	if (scene->key_state[XK_k] == 1 && scene->selected)
-		mrt_translate(scene->selected, 0.0f, 0.0f, -0.1f);
+		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, 0, -0.1f);
 	if (scene->key_state[XK_l] == 1 && scene->selected)
-		mrt_translate(scene->selected, 0.1f, 0.0f, 0.0f);
+		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0.1f, 0, 0);
 	if (scene->key_state[XK_j] == 1 && scene->selected)
-		mrt_translate(scene->selected, -0.1f, 0.0f, 0.0f);
+		scene->selected->i_m = mat_translate(&scene->selected->t_m, -0.1f, 0, 0);
 	if (scene->key_state[XK_u] == 1 && scene->selected)
-		mrt_translate(scene->selected, 0.0f, 0.1f, 0.0f);
+		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, 0.1f, 0);
 	if (scene->key_state[XK_o] == 1 && scene->selected)
-		mrt_translate(scene->selected, 0, -0.1f, 0.0f);
+		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, -0.1f, 0);
 }
 
 void	handle_object_rotation(t_data *scene)
 {
 	if (scene->key_state[XK_z] == 1 && scene->selected)
-		rotate_on_x(scene->selected, 1.0f);
+		scene->selected->i_m = mat_rotate(&scene->selected->t_m, 1.0f, 0, 0);
 	if (scene->key_state[XK_x] == 1 && scene->selected)
-		rotate_on_y(scene->selected, 1.0f);
+		scene->selected->i_m = mat_rotate(&scene->selected->t_m, 0, 1.0f, 0);
 	if (scene->key_state[XK_c] == 1 && scene->selected)
-		rotate_on_z(scene->selected, 1.0f);
+		scene->selected->i_m = mat_rotate(&scene->selected->t_m, 0, 0, 1.0f);
 }
 
 void	handle_camera_move(t_data *scene)
@@ -79,7 +79,6 @@ int	handle_input(t_data *scene)
 
 int	key_press(int keysym, t_data *scene)
 {
-	scene->rend = 1;
 	if (keysym == XK_Escape)
 		rt_shut_down(scene);
 	else if (keysym > 0 && keysym < 99999)
@@ -89,7 +88,6 @@ int	key_press(int keysym, t_data *scene)
 
 int	key_release(int keysym, t_data *scene)
 {
-	//scene->rend = 0;
 	if (keysym > 0 && keysym < 99999)
 		scene->key_state[keysym] = 0;
 	return (0);
