@@ -127,6 +127,7 @@ typedef enum e_type
 	PLANE,
 	CYLINDER,
 	HYPERBOL,
+	TRIANGLE,
 }	t_type;
 
 typedef struct	s_light
@@ -147,6 +148,7 @@ typedef struct	s_ray
 	t_vec4	o;
 	t_vec4	n;
 }	t_ray;
+
 // t_mat = matrix world space
 // i_mat = invert matrix
 typedef struct	s_object
@@ -155,17 +157,11 @@ typedef struct	s_object
 	t_argb			reflect;
 	t_argb			color;
 	char			mat[4][4];
+	t_vec4			vertice[3];
 	t_mat4			t_m;
-	t_mat4			i_m;
-	//t_vec4			pos;
-	//t_vec4			axis;
-	t_vec4			scale;
-	//t_vec4			up;
-	//t_vec4			dir;
-	//t_vec4			right;
-	//float			yaw;
-	//float			pitch;
 	float			t;
+	t_mat4			i_m;
+	t_vec4			scale;
 	float			radius;
 	float			height;
 	int				spec;
@@ -261,6 +257,7 @@ int	min_pos(float *t, float t1, float t2);
 
 
 //intersection.c
+int				intersect_triangle(t_ray *ray, t_object *tr, float *t);
 int				intersect_object(t_ray *ray, t_object *obj, float *t);
 int				intersect_sphere(t_ray *ray, t_object *object, float *t);
 int 			intersect_cylinder(t_ray *ray, t_object *cylinder, float *t);
@@ -269,6 +266,7 @@ int				intersect_hyperboloid(t_ray *ray, t_object *hyperb, float *t);
 
 
 //normal.c
+void	triangle_normal(t_ray *ray, t_object *tr);
 void	cylinder_normal(t_ray *ray, t_object *cylinder);
 void	plane_normal(t_ray *ray, t_object *plane);
 void	sphere_normal(t_ray *ray, t_object *sphere);
@@ -360,6 +358,7 @@ int	create_plane(char **line, t_data *scene);
 int	create_light(char **line, t_data *scene, t_type type);
 int	clean_lights(t_data *scene);
 
+int	create_triangle(char **line, t_data *scene);
 int	create_hyperboloid(char **line, t_data *scene);
 
 //rotation_object.c

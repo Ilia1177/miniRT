@@ -133,6 +133,8 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 			status = create_cylinder(&line, scene);
 		else if (!ft_strncmp("hy", line, 2))
 			status = create_hyperboloid(&line, scene);
+		else if (!ft_strncmp("tr", line, 2))
+			status = create_triangle(&line, scene);
 		else if (ft_strcmp("\n", line))
 			status = -4;
 		else

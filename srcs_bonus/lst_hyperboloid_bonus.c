@@ -13,8 +13,8 @@ int	create_hyperboloid(char **line, t_data *scene)
 		status = str_to_vecdir(&str, &hyperb.t_m.k);
 	if (!status)
 		status = str_to_vec4(&str, &hyperb.scale, 2.0f);
-	if (!status)
-		status = str_to_float(&str, &hyperb.height);
+	//if (!status)
+	//	status = str_to_float(&str, &hyperb.height);
 	if (!status)
 		status = str_to_argb(&str, &hyperb.color, 0);
 	if (!status)

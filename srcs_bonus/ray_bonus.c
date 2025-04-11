@@ -20,6 +20,8 @@ void	r_update(t_ray *ray, t_object *obj)
 		sphere_normal(ray, obj);
 	else if (obj->type == PLANE)
 		plane_normal(ray, obj);
+	else if (obj->type == TRIANGLE)
+		triangle_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
 	if (dot_vec3(ray->n, ray->v) < 0)
@@ -64,7 +66,7 @@ int	solve_quadratic(t_quad *quad)
 	float	square_root;
 
 	quad->delta = quad->b * quad->b - 4.0f * quad->a * quad->c;
-	if (quad->delta <= EPSILON)
+	if (quad->delta < 0.0f)
 	{
 		quad->t[0] = FLT_MAX;
 		quad->t[1] = FLT_MAX;

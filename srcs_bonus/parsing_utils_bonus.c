@@ -109,6 +109,9 @@ int	str_to_float(char **line, float *num)
 	return (0);
 }
 
+/*****************************************************************************
+ * return a normalized direction vector
+ *****************************************************************************/
 int	str_to_vecdir(char **line, t_vec4 *v)
 {
 	char	*str;

@@ -19,7 +19,7 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	(void)spec;
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
-	if (n_dot_l > 0) //useless ?
+	if (n_dot_l > 0)
 	{
 		diffuse = diffuse_reflect(ray, lumen, n_dot_l);
 		if (spec != -1 && r_dot_v > 0)

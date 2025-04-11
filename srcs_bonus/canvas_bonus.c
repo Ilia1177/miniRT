@@ -33,8 +33,6 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 		j = -1;
 		while (++j < res)
 		{
-		//	print_argb(color, "color argb:");
-		//	printf("color :%x\n", encode_argb(color));
 			rt_put_pixel(img, x + i, y + j, encode_argb(color));
 		}
 	}
@@ -50,6 +48,7 @@ void	display_color(t_data *scene)
 	t_vec2			pix;
 	const char		res = scene->res;
 
+	ft_bzero(&ray, sizeof(t_ray));
 	ray.o.w = 1;
 	ray.d.w = 0;
 	vp = scene->viewport;

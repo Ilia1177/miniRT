@@ -2,19 +2,23 @@
 
 static void	make_matrix(t_object data, t_object *new)
 {
-	//const float	scale = data.radius;
-	const float	scale = 1;
+	const float	scale = data.radius;
+	//const float	scale = 1;
 
 	new->t_m = mat_orthogonal(data.t_m.k);
 	new->t_m.p = data.t_m.p;
 	if (data.type == SPHERE)
 		new->i_m = mat_scale(&new->t_m, scale, scale, scale);
 	else if (data.type == CYLINDER)
-		new->i_m = mat_scale(&new->t_m, scale, scale, data.height);
+		new->i_m = mat_scale(&new->t_m, data.radius, data.radius, data.height);
+		//new->i_m = mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == PLANE)
 		new->i_m = mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == HYPERBOL)
+		//new->i_m = mat_scale(&new->t_m, 1, 1, 1);
 		new->i_m = mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
+	else if (data.type == TRIANGLE)
+		new->i_m = mat_inverse(new->t_m);
 
 }
 

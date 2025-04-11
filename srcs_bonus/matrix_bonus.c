@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:10:37 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/10 23:04:27 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/11 12:34:44 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,15 @@ t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz)
 	r.j = normalize_vec4((t_vec4){0, cos(tx), sin(tx), 0});
 	r.k = normalize_vec4((t_vec4){0, -sin(tx), cos(tx), 0});
 	r.i = normalize_vec4((t_vec4){1, 0, 0, 0});
-	*m = mat_compose(r, *m);
+	*m = mat_compose(*m, r);
 	r.i = normalize_vec4((t_vec4){cos(ty), 0, -sin(ty), 0});
 	r.k = normalize_vec4((t_vec4){sin(ty), 0, cos(ty), 0});
 	r.j = normalize_vec4((t_vec4){0, 1, 0, 0});
-	*m = mat_compose(r, *m);
+	*m = mat_compose(*m, r);
 	r.i = normalize_vec4((t_vec4){cos(tz), sin(tz), 0, 0});
 	r.j = normalize_vec4((t_vec4){-sin(tz), cos(tz), 0, 0});
 	r.k = normalize_vec4((t_vec4){0, 0, 1, 0});
-	*m = mat_compose(r, *m);
+	*m = mat_compose(*m, r);
 	print_mat4(*m);
 	return (mat_inverse(*m));
 }

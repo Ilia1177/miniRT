@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:55:38 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/10 23:28:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/11 12:01:30 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
 	t_quad			quad;
 	const t_vec4	o = ray->o;
 	const t_vec4	d = ray->d;
-	const float 	r = sp->radius;
-	//const float 	r = 1.0f;
+	//const float 	r = sp->radius;
+	const float 	r = 1.0f;
 
 	(void)sp;
 	quad.a = dot_vec3(d, d);

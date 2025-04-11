@@ -66,11 +66,14 @@ SRCS_BONUS = 	miniRT\
 		intersect_cylinder\
 		intersect_sphere\
 		intersect_plane\
+		intersect_hyperboloid\
+		intersect_triangle\
 		light\
 		lst_cylinder\
 		lst_light\
 		lst_plane\
 		lst_sphere\
+		lst_triangle\
 		norm_utils\
 		normal\
 		parsing_utils\

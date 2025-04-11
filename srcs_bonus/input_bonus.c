@@ -6,87 +6,96 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:00:48 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/10 22:42:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:52:24 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT_bonus.h>
 
-void	handle_object_transformation(t_data *scene)
+void	handle_object_scaling(t_data *scene, t_mat4 *tm, t_mat4 *im)
 {
-	if (scene->key_state[XK_m] == 1 && scene->selected)
-		scene->selected->i_m = mat_scale(&scene->selected->t_m, 1.5f, 1.5f, 1.5f);
-	if (scene->key_state[XK_n] == 1 && scene->selected)
-		scene->selected->i_m = mat_scale(&scene->selected->t_m, 0.5f, 0.5f, 0.5f);
+	const float	pscale = 1.1f;
+	const float	mscale = 0.9f;
+
+	if (scene->key_state[XK_r] == 1)
+		*im = mat_scale(tm, pscale, 1.0f, 1.0f);
+	if (scene->key_state[XK_t] == 1)
+		*im = mat_scale(tm, 1.0f, pscale, 1.0f);
+	if (scene->key_state[XK_y] == 1)
+		*im = mat_scale(tm, 1.0f, 1.0f, pscale);
+	if (scene->key_state[XK_f] == 1)
+		*im = mat_scale(tm, mscale, 1.0f, 1.0f);
+	if (scene->key_state[XK_g] == 1)
+		*im = mat_scale(tm, 1.0f, mscale, 1.0f);
+	if (scene->key_state[XK_h] == 1)
+		*im = mat_scale(tm, 1.0f, 1.0f, mscale);
 }
 
-void	handle_object_translation(t_data *scene)
+void	handle_object_translation(t_data *scene, t_mat4 *tm, t_mat4 *im)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
-		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, 0, 0.1f);
+		*im = mat_translate(tm, 0, 0, 0.1f);
 	if (scene->key_state[XK_k] == 1 && scene->selected)
-		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, 0, -0.1f);
+		*im = mat_translate(tm, 0, 0, -0.1f);
 	if (scene->key_state[XK_l] == 1 && scene->selected)
-		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0.1f, 0, 0);
+		*im = mat_translate(tm, 0.1f, 0, 0);
 	if (scene->key_state[XK_j] == 1 && scene->selected)
-		scene->selected->i_m = mat_translate(&scene->selected->t_m, -0.1f, 0, 0);
+		*im = mat_translate(tm, -0.1f, 0, 0);
 	if (scene->key_state[XK_u] == 1 && scene->selected)
-		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, 0.1f, 0);
+		*im = mat_translate(tm, 0, 0.1f, 0);
 	if (scene->key_state[XK_o] == 1 && scene->selected)
-		scene->selected->i_m = mat_translate(&scene->selected->t_m, 0, -0.1f, 0);
+		*im = mat_translate(tm, 0, -0.1f, 0);
 }
 
-void	handle_object_rotation(t_data *scene)
+void	handle_object_rotation(t_data *scene, t_mat4 *tm, t_mat4 *im)
 {
-	if (scene->key_state[XK_z] == 1 && scene->selected)
-		scene->selected->i_m = mat_rotate(&scene->selected->t_m, 1.0f, 0, 0);
+	if (scene->key_state[XK_z] == 1)
+		*im = mat_rotate(tm, 1.0f, 0, 0);
 	if (scene->key_state[XK_x] == 1 && scene->selected)
-		scene->selected->i_m = mat_rotate(&scene->selected->t_m, 0, 1.0f, 0);
+		*im = mat_rotate(tm, 0, 1.0f, 0);
 	if (scene->key_state[XK_c] == 1 && scene->selected)
-		scene->selected->i_m = mat_rotate(&scene->selected->t_m, 0, 0, 1.0f);
+		*im = mat_rotate(tm, 0, 0, 1.0f);
 }
 
 void	handle_camera_move(t_data *scene)
 {
 	const float speed = 2.0f;
 
-	if (scene->key_state[XK_Left] == 1) 
-	//	scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, speed, 0);
+	if (scene->key_state[XK_Left] == 1)
 		rotate_camera(&scene->cam, 0, speed, 0);
 	if (scene->key_state[XK_Right] == 1)
-//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, -speed, 0);
 		rotate_camera(&scene->cam, 0, -speed, 0);
 	if (scene->key_state[XK_Down] == 1)
-//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, -speed, 0, 0);
 		rotate_camera(&scene->cam, -speed, 0, 0);
-	if (scene->key_state[XK_Up] == 1) 
-//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, speed, 0, 0);
+	if (scene->key_state[XK_Up] == 1)
 		rotate_camera(&scene->cam, speed, 0, 0);
 	if (scene->key_state[XK_e] == 1)
-//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, -speed, 0);
 		translate_camera(&scene->cam, 0.0f, -speed, 0.0f);
 	if (scene->key_state[XK_q] == 1)
-//		scene->cam.i_m = mat_rotate(&scene->cam.t_m, 0, -speed, 0);
 		translate_camera(&scene->cam, 0.0f, 0.5, 0.0f);
 	if (scene->key_state[XK_w] == 1)
-//		scene->cam.i_m = mat_translate(&scene->cam.t_m, 0, 0, 0.5f);
 		translate_camera(&scene->cam, 0.0f, 0.0f, 0.5f);
 	if (scene->key_state[XK_s] == 1)
-//		scene->cam.i_m = mat_translate(&scene->cam.t_m, 0, 0, -0.5f);
 		translate_camera(&scene->cam, 0.0f, 0.0f, -0.5f);
 	if (scene->key_state[XK_a] == 1)
-//		scene->cam.i_m = mat_translate(&scene->cam.t_m, -0.5f, 0, 0);
 		translate_camera(&scene->cam, -0.5f, 0.0f, 0.0f);
 	if (scene->key_state[XK_d] == 1)
-//		scene->cam.i_m = mat_translate(&scene->cam.t_m, 0.5f, 0, 0);
 		translate_camera(&scene->cam, 0.5f, 0, 0);
 }
 
 int	handle_input(t_data *scene)
 {
-	handle_object_translation(scene);
-	handle_object_rotation(scene);
-	handle_object_transformation(scene);
+	t_mat4	*tm;
+	t_mat4	*im;
+
+	if (scene->selected)
+	{
+		tm = &scene->selected->t_m;
+		im = &scene->selected->i_m;
+		handle_object_translation(scene, tm, im);
+		handle_object_rotation(scene, tm, im);
+		handle_object_scaling(scene, tm, im);
+	}
 	handle_camera_move(scene);
 	if (scene->key_state[XK_space] == 1)
 		save_as_ppm(&scene->img, "img.ppm");
@@ -101,16 +110,16 @@ int	key_press(int keysym, t_data *scene)
 {
 	if (keysym == XK_Escape)
 		rt_shut_down(scene);
-	else if (keysym > 0 && keysym < 99999)
+	else if (keysym >= 0 && keysym < 99999)
 		scene->key_state[keysym] = 1;
 	return (keysym);
 }
 
 int	key_release(int keysym, t_data *scene)
 {
-	if (keysym > 0 && keysym < 99999)
+	if (keysym >= 0 && keysym < 99999)
 		scene->key_state[keysym] = 0;
-	return (0);
+	return (keysym);
 }
 
 int	mouse_pos(int x, int y, t_data *scene)
@@ -128,52 +137,56 @@ int	mouse_pos(int x, int y, t_data *scene)
 	return (0);
 }
 
-void	select_object(t_data *scene)
+void	show_selected_object(t_data *scene, t_object *last_obj)
 {
-	t_ray		catch_ray;
-	t_canvas	cnv;
-	t_viewport  vp;
-	t_object	*obj;
 	static t_argb last_color;
 
-	obj = scene->selected;
-	vp = scene->viewport;
-	cnv = scene->cnv;
-	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
-	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
-	catch_ray.d = throught_vp(cnv, vp);
-	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
-	catch_ray.o = scene->cam.t_m.p;
-	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
-	if (scene->selected && scene->selected != obj)
+	if (scene->selected && scene->selected != last_obj)
 	{
-		if (obj)
-			obj->color = last_color;
+		if (last_obj)
+			last_obj->color = last_color;
 		last_color = scene->selected->color;
 		scene->selected->color = invert_color(scene->selected->color);
 		printf("selection transform matrix:\n");
 		print_mat4(scene->selected->t_m);
 	}
-	else if (scene->selected && scene->selected == obj)
+	else if (scene->selected && scene->selected == last_obj)
 	{
 		scene->selected->color = last_color;
 		scene->selected = NULL;
-		obj = NULL;
+		last_obj = NULL;
 	}
-	else if (!scene->selected && obj)
+	else if (!scene->selected && last_obj)
 	{
-		obj->color = last_color;
-		obj = NULL;
+		last_obj->color = last_color;
+		last_obj = NULL;
 	}
+}
+
+void	select_object(t_data *scene, int x, int y)
+{
+	t_ray		catch_ray;
+	t_canvas	cnv;
+	t_viewport  vp;
+	t_object	*last_obj;
+
+	last_obj = scene->selected;
+	vp = scene->viewport;
+	cnv = scene->cnv;
+	cnv.loc.x = x - (cnv.w / 2);
+	cnv.loc.y = (cnv.h / 2) - y;
+	catch_ray.d = throught_vp(cnv, vp);
+	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
+	catch_ray.o = scene->cam.t_m.p;
+	catch_ray.v.w = -1.0f;
+	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
+	show_selected_object(scene, last_obj);
 }
 
 int	mouse_press(int keycode, int x, int y, t_data *scene)
 {
 	(void)keycode;
-	scene->mouse.x = x;
-	scene->mouse.y = y;
-	scene->mouse_state = 1;
-	select_object(scene);
+	select_object(scene, x, y);
 	return (0);
 }
 

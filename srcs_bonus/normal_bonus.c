@@ -1,4 +1,26 @@
 #include <miniRT_bonus.h>
+void	triangle_normal(t_ray *ray, t_object *tr)
+{
+	t_vec4	edge1;
+	t_vec4	edge2;
+	t_vec4	normal_obj;
+	t_mat4	normal_matrix;
+
+	// 1. Compute edges in OBJECT SPACE (original vertices)
+	edge1 = sub_vec4(tr->vertice[1], tr->vertice[0]);
+	edge2 = sub_vec4(tr->vertice[2], tr->vertice[0]);
+
+	// 2. Calculate object-space normal via cross product
+	normal_obj = cross_vec4(edge1, edge2);
+	normal_obj = normalize_vec4(normal_obj);
+
+	// 3. Transform normal to WORLD SPACE using inverse transpose matrix
+	normal_matrix = mat_transpose(tr->i_m); // Inverse transpose = normal matrix
+	ray->n = mat_apply(normal_matrix, normal_obj);
+
+	// 4. Ensure final normal is unit length
+	ray->n = normalize_vec4(ray->n);
+}
 
 void	plane_normal(t_ray *ray, t_object *pl)
 {
@@ -11,33 +33,64 @@ void	sphere_normal(t_ray *ray, t_object *sp)
 }
 
 /*******************************************************************************
-* 1. Transform hit point to object space
-* 2. Calculate normal in object space
-* 3. Check if we're hitting an end cap
-* 4. End cap normal depends on which cap we hit
-* 5. Transform normal back to world space using inverse transpose matrix
+ * 1. Transform hit point to object space
+ * 3. Check if we're hitting an end cap 
+ * 4. End cap normal depends on which cap we hit
+ * 5. Tube body: radial direction (x, y, 0) in object space
+ * 6. Transform normal to world space using inverse transpose matrix
 *******************************************************************************/
 void	cylinder_normal(t_ray *ray, t_object *cy)
 {
-    t_vec4 hit_pt = mat_apply(cy->i_m, ray->o);
-    t_vec4 normal_obj;
-    
-   if (fabsf(hit_pt.z) < EPSILON || fabsf(hit_pt.z - cy->height) < EPSILON)
-   {
-	   if (hit_pt.z < EPSILON)
-			normal_obj = (t_vec4){0, 0, -1.0f, 0};
-	   else
-			normal_obj = (t_vec4){0, 0, 1.0f, 0};
-   }
-   else
-   {
-        normal_obj = (t_vec4){hit_pt.x, hit_pt.y, 0, 0};
-        normal_obj = normalize_vec4(normal_obj);
-   }	
-   ray->n = normalize_vec4(mat_apply(cy->t_m, normal_obj));
-}
+	const t_vec4	hit_pt = mat_apply(cy->i_m, ray->o); // World → object space
+	t_vec4			normal_obj;
+	const float		h = mag_vec4(cy->t_m.k); // Scaled height from transformation
+	t_mat4			normal_matrix;
 
-void hyperboloid_normal(t_ray *ray, t_object *object)
+	if (fabsf(hit_pt.z + h/2) < EPSILON || fabsf(hit_pt.z - h/2) < EPSILON)
+	{
+		if (hit_pt.z < 0)
+			normal_obj = (t_vec4){0, 0, -1.0f, 0};
+		else
+			normal_obj = (t_vec4){0, 0, 1.0f, 0};
+		//normal_obj = (t_vec4){0, 0, (hit_pt.z < 0 ? -1.0f : 1.0f), 0};
+	}
+	else
+	{
+		normal_obj = (t_vec4){hit_pt.x, hit_pt.y, 0, 0};
+		normal_obj = normalize_vec4(normal_obj);
+	}
+	normal_matrix = mat_transpose(cy->i_m); // Inverse transpose = transpose of inverse
+	ray->n = normalize_vec4(mat_apply(normal_matrix, normal_obj));
+}
+void	hyperboloid_normal(t_ray *ray, t_object *hy)
+{
+	//t_vec4	hit_world;    // Hit point in world space
+	t_vec4	hit_obj;      // Hit point in object space
+	t_vec4	normal_obj;   // Normal in object space
+	t_mat4	normal_mat;   // Inverse transpose matrix for normal transformation
+
+	// 1. Calculate hit point in world space
+	//hit_world = add_vec4(ray->o, mult_vec4(ray->d, ray->t));
+
+	// 2. Transform hit point to object space using inverse matrix
+	hit_obj = mat_apply(hy->i_m, ray->o);
+
+	// 3. Compute gradient (normal) in object space using hyperboloid equation
+	normal_obj = (t_vec4){
+		.x = hit_obj.x / (hy->scale.x * hy->scale.x),
+		.y = hit_obj.y / (hy->scale.y * hy->scale.y),
+		.z = -hit_obj.z / (hy->scale.z * hy->scale.z),
+		.w = 0.0f
+	};
+
+	// 4. Transform normal to world space using inverse transpose matrix
+	normal_mat = mat_transpose(hy->i_m); // Equivalent to inverse transpose
+	ray->n = mat_apply(normal_mat, normal_obj);
+
+	// 5. Normalize the final normal vector
+	ray->n = normalize_vec4(ray->n);
+}
+void hyperboloid_normal22(t_ray *ray, t_object *object)
 {
     // 1. Compute the hyperboloid's axis (W) and total height.
     t_vec4 W = normalize_vec4(object->t_m.k);
