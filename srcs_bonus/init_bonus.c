@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/10 16:31:31 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/12 18:51:10 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	rt_scene_init(t_data *scene, int ac, char **av)
 	else if (ac > 1)
 		scene->map_name = av[1];
 	scene->res = 5;
+	scene->brush = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;

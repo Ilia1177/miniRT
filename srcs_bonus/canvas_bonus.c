@@ -73,7 +73,7 @@ void	display_coloriSAVE(t_data *scene)
 }
 //
 // throw ray for every point of the canvas
-void	display_color(t_data *scene, t_slave *slave)
+void	display_color(t_data *scene, t_painter *painter)
 {
 	t_ray			ray; //[THREAD_NB];
 	t_argb			color;
@@ -83,17 +83,17 @@ void	display_color(t_data *scene, t_slave *slave)
 	const char		res = scene->res;
 	float			*lim;
 
-	lim = slave->lim;
-	ray = slave->ray;
+	lim = painter->lim;
+	ray = painter->ray;
 	ft_bzero(&ray, sizeof(t_ray));
-	vp = slave->vp;
-	cnv = slave->cnv;
+	vp = painter->vp;
+	cnv = painter->cnv;
 	lim[0] = 1.0f;
 	lim[1] = T_MAX;
 	lim[2] = R_LIMIT;
 
-	cnv.loc.x = (-cnv.w / 2) + ((slave->id-1) * (cnv.w / THREAD_NB));
-	while (cnv.loc.x < (slave->id) * (cnv.w / THREAD_NB) )
+	cnv.loc.x = (-cnv.w / 2) + ((painter->id-1) * (cnv.w / THREAD_NB));
+	while (cnv.loc.x < (painter->id) * (cnv.w / THREAD_NB) )
 	{
 		cnv.loc.y = -cnv.h / 2;
 		while (cnv.loc.y < (cnv.h / 2))

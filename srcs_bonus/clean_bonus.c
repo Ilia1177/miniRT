@@ -35,8 +35,9 @@ void	free_data(t_data *scene)
 
 int	rt_shut_down(t_data *scene)
 {
-	printf("RT SHUT DOWN\n");
-	
+	printf("RT SHUT DOWN with status: %d\n", scene->status);
+	th_painter_kill(scene);
+	th_painter_wait(scene);
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
@@ -47,5 +48,5 @@ int	rt_shut_down(t_data *scene)
 		free(scene->mlx);
 	}
 	free_data(scene);
-	exit(0);
+	exit(scene->status);
 }

@@ -12,7 +12,8 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <pthread.h>
-
+# include <stdatomic.h>
+//#include <atomic.h>
 # define THREAD_NB 4
 # define T_MAX 1600
 # define HEIGHT 800
@@ -174,26 +175,31 @@ typedef struct	s_object
 	t_type			type;
 }	t_object;
 
-typedef struct	s_slave
+typedef struct	s_painter
 {
 	float		lim[3];
+	
+
 	t_viewport	vp;
 	t_canvas	cnv;
 	t_ray		ray;
 	pthread_t	itself;
 	int			id;
-	int			quit;
+	int			done;
 	void		*sceneref;
-}	t_slave;
+}	t_painter;
 
 typedef struct	s_data
 {
+	pthread_mutex_t brush;
+	int			status;
+	//int			brush;
 	void		*mlx;
 	void		*win;
 	char		*map_name;
 	char		rend;
 	char		res;
-	t_slave		slave[THREAD_NB];
+	t_painter		painter[THREAD_NB];
 	pthread_t	master;
 //	float		intersec_p[2];
 	t_img		img;
@@ -212,7 +218,12 @@ typedef struct	s_data
 
 
 //thread
-//
+int			th_painter_start(t_data *scene);
+int			th_painter_wait(t_data *scene);
+t_painter	th_painter_init(t_data *scene, int i);
+void		th_painer_quit(t_data *scene);
+void		*th_painter_draw(void *painter);
+void		th_painter_kill(t_data *scene);
 
 //camera move
 void	rotate_y(t_camera *cam, float theta);
@@ -256,7 +267,7 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 //canvas.c
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
-void		display_color(t_data *scene, t_slave *slave);
+void		display_color(t_data *scene, t_painter *painter);
 t_vec2		cnv_to_screen(t_canvas cnv);
 
 //ray

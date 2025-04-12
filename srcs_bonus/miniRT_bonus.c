@@ -1,72 +1,20 @@
 #include <miniRT_bonus.h>
 
-void *draw_start(void *slv)
+int	rt_render(t_data *scene)
 {
-	t_slave *slave;
-	t_data	*scene;
 
-	slave = (t_slave *)slv;
-	scene = slave->sceneref;
-	display_color(scene, slave);
-	//mlx_loop(scene->mlx);
-	return NULL;
-}
-
-void	rt_thread_quit(t_data *scene)
-{
-	(void)scene;
-	return ;
-}
-
-int	rt_render(t_slave *slave)
-{
-	t_data *scene;
-
-	scene = slave->sceneref;
+	printf("render\n");
+	//scene = painter->sceneref;
 	handle_input(scene);
-	//display_color(scene, slave);
+	//display_color(scene, painter);
+	
+	pthread_mutex_lock(&scene->brush);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+	pthread_mutex_unlock(&scene->brush);
+	//mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+	//atomic_set(scene->brush, 1);
 	return (0);
 }
-t_slave	th_painter_init(t_data *scene, int i)
-{
-	t_slave new;
-
-	new.cnv = scene->cnv;
-	new.vp = scene->viewport;
-	new.sceneref = (t_data *)scene;
-	new.id = i + 1;
-	return (new);
-}
-int th_painter_wait(t_data *scene)
-{
-	int	i;
-
-	i = -1;
-	while (++i < THREAD_NB)
-		pthread_join(scene->slave[i].itself, NULL);
-	return (0);
-}
-int	th_painter_start(t_data *scene)
-{
-	int	i;
-
-	i = 0;
-	while (i < THREAD_NB)
-	{
-		scene->slave[i] = th_painter_init(scene, i);
-		if (pthread_create(&scene->slave[i].itself, NULL, draw_start, &scene->slave[i]))
-		{
-			rt_thread_quit(scene);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-
-
 
 int	display_scene(t_data *scene)
 {
@@ -76,9 +24,12 @@ int	display_scene(t_data *scene)
 	mlx_hook(scene->win, 4, 1L << 2, &mouse_press, scene);
 	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
 	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
-	mlx_loop_hook(scene->mlx, &rt_render, scene->slave);
-	th_painter_start(scene);
-	mlx_loop(scene->mlx);
+	mlx_loop_hook(scene->mlx, &rt_render, scene);
+	scene->status = th_painter_start(scene);
+	if (!scene->status)
+		mlx_loop(scene->mlx);
+	else
+		rt_shut_down(scene);
 	return (0);
 }
 

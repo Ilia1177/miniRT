@@ -63,6 +63,7 @@ SRCS_BONUS = 	miniRT\
 		init\
 		input\
 		intersection\
+		th_painter\
 		intersect_cylinder\
 		intersect_sphere\
 		intersect_plane\
