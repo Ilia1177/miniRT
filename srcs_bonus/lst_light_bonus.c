@@ -75,15 +75,16 @@ int	create_light(char **line, t_data *scene, t_type type)
 		if (status != 0)
 			return (status);
 	}
-	//status = str_to_float(&str, &bright); // what not ft_strtof ???
-	//if (status != 0)
-	//	return (status);
-	//norm_float(&bright, 0, 1);
 	status = str_to_argb(&str, &light.intensity, 1);
 	if (status != 0)
 		return (status);
-//	light.intensity = extract_argb(encode_rgb(color.r, color.g, color.b));
-//	add_bright_argb(&light.intensity, bright);
+	str = str + skip_space(str);
+	if (ft_strnstr(str, "-d", ft_strlen(str)))
+	{
+		light.type = DIRECTIONAL;
+		light.pos.w = 0.0f;
+		str += 2;
+	}
 	*line = str + skip_space(str);
 	return (make_light(light, &scene->lights));
 }

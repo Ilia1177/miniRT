@@ -29,7 +29,12 @@ void	plane_normal(t_ray *ray, t_object *pl)
 
 void	sphere_normal(t_ray *ray, t_object *sp)
 {
-	ray->n = normalize_vec4(sub_vec4(ray->o, sp->t_m.p));
+	t_vec4	o = mat_apply(sp->i_m, ray->o);
+	const t_vec4	normal = sub_vec4(o, (t_vec4){0,0,0,0});
+
+	o.w = 0.0f;
+	t_mat4 normal_matrix = mat_transpose(sp->i_m); //Inverse transpose = transpose of inverse
+	ray->n = normalize_vec4(mat_apply(normal_matrix, normal));
 }
 
 /*******************************************************************************

@@ -12,16 +12,6 @@
 
 #include "../../include/get_next_line_bonus.h"
 
-int	ft_strnlen(const char *str, int c)
-{
-	char	*start;
-
-	start = (char *)str;
-	while (*str && *str != c)
-		str++;
-	return (str - start);
-}
-
 void	gnl_clear_buffer(int fd)
 {
 	char *line;

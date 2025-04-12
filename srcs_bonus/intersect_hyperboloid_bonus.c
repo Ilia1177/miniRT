@@ -54,13 +54,13 @@ int intersect_hyperboloid(t_ray *ray, t_object *hy, float *t)
 	if (!solve_quadratic(&eq))
 		return (0);
     if (eq.t[0] > 0.001f)
-		if (fabs(o.z + eq.t[0] * d.z) <= s.z)
+		if (fabs(o.z + eq.t[0] * d.z) <= 0.5f)
 			*t = eq.t[0];
 	if (eq.t[1] > 0.001f && eq.t[1] < *t)
-		if (fabs(o.z + eq.t[1] * d.z) <= s.z)
+		if (fabs(o.z + eq.t[1] * d.z) <= 0.5f)
 			*t = eq.t[1];
-	check_hyper_cap(-s.z, o, d, s, t);
-	check_hyper_cap(s.z, o, d, s, t);
+	check_hyper_cap(-0.5f, o, d, s, t);
+	check_hyper_cap(0.5f, o, d, s, t);
 	if (*t == T_MAX)
 		return (0);
 	return (1);

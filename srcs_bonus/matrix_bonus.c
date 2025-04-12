@@ -157,18 +157,6 @@ static float mat_determinant(t_mat4 m)
     return (det);
 }
 
-//	static float cofactor(t_mat4 m)
-//	{
-//		t_vec4 cofact;
-//    cofact.x =  m.j.y*(m.k.z*m.p.w - m.k.w*m.p.z) - m.j.z*(m.k.y*m.p.w - m.k.w*m.p.y) + m.j.w*(m.k.y*m.p.z - m.k.z*m.p.y);
-//    cofact.y = -m.i.y*(m.k.z*m.p.w - m.k.w*m.p.z) + m.i.z*(m.k.y*m.p.w - m.k.w*m.p.y) - m.i.w*(m.k.y*m.p.z - m.k.z*m.p.y);
-//    cofact.z =  m.i.y*(m.j.z*m.p.w - m.j.w*m.p.z) - m.i.z*(m.j.y*m.p.w - m.j.w*m.p.y) + m.i.w*(m.j.y*m.p.z - m.j.z*m.p.y);
-//    cofact.w = -m.i.y*(m.j.z*m.k.w - m.j.w*m.k.z) + m.i.z*(m.j.y*m.k.w - m.j.w*m.k.y) - m.i.w*(m.j.y*m.k.z - m.j.z*m.k.y);
-
-//		(void)m;
-//		cofact = 0;
-//		return (cofact);
-//	}
 static t_mat4 adjugate(t_mat4 m)
 {
     t_mat4 adj;
@@ -203,7 +191,7 @@ static t_mat4 adjugate(t_mat4 m)
 
 t_mat4 mat_inverse(t_mat4 m)
 {
-    float det = mat_determinant(m);
+    const float det = mat_determinant(m);
     if (det < EPSILON)
 	{
         ft_printf("Matrix is not invertible\n");
@@ -211,28 +199,23 @@ t_mat4 mat_inverse(t_mat4 m)
     }
     t_mat4 adj = adjugate(m);
     float inv_det = 1.0f / det;
-
     t_mat4 inv;
     inv.i.x = adj.i.x * inv_det;
     inv.i.y = adj.i.y * inv_det;
     inv.i.z = adj.i.z * inv_det;
     inv.i.w = adj.i.w * inv_det;
-
     inv.j.x = adj.j.x * inv_det;
     inv.j.y = adj.j.y * inv_det;
     inv.j.z = adj.j.z * inv_det;
     inv.j.w = adj.j.w * inv_det;
-
     inv.k.x = adj.k.x * inv_det;
     inv.k.y = adj.k.y * inv_det;
     inv.k.z = adj.k.z * inv_det;
     inv.k.w = adj.k.w * inv_det;
-
     inv.p.x = adj.p.x * inv_det;
     inv.p.y = adj.p.y * inv_det;
     inv.p.z = adj.p.z * inv_det;
     inv.p.w = adj.p.w * inv_det;
-
     return inv;
 }
 t_mat4 mat_inverse2(t_mat4 m)

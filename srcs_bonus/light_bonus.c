@@ -88,7 +88,7 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 			}
 			else if (light->type == DIRECTIONAL)
 			{
-				ray->d = light->dir;
+				ray->d = light->pos;
 				dist = T_MAX;
 			}
 			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))

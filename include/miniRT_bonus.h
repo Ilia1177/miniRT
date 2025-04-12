@@ -11,6 +11,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <pthread.h>
 
 # define T_MAX 1600
 # define HEIGHT 800
@@ -341,9 +342,9 @@ int	get_options(char **line, t_object *obj);
 int	make_object(t_object data, t_object **objects);
 //init.c
 
-int		rt_scene_tozero(t_data *scene);
-void	mlx_tozero(t_data *scene);
-int		rt_init(t_data *scene);
+//int		rt_scene_tozero(t_data *scene);
+//void	mlx_tozero(t_data *scene);
+int		rt_init(t_data *scene, int ac, char **av);
 
 //lst_sphere.c
 int	create_sphere(char **line, t_data *scene);
