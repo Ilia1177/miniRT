@@ -71,8 +71,9 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 	t_argb		lumen;
 	t_light		*light;
 	float		dist;
+	float		lim[2];
 
-	(void)obj;
+	lim[0] = EPSILON;
 	lumen = (t_argb) {0, 0, 0, 0};
 	light = scene->lights;
 	while (light)
@@ -84,14 +85,14 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 			if (light->type == POINT)
 			{
 				ray->d = normalize_vec4(sub_vec4(light->pos, ray->o));
-				dist = dist_vec4(ray->o, light->pos);
+				lim[1] = dist_vec4(ray->o, light->pos);
 			}
 			else if (light->type == DIRECTIONAL)
 			{
 				ray->d = light->pos;
-				dist = T_MAX;
+				lim[1] = T_MAX;
 			}
-			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))
+			if (!closest_intersect(ray, 1, lim, scene->objects))
 				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}
 		light = light->next;

@@ -39,7 +39,7 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 }
 
 // throw ray for every point of the canvas
-void	display_color(t_data *scene)
+void	display_coloriSAVE(t_data *scene)
 {
 	t_ray			ray;
 	t_argb			color;
@@ -47,20 +47,23 @@ void	display_color(t_data *scene)
 	t_canvas		cnv;
 	t_vec2			pix;
 	const char		res = scene->res;
+	float			t_lim[2];
 
 	ft_bzero(&ray, sizeof(t_ray));
 	vp = scene->viewport;
 	cnv = scene->cnv;
-	cnv.loc.x = -cnv.w / 2;
-	while (cnv.loc.x < cnv.w / 2)
+	t_lim[0] = 1.0f;
+	t_lim[1] = T_MAX;
+	cnv.loc.x = (-cnv.w / 2);
+	while (cnv.loc.x < (cnv.w / 2))
 	{
 		cnv.loc.y = -cnv.h / 2;
-		while (cnv.loc.y < cnv.h / 2)
+		while (cnv.loc.y < (cnv.h / 2))
 		{
 			ray.o = scene->cam.t_m.p;
 			ray.d = throught_vp(cnv, vp);
 			ray.d = normalize_vec4(mat_apply(scene->cam.t_m, ray.d));
-			color = throw_ray(&ray, 1.0f, T_MAX, R_LIMIT, scene);
+			color = throw_ray(&ray, t_lim, R_LIMIT, scene);
 			pix = cnv_to_screen(cnv);
 			color_screen(&scene->img, pix.x, pix.y, res, color);
 			cnv.loc.y += res;
@@ -68,4 +71,41 @@ void	display_color(t_data *scene)
 		cnv.loc.x += res;
 	}
 }
+//
+// throw ray for every point of the canvas
+void	display_color(t_data *scene, t_slave *slave)
+{
+	t_ray			ray; //[THREAD_NB];
+	t_argb			color;
+	t_viewport		vp;
+	t_canvas		cnv;
+	t_vec2			pix;
+	const char		res = scene->res;
+	float			*lim;
 
+	lim = slave->lim;
+	ray = slave->ray;
+	ft_bzero(&ray, sizeof(t_ray));
+	vp = slave->vp;
+	cnv = slave->cnv;
+	lim[0] = 1.0f;
+	lim[1] = T_MAX;
+	lim[2] = R_LIMIT;
+
+	cnv.loc.x = (-cnv.w / 2) + ((slave->id-1) * (cnv.w / THREAD_NB));
+	while (cnv.loc.x < (slave->id) * (cnv.w / THREAD_NB) )
+	{
+		cnv.loc.y = -cnv.h / 2;
+		while (cnv.loc.y < (cnv.h / 2))
+		{
+			ray.o = scene->cam.t_m.p;
+			ray.d = throught_vp(cnv, vp);
+			ray.d = normalize_vec4(mat_apply(scene->cam.t_m, ray.d));
+			color = throw_ray(&ray, lim, R_LIMIT, scene);
+			pix = cnv_to_screen(cnv);
+			color_screen(&scene->img, pix.x, pix.y, res, color);
+			cnv.loc.y += res;
+		}
+		cnv.loc.x += res;
+	}
+}

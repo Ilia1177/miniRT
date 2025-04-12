@@ -28,6 +28,17 @@ static void	ray_update(t_ray *ray, t_object *obj)
 		ray->n = mult_vec4(ray->n, -1);	
 }
 
+t_argb	get_reflected_color(t_ray *ray, float *lim, int r, t_data *scene)
+{
+	t_argb reflected_color;
+
+	ft_bzero(&reflected_color, sizeof(reflected_color));
+	ray_reflect(ray);
+	lim[0] = EPSILON;
+	reflected_color = throw_ray(ray, lim, r - 1, scene);
+	return (reflected_color);
+}
+
 /*******************************************************************************
 * 1) find intersection between ray and object
 * 1.2. Compute t (distance on the rat->d);
@@ -37,16 +48,17 @@ static void	ray_update(t_ray *ray, t_object *obj)
 * 5) return color if no reflective or recursive <= 0
 * 6) reflect ray and throw new ray to get reflections
 *******************************************************************************/
-t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
+//t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
+t_argb	throw_ray(t_ray *ray, float *t_lim, int rec, t_data *scene)
 {
 	t_object	*obj;
-	t_argb		reflected_color;
 	t_argb		local_color;
+	t_argb		reflected_color;
 	t_argb		lumen;
 
-	(void)rec;
-	local_color = (t_argb) {0, 0, 0, 0};
-	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
+
+	ft_bzero(&local_color, sizeof(local_color));
+	obj = closest_intersect(ray, 0, t_lim, scene->objects);
 	if (obj == NULL)
 		return (local_color);
 	ray_update(ray, obj);
@@ -54,8 +66,9 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	local_color = mult_colors(pattern_color(ray, obj, scene), lumen);
 	if (rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
-	ray_reflect(ray);
-	reflected_color = throw_ray(ray, EPSILON, t_max, rec - 1, scene);
+
+	reflected_color = get_reflected_color(ray, t_lim, rec, scene);
+//	transparency_color = get_transparency_color(ray, t_lim, rec, scene);
 	local_color = mult_colors(local_color, ease_color(obj->reflect, 255));
 	reflected_color = mult_colors(reflected_color, obj->reflect);
 	return (add_colors(local_color, reflected_color));

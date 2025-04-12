@@ -32,9 +32,11 @@ void	free_data(t_data *scene)
 	free_objects(&scene->objects);
 }
 
+
 int	rt_shut_down(t_data *scene)
 {
 	printf("RT SHUT DOWN\n");
+	
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)

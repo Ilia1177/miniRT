@@ -13,6 +13,7 @@
 # include <fcntl.h>
 # include <pthread.h>
 
+# define THREAD_NB 4
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800
@@ -173,6 +174,18 @@ typedef struct	s_object
 	t_type			type;
 }	t_object;
 
+typedef struct	s_slave
+{
+	float		lim[3];
+	t_viewport	vp;
+	t_canvas	cnv;
+	t_ray		ray;
+	pthread_t	itself;
+	int			id;
+	int			quit;
+	void		*sceneref;
+}	t_slave;
+
 typedef struct	s_data
 {
 	void		*mlx;
@@ -180,6 +193,8 @@ typedef struct	s_data
 	char		*map_name;
 	char		rend;
 	char		res;
+	t_slave		slave[THREAD_NB];
+	pthread_t	master;
 //	float		intersec_p[2];
 	t_img		img;
 	//t_img		earth;
@@ -194,6 +209,7 @@ typedef struct	s_data
 	int			mouse_state;
 	char		key_state[99999];
 }				t_data;
+
 
 //camera move
 //
@@ -240,12 +256,12 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 //canvas.c
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
-void		display_color(t_data *scene);
+void		display_color(t_data *scene, t_slave *slave);
 t_vec2		cnv_to_screen(t_canvas cnv);
 
 //ray
-t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
-t_object		*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj);
+t_argb			throw_ray(t_ray *ray, float *t_lim, int rec, t_data *scene);
+t_object		*closest_intersect(t_ray *ray, int shadow, float *t_lim, t_object *obj);
 int				solve_quadratic(t_quad *quad);
 int				solve_gen_quad(t_quad *quad);
 

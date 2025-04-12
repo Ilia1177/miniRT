@@ -82,6 +82,7 @@ t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz)
 	r.k = normalize_vec4((t_vec4){0, -sin(tx), cos(tx), 0});
 	r.i = normalize_vec4((t_vec4){1, 0, 0, 0});
 	*m = mat_compose(*m, r);
+	//rotate by inverse ?? to DELETE TRANSLATION !!
 	r.i = normalize_vec4((t_vec4){cos(ty), 0, -sin(ty), 0});
 	r.k = normalize_vec4((t_vec4){sin(ty), 0, cos(ty), 0});
 	r.j = normalize_vec4((t_vec4){0, 1, 0, 0});

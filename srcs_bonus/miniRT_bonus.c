@@ -1,38 +1,68 @@
 #include <miniRT_bonus.h>
 
-void *draw_start(void *scene)
+void *draw_start(void *slv)
 {
+	t_slave *slave;
+	t_data	*scene;
+
+	slave = (t_slave *)slv;
+	scene = slave->sceneref;
+	mlx_loop(scene->mlx);
 	return NULL;
 }
+
 void	rt_thread_quit(t_data *scene)
 {
 	return ;
 }
 
-int	rt_thread_start(t_data *scn)
+int	rt_render(t_slave *slave)
 {
-	pthread_t	master;
-	pthread_t	slave[4];
-	t_data		*scene;
+	t_data *scene;
 
-	scene = scn;
-	if (pthread_create(&master, NULL, draw_start, scn))
-	{
-		rt_thread_quit(scene);
-		return (1);
-	}
-	pthread_join(master, NULL);
-	return (0);
-}
-
-
-int	rt_render(t_data *scene)
-{
+	scene = slave->sceneref;
 	handle_input(scene);
-	display_color(scene);
+	display_color(scene, slave);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	return (0);
 }
+t_slave	slave_init(t_data *scene, int i)
+{
+	t_slave new;
+
+	new.cnv = scene->cnv;
+	new.vp = scene->viewport;
+	new.sceneref = (t_data *)scene;
+	new.id = i + 1;
+	return (new);
+}
+
+int	rt_thread_start(t_data *scn)
+{
+	pthread_t	master;
+	t_data		*scene;
+	int	i;
+
+	scene = scn;
+	i = 0;
+	while (i < THREAD_NB)
+	{
+		scene->slave[i] = slave_init(scene, i);
+		if (pthread_create(&scene->slave[i].itself, NULL, draw_start, &scene->slave[i]))
+		{
+			rt_thread_quit(scene);
+			return (1);
+		}
+		i++;
+	}
+	i = -1;
+	while (++i < THREAD_NB)
+		pthread_join(scene->slave[i].itself, NULL);
+	return (0);
+}
+
+
+
 
 int	display_scene(t_data *scene)
 {
@@ -42,9 +72,9 @@ int	display_scene(t_data *scene)
 	mlx_hook(scene->win, 4, 1L << 2, &mouse_press, scene);
 	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
 	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
-	mlx_loop_hook(scene->mlx, &rt_render, scene);
-	//rt_thread_start(scene);
-	mlx_loop(scene->mlx);
+	mlx_loop_hook(scene->mlx, &rt_render, scene->slave);
+	rt_thread_start(scene);
+//	mlx_loop(scene->mlx);
 	return (0);
 }
 
@@ -61,7 +91,7 @@ int	main(int ac, char **av)
 	else if (ac == 3)
 	{
 		scene.res = 1;
-		display_color(&scene);
+		display_color(&scene, NULL);
 		save_as_ppm(&scene.img, av[2]);
 		rt_shut_down(&scene);
 	}

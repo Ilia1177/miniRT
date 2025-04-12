@@ -1,13 +1,13 @@
 #include <miniRT_bonus.h>
 
-t_object	*closest_intersect(t_ray *ray, int shw, float t_min, float t_max, t_object *obj)
+t_object	*closest_intersect(t_ray *ray, int shw, float *lim, t_object *obj)
 {
 	t_object	*closest_obj;
 	float		closest_t;
 	float		curr_t;
 
-	closest_t = t_max;
-	curr_t = t_max;
+	closest_t = INFINITY;
+	curr_t = INFINITY;
 	closest_obj = NULL;
 	if (ray->v.w < 0.0f)
 		printf("CLOSEST INTERECTION:\n");
@@ -15,9 +15,9 @@ t_object	*closest_intersect(t_ray *ray, int shw, float t_min, float t_max, t_obj
 	{
 		if (intersect_object(ray, obj, &curr_t))
 		{
-			if (shw && curr_t >= t_min && curr_t < t_max)
+			if (shw && curr_t >= lim[0] && curr_t < lim[1])
 				return (obj);
-			if (curr_t < closest_t && curr_t >= t_min && curr_t < t_max)
+			if (curr_t < closest_t && curr_t >= lim[0] && curr_t < lim[1])
 			{
 				if (ray->v.w < 0.0f)
 				{
