@@ -211,17 +211,17 @@ typedef struct	s_data
 }				t_data;
 
 
-//camera move
+//thread
 //
+
+//camera move
 void	rotate_y(t_camera *cam, float theta);
 void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 
 t_mat4	mat_scale(t_mat4 *m, float sx, float sy, float sz);
-//
-
 t_mat4	mat_orthogonal(t_vec4 dir);
-t_mat4 mat_transpose_inverse(t_mat4 mat);
+t_mat4	mat_transpose_inverse(t_mat4 mat);
 t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz);
 t_mat4	mat_translate(t_mat4 *m, float dx, float dy, float dz);
 t_vec4	mat_apply(t_mat4 mat, t_vec4 v);

@@ -70,7 +70,7 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 {
 	t_argb		lumen;
 	t_light		*light;
-	float		dist;
+	//float		dist;
 	float		lim[2];
 
 	lim[0] = EPSILON;

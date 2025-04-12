@@ -183,7 +183,6 @@ int	build_scene(t_data *scene)
 	line = get_next_line(map);
 	while (!status && line)
 	{
-	printf("line: %s\n", line, status);
 		status = register_line_into_scene(line, scene, status);
 		free(line);
 		line = get_next_line(map);

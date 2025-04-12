@@ -7,12 +7,14 @@ void *draw_start(void *slv)
 
 	slave = (t_slave *)slv;
 	scene = slave->sceneref;
-	mlx_loop(scene->mlx);
+	display_color(scene, slave);
+	//mlx_loop(scene->mlx);
 	return NULL;
 }
 
 void	rt_thread_quit(t_data *scene)
 {
+	(void)scene;
 	return ;
 }
 
@@ -22,11 +24,11 @@ int	rt_render(t_slave *slave)
 
 	scene = slave->sceneref;
 	handle_input(scene);
-	display_color(scene, slave);
+	//display_color(scene, slave);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	return (0);
 }
-t_slave	slave_init(t_data *scene, int i)
+t_slave	th_painter_init(t_data *scene, int i)
 {
 	t_slave new;
 
@@ -36,18 +38,23 @@ t_slave	slave_init(t_data *scene, int i)
 	new.id = i + 1;
 	return (new);
 }
-
-int	rt_thread_start(t_data *scn)
+int th_painter_wait(t_data *scene)
 {
-	pthread_t	master;
-	t_data		*scene;
 	int	i;
 
-	scene = scn;
+	i = -1;
+	while (++i < THREAD_NB)
+		pthread_join(scene->slave[i].itself, NULL);
+	return (0);
+}
+int	th_painter_start(t_data *scene)
+{
+	int	i;
+
 	i = 0;
 	while (i < THREAD_NB)
 	{
-		scene->slave[i] = slave_init(scene, i);
+		scene->slave[i] = th_painter_init(scene, i);
 		if (pthread_create(&scene->slave[i].itself, NULL, draw_start, &scene->slave[i]))
 		{
 			rt_thread_quit(scene);
@@ -55,9 +62,6 @@ int	rt_thread_start(t_data *scn)
 		}
 		i++;
 	}
-	i = -1;
-	while (++i < THREAD_NB)
-		pthread_join(scene->slave[i].itself, NULL);
 	return (0);
 }
 
@@ -73,8 +77,8 @@ int	display_scene(t_data *scene)
 	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
 	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
 	mlx_loop_hook(scene->mlx, &rt_render, scene->slave);
-	rt_thread_start(scene);
-//	mlx_loop(scene->mlx);
+	th_painter_start(scene);
+	mlx_loop(scene->mlx);
 	return (0);
 }
 
