@@ -25,6 +25,8 @@ int	rt_scene_init(t_data *scene, int ac, char **av)
 	scene->is_printing = 1;
 	scene->print = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	scene->speak = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+	scene->painter_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+	scene->master_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;

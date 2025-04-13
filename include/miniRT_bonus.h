@@ -15,7 +15,7 @@
 # include <stdatomic.h>
 # include <semaphore.h>
 //#include <atomic.h>
-# define THREAD_NB 8 
+# define THREAD_NB 16 
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800
@@ -195,8 +195,11 @@ typedef struct	s_data
 {
 	pthread_mutex_t print;
 	pthread_mutex_t speak;
+	pthread_cond_t	painter_rest;
+	pthread_cond_t	master_rest;
 
-
+	int			processing;
+	int			at_rest;
 	sem_t		*brushes;
 	int			painting;
 	int			painter_ready;

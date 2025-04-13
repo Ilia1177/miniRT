@@ -36,7 +36,12 @@ void	free_data(t_data *scene)
 int	rt_shut_down(t_data *scene)
 {
 	printf("RT SHUT DOWN with status: %d\n", scene->status);
+	
+	pthread_mutex_lock(&scene->print);
 	th_painter_kill(scene);
+	scene->processing = 0;
+    pthread_cond_broadcast(&scene->painter_rest);
+    pthread_mutex_unlock(&scene->print);
 	th_painter_wait(scene);
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);

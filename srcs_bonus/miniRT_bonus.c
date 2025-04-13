@@ -24,29 +24,39 @@ int	all_ready(t_painter *painter)
 	}
 	return (1);
 }
-int	rt_render(t_data *scene)
+int	rt_render2(t_data *scene)
 {
-	int	i;
-
-	while (!all_ready(scene->painter))
-		;
 	pthread_mutex_lock(&scene->print);
-	scene->is_printing = 1;
+    while (scene->at_rest < THREAD_NB)
+        pthread_cond_wait(&scene->master_rest, &scene->print);
+	scene->at_rest = 0;//?
 	pthread_mutex_unlock(&scene->print);
 
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-	handle_input(scene);	
-	i = -1;
-	while (++i < THREAD_NB)
-	{
-		pthread_mutex_lock(&scene->painter[i].brush);
-		scene->painter[i].ready = 0;
-		pthread_mutex_unlock(&scene->painter[i].brush);
-	}
-	pthread_mutex_lock(&scene->print);
-	scene->is_printing = 0;
-	pthread_mutex_unlock(&scene->print);
+	handle_input(scene);
+
+    pthread_mutex_lock(&scene->print);
+    pthread_cond_broadcast(&scene->painter_rest);
+    pthread_mutex_unlock(&scene->print);
 	return (0);
+}
+/* Master Render Loop (called via mlx_loop) */
+int rt_render(t_data *scene)
+{
+    pthread_mutex_lock(&scene->print);
+    
+    // Wait for all painters to finish
+    while (scene->at_rest < THREAD_NB) {
+        pthread_cond_wait(&scene->master_rest, &scene->print);
+    }
+    
+	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+	handle_input(scene);
+
+	scene->at_rest = 0;
+    pthread_cond_broadcast(&scene->painter_rest);
+    pthread_mutex_unlock(&scene->print);
+    return 0;
 }
 
 int	display_scene(t_data *scene)

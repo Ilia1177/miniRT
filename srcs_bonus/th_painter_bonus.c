@@ -39,24 +39,42 @@ int	is_printing(t_data *scene)
 	return (0);	
 }
 
-int	all_ready(t_painter *painter);
 void	*th_painter_draw(void *worker)
 {
 	t_painter *painter;
 	t_data	*scene;
+	int	rest;
 
+	rest = 0;
 	painter = (t_painter *)worker;
 	scene = painter->sceneref;
-	while (!painter->done)
+	scene->processing = 1;
+	while (1)
 	{
+		pthread_mutex_lock(&scene->print);
+		if (!scene->processing)
+		{
+			pthread_mutex_unlock(&scene->print);
+			break ;
+		}
+		pthread_mutex_unlock(&scene->print);
+
+		//printf("is painting\n");
 		display_color(scene, painter);
 
-		pthread_mutex_lock(&painter->brush);
-		painter->ready = 1;
-		pthread_mutex_unlock(&painter->brush);
-		while (is_printing(scene))
-			;
+
+        pthread_mutex_lock(&scene->print); // lock
+		scene->at_rest++;
+		//printf("at rest: %d\n", scene->at_rest);
+		if (scene->at_rest == THREAD_NB)
+			pthread_cond_signal(&scene->master_rest);
+
+		//printf("is done: %d\n", painter->done);
+		while (scene->processing && scene->at_rest)
+			pthread_cond_wait(&scene->painter_rest, &scene->print); // wait
+		pthread_mutex_unlock(&scene->print);
 	}
+
 	return NULL;
 }
 
@@ -99,9 +117,14 @@ int th_painter_wait(t_data *scene)
 {
 	int	i;
 
+	printf("wait for thread to finish\n");
 	i = -1;
 	while (++i < THREAD_NB)
+	{
 		pthread_join(scene->painter[i].itself, NULL);
+		printf("Painter %d gone", scene->painter[i].id);
+	}
+	printf("All painters are gone (bye bye)\n");
 	return (0);
 }
 int	th_painter_start(t_data *scene)
