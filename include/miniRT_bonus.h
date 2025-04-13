@@ -16,7 +16,7 @@
 //# include <semaphore.h>
 # include <sys/time.h>
 //#include <atomic.h>
-# define THREAD_NB 16 
+# define THREAD_NB 8 
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800
