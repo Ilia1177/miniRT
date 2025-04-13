@@ -48,5 +48,5 @@ int	rt_shut_down(t_data *scene)
 		free(scene->mlx);
 	}
 	free_data(scene);
-	exit(scene->status);
+	pthread_exit(0);
 }

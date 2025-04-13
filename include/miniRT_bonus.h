@@ -13,8 +13,9 @@
 # include <fcntl.h>
 # include <pthread.h>
 # include <stdatomic.h>
+# include <semaphore.h>
 //#include <atomic.h>
-# define THREAD_NB 4
+# define THREAD_NB 1
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800
@@ -179,7 +180,8 @@ typedef struct	s_painter
 {
 	float		lim[3];
 	
-
+	pthread_mutex_t	brush;
+	int			ready;
 	t_viewport	vp;
 	t_canvas	cnv;
 	t_ray		ray;
@@ -191,7 +193,16 @@ typedef struct	s_painter
 
 typedef struct	s_data
 {
-	pthread_mutex_t brush;
+	pthread_mutex_t print;
+	pthread_mutex_t speak;
+
+
+	sem_t		*brushes;
+	int			painting;
+	int			painter_ready;
+	int			painter_at_rest;
+	int			is_painting;	
+	int			is_printing;	
 	int			status;
 	//int			brush;
 	void		*mlx;
@@ -200,7 +211,7 @@ typedef struct	s_data
 	char		rend;
 	char		res;
 	t_painter		painter[THREAD_NB];
-	pthread_t	master;
+	pthread_t	listener;
 //	float		intersec_p[2];
 	t_img		img;
 	//t_img		earth;
@@ -218,6 +229,7 @@ typedef struct	s_data
 
 
 //thread
+int			th_listener_start(t_data *scene);
 int			th_painter_start(t_data *scene);
 int			th_painter_wait(t_data *scene);
 t_painter	th_painter_init(t_data *scene, int i);

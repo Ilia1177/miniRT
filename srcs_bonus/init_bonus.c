@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/12 18:51:10 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/13 02:17:09 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,16 @@ int	rt_scene_init(t_data *scene, int ac, char **av)
 	else if (ac > 1)
 		scene->map_name = av[1];
 	scene->res = 5;
-	scene->brush = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
+	scene->is_printing = 1;
+	scene->print = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+	scene->speak = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.h = 1;
-	scene->viewport.w = 1; 
+	scene->viewport.w = 1;
+	scene->is_painting = 1;
 	i = -1;
 	while (++i < 99999)
 		scene->key_state[i] = 0;
@@ -42,12 +45,12 @@ int	rt_init(t_data *scene, int ac, char **av)
 	t_img	*img;
 	int		status;
 
-	if (rt_scene_init(scene, ac, av))
-		return (12);
 	status = 0;
+	status = rt_scene_init(scene, ac, av);
 	img = &scene->img;
-	scene->mlx = mlx_init();
-	if (!scene->mlx)
+	if (!status)
+		scene->mlx = mlx_init();
+	if (!scene->mlx && !status)
 		status = -1;
 	else if (!status)
 		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Ray_tracing");
