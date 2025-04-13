@@ -1,6 +1,6 @@
 #include <miniRT_bonus.h>
 
-void	*th_listen(void *sceneref)
+void	*th_mastering(void *sceneref)
 {
 	t_data *scene;
 
@@ -9,46 +9,26 @@ void	*th_listen(void *sceneref)
 	return (NULL);
 }
 
-int	th_listener_start(t_data *scene)
+int	th_master_start(t_data *scene)
 {
-	pthread_t	listener;
+	pthread_t	master;
 	
-	if (pthread_create(&listener, NULL, &th_listen, scene))
+	if (pthread_create(&master, NULL, &th_mastering, scene))
 	{
-		perror("thread start:");
-		rt_shut_down(scene);
+		perror("master start:");
 		return (1);
 	}
-	pthread_join(listener, NULL);
+	pthread_join(master, NULL);
 	return (0);
-}
-
-void	speak(t_data *scene, char *msg);
-int	is_printing(t_data *scene)
-{
-	int i;
-
-	i = -1;
-	pthread_mutex_lock(&scene->print);
-	if (scene->is_printing == 1)
-	{
-		pthread_mutex_unlock(&scene->print);
-		return (1);
-	}
-	pthread_mutex_unlock(&scene->print);
-	return (0);	
 }
 
 void	*th_painter_draw(void *worker)
 {
 	t_painter *painter;
 	t_data	*scene;
-	int	rest;
 
-	rest = 0;
 	painter = (t_painter *)worker;
 	scene = painter->sceneref;
-	scene->processing = 1;
 	while (1)
 	{
 		pthread_mutex_lock(&scene->print);

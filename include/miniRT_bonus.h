@@ -12,8 +12,9 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <pthread.h>
-# include <stdatomic.h>
-# include <semaphore.h>
+//# include <stdatomic.h>
+//# include <semaphore.h>
+# include <sys/time.h>
 //#include <atomic.h>
 # define THREAD_NB 16 
 # define T_MAX 1600
@@ -194,20 +195,12 @@ typedef struct	s_painter
 typedef struct	s_data
 {
 	pthread_mutex_t print;
-	pthread_mutex_t speak;
 	pthread_cond_t	painter_rest;
 	pthread_cond_t	master_rest;
 
 	int			processing;
 	int			at_rest;
-	sem_t		*brushes;
-	int			painting;
-	int			painter_ready;
-	int			painter_at_rest;
-	int			is_painting;	
-	int			is_printing;	
 	int			status;
-	//int			brush;
 	void		*mlx;
 	void		*win;
 	char		*map_name;
@@ -232,7 +225,7 @@ typedef struct	s_data
 
 
 //thread
-int			th_listener_start(t_data *scene);
+int			th_master_start(t_data *scene);
 int			th_painter_start(t_data *scene);
 int			th_painter_wait(t_data *scene);
 t_painter	th_painter_init(t_data *scene, int i);

@@ -1,61 +1,37 @@
 #include <miniRT_bonus.h>
 
-void	speak(t_data *scene, char *msg)
+long long	time_from(struct timeval *last)
 {
-	pthread_mutex_lock(&scene->speak);
-	printf("%s\n", msg);
-	pthread_mutex_unlock(&scene->speak);
+	struct timeval	current_time;
+	long long		sec;
+	long long		usec;
+
+	gettimeofday(&current_time, NULL);
+	sec = current_time.tv_sec - last->tv_sec;
+	usec = current_time.tv_usec - last->tv_usec;
+	return ((sec * 1000000LL) + (usec));
 }
 
-int	all_ready(t_painter *painter)
-{
-	int	i;
-
-	i = -1;
-	while (++i < THREAD_NB)
-	{
-		pthread_mutex_lock(&painter[i].brush);
-		if (painter[i].ready == 0)
-		{
-			pthread_mutex_unlock(&painter[i].brush);
-			return (0);
-		}
-		pthread_mutex_unlock(&painter[i].brush);
-	}
-	return (1);
-}
-int	rt_render2(t_data *scene)
-{
-	pthread_mutex_lock(&scene->print);
-    while (scene->at_rest < THREAD_NB)
-        pthread_cond_wait(&scene->master_rest, &scene->print);
-	scene->at_rest = 0;//?
-	pthread_mutex_unlock(&scene->print);
-
-	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-	handle_input(scene);
-
-    pthread_mutex_lock(&scene->print);
-    pthread_cond_broadcast(&scene->painter_rest);
-    pthread_mutex_unlock(&scene->print);
-	return (0);
-}
-/* Master Render Loop (called via mlx_loop) */
 int rt_render(t_data *scene)
 {
+
+	struct timeval last_time;
+
+	gettimeofday(&last_time, NULL);
+//	printf("mastering: wait\n");
     pthread_mutex_lock(&scene->print);
-    
-    // Wait for all painters to finish
     while (scene->at_rest < THREAD_NB) {
         pthread_cond_wait(&scene->master_rest, &scene->print);
     }
-    
+	pthread_mutex_unlock(&scene->print);
+//	printf("mastering: start\n");
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);
-
 	scene->at_rest = 0;
+//	printf("mastering: end / broadcast painters\n");
     pthread_cond_broadcast(&scene->painter_rest);
     pthread_mutex_unlock(&scene->print);
+	printf("TS: %02lld ms\n", time_from(&last_time) / 1000);
     return 0;
 }
 
@@ -70,7 +46,7 @@ int	display_scene(t_data *scene)
 	mlx_loop_hook(scene->mlx, &rt_render, scene);
 	scene->status = th_painter_start(scene);
 	if (!scene->status)
-		th_listener_start(scene);
+		th_master_start(scene);
 	else
 		rt_shut_down(scene);
 	return (0);
