@@ -30,7 +30,7 @@ static void check_hyper_cap(float cap_z, t_vec4 o, t_vec4 d, t_vec4 s, float *t_
     if (fabsf(z - cap_z) > EPSILON)
         return;
     // Check if (x/s.x)^2 + (y/s.y)^2 <= 1 + (cap_z/s.z)^2 (hyperboloid equation at z=cap_z)
-    if ((x * x) / (s.x * s.x) + (y * y) / (s.y * s.y) <= 1.0f + (cap_z * cap_z) / (s.z * s.z) + EPSILON)
+    if ((x * x) / (s.x * s.x) + (y * y) / (s.y * s.y) <= 1.0f + (cap_z * cap_z) / (0.5 * 0.5) + EPSILON)
     {
         if (t < *t_min)
             *t_min = t;

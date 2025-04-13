@@ -1,36 +1,26 @@
 #include <miniRT_bonus.h>
 
-void *draw_start(void *scene)
+long long	time_from(struct timeval *start)
 {
-	return NULL;
-}
-void	rt_thread_quit(t_data *scene)
-{
-	return ;
-}
+	struct timeval	current_time;
+	long long		sec;
+	long long		usec;
 
-int	rt_thread_start(t_data *scn)
-{
-	pthread_t	master;
-	pthread_t	slave[4];
-	t_data		*scene;
-
-	scene = scn;
-	if (pthread_create(&master, NULL, draw_start, scn))
-	{
-		rt_thread_quit(scene);
-		return (1);
-	}
-	pthread_join(master, NULL);
-	return (0);
+	gettimeofday(&current_time, NULL);
+	sec = current_time.tv_sec - start->tv_sec;
+	usec = current_time.tv_usec - start->tv_usec;
+	return ((sec * 1000000LL) + (usec));
 }
-
 
 int	rt_render(t_data *scene)
 {
+	struct timeval	last_time;
+
+	gettimeofday(&last_time, NULL);
 	handle_input(scene);
 	display_color(scene);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+	printf("TS: %02lld ms\n", time_from(&last_time) / 1000);
 	return (0);
 }
 
@@ -43,7 +33,6 @@ int	display_scene(t_data *scene)
 	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
 	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
 	mlx_loop_hook(scene->mlx, &rt_render, scene);
-	//rt_thread_start(scene);
 	mlx_loop(scene->mlx);
 	return (0);
 }

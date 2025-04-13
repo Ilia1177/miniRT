@@ -12,10 +12,11 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 # define T_MAX 1600
-# define HEIGHT 800
-# define WIDTH 800
+# define HEIGHT 1600
+# define WIDTH 1600
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
@@ -290,6 +291,7 @@ t_argb			diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
 t_argb			reflections(t_ray *ray, t_argb intensity, int spec);
 
 //vector_math.c
+t_vec4	random_vec4(float magnitude);
 t_vec4	cross_vec4(t_vec4 a, t_vec4 b);
 float	dot_vec4(t_vec4 a, t_vec4 b);
 float	dot_vec3(t_vec4 a, t_vec4 b);
