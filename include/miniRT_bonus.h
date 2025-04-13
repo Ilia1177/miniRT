@@ -15,7 +15,7 @@
 # include <stdatomic.h>
 # include <semaphore.h>
 //#include <atomic.h>
-# define THREAD_NB 1
+# define THREAD_NB 8 
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800

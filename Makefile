@@ -15,7 +15,7 @@ ifeq ($(shell uname), Linux)
 	INCLUDES = -I/usr/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
-	CFLAGS = -g #-Wall -Wextra -Werror -g #-fsanitize=address
+	CFLAGS = -g -pthread -fsanitize=thread #-Wall -Wextra -Werror -g x#-fsanitize=pthread
 	INCLUDES =  -I./mlx -I./libft/include -I./include# -I/opt/X11/include
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit
 endif

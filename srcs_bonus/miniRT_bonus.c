@@ -34,7 +34,6 @@ int	rt_render(t_data *scene)
 	scene->is_printing = 1;
 	pthread_mutex_unlock(&scene->print);
 
-	speak(scene, "listener is working");
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);	
 	i = -1;
@@ -42,36 +41,11 @@ int	rt_render(t_data *scene)
 	{
 		pthread_mutex_lock(&scene->painter[i].brush);
 		scene->painter[i].ready = 0;
-		speak(scene, "threads back to work");
 		pthread_mutex_unlock(&scene->painter[i].brush);
 	}
-
-	speak(scene, "listener attempt to lock print");
 	pthread_mutex_lock(&scene->print);
-	speak(scene, "not printing anymore");
 	scene->is_printing = 0;
 	pthread_mutex_unlock(&scene->print);
-	//printf("listener is realising\n");
-	//i = -1;
-	//while (++i < THREAD_NB)
-	//	sem_post(scene->print);
-	//usleep(500000);
-//	printf("rendering\n");
-//	pthread_mutex_lock(&scene->mutex);
-//	while (scene->is_painting) {
-//		pthread_cond_wait(&scene->modifyer, &scene->mutex);
-//    }
-//    scene->is_printing = 1;  
-//	pthread_mutex_unlock(&scene->mutex);
-//
-//	printf("listener is printing && updating\n");
-//	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-//	handle_input(scene);
-//
-//	pthread_mutex_lock(&scene->mutex);
-//    scene->is_printing = 0;  
-//	pthread_cond_broadcast(&scene->brush);
-//    pthread_mutex_unlock(&scene->mutex);
 	return (0);
 }
 

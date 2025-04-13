@@ -32,7 +32,6 @@ int	is_printing(t_data *scene)
 	pthread_mutex_lock(&scene->print);
 	if (scene->is_printing == 1)
 	{
-		speak(scene, "is printing");
 		pthread_mutex_unlock(&scene->print);
 		return (1);
 	}
@@ -50,44 +49,13 @@ void	*th_painter_draw(void *worker)
 	scene = painter->sceneref;
 	while (!painter->done)
 	{
-		speak(scene, "thread is painting");
 		display_color(scene, painter);
 
 		pthread_mutex_lock(&painter->brush);
 		painter->ready = 1;
-		speak(scene, "thread is ready");
 		pthread_mutex_unlock(&painter->brush);
-
-
-	//	while (!all_ready(scene->painter))
-	//		;
-		speak(scene, "all thread are ready");
 		while (is_printing(scene))
 			;
-
-	//	if (scene->painter_at_rest == THREAD_NB)
-	//	{
-	//		scene->is_painting = 0;
-	//		pthread_cond_signal(&scene->modifyer);
-	//	}
-	//	printf("thread %d is waiting\n", painter->id);
-	//	while (scene->is_painting)
-	//		pthread_cond_wait(&scene->brush, &scene->mutex);
-	//	pthread_mutex_unlock(&scene->mutex);
-
-
-
-
-//    	scene->painter_ready++;
-//        if (scene->painter_ready < THREAD_NB) {
-//            pthread_cond_wait(&scene->wait_for_others, &scene->mutex);
-//        } else
-//		{
-//            scene->painter_ready = 0;
-//            scene->painter_at_rest = 0;
-//            pthread_cond_broadcast(&scene->wait_for_others);
-//        }
-//		pthread_mutex_unlock(&scene->mutex);
 	}
 	return NULL;
 }
