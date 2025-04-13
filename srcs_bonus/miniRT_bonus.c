@@ -6,6 +6,17 @@ void	speak(t_data *scene, char *msg)
 	printf("%s\n", msg);
 	pthread_mutex_unlock(&scene->speak);
 }
+long long	time_from(struct timeval *last)
+{
+	struct timeval	current_time;
+	long long		sec;
+	long long		usec;
+
+	gettimeofday(&current_time, NULL);
+	sec = current_time.tv_sec - last->tv_sec;
+	usec = current_time.tv_usec - last->tv_usec;
+	return ((sec * 1000000LL) + (usec));
+}
 
 int	all_ready(t_painter *painter)
 {
@@ -27,6 +38,9 @@ int	all_ready(t_painter *painter)
 int	rt_render(t_data *scene)
 {
 	int	i;
+	struct timeval last_time;
+
+	gettimeofday(&last_time, NULL);
 
 	while (!all_ready(scene->painter))
 		;
@@ -46,6 +60,7 @@ int	rt_render(t_data *scene)
 	pthread_mutex_lock(&scene->print);
 	scene->is_printing = 0;
 	pthread_mutex_unlock(&scene->print);
+	printf("TS: %02lld ms\n", time_from(&last_time) / 1000);
 	return (0);
 }
 

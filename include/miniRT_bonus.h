@@ -14,6 +14,7 @@
 # include <pthread.h>
 # include <stdatomic.h>
 # include <semaphore.h>
+# include <sys/time.h>
 //#include <atomic.h>
 # define THREAD_NB 8 
 # define T_MAX 1600
