@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   norm_utils.c                                       :+:      :+:    :+:   */
+/*   ft_normalize_vector.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 11:35:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:35:54 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/04/14 17:54:59 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 17:56:20 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include "../../include/vector.h"
 
-// same as limit_color(t_argb *color) --> in color.c
-void	norm_rgb(t_rgb *c)
+t_vec3	normalize_vec3(t_vec3 vec)
 {
-	c->r = fmin(255, fmax(0, c->r));
-	c->g = fmin(255, fmax(0, c->g));
-	c->b = fmin(255, fmax(0, c->b));
+	t_vec3	result;
+	float	lenght;
+
+	lenght = mag_vec3(vec);
+	result = div_vec3(vec, lenght);
+	return (result);
 }
 
-void	norm_float(float *f, float min, float max)
+t_vec4	normalize_vec4(t_vec4 vec)
 {
-	*f = fmin(max, fmax(min, *f));
-}
+	t_vec4	result;
+	float	lenght;
 
-void	norm_int(int *num, int min, int max)
-{
-	*num = fmin(max, fmax(min, *num));
+	lenght = mag_vec4(vec);
+	result = div_vec4(vec, lenght);
+	result.w = 0;
+	return (result);
 }

@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   norm_utils.c                                       :+:      :+:    :+:   */
+/*   ft_mult_vector.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 11:35:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:35:54 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/04/14 17:51:25 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 17:53:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include "../../include/vector.h"
 
-// same as limit_color(t_argb *color) --> in color.c
-void	norm_rgb(t_rgb *c)
+t_vec4	mult_vec4(t_vec4 vec, float a)
 {
-	c->r = fmin(255, fmax(0, c->r));
-	c->g = fmin(255, fmax(0, c->g));
-	c->b = fmin(255, fmax(0, c->b));
+	t_vec4	result;
+
+	result.x = vec.x * a;
+	result.y = vec.y * a;
+	result.z = vec.z * a;
+	result.w = vec.w;
+	return (result);
 }
 
-void	norm_float(float *f, float min, float max)
+t_vec3	mult_vec3(t_vec3 vec, float a)
 {
-	*f = fmin(max, fmax(min, *f));
-}
+	t_vec3	result;
 
-void	norm_int(int *num, int min, int max)
-{
-	*num = fmin(max, fmax(min, *num));
+	result.x = vec.x * a;
+	result.y = vec.y * a;
+	result.z = vec.z * a;
+	return (result);
 }

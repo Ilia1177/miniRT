@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_fact.c                                          :+:      :+:    :+:   */
+/*   ft_dot_vector.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 12:08:42 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/10 12:08:46 by npolack          ###   ########.fr       */
+/*   Created: 2025/04/14 17:44:38 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 17:45:52 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_fact(int nb)
-{
-	int	result;
+#include "../../include/vector.h"
 
-	if (nb < 0)
-		return (0);
-	else if (nb == 0)
-		return (1);
-	result = nb;
-	if (nb > 1)
-		result = nb * ft_fact(nb - 1);
+float	dot_vec3(t_vec4 a, t_vec4 b)
+{
+	float	result;
+
+	result = a.x * b.x + a.y * b.y + a.z * b.z;
+	return (result);
+}
+
+float	dot_vec4(t_vec4 a, t_vec4 b)
+{
+	float	result;
+
+	result = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	return (result);
 }

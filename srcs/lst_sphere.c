@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_sphere.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 11:24:34 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 11:24:36 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 
 int	make_object(t_object data, t_object **objects)
@@ -40,7 +52,7 @@ int	create_sphere(char **line, t_data *scene)
 
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
-	sphere.axis = (t_vec3){0, 0, 1, 0};
+	sphere.axis = (t_vec4){0, 0, 1, 0};
 	status = str_to_vec3(&str, &sphere.pos);
 	sphere.pos.w = 1;
 	sphere.axis.w = 1;

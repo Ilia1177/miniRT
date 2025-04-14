@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 13:48:26 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 13:48:28 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 
 int	skip_space(char *str)
@@ -19,7 +31,7 @@ int	skip_space(char *str)
 *
 * 
 *****************************************************************************/
-int	str_to_vec3(char **line, t_vec3 *v)
+int	str_to_vec3(char **line, t_vec4 *v)
 {
 	char	*str;
 	char	*end;
@@ -108,7 +120,7 @@ int	str_to_float(char **line, float *num)
 	return (0);
 }
 
-int	str_to_vecdir(char **line, t_vec3 *v)
+int	str_to_vecdir(char **line, t_vec4 *v)
 {
 	char	*str;
 	char	*end;
@@ -128,7 +140,7 @@ int	str_to_vecdir(char **line, t_vec3 *v)
 	if (str == end)
 		return (-2);
 	norm_float(&v->z, -1.0f, 1.0f);
-	*v = normalize_vec3(*v);
+	*v = normalize_vec4(*v);
 	*line = end;
 	return (0);
 }

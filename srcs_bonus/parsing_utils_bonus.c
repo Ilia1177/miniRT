@@ -48,8 +48,8 @@ int	str_to_vec4(char **line, t_vec4 *v, float w)
 	char	*str;
 	char	*end;
 
-	end = str;
 	str = *line;
+	end = str;
 	if (get_random_vec4(line, v, w))
 		return (0);
 	v->x = ft_strtof(str, &end);
