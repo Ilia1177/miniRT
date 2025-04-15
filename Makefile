@@ -45,6 +45,8 @@ SRCS = 	miniRT\
 		norm_utils\
 		normal\
 		parsing_utils\
+		parsing_utils_2\
+		print\
 		ray\
 		rotation_object\
 		dl_img\
