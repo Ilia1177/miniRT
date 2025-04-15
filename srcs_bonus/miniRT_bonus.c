@@ -56,6 +56,7 @@ int	main(int ac, char **av)
 {
 	int status;
 	t_data	scene;
+	t_painter	painter;
 
 	status = rt_init(&scene, ac, av);
 	if (!status)
@@ -65,7 +66,7 @@ int	main(int ac, char **av)
 	else if (ac == 3)
 	{
 		scene.res = 1;
-		display_color(&scene, NULL);
+		display_color(&painter);
 		save_as_ppm(&scene.img, av[2]);
 		rt_shut_down(&scene);
 	}
@@ -73,3 +74,4 @@ int	main(int ac, char **av)
 		display_scene(&scene);
 	return (status);
 }
+

@@ -40,7 +40,7 @@ void	*th_painter_draw(void *worker)
 		pthread_mutex_unlock(&scene->print);
 
 		//printf("is painting\n");
-		display_color(scene, painter);
+		display_color(painter);
 
 
         pthread_mutex_lock(&scene->print); // lock

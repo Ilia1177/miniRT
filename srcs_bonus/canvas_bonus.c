@@ -39,73 +39,33 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 }
 
 // throw ray for every point of the canvas
-void	display_coloriSAVE(t_data *scene)
+void	display_color(t_painter *painter)
 {
-	t_ray			ray;
-	t_argb			color;
-	t_viewport		vp;
-	t_canvas		cnv;
+	t_data			*scene;
 	t_vec2			pix;
-	const char		res = scene->res;
-	float			t_lim[2];
+	char		res;
 
-	ft_bzero(&ray, sizeof(t_ray));
-	vp = scene->viewport;
-	cnv = scene->cnv;
-	t_lim[0] = 1.0f;
-	t_lim[1] = T_MAX;
-	cnv.loc.x = (-cnv.w / 2);
-	while (cnv.loc.x < (cnv.w / 2))
+	scene = painter->sceneref;
+	res = scene->res;
+	ft_bzero(&painter->ray, sizeof(t_ray));
+	painter->lim[0] = 1.0f;
+	painter->lim[1] = T_MAX;
+	painter->lim[2] = R_LIMIT;
+
+	painter->cnv.loc.x = (-painter->cnv.w / 2) + ((painter->id-1) * (painter->cnv.w / THREAD_NB));
+	while (painter->cnv.loc.x < (painter->id) * (painter->cnv.w / THREAD_NB) )
 	{
-		cnv.loc.y = -cnv.h / 2;
-		while (cnv.loc.y < (cnv.h / 2))
+		painter->cnv.loc.y = -painter->cnv.h / 2;
+		while (painter->cnv.loc.y < (painter->cnv.h / 2))
 		{
-			ray.o = scene->cam.t_m.p;
-			ray.d = throught_vp(cnv, vp);
-			ray.d = normalize_vec4(mat_apply(scene->cam.t_m, ray.d));
-			color = throw_ray(&ray, t_lim, R_LIMIT, scene);
-			pix = cnv_to_screen(cnv);
-			color_screen(&scene->img, pix.x, pix.y, res, color);
-			cnv.loc.y += res;
+			painter->ray.o = scene->cam.t_m.p;
+			painter->ray.d = throught_vp(painter->cnv, painter->vp);
+			painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
+			painter->color = throw_ray(painter);
+			pix = cnv_to_screen(painter->cnv);
+			color_screen(&scene->img, pix.x, pix.y, res, painter->color);
+			painter->cnv.loc.y += res;
 		}
-		cnv.loc.x += res;
-	}
-}
-//
-// throw ray for every point of the canvas
-void	display_color(t_data *scene, t_painter *painter)
-{
-	t_ray			ray; //[THREAD_NB];
-	t_argb			color;
-	t_viewport		vp;
-	t_canvas		cnv;
-	t_vec2			pix;
-	const char		res = scene->res;
-	float			*lim;
-
-	lim = painter->lim;
-	ray = painter->ray;
-	ft_bzero(&ray, sizeof(t_ray));
-	vp = painter->vp;
-	cnv = painter->cnv;
-	lim[0] = 1.0f;
-	lim[1] = T_MAX;
-	lim[2] = R_LIMIT;
-
-	cnv.loc.x = (-cnv.w / 2) + ((painter->id-1) * (cnv.w / THREAD_NB));
-	while (cnv.loc.x < (painter->id) * (cnv.w / THREAD_NB) )
-	{
-		cnv.loc.y = -cnv.h / 2;
-		while (cnv.loc.y < (cnv.h / 2))
-		{
-			ray.o = scene->cam.t_m.p;
-			ray.d = throught_vp(cnv, vp);
-			ray.d = normalize_vec4(mat_apply(scene->cam.t_m, ray.d));
-			color = throw_ray(&ray, lim, R_LIMIT, scene);
-			pix = cnv_to_screen(cnv);
-			color_screen(&scene->img, pix.x, pix.y, res, color);
-			cnv.loc.y += res;
-		}
-		cnv.loc.x += res;
+		painter->cnv.loc.x += res;
 	}
 }

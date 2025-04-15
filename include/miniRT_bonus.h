@@ -179,12 +179,17 @@ typedef struct	s_object
 
 typedef struct	s_painter
 {
+
+	t_argb		color;
+	t_argb		lumen;
+	t_argb		local_color;
+	t_argb		reflected_color;
 	float		lim[3];
-	
 	pthread_mutex_t	brush;
 	int			ready;
 	t_viewport	vp;
 	t_canvas	cnv;
+	float		t;
 	t_ray		ray;
 	pthread_t	itself;
 	int			id;
@@ -275,11 +280,11 @@ int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 //canvas.c
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
-void		display_color(t_data *scene, t_painter *painter);
+void		display_color(t_painter *painter);
 t_vec2		cnv_to_screen(t_canvas cnv);
 
 //ray
-t_argb			throw_ray(t_ray *ray, float *t_lim, int rec, t_data *scene);
+t_argb			throw_ray(t_painter *painter);
 t_object		*closest_intersect(t_ray *ray, int shadow, float *t_lim, t_object *obj);
 int				solve_quadratic(t_quad *quad);
 int				solve_gen_quad(t_quad *quad);
