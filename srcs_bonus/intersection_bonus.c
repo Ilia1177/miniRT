@@ -1,11 +1,15 @@
 #include <miniRT_bonus.h>
 
-t_object	*closest_intersect(t_ray *ray, int shw, float *lim, t_object *obj)
+//t_object	*closest_intersect(t_ray *ray, int shw, float *lim, t_object *obj)
+t_object	*closest_intersect(t_painter *painter, int shw, t_object *obj)
 {
 	t_object	*closest_obj;
 	float		closest_t;
 	float		curr_t;
+	const float		*lim = painter->lim;
+	t_ray		*ray;
 
+	ray = &painter->ray;
 	closest_t = INFINITY;
 	curr_t = INFINITY;
 	closest_obj = NULL;

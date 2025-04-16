@@ -209,20 +209,21 @@ void	select_object(t_data *scene, int x, int y)
 	t_canvas	cnv;
 	t_viewport  vp;
 	t_object	*last_obj;
-	float		t_lim[2];
+	float		t_lim[2];	
+	t_painter	catcher;
 
-	t_lim[0] = EPSILON;
-	t_lim[1] = T_MAX;
+	catcher.lim[0] = EPSILON;
+	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = x - (cnv.w / 2);
 	cnv.loc.y = (cnv.h / 2) - y;
-	catch_ray.d = throught_vp(cnv, vp);
-	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
-	catch_ray.o = scene->cam.t_m.p;
-	catch_ray.v.w = -1.0f;
-	scene->selected = closest_intersect(&catch_ray, 0, t_lim, scene->objects);
+	catcher.ray.d = throught_vp(cnv, vp);
+	catcher.ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
+	catcher.ray.o = scene->cam.t_m.p;
+	catcher.ray.v.w = -1.0f;
+	scene->selected = closest_intersect(&catcher, 0, scene->objects);
 	show_selected_object(scene, last_obj);
 }
 

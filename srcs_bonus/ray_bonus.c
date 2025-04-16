@@ -54,14 +54,16 @@ t_argb	throw_ray(t_painter *painter)
 {
 	t_object	*obj;
 	t_data	*scene;
+//	t_argb	local_color;
+//	t_argb	refected_color;
 
 	scene = painter->sceneref;
 	ft_bzero(&painter->local_color, sizeof(t_argb));
-	obj = closest_intersect(&painter->ray, 0, painter->lim, scene->objects);
+	obj = closest_intersect(painter, 0, scene->objects);
 	if (obj == NULL)
 		return (painter->local_color);
 	ray_update(&painter->ray, obj);
-	painter->lumen = compute_lighting(&painter->ray, obj, scene);
+	painter->lumen = compute_lighting(painter, obj);
 	painter->local_color = mult_colors(pattern_color(&painter->ray, obj, scene), painter->lumen);
 	if (painter->lim[2] <= 0 || obj->reflect.a <= 0)
 		return (painter->local_color);

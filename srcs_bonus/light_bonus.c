@@ -66,14 +66,19 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lume
 * 1) get the direction of the light form point to light (ray->o to light->pos)
 * 2) if v_dot_n < 0 we are looking the inside the object, -> reverse normal
 *******************************************************************************/
-t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
+t_argb	compute_lighting(t_painter *painter, t_object *obj)
 {
 	t_argb		lumen;
 	t_light		*light;
 	//float		dist;
-	float		lim[2];
+	float		*lim;
+	t_ray	*ray;
+	t_data	*scene;
 
-	lim[0] = EPSILON;
+	lim = painter->lim;
+	ray = &painter->ray;
+	scene = painter->sceneref;
+	painter->lim[0] = EPSILON;
 	lumen = (t_argb) {0, 0, 0, 0};
 	light = scene->lights;
 	while (light)
@@ -92,7 +97,7 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 				ray->d = light->pos;
 				lim[1] = T_MAX;
 			}
-			if (!closest_intersect(ray, 1, lim, scene->objects))
+			if (!closest_intersect(painter, 1, scene->objects))
 				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}
 		light = light->next;

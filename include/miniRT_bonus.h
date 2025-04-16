@@ -299,7 +299,7 @@ t_vec2		cnv_to_screen(t_canvas cnv);
 
 //ray
 t_argb			throw_ray(t_painter *painter);
-t_object		*closest_intersect(t_ray *ray, int shadow, float *t_lim, t_object *obj);
+t_object		*closest_intersect(t_painter *painter, int shadow, t_object *obj);
 int				solve_quadratic(t_quad *quad);
 int				solve_gen_quad(t_quad *quad);
 
@@ -337,7 +337,7 @@ unsigned int 	encode_argb(t_argb color);
 t_argb			apply_brightness(t_argb color);
 
 //light.c
-t_argb			compute_lighting(t_ray *ray, t_object *obj, t_data *scene);
+t_argb			compute_lighting(t_painter *painter, t_object *obj);
 void			reflect_ray(t_ray *ray);
 t_argb			specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb intensity);
 t_argb			diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
