@@ -21,7 +21,7 @@ int	rt_scene_init(t_data *scene, int ac, char **av)
 		return (1);
 	else if (ac > 1)
 		scene->map_name = av[1];
-	scene->res = 20;
+	scene->res = 5;
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;

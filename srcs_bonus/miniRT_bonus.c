@@ -12,15 +12,41 @@ long long	time_from(struct timeval *start)
 	return ((sec * 1000000LL) + (usec));
 }
 
+void	rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color)
+{
+	int i;
+	int	j;
+
+	i = -1;
+	while (++i < size.x)
+	{
+		j = -1;
+		while (++j < size.y)
+			rt_put_pixel(img, pos.x + i, pos.y + j, color);
+	}
+}
 int	rt_render(t_data *scene)
 {
 	struct timeval	last_time;
+	char	*str;
+	char	*tmp;
+	const t_argb color = {255, 245, 47, 187};
+	const t_vec2 pos = {0, 0};
 
 	gettimeofday(&last_time, NULL);
 	handle_input(scene);
 	display_color(scene);
+	rt_rect(&scene->img, pos, (t_vec2){110, 30}, 0xFFFFFFFF);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-	printf("TS: %02lld ms\n", time_from(&last_time) / 1000);
+
+	str = 0;
+	tmp = ft_itoa((int)time_from(&last_time) / 1000);
+	if (tmp)
+		str = ft_strjoin("MS per frame:", tmp);
+	if (str)
+		mlx_string_put(scene->mlx, scene->win, 10, 10, 0, str);
+	free(str);
+	free(tmp);
 	return (0);
 }
 
@@ -56,5 +82,6 @@ int	main(int ac, char **av)
 	}
 	else if (ac == 2)
 		display_scene(&scene);
+		//rt_rect(&scene->img, (t_vec2){20, 20}, (t_vec2){100, 100}, 0xFFFFFFFF);
 	return (status);
 }

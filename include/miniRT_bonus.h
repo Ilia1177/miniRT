@@ -14,9 +14,10 @@
 # include <pthread.h>
 # include <sys/time.h>
 
+# define MAX_SCALE 30
 # define T_MAX 1600
-# define HEIGHT 400
-# define WIDTH 400 
+# define HEIGHT 800
+# define WIDTH 800 
 # define R_LIMIT 3 // limit to recursion (reflect ray)
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
@@ -36,20 +37,32 @@ typedef struct	s_vec4
 	float		z;
 	float		w;
 }				t_vec4;
-
+typedef struct	s_vec3
+{
+	float		x;
+	float		y;
+	float		z;
+}				t_vec3;
 typedef struct	s_vec2
 {
 	float		x;
 	float		y;
 }				t_vec2;
 
-typedef struct	s_matrix
+typedef struct	s_mat4
 {
 	t_vec4	i;
 	t_vec4	j;
 	t_vec4	k;
 	t_vec4	p;
 }	t_mat4;
+
+typedef struct	s_mat3
+{
+	t_vec3	i;
+	t_vec3	j;
+	t_vec3	k;
+}	t_mat3;
 
 typedef struct	s_rgb
 {
@@ -220,11 +233,12 @@ t_mat4	mat_tinverse(t_mat4 matrix);
 void	trans_sp_matrix(t_object *obj);
 
 //img.c
+void			rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color);
 void			rt_put_pixel(t_img *img, int x, int y, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
-int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
-int				encode_img_argb(uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue);
-t_rgb			extract_rgb(int color);
+//int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
+//int				encode_img_argb(uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue);
+//t_rgb			extract_rgb(int color);
 t_argb			extract_argb(int color);
 
 //norm_utils.c

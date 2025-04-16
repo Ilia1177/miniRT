@@ -51,11 +51,25 @@ t_mat4	mat_orthogonal(t_vec4 dir)
 t_mat4	mat_scale(t_mat4 *m, float sx, float sy, float sz)
 {
 	t_mat4	inverse;
+	t_vec4	vec;
+	float	lim;
 
-	m->i = mult_vec4(m->i, sx);
-	m->j = mult_vec4(m->j, sy);
-	m->k = mult_vec4(m->k, sz);
+	vec.w = 0;
+	vec = mult_vec4(m->i, sx);
+	lim = mag_vec4(vec);
+	if (lim < MAX_SCALE && lim > 0)
+		m->i = mult_vec4(m->i, sx);
+	vec = mult_vec4(m->j, sy);
+	lim = mag_vec4(vec);
+	if (lim < MAX_SCALE && lim > 0)
+		m->j = mult_vec4(m->j, sy);
+	vec = mult_vec4(m->k, sz);
+	lim = mag_vec4(vec);
+	if (lim < MAX_SCALE && lim > 0)
+		m->k = mult_vec4(m->k, sz);
 	inverse = mat_inverse(*m);
+	printf("Scale matrix:\n");
+	print_mat4(*m);
 	return (inverse);
 }
 
@@ -70,51 +84,153 @@ t_mat4	mat_translate(t_mat4 *m, float dx, float dy, float dz)
 	return (inverse);
 }
 
-t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz)
+t_mat4 mat_rotate(t_mat4 *m, float dx, float dy, float dz) {
+    const float tx = dx * (M_PI / 180.0f);
+    const float ty = dy * (M_PI / 180.0f);
+    const float tz = dz * (M_PI / 180.0f);
+
+    // X-axis rotation matrix (correct)
+    t_mat4 rx = {
+        .i = {1, 0, 0, 0},
+        .j = {0, cosf(tx), sinf(tx), 0},
+        .k = {0, -sinf(tx), cosf(tx), 0},
+        .p = {0, 0, 0, 1}
+    };
+
+    // Y-axis rotation matrix (FIXED SIGN)
+    t_mat4 ry = {
+        .i = {cosf(ty), 0, sinf(ty), 0},  // <- i.z = +sin(ty)
+        .j = {0, 1, 0, 0},
+        .k = {-sinf(ty), 0, cosf(ty), 0}, // <- k.x = -sin(ty)
+        .p = {0, 0, 0, 1}
+    };
+
+    // Z-axis rotation matrix (correct)
+    t_mat4 rz = {
+        .i = {cosf(tz), sinf(tz), 0, 0},
+        .j = {-sinf(tz), cosf(tz), 0, 0},
+        .k = {0, 0, 1, 0},
+        .p = {0, 0, 0, 1}
+    };
+
+    // Apply rotations in local space: M = M * (Rx * Ry * Rz)
+    t_mat4 combined_rot = mat_compose(mat_compose(rx, ry), rz);
+    *m = mat_compose(*m, combined_rot);
+    return *m;
+}
+
+t_mat4	mat_rotate2(t_mat4 *m, float dx, float dy, float dz)
 {
 	const float	tx = dx * (M_PI / 180.0f);
 	const float	ty = dy * (M_PI / 180.0f);
 	const float	tz = dz * (M_PI / 180.0f);
-	t_mat4		r;
+//	t_mat4		r;
+//
+    t_mat4 rx = { // X-axis rotation
+        .i = {1, 0, 0, 0},
+        .j = {0, cosf(tx), sinf(tx), 0},
+        .k = {0, -sinf(tx), cosf(tx), 0},
+        .p = {0, 0, 0, 1}
+    };
+    t_mat4 ry = { // Y-axis rotation
+        .i = {cosf(ty), 0, -sinf(ty), 0},
+        .j = {0, 1, 0, 0},
+        .k = {sinf(ty), 0, cosf(ty), 0},
+        .p = {0, 0, 0, 1}
+    };
+    t_mat4 rz = { // Z-axis rotation
+        .i = {cosf(tz), sinf(tz), 0, 0},
+        .j = {-sinf(tz), cosf(tz), 0, 0},
+        .k = {0, 0, 1, 0},
+        .p = {0, 0, 0, 1}
+    };
+	*m = mat_compose(*m, mat_compose(mat_compose(rx, ry), rz));
 
-	r.p = (t_vec4){0, 0, 0, 1};
-	r.j = normalize_vec4((t_vec4){0, cos(tx), sin(tx), 0});
-	r.k = normalize_vec4((t_vec4){0, -sin(tx), cos(tx), 0});
-	r.i = normalize_vec4((t_vec4){1, 0, 0, 0});
-	*m = mat_compose(*m, r);
-	r.i = normalize_vec4((t_vec4){cos(ty), 0, -sin(ty), 0});
-	r.k = normalize_vec4((t_vec4){sin(ty), 0, cos(ty), 0});
-	r.j = normalize_vec4((t_vec4){0, 1, 0, 0});
-	*m = mat_compose(*m, r);
-	r.i = normalize_vec4((t_vec4){cos(tz), sin(tz), 0, 0});
-	r.j = normalize_vec4((t_vec4){-sin(tz), cos(tz), 0, 0});
-	r.k = normalize_vec4((t_vec4){0, 0, 1, 0});
-	*m = mat_compose(*m, r);
+//	r.p = (t_vec4){0, 0, 0, 1};
+//	r.i = normalize_vec4((t_vec4){1, 0, 0, 0});
+//	r.j = normalize_vec4((t_vec4){0, cos(tx), sin(tx), 0});
+//	r.k = normalize_vec4((t_vec4){0, -sin(tx), cos(tx), 0});
+//	*m = mat_compose(*m, r);
+//	r.i = normalize_vec4((t_vec4){cos(ty), 0, -sin(ty), 0});
+//	r.j = normalize_vec4((t_vec4){0, 1, 0, 0});
+//	r.k = normalize_vec4((t_vec4){sin(ty), 0, cos(ty), 0});
+//	*m = mat_compose(*m, r);
+//	r.i = normalize_vec4((t_vec4){cos(tz), sin(tz), 0, 0});
+//	r.j = normalize_vec4((t_vec4){-sin(tz), cos(tz), 0, 0});
+//	r.k = normalize_vec4((t_vec4){0, 0, 1, 0});
+//	*m = mat_compose(*m, r);
+	printf("Transformation matrix:\n");
 	print_mat4(*m);
 	return (mat_inverse(*m));
 }
 
-t_mat4	mat_compose(t_mat4 m1, t_mat4 m2)
+t_mat4 mat_compose(t_mat4 m1, t_mat4 m2) {
+    t_mat4 res;
+
+    // Column 0 (i)
+    res.i.x = m1.i.x*m2.i.x + m1.j.x*m2.i.y + m1.k.x*m2.i.z + m1.p.x*m2.i.w;
+    res.i.y = m1.i.y*m2.i.x + m1.j.y*m2.i.y + m1.k.y*m2.i.z + m1.p.y*m2.i.w;
+    res.i.z = m1.i.z*m2.i.x + m1.j.z*m2.i.y + m1.k.z*m2.i.z + m1.p.z*m2.i.w;
+    res.i.w = m1.i.w*m2.i.x + m1.j.w*m2.i.y + m1.k.w*m2.i.z + m1.p.w*m2.i.w;
+
+    // Column 1 (j)
+    res.j.x = m1.i.x*m2.j.x + m1.j.x*m2.j.y + m1.k.x*m2.j.z + m1.p.x*m2.j.w;
+    res.j.y = m1.i.y*m2.j.x + m1.j.y*m2.j.y + m1.k.y*m2.j.z + m1.p.y*m2.j.w;
+    res.j.z = m1.i.z*m2.j.x + m1.j.z*m2.j.y + m1.k.z*m2.j.z + m1.p.z*m2.j.w;
+    res.j.w = m1.i.w*m2.j.x + m1.j.w*m2.j.y + m1.k.w*m2.j.z + m1.p.w*m2.j.w;
+
+    // Column 2 (k)
+    res.k.x = m1.i.x*m2.k.x + m1.j.x*m2.k.y + m1.k.x*m2.k.z + m1.p.x*m2.k.w;
+    res.k.y = m1.i.y*m2.k.x + m1.j.y*m2.k.y + m1.k.y*m2.k.z + m1.p.y*m2.k.w;
+    res.k.z = m1.i.z*m2.k.x + m1.j.z*m2.k.y + m1.k.z*m2.k.z + m1.p.z*m2.k.w;
+    res.k.w = m1.i.w*m2.k.x + m1.j.w*m2.k.y + m1.k.w*m2.k.z + m1.p.w*m2.k.w;
+
+    // Column 3 (p/translation)
+    res.p.x = m1.i.x*m2.p.x + m1.j.x*m2.p.y + m1.k.x*m2.p.z + m1.p.x*m2.p.w;
+    res.p.y = m1.i.y*m2.p.x + m1.j.y*m2.p.y + m1.k.y*m2.p.z + m1.p.y*m2.p.w;
+    res.p.z = m1.i.z*m2.p.x + m1.j.z*m2.p.y + m1.k.z*m2.p.z + m1.p.z*m2.p.w;
+    res.p.w = m1.i.w*m2.p.x + m1.j.w*m2.p.y + m1.k.w*m2.p.z + m1.p.w*m2.p.w;
+
+    return res;
+}
+t_mat4	mat_compose2(t_mat4 m1, t_mat4 m2)
 {
 	t_mat4			res;
 	const t_mat4	transposed = mat_transpose(m2);
 
-	res.i.x = dot_vec4(m1.i, transposed.i);
-	res.i.y = dot_vec4(m1.i, transposed.j);
-	res.i.z = dot_vec4(m1.i, transposed.k);
-	res.i.w = dot_vec4(m1.i, transposed.p);
-	res.j.x = dot_vec4(m1.j, transposed.i);
-	res.j.y = dot_vec4(m1.j, transposed.j);
-	res.j.z = dot_vec4(m1.j, transposed.k);
-	res.j.w = dot_vec4(m1.j, transposed.p);
-	res.k.x = dot_vec4(m1.k, transposed.i);
-	res.k.y = dot_vec4(m1.k, transposed.j);
-	res.k.z = dot_vec4(m1.k, transposed.k);
-	res.k.w = dot_vec4(m1.k, transposed.p);
-	res.p.x = dot_vec4(m1.p, transposed.i);
-	res.p.y = dot_vec4(m1.p, transposed.j);
-	res.p.z = dot_vec4(m1.p, transposed.k);
-	res.p.w = dot_vec4(m1.p, transposed.p);
+	res.i.x = dot_vec4(m1.i, m2.i);
+	res.i.y = dot_vec4(m1.i, m2.j);
+	res.i.z = dot_vec4(m1.i, m2.k);
+	res.i.w = dot_vec4(m1.i, m2.p);
+	res.j.x = dot_vec4(m1.j, m2.i);
+	res.j.y = dot_vec4(m1.j, m2.j);
+	res.j.z = dot_vec4(m1.j, m2.k);
+	res.j.w = dot_vec4(m1.j, m2.p);
+	res.k.x = dot_vec4(m1.k, m2.i);
+	res.k.y = dot_vec4(m1.k, m2.j);
+	res.k.z = dot_vec4(m1.k, m2.k);
+	res.k.w = dot_vec4(m1.k, m2.p);
+	res.p.x = dot_vec4(m1.p, m2.i);
+	res.p.y = dot_vec4(m1.p, m2.j);
+	res.p.z = dot_vec4(m1.p, m2.k);
+	res.p.w = dot_vec4(m1.p, m2.p);
+	
+//	res.i.x = dot_vec4(m1.i, transposed.i);
+//	res.i.y = dot_vec4(m1.i, transposed.j);
+//	res.i.z = dot_vec4(m1.i, transposed.k);
+//	res.i.w = dot_vec4(m1.i, transposed.p);
+//	res.j.x = dot_vec4(m1.j, transposed.i);
+//	res.j.y = dot_vec4(m1.j, transposed.j);
+//	res.j.z = dot_vec4(m1.j, transposed.k);
+//	res.j.w = dot_vec4(m1.j, transposed.p);
+//	res.k.x = dot_vec4(m1.k, transposed.i);
+//	res.k.y = dot_vec4(m1.k, transposed.j);
+//	res.k.z = dot_vec4(m1.k, transposed.k);
+//	res.k.w = dot_vec4(m1.k, transposed.p);
+//	res.p.x = dot_vec4(m1.p, transposed.i);
+//	res.p.y = dot_vec4(m1.p, transposed.j);
+//	res.p.z = dot_vec4(m1.p, transposed.k);
+//	res.p.w = dot_vec4(m1.p, transposed.p);
 	return (res);
 }
 
@@ -189,6 +305,25 @@ static t_mat4 adjugate(t_mat4 m)
     return adj;
 }
 
+
+//	t_mat4 mat_inverse3(t_mat4 m) {
+//		t_mat4 inv;
+//		// Compute inverse of the 3x3 rotation/scale part
+//		t_mat3 upper = {m.i.xyz, m.j.xyz, m.k.xyz};
+//		t_mat3 inv_upper = mat3_transpose(upper); // For pure rotation
+//		// Compute translation adjustment
+//		t_vec3 T = m.p.xyz;
+//		t_vec3 inv_T = mat3_mul_vec3(inv_upper, T);
+//		inv_T = vec3_negate(inv_T);
+//		// Build inverse matrix
+//		inv.i = (t_vec4){inv_upper.i.x, inv_upper.i.y, inv_upper.i.z, 0};
+//		inv.j = (t_vec4){inv_upper.j.x, inv_upper.j.y, inv_upper.j.z, 0};
+//		inv.k = (t_vec4){inv_upper.k.x, inv_upper.k.y, inv_upper.k.z, 0};
+//		inv.p = (t_vec4){inv_T.x, inv_T.y, inv_T.z, 1};
+//		return inv;
+//	}
+//
+
 t_mat4 mat_inverse(t_mat4 m)
 {
     const float det = mat_determinant(m);
@@ -224,20 +359,20 @@ t_mat4 mat_inverse2(t_mat4 m)
     
 	inv = mat_transpose(m);
     // Transpose rotation (inverse of orthogonal matrix)
-//    inv.i.x = m.i.x;  // Column 0 becomes row 0
-//    inv.i.y = m.j.x;  // Column 1 becomes row 0
-//    inv.i.z = m.k.x;  // Column 2 becomes row 0
-//    inv.i.w = 0.0f;
-//
-//    inv.j.x = m.i.y;  // Column 0 becomes row 1
-//    inv.j.y = m.j.y;
-//    inv.j.z = m.k.y;
-//    inv.j.w = 0.0f;
-//
-//    inv.k.x = m.i.z;  // Column 0 becomes row 2
-//    inv.k.y = m.j.z;
-//    inv.k.z = m.k.z;
-//    inv.k.w = 0.0f;
+    inv.i.x = m.i.x;  // Column 0 becomes row 0
+    inv.i.y = m.j.x;  // Column 1 becomes row 0
+    inv.i.z = m.k.x;  // Column 2 becomes row 0
+    inv.i.w = 0.0f;
+
+    inv.j.x = m.i.y;  // Column 0 becomes row 1
+    inv.j.y = m.j.y;
+    inv.j.z = m.k.y;
+    inv.j.w = 0.0f;
+
+    inv.k.x = m.i.z;  // Column 0 becomes row 2
+    inv.k.y = m.j.z;
+    inv.k.z = m.k.z;
+    inv.k.w = 0.0f;
 
     // Compute inverse translation: -(transposed_rotation * translation)
     inv.p.x = -(m.i.x * m.p.x + m.j.x * m.p.y + m.k.x * m.p.z);
