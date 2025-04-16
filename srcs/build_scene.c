@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   build_scene.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 09:59:39 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 10:33:12 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 
 int	check_nb_obj(t_data *scene)
@@ -30,7 +42,7 @@ int	check_nb_light(t_data *scene)
 {
 	int			nb_ambient;
 	int			nb_point;
-	t_light	*curr_light;
+	t_light		*curr_light;
 
 	nb_ambient = 0;
 	nb_point = 0;
@@ -51,21 +63,15 @@ int	check_nb_light(t_data *scene)
 void	init_obj(t_object *obj, t_type type)
 {
 	ft_bzero(obj, sizeof(t_object));
-	obj->type		= type;
-	obj->t 			= T_MAX;
-	obj->pos		= (t_vec3){0, 0, 0, 1};
-	obj->axis		= (t_vec3){0, 0, 0, 0};
-	obj->dir		= (t_vec3){0, 0, 1, 0};
-	obj->up			= (t_vec3){0, 1, 0, 0};
-	obj->right		= (t_vec3){1, 0, 0, 0};
-	obj->spec		= SPECULAR;
-	//scene->earth = text_img(scene);
-   // obj->pattern	= 0;
-   // obj->radius 	= 0.0f;
-   // obj->height 	= 0.0f;
-   // obj->reflect 	= (t_argb){0, 0, 0, 0};
-   // obj->color 		= (t_argb){0, 0, 0, 0};
-	obj->next		= NULL;
+	obj->type = type;
+	obj->t = T_MAX;
+	obj->pos = (t_vec4){0, 0, 0, 1};
+	obj->axis = (t_vec4){0, 0, 0, 0};
+	obj->dir = (t_vec4){0, 0, 1, 0};
+	obj->up = (t_vec4){0, 1, 0, 0};
+	obj->right = (t_vec4){1, 0, 0, 0};
+	obj->spec = SPECULAR;
+	obj->next = NULL;
 }
 
 int	place_camera(char **line, t_data *scene)
@@ -151,8 +157,6 @@ int	build_scene(t_data *scene)
 	int			status;
 	t_object	*it;
 	t_light	*it2;
-	//added for debug
-//	t_object	hyperbol;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -174,24 +178,12 @@ int	build_scene(t_data *scene)
 		gnl_clear_buffer(map);
 	close(map);
 	printf("**************************linked list OBJECT**************\n");
-	// added for debug
-	//	hyperbol.type = HYPERBOL;
-	//	hyperbol.height = 5;
-	//	hyperbol.pos = (t_vec3) {0, 0, 9, 0};
-	//	hyperbol.axis = (t_vec3) {1, 0, 0, 0};
-	//	hyperbol.scale = (t_vec3) {2, 2, 2, 0};
-	//	hyperbol.color = (t_argb) {255, 255, 255, 255};
-	//	hyperbol.reflect = (t_argb) {0,0,0,0};
-	//	hyperbol.spec = -1;
-	//	hyperbol.next = NULL;
-	//	make_hyperboloid(hyperbol, &scene->objects);
 	it = scene->objects;
 	while (it)
 	{
 		print_obj(*it);
 		it = it->next;
 	}
-
 	printf("**************************linked list LIGHT**************\n");
 	it2 = scene->lights;
 	while (it2)

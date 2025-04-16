@@ -47,10 +47,11 @@ int	intersect_object(t_ray *ray, t_object *obj, float *t)
 {
 	t_ray	local_ray;
 	int		intersect;
-
+	const t_mat4	inv = mat_inverse(obj->t_m);
 	intersect = 0;
-	local_ray.d = mat_apply(obj->i_m, ray->d);
-	local_ray.o = mat_apply(obj->i_m, ray->o);
+
+	local_ray.d = mat_apply(inv, ray->d);
+	local_ray.o = mat_apply(inv, ray->o);
 	if (obj->type == SPHERE && intersect_sphere(&local_ray, obj, t))
 		intersect = 1;
 	else if (obj->type == CYLINDER && intersect_cylinder(&local_ray, obj, t))

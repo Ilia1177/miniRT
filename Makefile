@@ -31,6 +31,7 @@ SRCS = 	miniRT\
 		color\
 		cylinder_utils\
 		debug\
+		handle\
 		img\
 		init\
 		input\
@@ -46,8 +47,6 @@ SRCS = 	miniRT\
 		parsing_utils\
 		ray\
 		rotation_object\
-		vector\
-		lst_hyperboloid\
 		dl_img\
 		matrix\
 

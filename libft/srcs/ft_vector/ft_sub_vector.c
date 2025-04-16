@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   norm_utils.c                                       :+:      :+:    :+:   */
+/*   ft_sub_vector.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 11:35:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:35:54 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/04/14 18:00:07 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 18:01:11 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include "../../include/vector.h"
 
-// same as limit_color(t_argb *color) --> in color.c
-void	norm_rgb(t_rgb *c)
+t_vec3	sub_vec3(t_vec3 a, t_vec3 b)
 {
-	c->r = fmin(255, fmax(0, c->r));
-	c->g = fmin(255, fmax(0, c->g));
-	c->b = fmin(255, fmax(0, c->b));
+	t_vec3	result;
+
+	result.x = a.x - b.x;
+	result.y = a.y - b.y;
+	result.z = a.z - b.z;
+	return (result);
 }
 
-void	norm_float(float *f, float min, float max)
+t_vec4	sub_vec4(t_vec4 a, t_vec4 b)
 {
-	*f = fmin(max, fmax(min, *f));
-}
+	t_vec4	result;
 
-void	norm_int(int *num, int min, int max)
-{
-	*num = fmin(max, fmax(min, *num));
+	result.x = a.x - b.x;
+	result.y = a.y - b.y;
+	result.z = a.z - b.z;
+	result.w = a.w - b.w;
+	return (result);
 }

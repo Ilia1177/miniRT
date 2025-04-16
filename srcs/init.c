@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/26 17:59:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:00:29 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 int	rt_scene_tozero(t_data *scene)
 {
 	scene->res = 5;
-	scene->cam.pos = (t_vec3){0, 0, 0, 0};
-	scene->cam.dir = (t_vec3){0, 0, 1, 0};
-	scene->cam.up = (t_vec3){0, 1, 0, 0};
-	scene->cam.right = (t_vec3){1, 0, 0, 0};
+	scene->cam.pos = (t_vec4){0, 0, 0, 0};
+	scene->cam.dir = (t_vec4){0, 0, 1, 0};
+	scene->cam.up = (t_vec4){0, 1, 0, 0};
+	scene->cam.right = (t_vec4){1, 0, 0, 0};
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
 	scene->cnv.w = WIDTH;
@@ -37,9 +37,6 @@ void	mlx_tozero(t_data *scene)
 
 	scene->mlx = NULL;
 	scene->win = NULL;
-	//ft_bzero(&scene->img,sizeof(t_img));
-	//scene->img.ptr = NULL;
-	//scene->img.addr = NULL;
 	i = -1;
 	while (++i < 99999)
 		scene->key_state[i] = 0;
@@ -47,7 +44,6 @@ void	mlx_tozero(t_data *scene)
 
 int	rt_init(t_data *scene)
 {
-	//int	i;
 	t_img	*img;
 	int		status;
 
@@ -66,7 +62,8 @@ int	rt_init(t_data *scene)
 	if (!img->ptr)
 		status = -1;
 	else if (!status)
-		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
+		img->addr = mlx_get_data_addr(img->ptr, &img->bpp,
+				&img->llen, &img->endian);
 	if (!img->addr)
 		status = -1;
 	return (status);

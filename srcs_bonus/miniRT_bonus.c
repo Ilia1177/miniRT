@@ -16,23 +16,49 @@ int rt_render(t_data *scene)
 {
 
 	struct timeval last_time;
-
+	char	*str;
+	char	*tmp;
+	const t_argb color = {255, 245, 47, 187};
+	const t_vec2 pos = {0, 0};
 	gettimeofday(&last_time, NULL);
-//	printf("mastering: wait\n");
     pthread_mutex_lock(&scene->print);
     while (scene->at_rest < THREAD_NB) {
         pthread_cond_wait(&scene->master_rest, &scene->print);
     }
 	pthread_mutex_unlock(&scene->print);
-//	printf("mastering: start\n");
+
+	rt_rect(&scene->img, pos, (t_vec2){110, 30}, 0xFFFFFFFF);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);
+
+
+	str = 0;
+	tmp = ft_itoa((int)time_from(&last_time) / 1000);
+	if (tmp)
+		str = ft_strjoin("MS per frame:", tmp);
+	if (str)
+		mlx_string_put(scene->mlx, scene->win, 10, 10, 0, str);
+	free(str);
+	free(tmp);
+
+	
 	scene->at_rest = 0;
-//	printf("mastering: end / broadcast painters\n");
     pthread_cond_broadcast(&scene->painter_rest);
     pthread_mutex_unlock(&scene->print);
-	printf("TS: %02lld ms\n", time_from(&last_time) / 1000);
-    return 0;
+}
+
+void	rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color)
+{
+	int i;
+	int	j;
+
+	i = -1;
+	while (++i < size.x)
+	{
+		j = -1;
+		while (++j < size.y)
+			rt_put_pixel(img, pos.x + i, pos.y + j, color);
+	}
 }
 
 int	display_scene(t_data *scene)

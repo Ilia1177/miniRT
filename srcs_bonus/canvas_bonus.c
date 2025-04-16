@@ -22,22 +22,6 @@ t_vec2 cnv_to_screen(t_canvas cnv)
 	return (screen);
 }
 
-void	color_screen(t_img *img, int x, int y, int res, t_argb color)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	while (++i < res)
-	{
-		j = -1;
-		while (++j < res)
-		{
-			rt_put_pixel(img, x + i, y + j, encode_argb(color));
-		}
-	}
-}
-
 // throw ray for every point of the canvas
 void	display_color(t_painter *painter)
 {
@@ -63,7 +47,7 @@ void	display_color(t_painter *painter)
 			painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
 			painter->color = throw_ray(painter);
 			pix = cnv_to_screen(painter->cnv);
-			color_screen(&scene->img, pix.x, pix.y, res, painter->color);
+			rt_rect(&scene->img, pix, (t_vec2){res, res}, encode_argb(painter->color));
 			painter->cnv.loc.y += res;
 		}
 		painter->cnv.loc.x += res;

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   canvas.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 10:40:36 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 10:41:05 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 //
 // get location of the point in the viemport from canvas'location
-t_vec3 get_viewport_loc(t_canvas cnv, t_viewport vp)
+t_vec4	get_viewport_loc(t_canvas cnv, t_viewport vp)
 {
-	t_vec3 vp_loc;
+	t_vec4	vp_loc;
 
 	vp_loc.x = cnv.loc.x * vp.w / cnv.w;
 	vp_loc.y = cnv.loc.y * vp.h / cnv.h;
@@ -12,9 +24,9 @@ t_vec3 get_viewport_loc(t_canvas cnv, t_viewport vp)
 }
 
 // get screen's pixel from canvas's point
-t_vec2 cnv_to_screen(t_canvas cnv)
+t_vec2	cnv_to_screen(t_canvas cnv)
 {
-	t_vec2 screen;
+	t_vec2	screen;
 
 	screen.x = (cnv.w / 2) + cnv.loc.x;
 	screen.y = (cnv.h / 2) - cnv.loc.y;

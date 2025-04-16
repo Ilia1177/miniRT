@@ -17,44 +17,77 @@ void	handle_object_scaling(t_data *scene, t_mat4 *tm, t_mat4 *im)
 	const float	pscale = 1.1f;
 	const float	mscale = 0.9f;
 
+	(void)im;
 	if (scene->key_state[XK_r] == 1)
-		*im = mat_scale(tm, pscale, 1.0f, 1.0f);
+		mat_scale(tm, pscale, 1.0f, 1.0f);
 	if (scene->key_state[XK_t] == 1)
-		*im = mat_scale(tm, 1.0f, pscale, 1.0f);
+		mat_scale(tm, 1.0f, pscale, 1.0f);
 	if (scene->key_state[XK_y] == 1)
-		*im = mat_scale(tm, 1.0f, 1.0f, pscale);
+		mat_scale(tm, 1.0f, 1.0f, pscale);
 	if (scene->key_state[XK_f] == 1)
-		*im = mat_scale(tm, mscale, 1.0f, 1.0f);
+		mat_scale(tm, mscale, 1.0f, 1.0f);
 	if (scene->key_state[XK_g] == 1)
-		*im = mat_scale(tm, 1.0f, mscale, 1.0f);
+		mat_scale(tm, 1.0f, mscale, 1.0f);
 	if (scene->key_state[XK_h] == 1)
-		*im = mat_scale(tm, 1.0f, 1.0f, mscale);
+		mat_scale(tm, 1.0f, 1.0f, mscale);
 }
 
 void	handle_object_translation(t_data *scene, t_mat4 *tm, t_mat4 *im)
 {
+	(void)im;
 	if (scene->key_state[XK_i] == 1 && scene->selected)
-		*im = mat_translate(tm, 0, 0, 0.1f);
+		mat_translate(tm, 0, 0, 0.1f);
 	if (scene->key_state[XK_k] == 1 && scene->selected)
-		*im = mat_translate(tm, 0, 0, -0.1f);
+		mat_translate(tm, 0, 0, -0.1f);
 	if (scene->key_state[XK_l] == 1 && scene->selected)
-		*im = mat_translate(tm, 0.1f, 0, 0);
+		mat_translate(tm, 0.1f, 0, 0);
 	if (scene->key_state[XK_j] == 1 && scene->selected)
-		*im = mat_translate(tm, -0.1f, 0, 0);
+		mat_translate(tm, -0.1f, 0, 0);
 	if (scene->key_state[XK_u] == 1 && scene->selected)
-		*im = mat_translate(tm, 0, 0.1f, 0);
+		mat_translate(tm, 0, 0.1f, 0);
 	if (scene->key_state[XK_o] == 1 && scene->selected)
-		*im = mat_translate(tm, 0, -0.1f, 0);
+		mat_translate(tm, 0, -0.1f, 0);
+}
+
+void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
+{
+	t_vec4	s;
+	t_mat4	new;
+
+	t_mat4 m = *tm;
+	s.x = mag_vec4(m.i);
+	s.y = mag_vec4(m.j);
+	s.z = mag_vec4(m.k);
+	new.i = normalize_vec4(m.i);
+	new.j = normalize_vec4(m.j);
+	new.k = normalize_vec4(m.k);
+	new.p = (t_vec4) {0, 0, 0, 1};
+	mat_translate(&new, m.p.x, m.p.y, m.p.z);
+	mat_rotate(&new, dx, dy, dz);
+	mat_scale(&new, s.x, s.y, s.z);
+	*tm = new;
+	print_mat4(*tm);
 }
 
 void	handle_object_rotation(t_data *scene, t_mat4 *tm, t_mat4 *im)
 {
+	(void)im;
+	t_object *obj = scene->selected;
+
+	const float	speed = 5.0f;
+
 	if (scene->key_state[XK_z] == 1)
-		*im = mat_rotate(tm, 1.0f, 0, 0);
-	if (scene->key_state[XK_x] == 1 && scene->selected)
-		*im = mat_rotate(tm, 0, 1.0f, 0);
-	if (scene->key_state[XK_c] == 1 && scene->selected)
-		*im = mat_rotate(tm, 0, 0, 1.0f);
+		rotate_obj(tm, speed, 0, 0);
+	if (scene->key_state[XK_x] == 1)
+		rotate_obj(tm, 0, speed, 0);
+	if (scene->key_state[XK_c] == 1)
+		rotate_obj(tm, 0, 0, speed);
+	if (scene->key_state[XK_Z] == 1)
+		mat_rotate(tm, -speed, 0, 0);
+	if (scene->key_state[XK_X] == 1 && scene->selected)
+		mat_rotate(tm, 0, -speed, 0);
+	if (scene->key_state[XK_C] == 1 && scene->selected)
+		mat_rotate(tm, 0, 0, -speed);
 }
 
 void	handle_camera_move(t_data *scene)
@@ -149,13 +182,20 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 		scene->selected->color = invert_color(scene->selected->color);
 		printf("selection transform matrix:\n");
 		print_mat4(scene->selected->t_m);
+		printf("selection invers matrix:\n");
+		print_mat4(mat_inverse(scene->selected->t_m));
 	}
 	else if (scene->selected && scene->selected == last_obj)
 	{
+		printf("selection transform matrix:\n");
+		print_mat4(scene->selected->t_m);
+		printf("selection invers matrix:\n");
+		print_mat4(mat_inverse(scene->selected->t_m));
+
 		scene->selected->color = last_color;
 		scene->selected = NULL;
 		last_obj = NULL;
-	}
+		}
 	else if (!scene->selected && last_obj)
 	{
 		last_obj->color = last_color;

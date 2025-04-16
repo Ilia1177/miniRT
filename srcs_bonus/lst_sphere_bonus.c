@@ -16,7 +16,7 @@ static void	make_matrix(t_object data, t_object *new)
 		new->i_m = mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == HYPERBOL)
 		new->i_m = mat_scale(&new->t_m, 1.0f, 1.0f, 1.0f);
-		//new->i_m = mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
+	//	new->i_m = mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
 	else if (data.type == TRIANGLE)
 		new->i_m = mat_inverse(new->t_m);
 

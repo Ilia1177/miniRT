@@ -10,8 +10,32 @@ int	skip_space(char *str)
 	return (space);
 }
 
+int	get_random_vec4(char **line, t_vec4 *v, float w)
+{
+	char	*str;
+	float	mag;
+	char	*end;
+
+	str = *line;
+	str += skip_space(str);
+	if (!ft_strncmp(str, "ran", 3))
+	{
+		str += 3;
+		end = str;
+		mag = ft_strtof(str, &end);
+		if (str == end)
+			return (0);
+		else
+			*v = random_vec4(mag);
+		v->w = w;
+		*line = end;
+		return (1);
+	}
+	return (0);
+}
 /*****************************************************************************
-* convert a string to a vector 3
+* convert a string to a vector 3 an assign w component
+* if str = "   ran3.0   " -->  get a random vector of magnitude 3.0 
 * @return int is code -1 for error or 1 for success
 * 
 * @param line is a pointer to the string
@@ -25,6 +49,9 @@ int	str_to_vec4(char **line, t_vec4 *v, float w)
 	char	*end;
 
 	str = *line;
+	end = str;
+	if (get_random_vec4(line, v, w))
+		return (0);
 	v->x = ft_strtof(str, &end);
 	if (*end != ',' || str == end)
 		return (-1);
@@ -153,7 +180,12 @@ int	get_int_opt(char **line, int *num, int nb_char)
 	*line = end;
 	return (status);
 }
-
+int assign_opt(char **line, int *opt, int nb_char)
+{
+	*opt = 1;
+	*line = *line + nb_char;
+	return (0);
+}
 int	get_str_opt(char **line, char **opt, int nb_char)
 {
 	char	*str;
@@ -199,11 +231,11 @@ int	get_options(char **line, t_object *obj)
 	while (str && *str && !status && ft_strcmp(str,"\n"))
 	{
 		if (!ft_strncmp("-p", str, 2))
-			status = get_int_opt(&str, &obj->pattern, 2);
+			status = assign_opt(&str, &obj->pattern, 2);
 		else if (!ft_strncmp("-spc", str, 4))
 			status = get_int_opt(&str, &obj->spec, 4);
-		else if (!ft_strncmp("-o", str, 2))
-			status = get_int_opt(&str, &obj->opt, 2);
+		else if (!ft_strncmp("-opt", str, 2))
+			status = assign_opt(&str, &obj->opt, 4);
 		else if (!ft_strncmp("-img", str, 4))
 			status = get_str_opt(&str, &obj->path, 4);
 		else if (!ft_strncmp("-ref", str, 4))

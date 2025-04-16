@@ -68,7 +68,7 @@ int intersect_cylinder(t_ray *ray, t_object *cy, float *t)
 	t_min = INFINITY;
 	check_tube(equation.t[0], ray->o, ray->d, &t_min);
 	check_tube(equation.t[1], ray->o, ray->d, &t_min);
-	if (cy->opt)
+	if (!cy->opt)
 	{
 		check_cap(-0.5f, ray->o, ray->d, &t_min);
 		check_cap(0.5f, ray->o, ray->d, &t_min);

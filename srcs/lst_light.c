@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_light.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 11:24:26 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/04/14 11:24:27 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 
 static int	make_light(t_light light, t_light **lights)
@@ -18,11 +30,11 @@ static int	make_light(t_light light, t_light **lights)
 		while (curr_light->next)
 		{
 			curr_light = curr_light->next;
-		//	if (curr_light->type == new_light->type)
-		//	{
-		//		free(new_light);
-		//		return (-5);
-		//	}
+			if (curr_light->type == new_light->type)
+			{
+				free(new_light);
+				return (-5);
+			}
 		}
 		curr_light->next = new_light;
 	}
@@ -32,8 +44,8 @@ static int	make_light(t_light light, t_light **lights)
 void	init_light(t_light *light, t_type type)
 {
 	light->type = type;
-	light->pos = (t_vec3){0, 0, 0, 0};
-	light->dir = (t_vec3){0, 0, 0, 0};
+	light->pos = (t_vec4){0, 0, 0, 0};
+	light->dir = (t_vec4){0, 0, 0, 0};
 	light->intensity = (t_argb){0, 0, 0, 0};
 	light->next = NULL;
 }
@@ -43,7 +55,7 @@ int	clean_lights(t_data *scene)
 	t_light	light;
 
 	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
-		(t_vec3){-2, 0, 0, 0}, (t_vec3){1, 1, 0, 0}, DIRECTIONAL};
+		(t_vec4){-2, 0, 0, 0}, (t_vec4){1, 1, 0, 0}, DIRECTIONAL};
 	if (make_light(light, &scene->lights) == -109)
 		return (-109);
 	return (0);
@@ -63,9 +75,6 @@ int	create_light(char **line, t_data *scene, t_type type)
 	char		*str;
 	t_light		light;
 	int			status;
-	//t_argb		color;
-	//float		bright;
-	//float		brightness;
 
 	str = *line + 1 ;
 	init_light(&light, type);
@@ -75,16 +84,10 @@ int	create_light(char **line, t_data *scene, t_type type)
 		if (status != 0)
 			return (status);
 	}
-	//status = str_to_float(&str, &bright); // what not ft_strtof ???
-	//if (status != 0)
-	//	return (status);
-	//norm_float(&bright, 0, 1);
 	status = str_to_argb(&str, &light.intensity, 1);
 	print_argb(light.intensity, "light");
 	if (status != 0)
 		return (status);
-//	light.intensity = extract_argb(encode_rgb(color.r, color.g, color.b));
-//	add_bright_argb(&light.intensity, bright);
 	*line = str + skip_space(str);
 	return (make_light(light, &scene->lights));
 }
