@@ -16,7 +16,7 @@
 //# include <semaphore.h>
 # include <sys/time.h>
 //#include <atomic.h>
-# define THREAD_NB 8 
+# define THREAD_NB 4 
 # define MAX_SCALE 30
 # define T_MAX 1600
 # define HEIGHT 800
@@ -256,28 +256,22 @@ void	rotate_y(t_camera *cam, float theta);
 void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 
-t_mat4	mat_scale(t_mat4 *m, float sx, float sy, float sz);
-t_mat4	mat_orthogonal(t_vec4 dir);
-t_mat4	mat_transpose_inverse(t_mat4 mat);
-t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz);
-t_mat4	mat_translate(t_mat4 *m, float dx, float dy, float dz);
+void	mat_scale(t_mat4 *m, float sx, float sy, float sz);
+void	mat_transpose_inverse(t_mat4 mat);
+void	mat_rotate(t_mat4 *m, float dx, float dy, float dz);
+void	mat_translate(t_mat4 *m, float dx, float dy, float dz);
 t_vec4	mat_apply(t_mat4 mat, t_vec4 v);
 t_mat4	mat_generate(t_object *obj);
 t_mat4	mat_compose(t_mat4 m2, t_mat4 m1);
 t_mat4	mat_transpose(t_mat4 m);
-	
 t_mat4	mat_init_id(void);
+t_mat4	mat_orthogonal(t_vec4 dir);
 t_mat4	mat_inverse(t_mat4 matrix);
-t_mat4	mat_tinverse(t_mat4 matrix);
-void	trans_sp_matrix(t_object *obj);
 
 //img.c
 void			rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color);
 void			rt_put_pixel(t_img *img, int x, int y, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
-//int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
-//int				encode_img_argb(uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue);
-//t_rgb			extract_rgb(int color);
 t_argb			extract_argb(int color);
 
 //norm_utils.c
@@ -298,20 +292,19 @@ void		display_color(t_painter *painter);
 t_vec2		cnv_to_screen(t_canvas cnv);
 
 //ray
+
+//inter_utils.c
+//int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
+//int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
+//int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
+//void get_min_t(float *t_min, float t_tmp, int *hit);
+//int	min_pos(float *t, float t1, float t2);
+
+
+//ray && intersection.c
 t_argb			throw_ray(t_painter *painter);
 t_object		*closest_intersect(t_painter *painter, int shadow, t_object *obj);
 int				solve_quadratic(t_quad *quad);
-int				solve_gen_quad(t_quad *quad);
-
-//inter_utils.c
-int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
-int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
-int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
-void get_min_t(float *t_min, float t_tmp, int *hit);
-int	min_pos(float *t, float t1, float t2);
-
-
-//intersection.c
 int				intersect_triangle(t_ray *ray, t_object *tr, float *t);
 int				intersect_object(t_ray *ray, t_object *obj, float *t);
 int				intersect_sphere(t_ray *ray, t_object *object, float *t);
@@ -322,10 +315,10 @@ int				intersect_hyperboloid(t_ray *ray, t_object *hyperb, float *t);
 
 //normal.c
 void	triangle_normal(t_ray *ray, t_object *tr);
-void	cylinder_normal(t_ray *ray, t_object *cylinder);
-void	plane_normal(t_ray *ray, t_object *plane);
-void	sphere_normal(t_ray *ray, t_object *sphere);
-void hyperboloid_normal(t_ray *ray, t_object *object);
+void	cylinder_normal(t_ray *ray, t_object *cy);
+void	plane_normal(t_ray *ray, t_object *pl);
+void	sphere_normal(t_ray *ray, t_object *sp);
+void	hyperboloid_normal(t_ray *ray, t_object *hy);
 
 //color.c
 t_argb			invert_color(t_argb color);
@@ -359,8 +352,8 @@ float	dist_vec4(t_vec4 a, t_vec4 b);
 
 //camera_vectors.c
 void	update_camera_rotation(t_camera *cam);
-t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
-void	mouse_move(t_camera *cam, float delta_x, float delta_y);
+//t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
+//void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float	calc_vp_width(float fov_degrees, float focal_length);
 
 //camera_move.c

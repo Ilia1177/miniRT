@@ -8,18 +8,17 @@ static void	make_matrix(t_object data, t_object *new)
 	new->t_m = mat_orthogonal(data.t_m.k);
 	new->t_m.p = data.t_m.p;
 	if (data.type == SPHERE)
-		new->i_m = mat_scale(&new->t_m, scale, scale, scale);
+		mat_scale(&new->t_m, scale, scale, scale);
 	else if (data.type == CYLINDER)
-		new->i_m = mat_scale(&new->t_m, data.radius, data.radius, data.height);
+		mat_scale(&new->t_m, data.radius, data.radius, data.height);
 		//new->i_m = mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == PLANE)
-		new->i_m = mat_scale(&new->t_m, 1, 1, 1);
+		mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == HYPERBOL)
-		new->i_m = mat_scale(&new->t_m, 1.0f, 1.0f, 1.0f);
+		mat_scale(&new->t_m, 1.0f, 1.0f, 1.0f);
 	//	new->i_m = mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
 	else if (data.type == TRIANGLE)
-		new->i_m = mat_inverse(new->t_m);
-
+		new->t_m = mat_init_id();
 }
 
 int	make_object(t_object data, t_object **objects)

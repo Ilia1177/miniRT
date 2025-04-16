@@ -61,6 +61,24 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lume
 	return (luminosity);
 }
 
+void	get_light_dir(t_painter *painter, t_light *light)
+{
+	float	*lim;
+	t_ray	*ray;
+
+	lim = &painter->lim;
+	ray = &painter->ray;
+	if (light->type == POINT)
+	{
+		ray->d = normalize_vec4(sub_vec4(light->pos, ray->o));
+		lim[1] = dist_vec4(ray->o, light->pos);
+	}
+	else if (light->type == DIRECTIONAL)
+	{
+		ray->d = light->pos;
+		lim[1] = T_MAX;
+	}
+}
 /*******************************************************************************
 * Compute light coming at a point from all light sources
 * 1) get the direction of the light form point to light (ray->o to light->pos)
@@ -70,15 +88,14 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 {
 	t_argb		lumen;
 	t_light		*light;
-	//float		dist;
 	float		*lim;
-	t_ray	*ray;
-	t_data	*scene;
+	t_ray		*ray;
+	t_data		*scene;
 
 	lim = painter->lim;
 	ray = &painter->ray;
 	scene = painter->sceneref;
-	painter->lim[0] = EPSILON;
+	lim[0] = EPSILON;
 	lumen = (t_argb) {0, 0, 0, 0};
 	light = scene->lights;
 	while (light)
@@ -87,16 +104,7 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 			lumen = add_colors(lumen, apply_brightness(light->intensity));
 		else
 		{
-			if (light->type == POINT)
-			{
-				ray->d = normalize_vec4(sub_vec4(light->pos, ray->o));
-				lim[1] = dist_vec4(ray->o, light->pos);
-			}
-			else if (light->type == DIRECTIONAL)
-			{
-				ray->d = light->pos;
-				lim[1] = T_MAX;
-			}
+			get_light_dir(painter, light);
 			if (!closest_intersect(painter, 1, scene->objects))
 				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}

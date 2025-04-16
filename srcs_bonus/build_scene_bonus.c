@@ -52,9 +52,7 @@ void	init_obj(t_object *obj, t_type type)
 {
 	ft_bzero(obj, sizeof(t_object));
 	obj->type		= type;
-	obj->t 			= T_MAX;
 	obj->t_m		= mat_init_id();
-	obj->i_m		= mat_inverse(obj->t_m);
 	obj->spec		= SPECULAR;
 }
 
@@ -178,7 +176,7 @@ int	build_scene(t_data *scene)
 	if (map == -1)
 	{
 		perror("miniRT: open_map");
-		return (1);
+		return (2);
 	}
 	line = get_next_line(map);
 	while (!status && line)

@@ -45,23 +45,23 @@ int	rt_init(t_data *scene, int ac, char **av)
 	int		status;
 
 	status = 0;
-	status = rt_scene_init(scene, ac, av);
 	img = &scene->img;
+	status = rt_scene_init(scene, ac, av);
 	if (!status)
 		scene->mlx = mlx_init();
 	if (!scene->mlx && !status)
-		status = -1;
+		status = -11;
 	else if (!status)
-		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Ray_tracing");
+		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Hazardous RAY TRACER");
 	if (!scene->win && !status)
-		status = -2;
+		status = -12;
 	else if (!status)
 		img->ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
 	if (!img->ptr && !status)
-		status = -3;
+		status = -13;
 	else if (!status)
 		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
 	if (!img->addr && !status)
-		status = -4;
+		status = -14;
 	return (status);
 }

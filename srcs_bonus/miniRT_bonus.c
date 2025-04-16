@@ -20,6 +20,7 @@ int rt_render(t_data *scene)
 	char	*tmp;
 	const t_argb color = {255, 245, 47, 187};
 	const t_vec2 pos = {0, 0};
+
 	gettimeofday(&last_time, NULL);
     pthread_mutex_lock(&scene->print);
     while (scene->at_rest < THREAD_NB) {

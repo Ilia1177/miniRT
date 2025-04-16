@@ -10,9 +10,12 @@ static void	ray_reflect(t_ray *ray)
 // 1. Compute new origin of ray = hit point in world space
 // 2. Get the vector to camera
 // 3. Compute normal of object
-static void	ray_update(t_ray *ray, t_object *obj)
+static void	ray_update(t_painter *painter, t_object *obj)
 {
-	ray->o = add_vec4(mult_vec4(ray->d, obj->t), ray->o);
+	t_ray	*ray;
+
+	ray = &painter->ray;
+	ray->o = add_vec4(mult_vec4(ray->d, painter->t), ray->o);
 	ray->v = mult_vec4(ray->d, -1);
 	if (obj->type == CYLINDER)
 		cylinder_normal(ray, obj);
@@ -32,11 +35,11 @@ t_argb	get_reflected_color(t_painter *painter)
 {
 	t_argb reflected_color;
 
-	ft_bzero(&painter->reflected_color, sizeof(reflected_color));
+	ft_bzero(&reflected_color, sizeof(reflected_color));
 	ray_reflect(&painter->ray);
 	painter->lim[0] = EPSILON;
 	painter->lim[2] -= 1.0f;
-	painter->reflected_color = throw_ray(painter);
+	reflected_color = throw_ray(painter);
 	return (reflected_color);
 }
 
@@ -54,24 +57,24 @@ t_argb	throw_ray(t_painter *painter)
 {
 	t_object	*obj;
 	t_data	*scene;
-//	t_argb	local_color;
-//	t_argb	refected_color;
+	t_argb	local_color;
+	t_argb	reflected_color;
+	t_argb	lumen;
 
 	scene = painter->sceneref;
-	ft_bzero(&painter->local_color, sizeof(t_argb));
+	ft_bzero(&local_color, sizeof(t_argb));
 	obj = closest_intersect(painter, 0, scene->objects);
 	if (obj == NULL)
-		return (painter->local_color);
-	ray_update(&painter->ray, obj);
-	painter->lumen = compute_lighting(painter, obj);
-	painter->local_color = mult_colors(pattern_color(&painter->ray, obj, scene), painter->lumen);
+		return (local_color);
+	ray_update(painter, obj);
+	lumen = compute_lighting(painter, obj);
+	local_color = mult_colors(pattern_color(&painter->ray, obj, scene), lumen);
 	if (painter->lim[2] <= 0 || obj->reflect.a <= 0)
-		return (painter->local_color);
-
-	painter->reflected_color = get_reflected_color(painter);
-	painter->local_color = mult_colors(painter->local_color, ease_color(obj->reflect, 255));
-	painter->reflected_color = mult_colors(painter->reflected_color, obj->reflect);
-	return (add_colors(painter->local_color, painter->reflected_color));
+		return (local_color);
+	reflected_color = get_reflected_color(painter);
+	local_color = mult_colors(local_color, ease_color(obj->reflect, 255));
+	reflected_color = mult_colors(reflected_color, obj->reflect);
+	return (add_colors(local_color, reflected_color));
 }
 
 int	solve_quadratic(t_quad *quad)
