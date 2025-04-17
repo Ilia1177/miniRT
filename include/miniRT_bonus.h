@@ -16,7 +16,7 @@
 //# include <semaphore.h>
 # include <sys/time.h>
 //#include <atomic.h>
-# define THREAD_NB 4 
+# define THREAD_NB 8 
 # define MAX_SCALE 30
 # define T_MAX 1600
 # define HEIGHT 800
@@ -48,8 +48,8 @@ typedef struct	s_vec3
 }				t_vec3;
 typedef struct	s_vec2
 {
-	float		x;
-	float		y;
+	int			x;
+	int			y;
 }				t_vec2;
 
 typedef struct	s_mat4
@@ -193,21 +193,15 @@ typedef struct	s_object
 typedef struct	s_painter
 {
 
-	t_argb		color;
-	t_argb		lumen;
-	t_argb		local_color;
-	t_argb		reflected_color;
 	float		lim[3];
 	pthread_mutex_t	brush;
 	int			ready;
-	t_viewport	vp;
-	t_canvas	cnv;
 	float		t;
 	t_ray		ray;
 	pthread_t	itself;
 	int			id;
 	int			done;
-	void		*sceneref;
+	struct s_data		*sceneref;
 }	t_painter;
 
 typedef struct	s_data
@@ -287,9 +281,9 @@ int		key_press(int keycode, t_data *scene);
 int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 //canvas.c
-t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
+t_vec4		throught_vp(t_vec2 cnv, t_viewport vp);
 void		display_color(t_painter *painter);
-t_vec2		cnv_to_screen(t_canvas cnv);
+t_vec2		cnv_to_screen(t_vec2 cnv);
 
 //ray
 
@@ -361,8 +355,8 @@ void translate_camera(t_camera *camera, float dx, float dy, float dz);
 void rotate_camera(t_camera *camera, float dx, float dy, float dz);
 
 // debug
-void draw_line(t_img *img, t_vec4 start, t_vec4 end);
-void print_mat4(t_mat4 matrix); // for loop
+void	print_painter(t_painter *painter);
+void	print_mat4(t_mat4 matrix); // for loop
 void	print_argb(t_argb color, char *msg);
 void	print_vec4(t_vec4 v, char *msg);
 void	print_obj(t_object obj);

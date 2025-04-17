@@ -192,7 +192,7 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 
 void	select_object(t_data *scene, int x, int y)
 {
-	t_canvas	cnv;
+	t_vec2		cnv;
 	t_viewport  vp;
 	t_object	*last_obj;
 	float		t_lim[2];	
@@ -202,9 +202,8 @@ void	select_object(t_data *scene, int x, int y)
 	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
 	vp = scene->viewport;
-	cnv = scene->cnv;
-	cnv.loc.x = x - (cnv.w / 2);
-	cnv.loc.y = (cnv.h / 2) - y;
+	cnv.x = x - (WIDTH / 2);
+	cnv.y = (HEIGHT / 2) - y;
 	catcher.ray.d = throught_vp(cnv, vp);
 	catcher.ray.d = mat_apply(scene->cam.t_m, catcher.ray.d);
 	catcher.ray.o = scene->cam.t_m.p;

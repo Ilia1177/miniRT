@@ -71,8 +71,6 @@ t_painter	th_painter_init(t_data *scene, int i)
 
 	ft_bzero(&new, sizeof(new));
 	new.brush = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-	new.cnv = scene->cnv;
-	new.vp = scene->viewport;
 	new.sceneref = (t_data *)scene;
 	new.id = i + 1;
 	return (new);
@@ -82,29 +80,29 @@ void	th_painter_kill(t_data *scene)
 {
 	int i;
 
-	printf("Revoke painter!\n");
+	printf("Revoke painter...\n");
 	i = 0;
 	while (i < THREAD_NB)
 	{
-		printf("killing painter %d\n", scene->painter[i].id);
+		printf("killing painter %d.\n", scene->painter[i].id);
 		scene->painter[i].done = 1;
 		i++;
 	}
-	printf("all painter are done!\n");
+	printf("All painter are done!\n");
 }
 
 int th_painter_wait(t_data *scene)
 {
 	int	i;
 
-	printf("wait for thread to finish\n");
+	printf("Wait for painters to finish...\n");
 	i = -1;
 	while (++i < THREAD_NB)
 	{
 		pthread_join(scene->painter[i].itself, NULL);
-		printf("Painter %d gone", scene->painter[i].id);
+		printf("Painter %d/%d gone !", scene->painter[i].id, THREAD_NB);
 	}
-	printf("All painters are gone (bye bye)\n");
+	printf("All painters are gone. (bye bye)\n");
 	return (0);
 }
 int	th_painter_start(t_data *scene)
@@ -118,7 +116,7 @@ int	th_painter_start(t_data *scene)
 		if (pthread_create(&scene->painter[i].itself, NULL, &th_painter_draw, &scene->painter[i]))
 		{
 			perror("thread start:");
-			rt_shut_down(scene);
+			//rt_shut_down(scene);
 			return (1);
 		}
 		i++;

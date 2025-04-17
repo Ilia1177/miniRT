@@ -1,55 +1,68 @@
 #include <miniRT_bonus.h>
 
 // get location of the point in the viemport from canvas'location
-t_vec4 throught_vp(t_canvas cnv, t_viewport vp)
+t_vec4 throught_vp(t_vec2 cnv, t_viewport vp)
 {
 	t_vec4 dir;
 
-	dir.x = cnv.loc.x * vp.w / cnv.w;
-	dir.y = cnv.loc.y * vp.h / cnv.h;
-	dir.z = 1;
+	dir.x = (float)cnv.x * vp.w / WIDTH;
+	dir.y = (float)cnv.y * vp.h / HEIGHT;
+	dir.z = 1.0f;
 	dir.w = 0;
+	dir = normalize_vec4(dir);
 	return (dir);
 }
 
 // get screen's pixel from canvas's point
-t_vec2 cnv_to_screen(t_canvas cnv)
+t_vec2 cnv_to_screen(t_vec2 cnv)
 {
 	t_vec2 screen;
 
-	screen.x = (cnv.w / 2) + cnv.loc.x;
-	screen.y = (cnv.h / 2) - cnv.loc.y;
+	screen.x = (WIDTH / 2) + cnv.x;
+	screen.y = (HEIGHT / 2) - cnv.y;
 	return (screen);
 }
+void	reset_painter(t_painter *painter, t_vec2 cnv)
+{
+	t_data	*scene;
 
+	scene = painter->sceneref;
+	painter->lim[0] = 1.0f;
+	painter->lim[1] = T_MAX;
+	painter->lim[2] = R_LIMIT;
+	painter->ray.o = scene->cam.t_m.p;
+	painter->ray.d = throught_vp(cnv, scene->viewport);
+	painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
+}
 // throw ray for every point of the canvas
 void	display_color(t_painter *painter)
 {
 	t_data			*scene;
 	t_vec2			pix;
-	char		res;
+	char			res;
+	t_vec2			cnv;
+	t_viewport		vp;
+	t_argb			color;
+	int				x;
+	int				y;
 
 	scene = painter->sceneref;
+	//cnv = scene->cnv;
+	vp = scene->viewport;
 	res = scene->res;
 	ft_bzero(&painter->ray, sizeof(t_ray));
-	painter->lim[0] = 1.0f;
-	painter->lim[1] = T_MAX;
-	painter->lim[2] = R_LIMIT;
-
-	painter->cnv.loc.x = (-painter->cnv.w / 2) + ((painter->id-1) * (painter->cnv.w / THREAD_NB));
-	while (painter->cnv.loc.x < (painter->id) * (painter->cnv.w / THREAD_NB) )
+	cnv.x = (-WIDTH / 2) + ((painter->id - 1) * (WIDTH / THREAD_NB));
+	while (cnv.x < painter->id * (HEIGHT / THREAD_NB))
 	{
-		painter->cnv.loc.y = -painter->cnv.h / 2;
-		while (painter->cnv.loc.y < (painter->cnv.h / 2))
+		cnv.y = -HEIGHT / 2;
+		while (cnv.y < (HEIGHT / 2))
 		{
-			painter->ray.o = scene->cam.t_m.p;
-			painter->ray.d = throught_vp(painter->cnv, painter->vp);
-			painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
-			painter->color = throw_ray(painter);
-			pix = cnv_to_screen(painter->cnv);
-			rt_rect(&scene->img, pix, (t_vec2){res, res}, encode_argb(painter->color));
-			painter->cnv.loc.y += res;
+			reset_painter(painter, cnv);
+			color = throw_ray(painter);
+			pix = cnv_to_screen(cnv);
+			rt_rect(&scene->img, pix, (t_vec2){res, res}, encode_argb(color));
+			cnv.y += res;
 		}
-		painter->cnv.loc.x += res;
+		cnv.x += res;
 	}
 }

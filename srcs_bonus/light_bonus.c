@@ -61,13 +61,18 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lume
 	return (luminosity);
 }
 
-void	get_light_dir(t_painter *painter, t_light *light)
+t_argb	compute_light_reflection(t_painter *painter, t_light *light, t_object *obj)
 {
 	float	*lim;
 	t_ray	*ray;
+	t_argb	lumen;
+	t_data	*scene;
 
-	lim = &painter->lim;
+	scene = painter->sceneref;
+	ft_bzero(&lumen, sizeof(t_argb));
+	lim = painter->lim;
 	ray = &painter->ray;
+	lim[0] = EPSILON;
 	if (light->type == POINT)
 	{
 		ray->d = normalize_vec4(sub_vec4(light->pos, ray->o));
@@ -75,10 +80,14 @@ void	get_light_dir(t_painter *painter, t_light *light)
 	}
 	else if (light->type == DIRECTIONAL)
 	{
-		ray->d = light->pos;
+		ray->d = normalize_vec4(light->pos);
 		lim[1] = T_MAX;
 	}
+	if (!closest_intersect(painter, 1, scene->objects))
+		lumen = reflections(ray, apply_brightness(light->intensity), obj->spec);
+	return (lumen);
 }
+
 /*******************************************************************************
 * Compute light coming at a point from all light sources
 * 1) get the direction of the light form point to light (ray->o to light->pos)
@@ -87,26 +96,23 @@ void	get_light_dir(t_painter *painter, t_light *light)
 t_argb	compute_lighting(t_painter *painter, t_object *obj)
 {
 	t_argb		lumen;
+	t_argb		reflection;
 	t_light		*light;
 	float		*lim;
 	t_ray		*ray;
-	t_data		*scene;
 
 	lim = painter->lim;
 	ray = &painter->ray;
-	scene = painter->sceneref;
-	lim[0] = EPSILON;
 	lumen = (t_argb) {0, 0, 0, 0};
-	light = scene->lights;
+	light = painter->sceneref->lights;
 	while (light)
 	{
 		if (light->type == AMBIENT)
 			lumen = add_colors(lumen, apply_brightness(light->intensity));
 		else
 		{
-			get_light_dir(painter, light);
-			if (!closest_intersect(painter, 1, scene->objects))
-				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
+			reflection = compute_light_reflection(painter, light, obj);
+			lumen = add_colors(reflection, lumen);
 		}
 		light = light->next;
 	}

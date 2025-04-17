@@ -77,20 +77,4 @@ t_argb	throw_ray(t_painter *painter)
 	return (add_colors(local_color, reflected_color));
 }
 
-int	solve_quadratic(t_quad *quad)
-{
-	float	square_root;
-
-	quad->delta = quad->b * quad->b - 4.0f * quad->a * quad->c;
-	if (quad->delta < 0.0f)
-	{
-		quad->t[0] = FLT_MAX;
-		quad->t[1] = FLT_MAX;
-		return (0);
-	}
-	square_root = sqrtf(quad->delta);
-	quad->t[0] = (-quad->b - square_root) / (2.0f * quad->a);
-	quad->t[1] = (-quad->b + square_root) / (2.0f * quad->a);
-	return (1);
-}
 
