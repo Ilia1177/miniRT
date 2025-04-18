@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:12:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:16:03 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:01:03 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,43 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_d_v, int spec, t_argb lum)
 // 3) 
 t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 {
-	t_argb		lumen;
-	t_light		*light;
-	float		dist;
+	t_argb			lumen;
+	t_light			*light;
+	t_painter		*painter;
+
+	lumen = (t_argb){0, 0, 0, 0};
+	light = scene->lights;
+	painter = &((t_painter){0.001f, T_MAX, R_LIMIT,*ray, scene});
+	while (light)
+	{
+		if (light->type == AMBIENT)
+			lumen = add_colors(lumen, apply_brightness(light->intensity));
+		else
+		{
+			if (light->type == POINT)
+			{
+				painter->ray.d = normalize_vec4(sub_vec4(light->pos, ray->o));
+				painter->tmax = dist_vec4(ray->o, light->pos);
+			}
+			else if (light->type == DIRECTIONAL)
+				painter->ray.d = light->dir;
+			if (!closest_intersect(painter, 1, scene->objects))
+				lumen = add_colors(reflections(&painter->ray, apply_brightness(light->intensity), obj->spec), lumen);
+		}
+		light = light->next;
+	}
+	return (lumen);
+}
+
+t_argb	compute_lighting_old(t_ray *ray, t_object *obj, t_data *scene)
+{
+	t_argb			lumen;
+	t_light			*light;
+	float			dist;
+	t_painter		*painter;
 
 	(void)obj;
-	lumen = (t_argb) {0, 0, 0, 0};
+	lumen = (t_argb){0, 0, 0, 0};
 	light = scene->lights;
 	while (light)
 	{
@@ -100,7 +131,8 @@ t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
 				ray->d = light->dir;
 				dist = T_MAX;
 			}
-			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))
+			painter = &((t_painter){0.001f, dist, R_LIMIT,*ray, scene});
+			if (!closest_intersect(painter, 1, scene->objects))
 				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
 		}
 		light = light->next;

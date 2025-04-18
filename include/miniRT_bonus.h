@@ -209,6 +209,15 @@ typedef struct	s_data
 	char		key_state[99999];
 }				t_data;
 
+typedef struct s_painter
+{
+    float	tmin;
+    float	tmax;
+    float	rec;
+    t_ray	ray;
+    t_data	*scene;
+}	t_painter;
+
 //camera move
 //
 void	rotate_y(t_camera *cam, float theta);

@@ -46,7 +46,6 @@ void	sphere_normal(t_ray *ray, t_object *sphere)
 // Point is on the top cap
 void	cylinder_normal(t_ray *ray, t_object *cylinder)
 {
-	//t_vec4	center = sub_vec3(cylinder->pos, mult_vec4(cylinder->axis, cylinder->height/2));
 	const t_vec4	center = cylinder->pos;
 	const t_vec4	axis = normalize_vec4(cylinder->axis);
 	const t_vec4	pt_to_base = sub_vec4(ray->o, center);
@@ -59,5 +58,4 @@ void	cylinder_normal(t_ray *ray, t_object *cylinder)
 		ray->n = mult_vec4(axis, -1.0f);
 	else
 		ray->n = axis;
-	//	ray->n = compute_normal(ray->o, cylinder);
 }

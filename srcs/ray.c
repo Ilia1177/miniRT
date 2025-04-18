@@ -40,7 +40,7 @@ void	r_update(t_ray *ray, t_object *obj)
 // 4) compute light at hitting point
 // 5) return color if no reflective or recursive <= 0
 // 6) reflect ray and throw new ray to get reflections
-t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
+t_argb	throw_ray(t_painter *painter)
 {
 	t_object	*obj;
 	t_argb		reflected_color;
@@ -48,16 +48,16 @@ t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 	t_argb		lumen;
 
 	local_color = (t_argb){0, 0, 0, 0};
-	obj = closest_intersect(ray, 0, t_min, t_max, scene->objects);
+	obj = closest_intersect(painter, 0, painter->scene->objects);
 	if (obj == NULL)
 		return (local_color);
-	r_update(ray, obj);
-	lumen = compute_lighting(ray, obj, scene);
+	r_update(&painter->ray, obj);
+	lumen = compute_lighting(&painter->ray, obj, painter->scene);
 	local_color = mult_colors(obj->color, lumen);
-	if (rec <= 0 || obj->reflect.a <= 0)
+	if (painter->rec <= 0 || obj->reflect.a <= 0)
 		return (local_color);
-	r_reflect(ray);
-	reflected_color = throw_ray(ray, 0.001f, t_max, rec - 1, scene);
+	r_reflect(&painter->ray);
+	reflected_color = throw_ray(painter);
 	local_color = mult_colors(local_color, ease_color(obj->reflect, 255));
 	reflected_color = mult_colors(reflected_color, obj->reflect);
 	return (add_colors(local_color, reflected_color));

@@ -76,6 +76,7 @@ int	handle_input(t_data *scene)
 void	select_object(t_data *scene)
 {
 	t_ray		catch_ray;
+	t_painter	*painter;
 	t_canvas	cnv;
 	t_viewport	vp;
 	t_object	*obj;
@@ -89,6 +90,6 @@ void	select_object(t_data *scene)
 	catch_ray.d = get_viewport_loc(cnv, vp);
 	catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
 	catch_ray.o = scene->cam.pos;
-	scene->selected = closest_intersect(&catch_ray, 0,
-			0.001f, T_MAX, scene->objects);
+	painter = &((t_painter){0.001f, T_MAX, R_LIMIT, catch_ray, scene});
+	scene->selected = closest_intersect(painter, 0, scene->objects);
 }
