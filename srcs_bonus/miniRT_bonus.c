@@ -113,11 +113,17 @@ int	display_scene(t_data *scene)
 	return (scene->status);
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
 	t_data		scene;
 	t_painter	painter;
 
+	(void)envp;
+	if (!envp)
+	{
+		printf("no environnemnt\n");
+		return (0);
+	}
 	scene.status = rt_init(&scene, ac, av);
 	if (!scene.status)
 		scene.status = build_scene(&scene);
