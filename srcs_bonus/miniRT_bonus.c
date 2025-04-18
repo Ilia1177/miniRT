@@ -11,6 +11,29 @@ long long	time_from(struct timeval *last)
 	usec = current_time.tv_usec - last->tv_usec;
 	return ((sec * 1000000LL) + (usec));
 }
+
+void	print_timestamp(struct timeval *last_time, t_data *scene)
+{
+	const char	*title = "ms per frame: ";
+	char		str[20];
+	int			time;
+	int			len;
+	int			i;
+
+	time = time_from(last_time) / 1000;
+	len = get_intlen(time, 10);
+	i = 0;
+	while (i < len)
+	{
+		str[len - i - 1] = (time % 10) + '0';
+		time = time / 10;
+		i++;
+	}
+	str[len] = '\0';
+	mlx_string_put(scene->mlx, scene->win, 10, 10, 0, (char *)title);
+	mlx_string_put(scene->mlx, scene->win, 90, 10, 0, str);
+}
+
 int	rt_multi_thread(t_data *scene)
 {
 	struct timeval last_time;
@@ -18,55 +41,35 @@ int	rt_multi_thread(t_data *scene)
 	char	*tmp;
 	const t_vec2 pos = {0, 0};
 
-	gettimeofday(&last_time, NULL);
-    pthread_mutex_lock(&scene->print);
-    while (scene->at_rest < THREAD_NB) {
-        pthread_cond_wait(&scene->master_rest, &scene->print);
-    }
+	gettimeofday(&last_time, NULL);								// Timestamp 
+    pthread_mutex_lock(&scene->print);							//
+    while (scene->at_rest < THREAD_NB)							// wait until all thread are done (scene->at_rest)	
+        pthread_cond_wait(&scene->master_rest, &scene->print);	
 	pthread_mutex_unlock(&scene->print);
-	rt_rect(&scene->img, pos, (t_vec2){110, 20}, 0xFFFFFFFF);
+																// does his work ...
+	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);	
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);
-	str = 0;
-	tmp = ft_itoa((int)time_from(&last_time) / 1000);
-	if (tmp)
-		str = ft_strjoin("MS per frame:", tmp);
-	if (str)
-		mlx_string_put(scene->mlx, scene->win, 10, 10, 0, str);
-	free(str);
-	free(tmp);
-	scene->at_rest = 0;
-    pthread_cond_broadcast(&scene->painter_rest);
+	print_timestamp(&last_time, scene);
+	scene->at_rest = 0;											// set at_rest = 0 to unlock thread "painters"
+    pthread_cond_broadcast(&scene->painter_rest);				// send signal to unlock them
     pthread_mutex_unlock(&scene->print);
-//	if (!scene->processing)
-//		mlx_loop_end(scene->mlx);
 	return (0);
 }
+
 int rt_mono_thread(t_data *scene)
 {
 	struct timeval last_time;
-	char	*str;
-	char	*tmp;
-	const	t_argb color = {255, 245, 47, 187};
 	const	t_vec2 pos = {0, 0};
 	t_painter painter;
 
 	gettimeofday(&last_time, NULL);
 	painter = th_painter_init(scene, 0);
 	display_color(&painter);
-	rt_rect(&scene->img, pos, (t_vec2){110, 20}, 0xFFFFFFFF);
+	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);
-	str = 0;
-	tmp = ft_itoa((int)time_from(&last_time) / 1000);
-	if (tmp)
-		str = ft_strjoin("MS per frame:", tmp);
-	if (str)
-		mlx_string_put(scene->mlx, scene->win, 10, 10, 0, str);
-	free(str);
-	free(tmp);
-//	if (!scene->processing)
-//		mlx_loop_end(scene->mlx);
+	print_timestamp(&last_time, scene);
 	return (0);
 }
 

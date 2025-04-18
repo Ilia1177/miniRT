@@ -3,7 +3,7 @@
 void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
 {
 	(void)dz;
-	if (cam->pitch + dx < 89.0f && cam->pitch + dx > -89.0f)
+	if (cam->pitch + dx < 80.0f && cam->pitch + dx > -80.0f)
 		cam->pitch += dx;
 	cam->yaw += dy;
 	update_camera_rotation(cam);

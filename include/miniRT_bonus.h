@@ -17,7 +17,7 @@
 # include <sys/time.h>
 //#include <atomic.h>
 # define THREAD_NB 8 
-# define MAX_SCALE 30
+# define MAX_SCALE 1000
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800 
@@ -354,7 +354,7 @@ void	print_mat4(t_mat4 matrix); // for loop
 void	print_argb(t_argb color, char *msg);
 void	print_vec4(t_vec4 v, char *msg);
 void	print_obj(t_object obj);
-void	print_error_msg(int status);
+void	print_error_msg(int status, char *line);
 void	print_light(t_light light);
 void	print_cam(t_camera camera);
 

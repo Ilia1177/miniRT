@@ -66,8 +66,6 @@ void	mat_scale(t_mat4 *m, float sx, float sy, float sz)
 	lim = mag_vec4(vec);
 	if (lim < MAX_SCALE && lim > EPSILON)
 		m->k = mult_vec4(m->k, sz);
-	printf("Scale matrix:\n");
-	print_mat4(*m);
 }
 
 void	mat_translate(t_mat4 *m, float dx, float dy, float dz)

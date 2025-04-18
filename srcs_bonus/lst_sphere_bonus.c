@@ -3,7 +3,6 @@
 static void	make_matrix(t_object data, t_object *new)
 {
 	const float	scale = data.radius;
-	//const float	scale = 1;
 
 	new->t_m = mat_orthogonal(data.t_m.k);
 	new->t_m.p = data.t_m.p;
@@ -11,7 +10,6 @@ static void	make_matrix(t_object data, t_object *new)
 		mat_scale(&new->t_m, scale, scale, scale);
 	else if (data.type == CYLINDER)
 		mat_scale(&new->t_m, data.radius, data.radius, data.height);
-		//new->i_m = mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == PLANE)
 		mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == HYPERBOL)
@@ -31,8 +29,6 @@ int	make_object(t_object data, t_object **objects)
 		return (-109);
 	ft_memcpy(new_object, &data, sizeof(t_object));
 	make_matrix(data, new_object);
-	printf("\nMAKE OBJECT: transform matrix of %d:\n", data.type);
-	print_mat4(new_object->t_m);
 	new_object->next = NULL;
 	curr_object = NULL;
 	if (*objects == NULL)

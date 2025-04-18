@@ -57,16 +57,16 @@ void print_cam(t_camera camera)
 * Print message when an error is catched
 * 109 is ascii code of m firt letter of malloc
 ******************************************************************************/
-void	print_error_msg(int status)
+void	print_error_msg(int status, char *line)
 {
 	if (status == -1)
-		printf("Error\nBad position arguments\n");
+		printf("Error\nBad position arguments on line: %s\n", line);
 	if (status == -2)
-		printf("Error\nBad rgb arguments\n");
+		printf("Error\nBad rgb arguments on line: %s\n", line);
 	if (status == -3)
-		printf("Error\nBad float arguments\n");
+		printf("Error\nBad float arguments on line: %s\n", line);
 	if (status == -4)
-		printf("Error\nBad type arguments, only A,C,L,sp,pl,cy allowed\n");
+		printf("Error\nBad type arguments on line: %s (only A,C,L,sp,pl,cy allowed)\n", line);
 	if (status == -5)
 		printf("Error\nWrong number of light: only one ambient and one spot\n");
 	if (status == -6)
@@ -74,7 +74,7 @@ void	print_error_msg(int status)
 	if (status == -7)
 		printf("Error\nWrong number of light: only one ambient, one point\n");
 	if (status == -8)
-		printf("Error\nWrong options arguments\n");
+		printf("Error\nWrong options arguments on line: %s\n", line);
 	if (status == -109)
 		printf("Malloc error\n");
 }

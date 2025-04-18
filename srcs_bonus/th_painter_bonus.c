@@ -31,27 +31,21 @@ void	*th_painter_draw(void *worker)
 	scene = painter->sceneref;
 	while (1)
 	{
-		pthread_mutex_lock(&scene->print);
-		if (!scene->processing)
+		pthread_mutex_lock(&scene->print);			// protection for scene->processing
+		if (!scene->processing)						// if the simulation is not running, then quit.
 		{
 			pthread_mutex_unlock(&scene->print);
 			break ;
 		}
 		pthread_mutex_unlock(&scene->print);
-
-		//printf("is painting\n");
-		display_color(painter);
-
-
-        pthread_mutex_lock(&scene->print); // lock
-		scene->at_rest++;
-		//printf("at rest: %d\n", scene->at_rest);
-		if (scene->at_rest == THREAD_NB)
+		display_color(painter);						// throw_ray & write colors to scene->img
+        pthread_mutex_lock(&scene->print); 			// lock
+		scene->at_rest++; 							// painter is done writing colors
+		if (scene->at_rest == THREAD_NB)			// last thread send signal to unlock master
 			pthread_cond_signal(&scene->master_rest);
 
-		//printf("is done: %d\n", painter->done);
-		while (scene->processing && scene->at_rest)
-			pthread_cond_wait(&scene->painter_rest, &scene->print); // wait
+		while (scene->processing && scene->at_rest)	// threads wait until master unlock them (if scene->at_rest == 0)
+			pthread_cond_wait(&scene->painter_rest, &scene->print);
 		pthread_mutex_unlock(&scene->print);
 	}
 
