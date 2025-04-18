@@ -51,13 +51,16 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 void	display_color(t_data *scene)
 {
 	t_ray			ray;
+	t_painter		*painter;
 	t_argb			color;
 	t_viewport		vp;
 	t_canvas		cnv;
 	t_vec2			pix;
 	const char		res = scene->res;
 
-	ray.o.w = 1;
+	ft_bzero(&ray, sizeof(t_ray));
+	painter = &((t_painter){1.0f, T_MAX, R_LIMIT,ray, scene});
+	painter->ray.o.w = 1;
 	vp = scene->viewport;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
@@ -67,10 +70,10 @@ void	display_color(t_data *scene)
 		cnv.loc.y = -cnv.h / 2;
 		while (cnv.loc.y < cnv.h / 2)
 		{
-			ray.o = scene->cam.pos;
-			ray.d = get_viewport_loc(cnv, vp);
-			ray.d = apply_camera_rotation(scene->cam, ray.d);
-			color = throw_ray(&ray, 1.0f, T_MAX, R_LIMIT, scene);
+			painter->ray.o = scene->cam.pos;
+			painter->ray.d = get_viewport_loc(cnv, vp);
+			painter->ray.d = apply_camera_rotation(scene->cam, painter->ray.d);
+			color = throw_ray(painter);
 			pix = cnv_to_screen(cnv);
 			color_screen(&scene->img, pix.x, pix.y, res, color);
 			cnv.loc.y += res;

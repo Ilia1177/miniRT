@@ -40,12 +40,14 @@ typedef struct	s_vec4
 	float		z;
 	float		w;
 }				t_vec4;
+
 typedef struct	s_vec3
 {
 	float		x;
 	float		y;
 	float		z;
 }				t_vec3;
+
 typedef struct	s_vec2
 {
 	int			x;
@@ -59,13 +61,6 @@ typedef struct	s_mat4
 	t_vec4	k;
 	t_vec4	p;
 }	t_mat4;
-
-typedef struct	s_mat3
-{
-	t_vec3	i;
-	t_vec3	j;
-	t_vec3	k;
-}	t_mat3;
 
 typedef struct	s_rgb
 {
@@ -178,7 +173,7 @@ typedef struct	s_object
 	t_vec4			vertice[3];
 	t_mat4			t_m;
 	float			t;
-	t_mat4			i_m;
+//	t_mat4			i_m;
 	t_vec4			scale;
 	float			radius;
 	float			height;
@@ -194,8 +189,8 @@ typedef struct	s_painter
 {
 
 	float		lim[3];
-	pthread_mutex_t	brush;
-	int			ready;
+//	pthread_mutex_t	brush;
+//	int			ready;
 	float		t;
 	t_ray		ray;
 	pthread_t	itself;
@@ -218,8 +213,8 @@ typedef struct	s_data
 	char		*map_name;
 	char		rend;
 	char		res;
-	t_painter		painter[THREAD_NB];
-	pthread_t	listener;
+	t_painter	painter[THREAD_NB];
+//	pthread_t	listener;
 //	float		intersec_p[2];
 	t_img		img;
 	//t_img		earth;
@@ -230,11 +225,10 @@ typedef struct	s_data
 	t_object	*selected;
 	t_object	*objects;
 	t_light		*lights;
-	t_vec2		mouse;
+//	t_vec2		mouse;
 	int			mouse_state;
 	char		key_state[99999];
 }				t_data;
-
 
 //thread
 int			th_master_start(t_data *scene);

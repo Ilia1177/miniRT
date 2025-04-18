@@ -6,59 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:59:39 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 10:33:12 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/15 11:41:59 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT.h>
-
-int	check_nb_obj(t_data *scene)
-{
-	int			nb_sphere;
-	int			nb_plane;
-	int			nb_cylinder;
-	t_object	*curr_obj;
-
-	nb_sphere = 0;
-	nb_cylinder = 0;
-	nb_plane = 0;
-	curr_obj = scene->objects;
-	while (curr_obj)
-	{
-		if (curr_obj->type == SPHERE)
-			nb_sphere++;
-		if (curr_obj->type == CYLINDER)
-			nb_cylinder++;
-		if (curr_obj->type == PLANE)
-			nb_plane++;
-		curr_obj = curr_obj->next;
-	}
-	if (!nb_sphere || !nb_cylinder || !nb_plane)
-		return (-6);
-	return (0);
-}
-
-int	check_nb_light(t_data *scene)
-{
-	int			nb_ambient;
-	int			nb_point;
-	t_light		*curr_light;
-
-	nb_ambient = 0;
-	nb_point = 0;
-	curr_light = scene->lights;
-	while (curr_light)
-	{
-		if (curr_light->type == AMBIENT)
-			nb_ambient++;
-		if (curr_light->type == POINT)
-			nb_point++;
-		curr_light = curr_light->next;
-	}
-	if (!nb_point || !nb_ambient)
-		return (-7);
-	return (0);
-}
 
 void	init_obj(t_object *obj, t_type type)
 {
@@ -111,16 +63,6 @@ int	ambient_exist(t_data *scene)
 	return (0);
 }
 
-int	go_to_endl(char *str)
-{
-	int	c;
-
-	c = 0;
-	while (str[c] != '\n')
-		c++;
-	return (c);
-}
-
 int	register_line_into_scene(char *line, t_data *scene, int status)
 {
 	line += skip_space(line);
@@ -156,7 +98,7 @@ int	build_scene(t_data *scene)
 	int			map;
 	int			status;
 	t_object	*it;
-	t_light	*it2;
+	t_light		*it2;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);

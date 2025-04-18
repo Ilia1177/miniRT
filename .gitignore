@@ -12,3 +12,4 @@ objs/
 *.ppma
 *.orig
 Hazardous_miniRT
+*.dSYM

@@ -10,20 +10,20 @@
 *******************************************************************************/
 t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 {
-	const float		n_dot_l = dot_vec3(ray->n, ray->d);
-	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), n_dot_l), ray->d);
-	const float		r_dot_v = dot_vec3(r, ray->v);
+	const float		ndl = dot_vec3(ray->n, ray->d);
+	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), ndl), ray->d);
+	const float		rdv = dot_vec3(r, ray->v);
 	t_argb			diffuse;
 	t_argb			specular;
 
 	(void)spec;
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
-	if (n_dot_l > 0)
+	if (ndl > 0)
 	{
-		diffuse = diffuse_reflect(ray, lumen, n_dot_l);
-		if (spec != -1 && r_dot_v > 0)
-			specular = specular_reflect(ray->v, r, r_dot_v, spec, lumen);
+		diffuse = diffuse_reflect(ray, lumen, ndl);
+		if (spec != -1 && rdv > 0)
+			specular = specular_reflect(ray->v, r, rdv, spec, lumen);
 	}
 	if (diffuse.a > 0 && specular.a > 0)
 		return (add_colors(diffuse, specular));

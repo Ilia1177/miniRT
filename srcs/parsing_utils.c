@@ -6,21 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:48:26 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 13:48:28 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/15 11:40:27 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT.h>
-
-int	skip_space(char *str)
-{
-	int	space;
-
-	space = 0;
-	while (ft_isspace(str[space]))
-		space++;
-	return (space);
-}
 
 /*****************************************************************************
 * convert a string to a vector 3

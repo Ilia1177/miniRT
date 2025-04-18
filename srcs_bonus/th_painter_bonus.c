@@ -70,7 +70,6 @@ t_painter	th_painter_init(t_data *scene, int i)
 	t_painter new;
 
 	ft_bzero(&new, sizeof(new));
-	new.brush = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	new.sceneref = (t_data *)scene;
 	new.id = i + 1;
 	return (new);
