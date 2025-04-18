@@ -202,9 +202,10 @@ typedef struct	s_painter
 typedef struct	s_data
 {
 	pthread_mutex_t print;
+	pthread_mutex_t announce;
 	pthread_cond_t	painter_rest;
 	pthread_cond_t	master_rest;
-
+	struct timeval	start;
 	int			processing;
 	int			at_rest;
 	int			status;
@@ -349,6 +350,9 @@ void translate_camera(t_camera *camera, float dx, float dy, float dz);
 void rotate_camera(t_camera *camera, float dx, float dy, float dz);
 
 // debug
+
+long long	time_from(struct timeval *last);
+void	th_annouce(char *msg, t_painter *painter);
 void	print_painter(t_painter *painter);
 void	print_mat4(t_mat4 matrix); // for loop
 void	print_argb(t_argb color, char *msg);

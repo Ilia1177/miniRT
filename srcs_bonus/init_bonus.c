@@ -21,9 +21,11 @@ int	rt_scene_init(t_data *scene, int ac, char **av)
 		return (1);
 	else if (ac > 1)
 		scene->map_name = av[1];
+	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
 	scene->processing = 1;
 	scene->print = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+	scene->announce = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	scene->painter_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->master_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->cam.yaw = 90.0f;

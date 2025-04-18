@@ -1,4 +1,13 @@
 #include <miniRT_bonus.h>
+void	th_annouce(char *msg, t_painter *painter)
+{
+	t_data			*scene;
+
+	scene = (t_data *)painter->sceneref;
+	pthread_mutex_lock(&scene->announce);
+	printf("%lld painter %d: %s", time_from(&scene->start) / 1000, painter->id, msg);
+	pthread_mutex_unlock(&scene->announce);
+}
 
 void	*th_mastering(void *sceneref)
 {
@@ -31,9 +40,11 @@ void	*th_painter_draw(void *worker)
 	scene = painter->sceneref;
 	while (1)
 	{
+		th_annouce("start\n", painter);
 		pthread_mutex_lock(&scene->print);			// protection for scene->processing
 		if (!scene->processing)						// if the simulation is not running, then quit.
 		{
+			th_annouce("exit\n", painter);
 			pthread_mutex_unlock(&scene->print);
 			break ;
 		}
@@ -41,9 +52,11 @@ void	*th_painter_draw(void *worker)
 		display_color(painter);						// throw_ray & write colors to scene->img
         pthread_mutex_lock(&scene->print); 			// lock
 		scene->at_rest++; 							// painter is done writing colors
+		th_annouce("done\n", painter);													// 
 		if (scene->at_rest == THREAD_NB)			// last thread send signal to unlock master
 			pthread_cond_signal(&scene->master_rest);
 
+		th_annouce("wait\n", painter);
 		while (scene->processing && scene->at_rest)	// threads wait until master unlock them (if scene->at_rest == 0)
 			pthread_cond_wait(&scene->painter_rest, &scene->print);
 		pthread_mutex_unlock(&scene->print);

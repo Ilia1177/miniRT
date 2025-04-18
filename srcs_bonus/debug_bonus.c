@@ -1,5 +1,4 @@
 #include <miniRT_bonus.h>
-
 void	print_vec4(t_vec4 v, char *msg)
 {
 	printf("%s{x: %.3f, y: %.3f, z:%.3f, w: %.3f}\n", msg, v.x, v.y, v.z, v.w);

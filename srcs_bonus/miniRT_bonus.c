@@ -40,18 +40,22 @@ int	rt_multi_thread(t_data *scene)
 	char	*str;
 	char	*tmp;
 	const t_vec2 pos = {0, 0};
+	t_painter	master;
 
+	master = th_painter_init(scene, -1);
 	gettimeofday(&last_time, NULL);								// Timestamp 
-    pthread_mutex_lock(&scene->print);							//
+    pthread_mutex_lock(&scene->print);
+	th_annouce("Master wait\n", &master);
     while (scene->at_rest < THREAD_NB)							// wait until all thread are done (scene->at_rest)	
         pthread_cond_wait(&scene->master_rest, &scene->print);	
 	pthread_mutex_unlock(&scene->print);
-																// does his work ...
+	th_annouce("Master start\n", &master);
 	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);	
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);
 	print_timestamp(&last_time, scene);
 	scene->at_rest = 0;											// set at_rest = 0 to unlock thread "painters"
+	th_annouce("Master DONE\n", &master);
     pthread_cond_broadcast(&scene->painter_rest);				// send signal to unlock them
     pthread_mutex_unlock(&scene->print);
 	return (0);
