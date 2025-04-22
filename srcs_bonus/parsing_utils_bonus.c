@@ -144,18 +144,21 @@ int	str_to_vecdir(char **line, t_vec4 *v)
 	char	*str;
 	char	*end;
 
+	if (get_random_vec4(line, v, 0))
+		return (0);
 	str = *line;
-	v->x = (int)ft_strtof(str, &end);
+	end = str;
+	v->x = ft_strtof(str, &end);
 	if (*end != ',' || str == end)
 		return (-2);
 	norm_float(&v->x, -1.0f, 1.0f);
 	str = end + 1;
-	v->y = (int)ft_strtof(str, &end);
+	v->y = ft_strtof(str, &end);
 	if (*end != ',' || str == end)
 		return (-2);
 	norm_float(&v->y, -1.0f, 1.0f);
 	str = end + 1;
-	v->z = (int)ft_strtof(str, &end);
+	v->z = ft_strtof(str, &end);
 	if (str == end)
 		return (-2);
 	norm_float(&v->z, -1.0f, 1.0f);
@@ -180,12 +183,14 @@ int	get_int_opt(char **line, int *num, int nb_char)
 	*line = end;
 	return (status);
 }
+
 int assign_opt(char **line, int *opt, int nb_char)
 {
 	*opt = 1;
 	*line = *line + nb_char;
 	return (0);
 }
+
 int	get_str_opt(char **line, char **opt, int nb_char)
 {
 	char	*str;

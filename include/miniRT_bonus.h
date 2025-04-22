@@ -12,9 +12,12 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <pthread.h>
+//# include <stdatomic.h>
+//# include <semaphore.h>
 # include <sys/time.h>
-
-# define MAX_SCALE 30
+//#include <atomic.h>
+# define THREAD_NB 8 
+# define MAX_SCALE 1000
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800 
@@ -37,16 +40,18 @@ typedef struct	s_vec4
 	float		z;
 	float		w;
 }				t_vec4;
+
 typedef struct	s_vec3
 {
 	float		x;
 	float		y;
 	float		z;
 }				t_vec3;
+
 typedef struct	s_vec2
 {
-	float		x;
-	float		y;
+	int			x;
+	int			y;
 }				t_vec2;
 
 typedef struct	s_mat4
@@ -56,13 +61,6 @@ typedef struct	s_mat4
 	t_vec4	k;
 	t_vec4	p;
 }	t_mat4;
-
-typedef struct	s_mat3
-{
-	t_vec3	i;
-	t_vec3	j;
-	t_vec3	k;
-}	t_mat3;
 
 typedef struct	s_rgb
 {
@@ -175,7 +173,7 @@ typedef struct	s_object
 	t_vec4			vertice[3];
 	t_mat4			t_m;
 	float			t;
-	t_mat4			i_m;
+//	t_mat4			i_m;
 	t_vec4			scale;
 	float			radius;
 	float			height;
@@ -187,13 +185,37 @@ typedef struct	s_object
 	t_type			type;
 }	t_object;
 
+typedef struct	s_painter
+{
+
+	float		lim[3];
+//	pthread_mutex_t	brush;
+//	int			ready;
+	float		t;
+	t_ray		ray;
+	pthread_t	itself;
+	int			id;
+	int			done;
+	struct s_data		*sceneref;
+}	t_painter;
+
 typedef struct	s_data
 {
+	pthread_mutex_t print;
+	pthread_mutex_t announce;
+	pthread_cond_t	painter_rest;
+	pthread_cond_t	master_rest;
+	struct timeval	start;
+	int			processing;
+	int			at_rest;
+	int			status;
 	void		*mlx;
 	void		*win;
 	char		*map_name;
 	char		rend;
 	char		res;
+	t_painter	painter[THREAD_NB];
+//	pthread_t	listener;
 //	float		intersec_p[2];
 	t_img		img;
 	//t_img		earth;
@@ -204,50 +226,41 @@ typedef struct	s_data
 	t_object	*selected;
 	t_object	*objects;
 	t_light		*lights;
-	t_vec2		mouse;
+//	t_vec2		mouse;
 	int			mouse_state;
 	char		key_state[99999];
 }				t_data;
 
-typedef struct s_painter
-{
-    float	tmin;
-    float	tmax;
-    float	rec;
-    t_ray	ray;
-    t_data	*scene;
-}	t_painter;
+//thread
+int			th_master_start(t_data *scene);
+int			th_painter_start(t_data *scene);
+int			th_painter_wait(t_data *scene);
+t_painter	th_painter_init(t_data *scene, int i);
+void		th_painer_quit(t_data *scene);
+void		*th_painter_draw(void *painter);
+void		th_painter_kill(t_data *scene);
 
 //camera move
-//
 void	rotate_y(t_camera *cam, float theta);
 void	rotate_x(t_camera *cam, float theta);
 //matrix.c
 
-t_mat4	mat_scale(t_mat4 *m, float sx, float sy, float sz);
-//
-
-t_mat4	mat_orthogonal(t_vec4 dir);
-t_mat4 mat_transpose_inverse(t_mat4 mat);
-t_mat4	mat_rotate(t_mat4 *m, float dx, float dy, float dz);
-t_mat4	mat_translate(t_mat4 *m, float dx, float dy, float dz);
+void	mat_scale(t_mat4 *m, float sx, float sy, float sz);
+void	mat_transpose_inverse(t_mat4 mat);
+void	mat_rotate(t_mat4 *m, float dx, float dy, float dz);
+void	mat_translate(t_mat4 *m, float dx, float dy, float dz);
 t_vec4	mat_apply(t_mat4 mat, t_vec4 v);
 t_mat4	mat_generate(t_object *obj);
 t_mat4	mat_compose(t_mat4 m2, t_mat4 m1);
 t_mat4	mat_transpose(t_mat4 m);
-	
 t_mat4	mat_init_id(void);
+t_mat4	mat_orthogonal(t_vec4 dir);
 t_mat4	mat_inverse(t_mat4 matrix);
-t_mat4	mat_tinverse(t_mat4 matrix);
-void	trans_sp_matrix(t_object *obj);
 
 //img.c
 void			rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color);
 void			rt_put_pixel(t_img *img, int x, int y, int color);
 unsigned int	rt_get_pixel(t_img img, int x, int y);
-//int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
-//int				encode_img_argb(uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue);
-//t_rgb			extract_rgb(int color);
 t_argb			extract_argb(int color);
 
 //norm_utils.c
@@ -263,25 +276,24 @@ int		key_press(int keycode, t_data *scene);
 int		handle_input(t_data *scene);
 int		mouse_pos(int x, int y, t_data *scene);
 //canvas.c
-t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
-void		display_color(t_data *scene);
-t_vec2		cnv_to_screen(t_canvas cnv);
+t_vec4		throught_vp(t_vec2 cnv, t_viewport vp);
+void		display_color(t_painter *painter);
+t_vec2		cnv_to_screen(t_vec2 cnv);
 
 //ray
-t_argb			throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene);
-t_object		*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj);
-int				solve_quadratic(t_quad *quad);
-int				solve_gen_quad(t_quad *quad);
 
 //inter_utils.c
-int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
-int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
-int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
-void get_min_t(float *t_min, float t_tmp, int *hit);
-int	min_pos(float *t, float t1, float t2);
+//int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
+//int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
+//int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
+//void get_min_t(float *t_min, float t_tmp, int *hit);
+//int	min_pos(float *t, float t1, float t2);
 
 
-//intersection.c
+//ray && intersection.c
+t_argb			throw_ray(t_painter *painter);
+t_object		*closest_intersect(t_painter *painter, int shadow, t_object *obj);
+int				solve_quadratic(t_quad *quad);
 int				intersect_triangle(t_ray *ray, t_object *tr, float *t);
 int				intersect_object(t_ray *ray, t_object *obj, float *t);
 int				intersect_sphere(t_ray *ray, t_object *object, float *t);
@@ -292,10 +304,10 @@ int				intersect_hyperboloid(t_ray *ray, t_object *hyperb, float *t);
 
 //normal.c
 void	triangle_normal(t_ray *ray, t_object *tr);
-void	cylinder_normal(t_ray *ray, t_object *cylinder);
-void	plane_normal(t_ray *ray, t_object *plane);
-void	sphere_normal(t_ray *ray, t_object *sphere);
-void hyperboloid_normal(t_ray *ray, t_object *object);
+void	cylinder_normal(t_ray *ray, t_object *cy);
+void	plane_normal(t_ray *ray, t_object *pl);
+void	sphere_normal(t_ray *ray, t_object *sp);
+void	hyperboloid_normal(t_ray *ray, t_object *hy);
 
 //color.c
 t_argb			invert_color(t_argb color);
@@ -307,7 +319,7 @@ unsigned int 	encode_argb(t_argb color);
 t_argb			apply_brightness(t_argb color);
 
 //light.c
-t_argb			compute_lighting(t_ray *ray, t_object *obj, t_data *scene);
+t_argb			compute_lighting(t_painter *painter, t_object *obj);
 void			reflect_ray(t_ray *ray);
 t_argb			specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb intensity);
 t_argb			diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
@@ -329,8 +341,8 @@ float	dist_vec4(t_vec4 a, t_vec4 b);
 
 //camera_vectors.c
 void	update_camera_rotation(t_camera *cam);
-t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
-void	mouse_move(t_camera *cam, float delta_x, float delta_y);
+//t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
+//void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float	calc_vp_width(float fov_degrees, float focal_length);
 
 //camera_move.c
@@ -338,12 +350,15 @@ void translate_camera(t_camera *camera, float dx, float dy, float dz);
 void rotate_camera(t_camera *camera, float dx, float dy, float dz);
 
 // debug
-void draw_line(t_img *img, t_vec4 start, t_vec4 end);
-void print_mat4(t_mat4 matrix); // for loop
+
+long long	time_from(struct timeval *last);
+void	th_annouce(char *msg, t_painter *painter);
+void	print_painter(t_painter *painter);
+void	print_mat4(t_mat4 matrix); // for loop
 void	print_argb(t_argb color, char *msg);
 void	print_vec4(t_vec4 v, char *msg);
 void	print_obj(t_object obj);
-void	print_error_msg(int status);
+void	print_error_msg(int status, char *line);
 void	print_light(t_light light);
 void	print_cam(t_camera camera);
 

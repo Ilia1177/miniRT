@@ -12,12 +12,11 @@
 
 #include <miniRT_bonus.h>
 
-void	handle_object_scaling(t_data *scene, t_mat4 *tm, t_mat4 *im)
+void	handle_object_scaling(t_data *scene, t_mat4 *tm)
 {
 	const float	pscale = 1.1f;
 	const float	mscale = 0.9f;
 
-	(void)im;
 	if (scene->key_state[XK_r] == 1)
 		mat_scale(tm, pscale, 1.0f, 1.0f);
 	if (scene->key_state[XK_t] == 1)
@@ -32,9 +31,8 @@ void	handle_object_scaling(t_data *scene, t_mat4 *tm, t_mat4 *im)
 		mat_scale(tm, 1.0f, 1.0f, mscale);
 }
 
-void	handle_object_translation(t_data *scene, t_mat4 *tm, t_mat4 *im)
+void	handle_object_translation(t_data *scene, t_mat4 *tm)
 {
-	(void)im;
 	if (scene->key_state[XK_i] == 1 && scene->selected)
 		mat_translate(tm, 0, 0, 0.1f);
 	if (scene->key_state[XK_k] == 1 && scene->selected)
@@ -69,9 +67,8 @@ void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 	print_mat4(*tm);
 }
 
-void	handle_object_rotation(t_data *scene, t_mat4 *tm, t_mat4 *im)
+void	handle_object_rotation(t_data *scene, t_mat4 *tm)
 {
-	(void)im;
 	t_object *obj = scene->selected;
 
 	const float	speed = 5.0f;
@@ -119,15 +116,13 @@ void	handle_camera_move(t_data *scene)
 int	handle_input(t_data *scene)
 {
 	t_mat4	*tm;
-	t_mat4	*im;
 
 	if (scene->selected)
 	{
 		tm = &scene->selected->t_m;
-		im = &scene->selected->i_m;
-		handle_object_translation(scene, tm, im);
-		handle_object_rotation(scene, tm, im);
-		handle_object_scaling(scene, tm, im);
+		handle_object_translation(scene, tm);
+		handle_object_rotation(scene, tm);
+		handle_object_scaling(scene, tm);
 	}
 	handle_camera_move(scene);
 	if (scene->key_state[XK_space] == 1)
@@ -157,16 +152,9 @@ int	key_release(int keysym, t_data *scene)
 
 int	mouse_pos(int x, int y, t_data *scene)
 {
-	static int last_x = 0;
-    static int last_y = 0;
-    //float delta_x = x - last_x;
-    //float delta_y = y - last_y;
 	(void)scene;
- //   mouse_move(&scene->cam, delta_x, delta_y);
-    last_x = x;
-    last_y = y;
-//	scene->mouse.x = x;
-//	scene->mouse.y = y;
+	(void)x;
+	(void)y;
 	return (0);
 }
 
@@ -191,11 +179,10 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 		print_mat4(scene->selected->t_m);
 		printf("selection invers matrix:\n");
 		print_mat4(mat_inverse(scene->selected->t_m));
-
 		scene->selected->color = last_color;
 		scene->selected = NULL;
 		last_obj = NULL;
-		}
+	}
 	else if (!scene->selected && last_obj)
 	{
 		last_obj->color = last_color;
@@ -205,21 +192,23 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 
 void	select_object(t_data *scene, int x, int y)
 {
-	t_ray		catch_ray;
-	t_canvas	cnv;
+	t_vec2		cnv;
 	t_viewport  vp;
 	t_object	*last_obj;
+	float		t_lim[2];	
+	t_painter	catcher;
 
+	catcher.lim[0] = EPSILON;
+	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
 	vp = scene->viewport;
-	cnv = scene->cnv;
-	cnv.loc.x = x - (cnv.w / 2);
-	cnv.loc.y = (cnv.h / 2) - y;
-	catch_ray.d = throught_vp(cnv, vp);
-	catch_ray.d = mat_apply(scene->cam.t_m, catch_ray.d);
-	catch_ray.o = scene->cam.t_m.p;
-	catch_ray.v.w = -1.0f;
-	scene->selected = closest_intersect(&catch_ray, 0, 0.001f, T_MAX, scene->objects);
+	cnv.x = x - (WIDTH / 2);
+	cnv.y = (HEIGHT / 2) - y;
+	catcher.ray.d = throught_vp(cnv, vp);
+	catcher.ray.d = mat_apply(scene->cam.t_m, catcher.ray.d);
+	catcher.ray.o = scene->cam.t_m.p;
+	catcher.ray.v.w = -1.0f;
+	scene->selected = closest_intersect(&catcher, 0, scene->objects);
 	show_selected_object(scene, last_obj);
 }
 

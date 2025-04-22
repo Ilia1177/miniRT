@@ -52,9 +52,7 @@ void	init_obj(t_object *obj, t_type type)
 {
 	ft_bzero(obj, sizeof(t_object));
 	obj->type		= type;
-	obj->t 			= T_MAX;
 	obj->t_m		= mat_init_id();
-	obj->i_m		= mat_inverse(obj->t_m);
 	obj->spec		= SPECULAR;
 }
 
@@ -76,14 +74,9 @@ int	place_camera(char **line, t_data *scene)
 	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k));
 	scene->cam.t_m.p = pos;
 	status = str_to_float(&str, &f_fov);
-	printf("cam matrix\n");
-	print_mat4(scene->cam.t_m);
 	if (status != 0)
 		return (status);
-	fov = (int)f_fov;
-	print_cam(scene->cam);
-	printf("\n");
-	scene->cam.i_m = mat_inverse(scene->cam.t_m);
+	//fov = (int)f_fov;
 	*line = str + skip_space(str);
 	return (status);
 }
@@ -140,7 +133,7 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 		else
 			return (0);
 	}
-	print_error_msg(status);
+	print_error_msg(status, line);
 	return (status);
 }
 
@@ -178,12 +171,11 @@ int	build_scene(t_data *scene)
 	if (map == -1)
 	{
 		perror("miniRT: open_map");
-		return (1);
+		return (2);
 	}
 	line = get_next_line(map);
 	while (!status && line)
 	{
-	printf("line: %s - %d\n", line, status);
 		status = register_line_into_scene(line, scene, status);
 		free(line);
 		line = get_next_line(map);
@@ -193,7 +185,8 @@ int	build_scene(t_data *scene)
 	if (status)
 		gnl_clear_buffer(map);
 	close(map);
-	print_all(scene);
+	if (!status)
+		print_all(scene);
 		//status = check_nb_obj(scene);
 	//if (status)
 	//	print_error_msg(status);

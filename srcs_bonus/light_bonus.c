@@ -10,20 +10,20 @@
 *******************************************************************************/
 t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 {
-	const float		n_dot_l = dot_vec3(ray->n, ray->d);
-	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), n_dot_l), ray->d);
-	const float		r_dot_v = dot_vec3(r, ray->v);
+	const float		ndl = dot_vec3(ray->n, ray->d);
+	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), ndl), ray->d);
+	const float		rdv = dot_vec3(r, ray->v);
 	t_argb			diffuse;
 	t_argb			specular;
 
 	(void)spec;
 	diffuse = (t_argb) {0, 0, 0, 0};
 	specular = (t_argb) {0, 0, 0, 0};
-	if (n_dot_l > 0)
+	if (ndl > 0)
 	{
-		diffuse = diffuse_reflect(ray, lumen, n_dot_l);
-		if (spec != -1 && r_dot_v > 0)
-			specular = specular_reflect(ray->v, r, r_dot_v, spec, lumen);
+		diffuse = diffuse_reflect(ray, lumen, ndl);
+		if (spec != -1 && rdv > 0)
+			specular = specular_reflect(ray->v, r, rdv, spec, lumen);
 	}
 	if (diffuse.a > 0 && specular.a > 0)
 		return (add_colors(diffuse, specular));
@@ -61,38 +61,58 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lume
 	return (luminosity);
 }
 
+t_argb	compute_light_reflection(t_painter *painter, t_light *light, t_object *obj)
+{
+	float	*lim;
+	t_ray	*ray;
+	t_argb	lumen;
+	t_data	*scene;
+
+	scene = painter->sceneref;
+	ft_bzero(&lumen, sizeof(t_argb));
+	lim = painter->lim;
+	ray = &painter->ray;
+	lim[0] = EPSILON;
+	if (light->type == POINT)
+	{
+		ray->d = normalize_vec4(sub_vec4(light->pos, ray->o));
+		lim[1] = dist_vec4(ray->o, light->pos);
+	}
+	else if (light->type == DIRECTIONAL)
+	{
+		ray->d = normalize_vec4(light->pos);
+		lim[1] = T_MAX;
+	}
+	if (!closest_intersect(painter, 1, scene->objects))
+		lumen = reflections(ray, apply_brightness(light->intensity), obj->spec);
+	return (lumen);
+}
+
 /*******************************************************************************
 * Compute light coming at a point from all light sources
 * 1) get the direction of the light form point to light (ray->o to light->pos)
 * 2) if v_dot_n < 0 we are looking the inside the object, -> reverse normal
 *******************************************************************************/
-t_argb	compute_lighting(t_ray *ray, t_object *obj, t_data *scene)
+t_argb	compute_lighting(t_painter *painter, t_object *obj)
 {
 	t_argb		lumen;
+	t_argb		reflection;
 	t_light		*light;
-	float		dist;
+	float		*lim;
+	t_ray		*ray;
 
-	(void)obj;
+	lim = painter->lim;
+	ray = &painter->ray;
 	lumen = (t_argb) {0, 0, 0, 0};
-	light = scene->lights;
+	light = painter->sceneref->lights;
 	while (light)
 	{
 		if (light->type == AMBIENT)
 			lumen = add_colors(lumen, apply_brightness(light->intensity));
 		else
 		{
-			if (light->type == POINT)
-			{
-				ray->d = normalize_vec4(sub_vec4(light->pos, ray->o));
-				dist = dist_vec4(ray->o, light->pos);
-			}
-			else if (light->type == DIRECTIONAL)
-			{
-				ray->d = light->pos;
-				dist = T_MAX;
-			}
-			if (!closest_intersect(ray, 1, 0.001f, dist, scene->objects))
-				lumen = add_colors(reflections(ray, apply_brightness(light->intensity), obj->spec), lumen);
+			reflection = compute_light_reflection(painter, light, obj);
+			lumen = add_colors(reflection, lumen);
 		}
 		light = light->next;
 	}

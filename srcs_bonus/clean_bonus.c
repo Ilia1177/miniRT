@@ -32,9 +32,19 @@ void	free_data(t_data *scene)
 	free_objects(&scene->objects);
 }
 
+
 int	rt_shut_down(t_data *scene)
 {
-	printf("RT SHUT DOWN\n");
+	printf("Shutdown with status: %d.\n", scene->status);
+	if (THREAD_NB > 1)
+	{
+		pthread_mutex_lock(&scene->print);
+		th_painter_kill(scene);
+		scene->processing = 0;
+		pthread_cond_broadcast(&scene->painter_rest);
+		pthread_mutex_unlock(&scene->print);
+		th_painter_wait(scene);
+	}
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
@@ -45,5 +55,9 @@ int	rt_shut_down(t_data *scene)
 		free(scene->mlx);
 	}
 	free_data(scene);
-	exit(0);
+	if (THREAD_NB > 1)
+		pthread_exit(NULL);
+	else
+		exit(scene->status);
+	return (scene->status);
 }

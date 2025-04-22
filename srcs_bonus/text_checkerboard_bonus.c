@@ -113,7 +113,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 	t_argb	color;
 	t_vec4	hp;
 
-	hp = mat_apply(obj->i_m, ray->o);
+	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
 	(void)scene;
 	if (obj->type == SPHERE && obj->pattern)
 	{
