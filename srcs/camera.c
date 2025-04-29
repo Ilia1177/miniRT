@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:31:13 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 10:39:14 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:01:48 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v)
 {
 	t_vec4	result;
 
+	ft_bzero(&result, sizeof(result));
 	result.x = cam.right.x * v.x + cam.up.x * v.y + cam.dir.x * v.z;
 	result.y = cam.right.y * v.x + cam.up.y * v.y + cam.dir.y * v.z;
 	result.z = cam.right.z * v.x + cam.up.z * v.y + cam.dir.z * v.z;

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:36:35 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 20:18:49 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:02:49 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,7 @@
 # define R_LIMIT 3
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
-# define CBOARD_W 24
-# define CBOARD_H 24
-# define CBOARD_SCALE 0.22f
 # define FLT_MAX     3.40282347E+38F
-//# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 # define EPSILON 0.001f
 # define MSG_BAD_POS "Error\nBad position arguments\n"
 # define MSG_BAD_RGB "Error\nBad rgb arguments\n"
@@ -88,11 +84,6 @@ typedef struct s_quad
 	float	b;
 	float	c;
 }	t_quad;
-
-typedef struct s_board
-{
-	t_argb	color[CBOARD_H][CBOARD_W];
-}	t_board;
 
 typedef struct s_uv
 {
@@ -239,10 +230,6 @@ t_vec4		apply_mat4x4(t_matrix m, t_vec4 v);
 
 //img.c
 void		rt_put_pixel(t_img *img, int x, int y, int color);
-int			encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
-int			encode_img_argb(uint8_t a, uint8_t r, uint8_t g, uint8_t b);
-t_rgb		extract_rgb(int color);
-t_argb		extract_argb(int color);
 
 //norm_utils.c
 void		norm_rgb(t_rgb *c);
@@ -299,15 +286,21 @@ void		limit_color(t_argb *color);
 t_argb		ease_color(t_argb reflective, uint8_t factor);
 t_argb		mult_colors(t_argb color1, t_argb intensity);
 t_argb		add_colors(t_argb c1, t_argb c2);
-int			encode_argb(t_argb color);
 t_argb		apply_brightness(t_argb color);
 
+//rgb.c
+int			encode_argb(t_argb color);
+int			encode_rgb(uint8_t red, uint8_t green, uint8_t blue);
+int			encode_img_argb(uint8_t a, uint8_t r, uint8_t g, uint8_t b);
+t_rgb		extract_rgb(int color);
+t_argb		extract_argb(int color);
+
 //light.c
-t_argb		compute_lighting(t_ray *ray, t_object *obj, t_data *scene);
+t_argb		compute_lighting(t_ray *ray, t_data *scene);
 void		reflect_ray(t_ray *ray);
 t_argb		specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb intensity);
 t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
-t_argb		reflections(t_ray *ray, t_argb intensity, int spec);
+t_argb		reflections(t_ray *ray, t_argb intensity);
 
 //camera_vectors.c
 void		update_camera_vectors(t_camera *cam);
@@ -359,6 +352,8 @@ int			check_nb_light(t_data *scene);
 int			rt_scene_tozero(t_data *scene);
 void		mlx_tozero(t_data *scene);
 int			rt_init(t_data *scene);
+void	init_painter(t_painter *painter, t_data *scene, t_ray *ray);
+void		reset_painter(t_painter *painter, t_canvas cnv);
 
 //lst_sphere.c
 int			create_sphere(char **line, t_data *scene);
@@ -384,8 +379,5 @@ void		rotate_on_x(t_object *obj, float theta);
 //cylinder_utils.c
 t_vec4		cy_center_to_base(t_object cy);
 t_vec4		cy_base_to_center(t_vec4 pos, t_vec4 dir, float height);
-
-//dl_img.c
-void		save_as_ppm(t_img *img, char *filename);
 
 #endif

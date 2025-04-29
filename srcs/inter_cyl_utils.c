@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:01:21 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:01:41 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:01:14 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t)
 	t_vec4			d_perp;
 	t_vec4			oc_perp;
 
+	ft_bzero(&quad, sizeof(t_quad));
 	d_perp = sub_vec4(ray->d, mult_vec4(cy->axis, dot_vec4(ray->d, cy->axis)));
 	oc_perp = sub_vec4(oc, mult_vec4(cy->axis, dot_vec4(oc, cy->axis)));
 	quad.a = dot_vec4(d_perp, d_perp);

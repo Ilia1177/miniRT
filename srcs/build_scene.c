@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:59:39 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/15 11:41:59 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:54:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,11 @@ int	build_scene(t_data *scene)
 		print_light(*it2);
 		it2 = it2->next;
 	}
-	//status = check_nb_obj(scene);
-	//if (status)
-	//	print_error_msg(status);
-	//status = check_nb_light(scene);
-	//if (status)
-	//	print_error_msg(status);
-	//return (1);
+	status = check_nb_obj(scene);
+	if (status)
+		print_error_msg(status);
+	status = check_nb_light(scene);
+	if (status)
+		print_error_msg(status);
 	return (status);
 }

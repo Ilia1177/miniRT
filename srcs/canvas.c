@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:40:36 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 10:41:05 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:08:45 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_vec4	get_viewport_loc(t_canvas cnv, t_viewport vp)
 {
 	t_vec4	vp_loc;
 
+	ft_bzero(&vp_loc, sizeof(t_vec4));
 	vp_loc.x = cnv.loc.x * vp.w / cnv.w;
 	vp_loc.y = cnv.loc.y * vp.h / cnv.h;
 	vp_loc.z = 1;
@@ -33,7 +34,8 @@ t_vec2	cnv_to_screen(t_canvas cnv)
 	return (screen);
 }
 
-void	color_screen(t_img *img, int x, int y, int res, t_argb color)
+//void	color_screen(t_img *img, int x, int y, int res, t_argb color)
+void	color_screen(t_img *img, t_vec2 pix, int res, t_argb color)
 {
 	int	i;
 	int	j;
@@ -43,25 +45,21 @@ void	color_screen(t_img *img, int x, int y, int res, t_argb color)
 	{
 		j = -1;
 		while (++j < res)
-			rt_put_pixel(img, x + i, y + j, encode_argb(color));
+			rt_put_pixel(img, pix.x + i, pix.y + j, encode_argb(color));
 	}
 }
 
 // throw ray for every point of the canvas
 void	display_color(t_data *scene)
 {
-	t_ray			ray;
-	t_painter		*painter;
+	t_painter		painter;
 	t_argb			color;
-	t_viewport		vp;
 	t_canvas		cnv;
 	t_vec2			pix;
 	const char		res = scene->res;
 
-	ft_bzero(&ray, sizeof(t_ray));
-	painter = &((t_painter){1.0f, T_MAX, R_LIMIT,ray, scene});
-	painter->ray.o.w = 1;
-	vp = scene->viewport;
+	init_painter(&painter, scene, NULL);
+	painter.ray.o.w = 1;
 	cnv = scene->cnv;
 	cnv.loc.x = -cnv.w / 2;
 	update_camera_vectors(&scene->cam);
@@ -70,12 +68,10 @@ void	display_color(t_data *scene)
 		cnv.loc.y = -cnv.h / 2;
 		while (cnv.loc.y < cnv.h / 2)
 		{
-			painter->ray.o = scene->cam.pos;
-			painter->ray.d = get_viewport_loc(cnv, vp);
-			painter->ray.d = apply_camera_rotation(scene->cam, painter->ray.d);
-			color = throw_ray(painter);
+			reset_painter(&painter, cnv);
+			color = throw_ray(&painter);
 			pix = cnv_to_screen(cnv);
-			color_screen(&scene->img, pix.x, pix.y, res, color);
+			color_screen(&scene->img, pix, res, color);
 			cnv.loc.y += res;
 		}
 		cnv.loc.x += res;

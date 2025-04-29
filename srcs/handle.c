@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:06:49 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:08:00 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:12:11 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int	handle_input(t_data *scene)
 	handle_object_translation(scene);
 	handle_object_rotation(scene);
 	handle_camera_move(scene);
-	if (scene->key_state[XK_space] == 1)
-		save_as_ppm(&scene->img, "img.ppm");
 	if (scene->key_state[XK_F1] == 1 && scene->res < 10)
 		scene->res++;
 	if (scene->key_state[XK_F2] == 1 && scene->res > 1)

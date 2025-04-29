@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:00:29 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:28:17 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,30 @@ int	rt_init(t_data *scene)
 	if (!img->addr)
 		status = -1;
 	return (status);
+}
+
+void	init_painter(t_painter *painter, t_data *scene, t_ray *ray)
+{
+	ft_bzero(painter, sizeof(painter));
+	painter->scene = scene;
+	if (ray)
+		painter->ray = *ray;
+}
+
+void	reset_painter(t_painter *painter, t_canvas cnv)
+{
+	t_data		*scene;
+	t_viewport	vp;
+
+	if (painter)
+	{
+		scene = painter->scene;
+		vp = scene->viewport;
+		painter->tmin = 1.0f;
+		painter->tmax = T_MAX;
+		painter->rec = R_LIMIT;
+		painter->ray.o = scene->cam.pos;
+		painter->ray.d = get_viewport_loc(cnv, vp);
+		painter->ray.d = apply_camera_rotation(scene->cam, painter->ray.d);
+	}
 }

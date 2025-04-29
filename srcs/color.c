@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:42:16 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 20:17:55 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:24:38 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,6 @@ void	limit_color(t_argb *color)
 	color->r = fmin(255, fmax(0, color->r));
 	color->g = fmin(255, fmax(0, color->g));
 	color->b = fmin(255, fmax(0, color->b));
-}
-
-int	encode_argb(t_argb color)
-{
-	const uint8_t	alpha = color.a;
-	const uint8_t	red = color.r;
-	const uint8_t	green = color.g;
-	const uint8_t	blue = color.b;
-
-	return (alpha << 24 | red << 16 | green << 8 | blue);
 }
 
 t_argb	ease_color(t_argb color, uint8_t ease)

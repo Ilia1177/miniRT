@@ -42,15 +42,15 @@ SRCS = 	miniRT\
 		lst_light\
 		lst_plane\
 		lst_sphere\
+		matrix\
 		norm_utils\
 		normal\
 		parsing_utils\
 		parsing_utils_2\
 		print\
 		ray\
+		rgb\
 		rotation_object\
-		dl_img\
-		matrix\
 
 SRCS_BONUS = 	miniRT\
 		build_scene\

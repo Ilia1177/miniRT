@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:28:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:08:15 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:22:41 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 int	key_press(int keysym, t_data *scene)
 {
-	scene->rend = 1;
 	if (keysym == XK_Escape)
 		rt_shut_down(scene);
 	else if (keysym > 0 && keysym < 99999)
+	{
+		scene->rend = 1;
 		scene->key_state[keysym] = 1;
+	}
 	return (keysym);
 }
 
