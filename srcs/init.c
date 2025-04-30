@@ -21,6 +21,7 @@ int	rt_scene_tozero(t_data *scene)
 	scene->cam.right = (t_vec4){1, 0, 0, 0};
 	scene->cam.yaw = 90.0f;
 	scene->cam.pitch = 0.0f;
+	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.h = 1;

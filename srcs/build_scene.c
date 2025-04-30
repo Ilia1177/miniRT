@@ -33,6 +33,11 @@ int	place_camera(char **line, t_data *scene)
 	float	f_fov;
 	int		fov;
 
+	status = 0;
+	if (scene->cam.fov != -1)
+		status = -10;
+	if (status != 0)
+		return (status);
 	str = *line + 1;
 	status = str_to_vec3(&str, &scene->cam.pos);
 	if (status != 0)
@@ -44,7 +49,7 @@ int	place_camera(char **line, t_data *scene)
 	if (status != 0)
 		return (status);
 	fov = (int)f_fov;
-	print_cam(scene->cam);
+	scene->cam.fov = fov;
 	*line = str + skip_space(str);
 	return (status);
 }
@@ -87,8 +92,8 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 		else
 			return (0);
 	}
-	if (status < 0)
-		print_error_msg(status);
+	//if (status < 0)
+//		print_error_msg(status, scene);
 	return (status);
 }
 
@@ -133,11 +138,15 @@ int	build_scene(t_data *scene)
 		print_light(*it2);
 		it2 = it2->next;
 	}
+	if (scene->cam.fov == -1)
+		status = -10;
+	if (status)
+		print_error_msg(status, scene);
 	status = check_nb_obj(scene);
 	if (status)
-		print_error_msg(status);
+		print_error_msg(status, scene);
 	status = check_nb_light(scene);
 	if (status)
-		print_error_msg(status);
+		print_error_msg(status, scene);
 	return (status);
 }

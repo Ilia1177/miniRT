@@ -42,18 +42,14 @@ int	main(int ac, char **av)
 	t_data		scene;
 
 	ft_bzero(&scene, sizeof(t_data));
-	if (ac < 1)
-		return (1);
-	else if (ac > 1)
-		scene.map_name = av[1];
+	if (ac != 2 || ft_strlen(av[1]) <= 3
+		|| ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt")
+		|| !ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
+		print_error_msg(-9, &scene);
+	scene.map_name = av[1];
 	status = rt_init(&scene);
 	if (!status)
 		status = build_scene(&scene);
-	if (status)
-		rt_shut_down(&scene);
-	else if (ac > 2)
-		rt_shut_down(&scene);
-	else if (ac == 2)
-		display_scene(&scene);
+	display_scene(&scene);
 	return (status);
 }

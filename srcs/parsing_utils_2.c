@@ -75,7 +75,7 @@ int	check_nb_light(t_data *scene)
 			nb_point++;
 		curr_light = curr_light->next;
 	}
-	if (!nb_point || !nb_ambient)
+	if (nb_point != 1 || nb_ambient != 1)
 		return (-7);
 	return (0);
 }

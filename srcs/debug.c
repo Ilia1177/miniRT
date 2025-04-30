@@ -52,6 +52,7 @@ void	print_cam(t_camera camera)
 	print_vec4(camera.dir, "\tdir");
 	print_vec4(camera.right, "\tright");
 	print_vec4(camera.up, "\tup");
+	printf("\tfov : %d", camera.fov);
 	printf("\tyaw : %.1f", camera.yaw);
 	printf("\tpitch : %.1f\n", camera.pitch);
 }

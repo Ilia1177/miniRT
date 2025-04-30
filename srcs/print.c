@@ -16,7 +16,7 @@
 * Print message when an error is catched
 * 109 is ascii code of m firt letter of malloc
 ******************************************************************************/
-void	print_error_msg(int status)
+void	print_error_msg(int status, t_data *scene)
 {
 	if (status == -1)
 		printf(MSG_BAD_POS);
@@ -36,6 +36,12 @@ void	print_error_msg(int status)
 		printf(MSG_BAD_OPT);
 	if (status == -109)
 		printf(MSG_BAD_MALL);
+	if (status == -9)
+		printf(MSG_BAD_FILE);
+	if (status == -10)
+		printf(MSG_BAD_CAM);
+	rt_shut_down(scene);
+	exit (EXIT_FAILURE);
 }
 
 void	print_vec4(t_vec4 v, char *msg)

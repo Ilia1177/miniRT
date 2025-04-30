@@ -34,16 +34,18 @@
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
 # define EPSILON 0.001f
+# define MSG_BAD_FILE "Error\nNeed one file *.rt\n"
 # define MSG_BAD_POS "Error\nBad position arguments\n"
 # define MSG_BAD_RGB "Error\nBad rgb arguments\n"
 # define MSG_BAD_FLT "Error\nBad float arguments\n"
 # define MSG_BAD_TYPE "Error\nBad type arguments, only A,C,L,sp,pl,cy allowed\n"
 # define MSG_BAD_LGHT "Error\nWrong number of light: \
-	only one ambient and one spot\n"
+	need one ambient and one spot\n"
 # define MSG_BAD_ELEM "Error\nWrong number of element: \
 	at least one sphere, one cylinder, one plane\n"
 # define MSG_BAD_OPT "Error\nWrong options arguments\n"
-# define MSG_BAD_MALL "Malloc error\n"
+# define MSG_BAD_CAM "Error\nNeed one camera\n"
+# define MSG_BAD_MALL "Error\nMalloc error\n"
 
 typedef struct s_vec2
 {
@@ -101,6 +103,7 @@ typedef struct s_camera
 	t_vec4		up;
 	float		yaw;
 	float		pitch;
+	int			fov;
 }	t_camera;
 
 typedef struct s_viewport
@@ -323,7 +326,7 @@ void		print_light(t_light light);
 void		print_cam(t_camera camera);
 
 //print.c
-void		print_error_msg(int status);
+void		print_error_msg(int status, t_data *scene);
 void		print_vec4(t_vec4 v, char *msg);
 void		print_argb(t_argb color, char *msg);
 
