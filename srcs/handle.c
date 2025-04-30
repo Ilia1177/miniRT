@@ -39,6 +39,22 @@ void	handle_object_rotation(t_data *scene)
 		rotate_on_z(scene->selected, 1.0f);
 }
 
+// translate object on z axis zith i and j
+void	handle_object_resize(t_data *scene)
+{
+	if (scene->key_state[XK_v] == 1 && scene->selected)
+		scene->selected->radius += 0.1;
+	if (scene->key_state[XK_b] == 1 && scene->selected)
+		scene->selected->radius -= 0.1;
+	if (scene->selected->type == CYLINDER)
+	{
+		if (scene->key_state[XK_n] == 1 && scene->selected)
+			scene->selected->height += 0.1;
+		if (scene->key_state[XK_m] == 1 && scene->selected)
+			scene->selected->height -= 0.1;
+	}
+}
+
 void	handle_camera_move(t_data *scene)
 {
 	if (scene->key_state[XK_Left] == 1)
@@ -61,8 +77,12 @@ void	handle_camera_move(t_data *scene)
 
 int	handle_input(t_data *scene)
 {
-	handle_object_translation(scene);
-	handle_object_rotation(scene);
+	if (scene->selected)
+	{
+		handle_object_translation(scene);
+		handle_object_rotation(scene);
+		handle_object_resize(scene);
+	}
 	handle_camera_move(scene);
 	if (scene->key_state[XK_F1] == 1 && scene->res < 10)
 		scene->res++;

@@ -54,3 +54,17 @@ void	print_argb(t_argb color, char *msg)
 	printf("%s: a: %d, r: %d, g: %d, b %d", msg,
 		color.a, color.r, color.g, color.b);
 }
+
+void	print_input(void)
+{
+	printf("+=============+\n\
+|     MENU    |\n\
++=============+=============+=============+=============+\n\
+|    CAM      |   OBJECT    |   OBJECT    |   OBJECT    |\n\
+|-------------|-------------|-------------|-------------|\n\
+|w : forward  |i : forward  |u : up       |c : rot.on z |\n\
+|a : left     |j : left     |o : down     |v : bigger   |\n\
+|d : right    |l : right    |z : rot.on x |b : smaller  |\n\
+|s : backward |k : backward |x : rot.on y |n&m : cyl.   |\n\
++=============+=============+=============+=============+\n");
+}

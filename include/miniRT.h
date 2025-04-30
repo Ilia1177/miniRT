@@ -329,6 +329,7 @@ void		print_cam(t_camera camera);
 void		print_error_msg(int status, t_data *scene);
 void		print_vec4(t_vec4 v, char *msg);
 void		print_argb(t_argb color, char *msg);
+void		print_input(void);
 
 //clean.c
 void		free_light(t_light *light);

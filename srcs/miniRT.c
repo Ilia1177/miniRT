@@ -42,6 +42,7 @@ int	main(int ac, char **av)
 	t_data		scene;
 
 	ft_bzero(&scene, sizeof(t_data));
+	print_input();
 	if (ac != 2 || ft_strlen(av[1]) <= 3
 		|| ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt")
 		|| !ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
