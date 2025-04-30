@@ -36,6 +36,27 @@ int	display_scene(t_data *scene)
 	return (0);
 }
 
+void	select_object(t_data *scene)
+{
+	t_ray		catch_ray;
+	t_painter	*painter;
+	t_canvas	cnv;
+	t_viewport	vp;
+	t_object	*obj;
+
+	obj = NULL;
+	scene->selected = NULL;
+	vp = scene->viewport;
+	cnv = scene->cnv;
+	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
+	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
+	catch_ray.d = get_viewport_loc(cnv, vp);
+	catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
+	catch_ray.o = scene->cam.pos;
+	painter = &((t_painter){0.001f, T_MAX, R_LIMIT, catch_ray, scene});
+	scene->selected = closest_intersect(painter, 0, scene->objects);
+}
+
 int	main(int ac, char **av)
 {
 	int			status;

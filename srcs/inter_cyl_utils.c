@@ -79,7 +79,7 @@ int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t)
 	{
 		oc = sub_vec4(center, ray->o);
 		temp = dot_vec4(oc, cyl->axis) / denom;
-		if (temp > 0)
+		if (temp > EPSILON)
 		{
 			hit = add_vec4(ray->o, mult_vec4(ray->d, temp));
 			hit_vec = sub_vec4(hit, center);
