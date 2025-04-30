@@ -11,11 +11,11 @@ void	rt_put_pixel(t_img *img, int x, int y, int color)
 }
 
 //	not in usage for now
-unsigned int	rt_get_pixel(t_img img, int x, int y)
+uint8_t	rt_get_pixel(t_img img, int x, int y)
 {
-	unsigned int	p;
+	uint8_t	p;
 
-	p = *(unsigned int *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
+	p = *(uint8_t *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
 	return (p);
 }
 

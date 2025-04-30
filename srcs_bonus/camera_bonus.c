@@ -11,7 +11,7 @@ void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
 	print_mat4(cam->t_m);
 }
 
-void translate_camera(t_camera *camera, float dx, float dy, float dz)
+void	translate_camera(t_camera *camera, float dx, float dy, float dz)
 {
 	t_vec4	world_x;
 	t_vec4	world_y;

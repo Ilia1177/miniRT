@@ -40,8 +40,11 @@ void	free_objects(t_object **obj)
 
 void	free_data(t_data *scene)
 {
-	free_light(scene->lights);
-	free_objects(&scene->objects);
+	if (scene)
+	{
+		free_light(scene->lights);
+		free_objects(&scene->objects);
+	}
 }
 
 int	rt_shut_down(t_data *scene)

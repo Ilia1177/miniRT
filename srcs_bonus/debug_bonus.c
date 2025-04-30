@@ -1,13 +1,4 @@
 #include <miniRT_bonus.h>
-void	print_vec4(t_vec4 v, char *msg)
-{
-	printf("%s{x: %.3f, y: %.3f, z:%.3f, w: %.3f}\n", msg, v.x, v.y, v.z, v.w);
-}
-
-void	print_argb(t_argb color, char *msg)
-{
-	printf("%s: a: %d, r: %d, g: %d, b %d\n",msg, color.a, color.r, color.g, color.b);
-}
 
 void	print_light(t_light light)
 {
@@ -44,7 +35,7 @@ void	print_obj(t_object obj)
 	printf("\n");
 }
 
-void print_cam(t_camera camera)
+void	print_cam(t_camera camera)
 {
 	printf("camera :\n");
 	print_mat4(camera.t_m);
@@ -52,34 +43,8 @@ void print_cam(t_camera camera)
 	printf("\tpitch : %.1f\n", camera.pitch);
 }
 
-/*****************************************************************************
-* Print message when an error is catched
-* 109 is ascii code of m firt letter of malloc
-******************************************************************************/
-void	print_error_msg(int status, char *line)
+void	print_mat4(t_mat4 matrix)
 {
-	if (status == -1)
-		printf("Error\nBad position arguments on line: %s\n", line);
-	if (status == -2)
-		printf("Error\nBad rgb arguments on line: %s\n", line);
-	if (status == -3)
-		printf("Error\nBad float arguments on line: %s\n", line);
-	if (status == -4)
-		printf("Error\nBad type arguments on line: %s (only A,C,L,sp,pl,cy allowed)\n", line);
-	if (status == -5)
-		printf("Error\nWrong number of light: only one ambient and one spot\n");
-	if (status == -6)
-		printf("Error\nWrong number of element: at least one sphere, one cylinder, one plane\n");
-	if (status == -7)
-		printf("Error\nWrong number of light: only one ambient, one point\n");
-	if (status == -8)
-		printf("Error\nWrong options arguments on line: %s\n", line);
-	if (status == -109)
-		printf("Malloc error\n");
-}
-
-void print_mat4(t_mat4 matrix)
-{ 
 	print_vec4(matrix.i, "i:");
 	print_vec4(matrix.j, "j:");
 	print_vec4(matrix.k, "k:");
@@ -88,7 +53,6 @@ void print_mat4(t_mat4 matrix)
 
 void	print_painter(t_painter *painter)
 {
-	
 	printf("PAINTER %d\n --> lim[0]: %f lim[1]: %f\n", painter->id, painter->lim[0], painter->lim[1]);
 	print_vec4(painter->ray.o, "ray->o:");
 	print_vec4(painter->ray.d, "ray->d:");

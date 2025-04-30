@@ -43,8 +43,8 @@ void	display_color(t_painter *painter)
 	t_vec2			cnv;
 	t_viewport		vp;
 	t_argb			color;
-	int				x;
-	int				y;
+	//int				x;
+	//int				y;
 
 	scene = painter->sceneref;
 	//cnv = scene->cnv;

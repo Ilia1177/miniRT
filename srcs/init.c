@@ -53,20 +53,20 @@ int	rt_init(t_data *scene)
 	img = &scene->img;
 	scene->mlx = mlx_init();
 	if (!scene->mlx)
-		status = -1;
+		status = -11;
 	else
 		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Ray_tracing");
 	if (!scene->win)
-		status = -1;
+		status = -12;
 	else if (!status)
 		img->ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
 	if (!img->ptr)
-		status = -1;
+		status = -13;
 	else if (!status)
 		img->addr = mlx_get_data_addr(img->ptr, &img->bpp,
 				&img->llen, &img->endian);
 	if (!img->addr)
-		status = -1;
+		status = -14;
 	return (status);
 }
 

@@ -12,15 +12,15 @@
 
 #include <miniRT_bonus.h>
 
-int	rt_scene_init(t_data *scene, int ac, char **av)
+int	rt_scene_init(t_data *scene, char **av)
 {
-	int	i;
+//	int	i;
 
-	ft_bzero(scene, sizeof(t_data));
-	if (ac < 1)
-		return (1);
-	else if (ac > 1)
-		scene->map_name = av[1];
+//	ft_bzero(scene, sizeof(t_data));
+   // if (ac < 1)
+   // 	return (1);
+   // else if (ac > 1)
+   	scene->map_name = av[1];
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
 	scene->processing = 1;
@@ -29,26 +29,38 @@ int	rt_scene_init(t_data *scene, int ac, char **av)
 	scene->painter_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->master_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->cam.yaw = 90.0f;
+	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;
-	i = -1;
-	while (++i < 99999)
-		scene->key_state[i] = 0;
-	//scene->viewport.w = calc_vp_width(53, 2);
+ //   i = -1;
+ //   while (++i < 99999)
+ //   	scene->key_state[i] = 0;
+ //   //scene->viewport.w = calc_vp_width(53, 2);
 	return (0);
 }
 
+void	mlx_tozero(t_data *scene)
+{
+	int	i;
 
-int	rt_init(t_data *scene, int ac, char **av)
+	scene->mlx = NULL;
+	scene->win = NULL;
+	i = -1;
+	while (++i < 99999)
+		scene->key_state[i] = 0;
+}
+
+int	rt_init(t_data *scene, char **av)
 {
 	t_img	*img;
 	int		status;
 
 	status = 0;
+	status = rt_scene_init(scene, av);
+	mlx_tozero(scene);
 	img = &scene->img;
-	status = rt_scene_init(scene, ac, av);
 	if (!status)
 		scene->mlx = mlx_init();
 	if (!scene->mlx && !status)
@@ -66,4 +78,12 @@ int	rt_init(t_data *scene, int ac, char **av)
 	if (!img->addr && !status)
 		status = -14;
 	return (status);
+}
+
+void	init_obj(t_object *obj, t_type type)
+{
+	ft_bzero(obj, sizeof(t_object));
+	obj->type = type;
+	obj->t_m = mat_init_id();
+	obj->spec = SPECULAR;
 }

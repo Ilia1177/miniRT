@@ -69,7 +69,7 @@ void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 
 void	handle_object_rotation(t_data *scene, t_mat4 *tm)
 {
-	t_object *obj = scene->selected;
+	//t_object *obj = scene->selected;
 
 	const float	speed = 5.0f;
 
@@ -195,7 +195,7 @@ void	select_object(t_data *scene, int x, int y)
 	t_vec2		cnv;
 	t_viewport  vp;
 	t_object	*last_obj;
-	float		t_lim[2];	
+	//float		t_lim[2];	
 	t_painter	catcher;
 
 	catcher.lim[0] = EPSILON;

@@ -43,6 +43,7 @@ int intersect_hyperboloidi3(t_ray *ray, t_object *hy, float *t)
     const t_vec4    d = ray->d;
     t_quad          eq;
 
+    (void)hy;
     // Calculate quadratic coefficients for unit hyperboloid equation: x² + y² - z² = 1
     eq.a = d.x * d.x + d.y * d.y - d.z * d.z;
     eq.b = 2.0f * (o.x * d.x + o.y * d.y - o.z * d.z);

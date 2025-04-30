@@ -1,61 +1,5 @@
 #include <miniRT_bonus.h>
 
-int	check_nb_obj(t_data *scene)
-{
-	int			nb_sphere;
-	int			nb_plane;
-	int			nb_cylinder;
-	t_object	*curr_obj;
-
-	nb_sphere = 0;
-	nb_cylinder = 0;
-	nb_plane = 0;
-	curr_obj = scene->objects;
-	while (curr_obj)
-	{
-		if (curr_obj->type == SPHERE)
-			nb_sphere++;
-		if (curr_obj->type == CYLINDER)
-			nb_cylinder++;
-		if (curr_obj->type == PLANE)
-			nb_plane++;
-		curr_obj = curr_obj->next;
-	}
-	if (!nb_sphere || !nb_cylinder || !nb_plane)
-		return (-6);
-	return (0);
-}
-
-int	check_nb_light(t_data *scene)
-{
-	int			nb_ambient;
-	int			nb_point;
-	t_light	*curr_light;
-
-	nb_ambient = 0;
-	nb_point = 0;
-	curr_light = scene->lights;
-	while (curr_light)
-	{
-		if (curr_light->type == AMBIENT)
-			nb_ambient++;
-		if (curr_light->type == POINT)
-			nb_point++;
-		curr_light = curr_light->next;
-	}
-	if (!nb_point || !nb_ambient)
-		return (-7);
-	return (0);
-}
-
-void	init_obj(t_object *obj, t_type type)
-{
-	ft_bzero(obj, sizeof(t_object));
-	obj->type		= type;
-	obj->t_m		= mat_init_id();
-	obj->spec		= SPECULAR;
-}
-
 int	place_camera(char **line, t_data *scene)
 {
 	char	*str;
@@ -64,6 +8,8 @@ int	place_camera(char **line, t_data *scene)
 	int		fov;
 	t_vec4	pos;
 
+	if (scene->cam.fov != -1)
+		return (-10);
 	str = *line + 1;
 	status = str_to_vec4(&str, &pos, 1.0f);
 	if (status != 0)
@@ -76,33 +22,10 @@ int	place_camera(char **line, t_data *scene)
 	status = str_to_float(&str, &f_fov);
 	if (status != 0)
 		return (status);
-	//fov = (int)f_fov;
+	fov = (int)f_fov;
+	scene->cam.fov = fov;
 	*line = str + skip_space(str);
 	return (status);
-}
-
-int	ambient_exist(t_data *scene)
-{
-	t_light	*light;
-
-	light = scene->lights;
-	while (light)
-	{
-		if (light->type == AMBIENT)
-			return (1);
-		light = light->next;
-	}
-	return (0);
-}
-
-int	go_to_endl(char *str)
-{
-	int	c;
-
-	c = 0;
-	while (str[c] != '\n' && str[c])
-		c++;
-	return (c);
 }
 
 int	register_line_into_scene(char *line, t_data *scene, int status)
@@ -133,31 +56,25 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 		else
 			return (0);
 	}
-	print_error_msg(status, line);
+	//print_error_msg(status, line);
 	return (status);
 }
 
-void	print_all(t_data *scene)
+int	check_map_elem(int status, t_data *scene)
 {
-	t_object	*obj;
-	t_light		*light;
-
-	printf("**************************linked list OBJECT**************\n");
-	obj = scene->objects;
-	while (obj)
-	{
-		print_obj(*obj);
-		obj = obj->next;
-	}
-	printf("**************************linked list LIGHT**************\n");
-	light = scene->lights;
-	while (light)
-	{
-		print_light(*light);
-		light = light->next;
-	}
-	printf("****************************CAMERA **********************\n");
-	print_cam(scene->cam);
+	if (!status)
+		print_all(scene);
+	if (scene->cam.fov == -1)
+		status = -10;
+	if (status)
+		print_error_msg(status, scene);
+	status = check_nb_obj(scene);
+	if (status)
+		print_error_msg(status, scene);
+	status = check_nb_light(scene);
+	if (status)
+		print_error_msg(status, scene);
+	return (status);
 }
 
 int	build_scene(t_data *scene)
@@ -185,14 +102,6 @@ int	build_scene(t_data *scene)
 	if (status)
 		gnl_clear_buffer(map);
 	close(map);
-	if (!status)
-		print_all(scene);
-		//status = check_nb_obj(scene);
-	//if (status)
-	//	print_error_msg(status);
-	//status = check_nb_light(scene);
-	//if (status)
-	//	print_error_msg(status);
-	//return (1);
+	status = check_map_elem(status, scene);
 	return (status);
 }

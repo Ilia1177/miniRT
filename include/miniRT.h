@@ -21,7 +21,6 @@
 # include <X11/X.h>
 # include <math.h>
 # include <stdio.h>
-//# include <float.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
@@ -46,6 +45,10 @@
 # define MSG_BAD_OPT "Error\nWrong options arguments\n"
 # define MSG_BAD_CAM "Error\nNeed one camera\n"
 # define MSG_BAD_MALL "Error\nMalloc error\n"
+# define MSG_BAD_MLX "Error\nMlx init\n"
+# define MSG_BAD_WIN "Error\nMlx window\n"
+# define MSG_BAD_IMG "Error\nMlx image\n"
+# define MSG_BAD_ADD "Error\nMlx image address\n"
 
 typedef struct s_vec2
 {
@@ -139,7 +142,6 @@ typedef enum e_type
 	SPHERE,
 	PLANE,
 	CYLINDER,
-	HYPERBOL,
 }	t_type;
 
 typedef struct s_light
@@ -221,15 +223,15 @@ void		rotate_y(t_camera *cam, float theta);
 void		rotate_x(t_camera *cam, float theta);
 
 //matrix.c
-t_matrix	mat_rotate(t_matrix m1, t_matrix m2);
-t_vec4		mat_translate(t_matrix mat, t_vec4 v);
+//t_matrix	mat_rotate(t_matrix m1, t_matrix m2);
+//t_vec4		mat_translate(t_matrix mat, t_vec4 v);
 t_vec4		mat_apply(t_matrix mat, t_vec4 v);
 t_matrix	mat_generate(t_object *obj);
 t_matrix	mat_compose(t_matrix m2, t_matrix m1);
-t_matrix	mat_transpose(t_matrix m);
+//t_matrix	mat_transpose(t_matrix m);
 t_matrix	mat_inverse(t_matrix matrix);
-void		trans_sp_matrix(t_object *obj);
-t_vec4		apply_mat4x4(t_matrix m, t_vec4 v);
+//void		trans_sp_matrix(t_object *obj);
+//t_vec4		apply_mat4x4(t_matrix m, t_vec4 v);
 
 //img.c
 void		rt_put_pixel(t_img *img, int x, int y, int color);
@@ -257,9 +259,7 @@ t_vec2		cnv_to_screen(t_canvas cnv);
 t_vec4		get_viewport_loc(t_canvas cnv, t_viewport vp);
 
 //ray
-//t_argb		throw_ray(t_ray *ray, float tmin, float tmax, int rec, t_data *sc);
 t_argb		throw_ray(t_painter *painter);
-//t_object	*closest_intersect(t_ray *ray, int shadow, float t_min, float t_max, t_object *obj);
 t_object	*closest_intersect(t_painter *painter, int shadow, t_object *obj);
 t_quad		solve_quadratic(t_vec4 oc, t_vec4 dir, float radius);
 int			solve_gen_quad(t_quad *quad);
@@ -301,7 +301,6 @@ t_argb		extract_argb(int color);
 //light.c
 t_argb		compute_lighting(t_ray *ray, t_data *scene);
 void		reflect_ray(t_ray *ray);
-t_argb		specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb intensity);
 t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
 t_argb		reflections(t_ray *ray, t_argb intensity);
 
@@ -319,8 +318,7 @@ void		move_camera_right(t_camera *cam, float speed);
 void		move_camera_left(t_camera *cam, float speed);
 
 // debug
-//
-void		print_matrix(t_matrix matrix); // for loop
+void		print_matrix(t_matrix matrix);
 void		print_obj(t_object obj);
 void		print_light(t_light light);
 void		print_cam(t_camera camera);
@@ -346,6 +344,7 @@ int			str_to_argb(char **line, t_argb *c, int get_alpha);
 int			str_to_float(char **line, float *radius);
 int			str_to_vecdir(char **line, t_vec4 *v);
 int			make_object(t_object data, t_object **objects);
+
 //Parsing_utils_2.c
 int			skip_space(char *str);
 int			go_to_endl(char *str);
@@ -356,7 +355,7 @@ int			check_nb_light(t_data *scene);
 int			rt_scene_tozero(t_data *scene);
 void		mlx_tozero(t_data *scene);
 int			rt_init(t_data *scene);
-void	init_painter(t_painter *painter, t_data *scene, t_ray *ray);
+void		init_painter(t_painter *painter, t_data *scene, t_ray *ray);
 void		reset_painter(t_painter *painter, t_canvas cnv);
 
 //lst_sphere.c
@@ -371,7 +370,6 @@ int			create_plane(char **line, t_data *scene);
 //lst_light.c
 int			create_light(char **line, t_data *scene, t_type type);
 int			clean_lights(t_data *scene);
-
 int			make_hyperboloid(t_object data, t_object **objects);
 
 //rotation_object.c

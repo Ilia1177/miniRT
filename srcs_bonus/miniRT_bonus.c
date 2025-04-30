@@ -36,18 +36,18 @@ void	print_timestamp(struct timeval *last_time, t_data *scene)
 
 int	rt_multi_thread(t_data *scene)
 {
-	struct timeval last_time;
-	char	*str;
-	char	*tmp;
-	const t_vec2 pos = {0, 0};
-	t_painter	master;
+	struct timeval	last_time;
+	const t_vec2	pos = {0, 0};
+	t_painter		master;
+	//char			*str;
+	//char			*tmp;
 
 	master = th_painter_init(scene, -1);
-	gettimeofday(&last_time, NULL);								// Timestamp 
-    pthread_mutex_lock(&scene->print);
+	gettimeofday(&last_time, NULL);	// Timestamp 
+	pthread_mutex_lock(&scene->print);
 	th_annouce("Master wait\n", &master);
-    while (scene->at_rest < THREAD_NB)							// wait until all thread are done (scene->at_rest)	
-        pthread_cond_wait(&scene->master_rest, &scene->print);	
+	while (scene->at_rest < THREAD_NB)							// wait until all thread are done (scene->at_rest)	
+		pthread_cond_wait(&scene->master_rest, &scene->print);	
 	pthread_mutex_unlock(&scene->print);
 	th_annouce("Master start\n", &master);
 	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);	
@@ -56,16 +56,16 @@ int	rt_multi_thread(t_data *scene)
 	print_timestamp(&last_time, scene);
 	scene->at_rest = 0;											// set at_rest = 0 to unlock thread "painters"
 	th_annouce("Master DONE\n", &master);
-    pthread_cond_broadcast(&scene->painter_rest);				// send signal to unlock them
-    pthread_mutex_unlock(&scene->print);
+	pthread_cond_broadcast(&scene->painter_rest);				// send signal to unlock them
+	pthread_mutex_unlock(&scene->print);
 	return (0);
 }
 
-int rt_mono_thread(t_data *scene)
+int	rt_mono_thread(t_data *scene)
 {
-	struct timeval last_time;
-	const	t_vec2 pos = {0, 0};
-	t_painter painter;
+	struct timeval	last_time;
+	const t_vec2	pos = {0, 0};
+	t_painter		painter;
 
 	gettimeofday(&last_time, NULL);
 	painter = th_painter_init(scene, 0);
@@ -79,7 +79,7 @@ int rt_mono_thread(t_data *scene)
 
 void	rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
-	int i;
+	int	i;
 	int	j;
 
 	i = -1;
@@ -103,7 +103,6 @@ int	display_scene(t_data *scene)
 	{
 		printf("starting mono-thread RT\n");
 		mlx_loop_hook(scene->mlx, &rt_mono_thread, scene);
-
 	}
 	else if (THREAD_NB > 1)
 	{
@@ -131,7 +130,13 @@ int	main(int ac, char **av, char **envp)
 		printf("no environnemnt\n");
 		return (0);
 	}
-	scene.status = rt_init(&scene, ac, av);
+	ft_bzero(&scene, sizeof(t_data));
+	if (ac > 3 || ft_strlen(av[1]) <= 3
+		|| ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt")
+		|| !ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
+		print_error_msg(-9, &scene);
+	print_input();
+	scene.status = rt_init(&scene, av);
 	if (!scene.status)
 		scene.status = build_scene(&scene);
 	if (scene.status)
@@ -147,4 +152,3 @@ int	main(int ac, char **av, char **envp)
 		display_scene(&scene);
 	return (scene.status);
 }
-

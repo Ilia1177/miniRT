@@ -54,12 +54,14 @@ SRCS = 	miniRT\
 
 SRCS_BONUS = 	miniRT\
 		build_scene\
+		build_scene_utils\
 		camera\
 		camera_move\
 		canvas\
 		clean\
 		color\
 		debug\
+		dl_img\
 		img\
 		init\
 		input\
@@ -72,21 +74,23 @@ SRCS_BONUS = 	miniRT\
 		intersect_triangle\
 		light\
 		lst_cylinder\
+		lst_hyperboloid\
 		lst_light\
 		lst_plane\
 		lst_sphere\
 		lst_triangle\
+		matrix\
 		norm_utils\
 		normal\
+		parsing_utils_2\
 		parsing_utils\
+		parsing_utils_option\
+		print\
 		ray\
 		rotation_object\
 		text_checkerboard\
 		text_img\
 		vector\
-		lst_hyperboloid\
-		dl_img\
-		matrix\
 
 SRCS := $(addsuffix .c, $(SRCS))
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))

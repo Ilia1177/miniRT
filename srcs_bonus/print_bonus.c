@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <miniRT_bonus.h>
 
 void	print_error_mlx(int status)
 {
@@ -59,7 +59,7 @@ void	print_error_msg(int status, t_data *scene)
 
 void	print_vec4(t_vec4 v, char *msg)
 {
-	printf("%s{x: %.1f, y: %.1f, z:%.1f}", msg, v.x, v.y, v.z);
+	printf("%s{x: %.3f, y: %.3f, z:%.3f}", msg, v.x, v.y, v.z);
 }
 
 void	print_argb(t_argb color, char *msg)
