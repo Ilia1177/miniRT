@@ -52,9 +52,9 @@ void	cylinder_normal(t_ray *ray, t_object *cylinder)
 	const float		projection = dot_vec4(pt_to_base, axis);
 	const t_vec4	proj_vec = mult_vec4(axis, projection);
 
-	if (projection > 0.0f && projection < cylinder->height)
+	if (projection > -cylinder->height / 2 && projection < cylinder->height / 2)
 		ray->n = normalize_vec4(sub_vec4(pt_to_base, proj_vec));
-	else if (projection <= 0.0f)
+	else if (projection <= -cylinder->height / 2 )
 		ray->n = mult_vec4(axis, -1.0f);
 	else
 		ray->n = axis;
