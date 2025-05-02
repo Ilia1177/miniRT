@@ -110,3 +110,13 @@ t_argb	compute_lighting(t_ray *ray, t_data *scene)
 	}
 	return (lumen);
 }
+
+t_light	*select_light(t_light **lights)
+{
+	t_light	*curr_light;
+
+	curr_light = *lights;
+	while (curr_light->next && curr_light->type != POINT)
+		curr_light = curr_light->next;
+	return (curr_light);
+}

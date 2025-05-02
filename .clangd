@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-I./, -I../libft/include, -I../include , -I/usr/include, -I../mlx]

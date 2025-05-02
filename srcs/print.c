@@ -72,12 +72,12 @@ void	print_input(void)
 {
 	printf("+=============+\n\
 |     MENU    |\n\
-+=============+=============+=============+=============+\n\
-|    CAM      |   OBJECT    |   OBJECT    |   OBJECT    |\n\
-|-------------|-------------|-------------|-------------|\n\
-|w : forward  |i : forward  |u : up       |c : rot.on z |\n\
-|a : left     |j : left     |o : down     |v : bigger   |\n\
-|d : right    |l : right    |z : rot.on x |b : smaller  |\n\
-|s : backward |k : backward |x : rot.on y |n&m : cyl.   |\n\
-+=============+=============+=============+=============+\n");
++=============+=============+=============+=============+=============+\n\
+|    CAM      |   OBJECT    |   OBJECT    |   OBJECT    |    LIGHT    |\n\
+|-------------|-------------|-------------|-------------|-------------|\n\
+|w : forward  |i : forward  |u : up       |c : rot.on z |1 : backward |\n\
+|a : left     |j : left     |o : down     |v : bigger   |3 : forward  |\n\
+|d : right    |l : right    |z : rot.on x |b : smaller  |4-6 : lt.-rt.|\n\
+|s : backward |k : backward |x : rot.on y |n&m : cyl.   |2-8 : up-down|\n\
++=============+=============+=============+=============+=============+\n");
 }

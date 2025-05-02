@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:28:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/29 16:22:41 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:24:52 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ int	key_release(int keysym, t_data *scene)
 	scene->rend = 0;
 	if (keysym > 0 && keysym < 99999)
 		scene->key_state[keysym] = 0;
-	return (0);
-}
-
-int	mouse_pos(int x, int y, t_data *scene)
-{
-	static int	last_x = 0;
-	static int	last_y = 0;
-
-	(void)scene;
-	last_x = x;
-	last_y = y;
 	return (0);
 }
 

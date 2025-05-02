@@ -32,6 +32,7 @@ SRCS = 	miniRT\
 		cylinder_utils\
 		debug\
 		handle\
+		handle_2\
 		img\
 		init\
 		input\

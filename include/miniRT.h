@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:36:35 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/29 19:02:49 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:21:30 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,8 @@ int			mouse_pos(int x, int y, t_data *scene);
 //handle.c
 int			handle_input(t_data *scene);
 void		select_object(t_data *scene);
+//handle_2.c
+void		handle_light_move(t_data *scene);
 
 //canvas.c
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
@@ -303,6 +305,7 @@ t_argb		compute_lighting(t_ray *ray, t_data *scene);
 void		reflect_ray(t_ray *ray);
 t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
 t_argb		reflections(t_ray *ray, t_argb intensity);
+t_light		*select_light(t_light **lights);
 
 //camera_vectors.c
 void		update_camera_vectors(t_camera *cam);

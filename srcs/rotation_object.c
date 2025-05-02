@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:34:58 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 13:54:31 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:25:56 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,12 @@ void	change_axis(t_object *obj)
 void	rotate_on_x(t_object *obj, float theta)
 {
 	t_matrix	mat;
-	t_matrix	t_mat;
 
 	theta = theta * (M_PI / 180.0f);
 	mat.j = (t_vec4){0, cos(theta), sin(theta), 0};
 	mat.k = (t_vec4){0, -sin(theta), cos(theta), 0};
 	mat.i = normalize_vec4(cross_vec4(obj->up, obj->dir));
 	mat.p = (t_vec4){0, 0, 0, 1};
-	t_mat.i = (t_vec4){1, 0, 0, 0};
-	t_mat.j = (t_vec4){0, 1, 0, 0};
-	t_mat.k = (t_vec4){0, 0, 1, 0};
-	t_mat.p = (t_vec4){1, 0, 0, 1};
 	obj->axis = mat_apply(mat, obj->axis);
 	obj->t_m = mat_compose(mat, obj->t_m);
 }

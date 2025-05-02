@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:48:26 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/15 11:40:27 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:25:45 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,9 @@ int	str_to_vec3(char **line, t_vec4 *v)
 int	get_alpha(char **line, int *color, int alpha)
 {
 	char	*str;
-	char	*end;
 	float	brightness;
 
 	str = *line;
-	end = str;
 	if (alpha)
 	{
 		if (str_to_float(&str, &brightness))

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:01:43 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/29 18:22:18 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:25:27 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	display_scene(t_data *scene)
 	mlx_hook(scene->win, 3, 1L << 1, &key_release, scene);
 	mlx_hook(scene->win, 4, 1L << 2, &mouse_press, scene);
 	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
-	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
 	mlx_hook(scene->win, 17, 1L << 2, &rt_shut_down, scene);
 	mlx_loop_hook(scene->mlx, &render, scene);
 	mlx_loop(scene->mlx);
@@ -42,14 +41,12 @@ void	select_object(t_data *scene)
 	t_painter	*painter;
 	t_canvas	cnv;
 	t_viewport	vp;
-	t_object	*obj;
 
-	obj = NULL;
 	scene->selected = NULL;
 	vp = scene->viewport;
 	cnv = scene->cnv;
-	cnv.loc.x = scene->mouse.x - (cnv.w / 2);
-	cnv.loc.y = (cnv.h / 2) - scene->mouse.y;
+	cnv.loc.x = scene->mouse.x - (cnv.w / 2.0f);
+	cnv.loc.y = (cnv.h / 2.0f) - scene->mouse.y;
 	catch_ray.d = get_viewport_loc(cnv, vp);
 	catch_ray.d = apply_camera_rotation(scene->cam, catch_ray.d);
 	catch_ray.o = scene->cam.pos;
