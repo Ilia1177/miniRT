@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:01:21 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/29 18:01:14 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:58:53 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad)
 	const float		h0 = dot_vec4(sub_vec4(hit0, cy->pos), cy->axis);
 	const float		h1 = dot_vec4(sub_vec4(hit1, cy->pos), cy->axis);
 
-	valid[0] = (quad.t[0] > EPSILON) && (fabsf(h0) <= cy->height / 2);
-	valid[1] = (quad.t[1] > EPSILON) && (fabsf(h1) <= cy->height / 2);
+	valid[0] = (quad.t[0] > EPSILON) && (fabsf(h0) <= cy->height / 2.0f);
+	valid[1] = (quad.t[1] > EPSILON) && (fabsf(h1) <= cy->height / 2.0f);
 	if (valid[0] && valid[1])
 		*t = fminf(quad.t[0], quad.t[1]);
 	else if (valid[0])

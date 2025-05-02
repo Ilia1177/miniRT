@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/29 18:28:17 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:26:24 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	rt_init(t_data *scene)
 
 void	init_painter(t_painter *painter, t_data *scene, t_ray *ray)
 {
-	ft_bzero(painter, sizeof(painter));
+	ft_bzero(painter, sizeof(t_painter));
 	painter->scene = scene;
 	if (ray)
 		painter->ray = *ray;

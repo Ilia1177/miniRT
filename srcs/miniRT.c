@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:01:43 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/02 16:25:27 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:34:34 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 int	render(t_data *scene)
 {
-	if (scene->rend)
+	static int	first_rend;
+
+	if (!first_rend || scene->rend)
 	{
 		handle_input(scene);
 		display_color(scene);
 		mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+		first_rend = 1;
 	}
 	return (0);
 }
