@@ -35,6 +35,7 @@ SRCS = 	miniRT\
 		handle_2\
 		img\
 		init\
+		init_2\
 		input\
 		inter_cyl_utils\
 		intersection\

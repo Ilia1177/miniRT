@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:36:35 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/02 16:21:30 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:40:25 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,16 +223,18 @@ typedef struct s_painter
 void		rotate_y(t_camera *cam, float theta);
 void		rotate_x(t_camera *cam, float theta);
 
+//canvas.c
+t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
+void		display_color(t_data *scene);
+t_vec2		cnv_to_screen(t_canvas cnv);
+t_vec4		get_viewport_loc(t_canvas cnv, t_viewport vp);
+
+
 //matrix.c
-//t_matrix	mat_rotate(t_matrix m1, t_matrix m2);
-//t_vec4		mat_translate(t_matrix mat, t_vec4 v);
 t_vec4		mat_apply(t_matrix mat, t_vec4 v);
 t_matrix	mat_generate(t_object *obj);
 t_matrix	mat_compose(t_matrix m2, t_matrix m1);
-//t_matrix	mat_transpose(t_matrix m);
 t_matrix	mat_inverse(t_matrix matrix);
-//void		trans_sp_matrix(t_object *obj);
-//t_vec4		apply_mat4x4(t_matrix m, t_vec4 v);
 
 //img.c
 void		rt_put_pixel(t_img *img, int x, int y, int color);
@@ -254,12 +256,6 @@ int			handle_input(t_data *scene);
 void		select_object(t_data *scene);
 //handle_2.c
 void		handle_light_move(t_data *scene);
-
-//canvas.c
-t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
-void		display_color(t_data *scene);
-t_vec2		cnv_to_screen(t_canvas cnv);
-t_vec4		get_viewport_loc(t_canvas cnv, t_viewport vp);
 
 //ray
 t_argb		throw_ray(t_painter *painter);
@@ -361,6 +357,9 @@ void		mlx_tozero(t_data *scene);
 int			rt_init(t_data *scene);
 void		init_painter(t_painter *painter, t_data *scene, t_ray *ray);
 void		reset_painter(t_painter *painter, t_canvas cnv);
+
+//init_2.c
+void		init_obj(t_object *obj, t_type type);
 
 //lst_sphere.c
 int			create_sphere(char **line, t_data *scene);

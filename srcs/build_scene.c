@@ -6,25 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:59:39 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/29 19:54:47 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:37:22 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT.h>
-
-void	init_obj(t_object *obj, t_type type)
-{
-	ft_bzero(obj, sizeof(t_object));
-	obj->type = type;
-	obj->t = T_MAX;
-	obj->pos = (t_vec4){0, 0, 0, 1};
-	obj->axis = (t_vec4){0, 0, 0, 0};
-	obj->dir = (t_vec4){0, 0, 1, 0};
-	obj->up = (t_vec4){0, 1, 0, 0};
-	obj->right = (t_vec4){1, 0, 0, 0};
-	obj->spec = SPECULAR;
-	obj->next = NULL;
-}
 
 int	place_camera(char **line, t_data *scene)
 {
@@ -92,8 +78,21 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 		else
 			return (0);
 	}
-	//if (status < 0)
-//		print_error_msg(status, scene);
+	return (status);
+}
+
+int	check_map_elem(int status, t_data *scene)
+{
+	if (scene->cam.fov == -1)
+		status = -10;
+	if (status)
+		print_error_msg(status, scene);
+	status = check_nb_obj(scene);
+	if (status)
+		print_error_msg(status, scene);
+	status = check_nb_light(scene);
+	if (status)
+		print_error_msg(status, scene);
 	return (status);
 }
 
@@ -102,8 +101,6 @@ int	build_scene(t_data *scene)
 	char		*line;
 	int			map;
 	int			status;
-	t_object	*it;
-	t_light		*it2;
 
 	status = 0;
 	map = open(scene->map_name, O_RDONLY);
@@ -124,29 +121,6 @@ int	build_scene(t_data *scene)
 	if (status)
 		gnl_clear_buffer(map);
 	close(map);
-	printf("**************************linked list OBJECT**************\n");
-	it = scene->objects;
-	while (it)
-	{
-		print_obj(*it);
-		it = it->next;
-	}
-	printf("**************************linked list LIGHT**************\n");
-	it2 = scene->lights;
-	while (it2)
-	{
-		print_light(*it2);
-		it2 = it2->next;
-	}
-	if (scene->cam.fov == -1)
-		status = -10;
-	if (status)
-		print_error_msg(status, scene);
-	status = check_nb_obj(scene);
-	if (status)
-		print_error_msg(status, scene);
-	status = check_nb_light(scene);
-	if (status)
-		print_error_msg(status, scene);
+	status = check_map_elem(status, scene);
 	return (status);
 }
