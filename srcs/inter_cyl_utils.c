@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:01:21 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/02 16:58:53 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:19:56 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ int	min_pos(float *t, float t1, float t2)
 
 void	get_min_t(float *t_min, float t_tmp, int *hit)
 {
-	*t_min = t_tmp;
-	*hit = 1;
+	if (*t_min > t_tmp)
+	{
+		*t_min = t_tmp;
+		*hit = 1;
+	}
 }
 
 int	check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad)
@@ -75,20 +78,18 @@ int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t)
 	t_vec4		hit;
 	t_vec4		hit_vec;
 
-	if (fabsf(denom) > EPSILON)
+	if (fabsf(denom) < FLT_EPSILON)
+		return (0);
+	oc = sub_vec4(center, ray->o);
+	temp = dot_vec4(oc, cyl->axis) / denom;
+	if (temp < EPSILON)
+		return (0);
+	hit = add_vec4(ray->o, mult_vec4(ray->d, temp));
+	hit_vec = sub_vec4(hit, center);
+	if (dot_vec4(hit_vec, hit_vec) <= (cyl->radius * cyl->radius * 1.01f))
 	{
-		oc = sub_vec4(center, ray->o);
-		temp = dot_vec4(oc, cyl->axis) / denom;
-		if (temp > EPSILON)
-		{
-			hit = add_vec4(ray->o, mult_vec4(ray->d, temp));
-			hit_vec = sub_vec4(hit, center);
-			if (dot_vec4(hit_vec, hit_vec) <= cyl->radius * cyl->radius)
-			{
-				*t = temp;
-				return (1);
-			}
-		}
+		*t = temp;
+		return (1);
 	}
 	return (0);
 }

@@ -33,6 +33,7 @@
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
 # define EPSILON 0.001f
+# define FLT_EPSILON 1e-6f
 # define MSG_BAD_FILE "Error\nNeed one file *.rt\n"
 # define MSG_BAD_POS "Error\nBad position arguments\n"
 # define MSG_BAD_RGB "Error\nBad rgb arguments\n"

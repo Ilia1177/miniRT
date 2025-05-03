@@ -29,8 +29,8 @@ t_vec2	cnv_to_screen(t_canvas cnv)
 {
 	t_vec2	screen;
 
-	screen.x = (cnv.w / 2) + cnv.loc.x;
-	screen.y = (cnv.h / 2) - cnv.loc.y;
+	screen.x = (cnv.w / 2.0f) + cnv.loc.x;
+	screen.y = (cnv.h / 2.0f) - cnv.loc.y;
 	return (screen);
 }
 
@@ -61,12 +61,12 @@ void	display_color(t_data *scene)
 	init_painter(&painter, scene, NULL);
 	painter.ray.o.w = 1;
 	cnv = scene->cnv;
-	cnv.loc.x = -cnv.w / 2;
+	cnv.loc.x = -cnv.w / 2.0f;
 	update_camera_vectors(&scene->cam);
-	while (cnv.loc.x < cnv.w / 2)
+	while (cnv.loc.x < cnv.w / 2.0f)
 	{
-		cnv.loc.y = -cnv.h / 2;
-		while (cnv.loc.y < cnv.h / 2)
+		cnv.loc.y = -cnv.h / 2.0f;
+		while (cnv.loc.y < cnv.h / 2.0f)
 		{
 			reset_painter(&painter, cnv);
 			color = throw_ray(&painter);

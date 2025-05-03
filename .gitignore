@@ -13,3 +13,5 @@ objs/
 *.orig
 Hazardous_miniRT
 *.dSYM
+
+compile_commands.json

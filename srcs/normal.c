@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:36:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 13:47:11 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:22:05 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_vec4	compute_normal(t_vec4 P, t_object *cylinder)
 {
 	const t_vec4	center = sub_vec4(cylinder->pos,
-			mult_vec4(cylinder->axis, cylinder->height / 2));
+			mult_vec4(cylinder->axis, cylinder->height / 2.0f));
 	const t_vec4	x = sub_vec4(P, center);
 	const float		m = dot_vec4(x, cylinder->axis);
 	const t_vec4	n = normalize_vec4(sub_vec4(x,
@@ -46,16 +46,20 @@ void	sphere_normal(t_ray *ray, t_object *sphere)
 // Point is on the top cap
 void	cylinder_normal(t_ray *ray, t_object *cylinder)
 {
-	const t_vec4	center = cylinder->pos;
+	const float		half_height = cylinder->height / 2.0f;
 	const t_vec4	axis = normalize_vec4(cylinder->axis);
-	const t_vec4	pt_to_base = sub_vec4(ray->o, center);
-	const float		projection = dot_vec4(pt_to_base, axis);
-	const t_vec4	proj_vec = mult_vec4(axis, projection);
+	const t_vec4	pt_to_center = sub_vec4(ray->o, cylinder->pos);
+	const float		projection = dot_vec4(pt_to_center, axis);
+	const float		disk_margin = cylinder->radius * EPSILON;
 
-	if (projection > -cylinder->height / 2 && projection < cylinder->height / 2)
-		ray->n = normalize_vec4(sub_vec4(pt_to_base, proj_vec));
-	else if (projection <= -cylinder->height / 2 )
-		ray->n = mult_vec4(axis, -1.0f);
+	if (fabsf(projection) >= half_height - disk_margin)
+	{
+		if (projection > 0)
+			ray->n = axis;
+		else
+			ray->n = mult_vec4(axis, -1.0f);
+	}
 	else
-		ray->n = axis;
+		ray->n = normalize_vec4(sub_vec4(pt_to_center,
+					mult_vec4(axis, projection)));
 }

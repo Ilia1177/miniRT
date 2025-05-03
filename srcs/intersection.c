@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <miniRT.h>
-
 /****************************************************************************
  * check if rau intersect the cylinder
  * first intersect the lateral surface of cylinder 
@@ -31,12 +30,12 @@ int	intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
 	if (intersect_cylinder_lateral(ray, cyl, &t_tmp))
 		get_min_t(&t_min, t_tmp, &hit);
 	center = add_vec4(cyl->pos, mult_vec4(normalize_vec4(cyl->axis),
-				cyl->height / 2));
-	if (intersect_disk(ray, center, cyl, &t_tmp) && t_tmp < t_min)
+				cyl->height / 2.0f));
+	if (intersect_disk(ray, center, cyl, &t_tmp))
 		get_min_t(&t_min, t_tmp, &hit);
 	center = sub_vec4(cyl->pos, mult_vec4(normalize_vec4(cyl->axis),
 				cyl->height / 2));
-	if (intersect_disk(ray, center, cyl, &t_tmp) && t_tmp < t_min)
+	if (intersect_disk(ray, center, cyl, &t_tmp))
 		get_min_t(&t_min, t_tmp, &hit);
 	if (hit)
 		*t = t_min;
