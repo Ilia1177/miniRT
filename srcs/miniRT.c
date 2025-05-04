@@ -71,7 +71,10 @@ int	main(int ac, char **av)
 	scene.map_name = av[1];
 	status = rt_init(&scene);
 	if (!status)
+	{
 		status = build_scene(&scene);
-	display_scene(&scene);
+		display_scene(&scene);
+	}
+	rt_shut_down(&scene);
 	return (status);
 }
