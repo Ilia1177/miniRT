@@ -308,7 +308,6 @@ int			min_pos(float *t, float t1, float t2);
 t_vec4		cy_center_to_base(t_object cy);
 t_vec4		cy_base_to_center(t_vec4 pos, t_vec4 dir, float height);
 
-
 //intersection.c
 int			intersect_object(t_ray *ray, t_object *obj, float *t);
 int			intersect_sphere(t_ray *ray, t_object *object, float *t);
@@ -386,4 +385,4 @@ void		rotate_on_z(t_object *obj, float theta);
 void		rotate_on_y(t_object *obj, float theta);
 void		rotate_on_x(t_object *obj, float theta);
 
-#endif
+#end
