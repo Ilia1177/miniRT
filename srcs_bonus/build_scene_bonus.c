@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   build_scene_bonus.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/05 14:38:05 by npolack           #+#    #+#             */
+/*   Updated: 2025/05/05 15:52:35 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 int	place_camera(char **line, t_data *scene)
@@ -102,6 +114,8 @@ int	build_scene(t_data *scene)
 	if (status)
 		gnl_clear_buffer(map);
 	close(map);
-	status = check_map_elem(status, scene);
+
+	print_all(scene);
+	//status = check_map_elem(status, scene);
 	return (status);
 }

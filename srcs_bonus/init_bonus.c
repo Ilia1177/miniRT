@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/13 02:17:09 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:40:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	rt_scene_init(t_data *scene, char **av)
 {
 //	int	i;
 
-//	ft_bzero(scene, sizeof(t_data));
+	ft_bzero(scene, sizeof(t_data));
    // if (ac < 1)
    // 	return (1);
    // else if (ac > 1)
@@ -41,7 +41,7 @@ int	rt_scene_init(t_data *scene, char **av)
 	return (0);
 }
 
-void	mlx_tozero(t_data *scene)
+void	mlx_tozero(t_data *scene) //not used
 {
 	int	i;
 
@@ -59,7 +59,7 @@ int	rt_init(t_data *scene, char **av)
 
 	status = 0;
 	status = rt_scene_init(scene, av);
-	mlx_tozero(scene);
+	//mlx_tozero(scene);
 	img = &scene->img;
 	if (!status)
 		scene->mlx = mlx_init();

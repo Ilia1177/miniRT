@@ -11,12 +11,12 @@ MLX_LIB = $(MLX_DIR)/libmlx_$(UNAME).a
 CLONE = mlx
 
 ifeq ($(shell uname), Linux)
-	CFLAGS = -g -Wall -Wextra -Werror -g #-fsanitize=address
+	CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=thread -g -O1 -fPIE #-fsanitize=address
 	INCLUDES = -I/usr/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
-	CFLAGS = -g -pg #-Wall -Wextra -Werror -g 
-	INCLUDES =  -I./mlx -I./libft/include -I./include# -I/opt/X11/include
+	CFLAGS = -g #-Wall -Wextra -Werror -g 
+	INCLUDES =  -I./mlx -I./libft/include -I./include# -I/opt/X11/include 
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit
 endif
 
@@ -121,11 +121,10 @@ $(OBJS_BONUS_DIR)/%.o: $(SRCS_BONUS_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(NAME): $(OBJS)
-	$(CC) $^ $(MLX_FLAGS) -o $(NAME) -L./libft/bin -lft
+	$(CC) $(CFLAGS)  $^ $(MLX_FLAGS) -o $(NAME) $(INCLUDES) -L./libft/bin -lft
 
 $(NAME_BONUS): $(OBJS_BONUS)
-	$(CC) $^ $(MLX_FLAGS) -o $(NAME_BONUS) -L./libft/bin -lft
-
+	$(CC) $(CFLAGS) $^ $(MLX_FLAGS) -o $(NAME_BONUS) $(INCLUDES) -L./libft/bin -lft 
 
 $(MLX_LIB): $(CLONE) 
 	make -C $(MLX_DIR) 

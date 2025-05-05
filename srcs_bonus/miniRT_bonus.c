@@ -77,7 +77,7 @@ int	rt_mono_thread(t_data *scene)
 	return (0);
 }
 
-void	rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color)
+void	rt_rect(const t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
 	int	i;
 	int	j;

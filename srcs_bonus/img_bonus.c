@@ -1,6 +1,6 @@
 #include <miniRT_bonus.h>
 
-void	rt_put_pixel(t_img *img, int x, int y, int color)
+void	rt_put_pixel(const t_img *img, int x, int y, int color)
 {
 	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
 		return ;

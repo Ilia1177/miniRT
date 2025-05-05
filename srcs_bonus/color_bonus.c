@@ -8,12 +8,12 @@ void	limit_color(t_argb *color)
 	color->b = fmin(255, fmax(0, color->b));
 }
 
-uint8_t	encode_argb(t_argb color)
+uint32_t	encode_argb(t_argb color)
 {
-	const uint8_t	alpha = color.a;
-	const uint8_t	red = color.r;
-	const uint8_t	green = color.g;
-	const uint8_t	blue = color.b;
+	const uint32_t	alpha = color.a;
+	const uint32_t	red = color.r;
+	const uint32_t	green = color.g;
+	const uint32_t	blue = color.b;
 
 	return (alpha << 24 | red << 16 | green << 8 | blue);
 }

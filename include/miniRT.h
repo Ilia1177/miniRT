@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:36:35 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/03 19:40:25 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:29:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,4 +385,4 @@ void		rotate_on_z(t_object *obj, float theta);
 void		rotate_on_y(t_object *obj, float theta);
 void		rotate_on_x(t_object *obj, float theta);
 
-#end
+#endif

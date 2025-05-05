@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   print_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:53:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/15 11:54:13 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:27:55 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ void	print_error_msg(int status, t_data *scene)
 
 void	print_vec4(t_vec4 v, char *msg)
 {
-	printf("%s{x: %.3f, y: %.3f, z:%.3f}", msg, v.x, v.y, v.z);
+	printf("%s{x: %.3f, y: %.3f, z:%.3f, w:%.3f}\n", msg, v.x, v.y, v.z, v.w);
 }
 
 void	print_argb(t_argb color, char *msg)
 {
-	printf("%s: a: %d, r: %d, g: %d, b %d", msg,
+	printf("%s: a: %d, r: %d, g: %d, b %d\n", msg,
 		color.a, color.r, color.g, color.b);
 }
 
@@ -73,11 +73,11 @@ void	print_input(void)
 	printf("+=============+\n\
 |     MENU    |\n\
 +=============+=============+=============+=============+\n\
-|    CAM      |   OBJECT    |   OBJECT    |   OBJECT    |\n\
+|    CAM      | translation |  rotation   | scale (obj) |\n\
 |-------------|-------------|-------------|-------------|\n\
-|w : forward  |i : forward  |u : up       |c : rot.on z |\n\
-|a : left     |j : left     |o : down     |v : bigger   |\n\
-|d : right    |l : right    |z : rot.on x |b : smaller  |\n\
-|s : backward |k : backward |x : rot.on y |n&m : cyl.   |\n\
+|w : forward  |u/o: +/- (y) |z: + on x    |r/f: +/- (x) |\n\
+|a : left     |i/k: +/- (z) |x: + on y    |t/g: +/- (y) |\n\
+|d : right    |h/k: +/- (x) |c: + on z    |y/h: +/- (z) |\n\
+|s : backward |             |             | 			|\n\
 +=============+=============+=============+=============+\n");
 }

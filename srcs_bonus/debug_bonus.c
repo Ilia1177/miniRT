@@ -7,10 +7,10 @@ void	print_light(t_light light)
 	if (light.type == AMBIENT)
 		printf("type : %s", "ambient");
 	if (light.type == DIRECTIONAL)
-		printf("type : %s", "directionnal");
-	print_argb(light.intensity, "\tintensity");
-	print_vec4(light.pos, "\tpos");
-	print_vec4(light.dir, "\tdir");
+		printf("type : %s", "directionnal\n");
+	print_argb(light.intensity, "intensity");
+	print_vec4(light.pos, "pos");
+	print_vec4(light.dir, "dir");
 	printf("\n");
 }
 
@@ -25,12 +25,12 @@ void	print_obj(t_object obj)
 	if (obj.type == HYPERBOL)
 		printf("type : hyperboloid\n");
 	print_mat4(obj.t_m);
-	printf("\tpattern : %d", obj.pattern);
-	printf("\tspecu : %d", obj.spec);
-	printf("\tradius : %.1f", obj.radius);
-	printf("\thight : %.1f", obj.height);
-	print_argb(obj.reflect, "\treflective");
-	print_argb(obj.color, "\tcolor");
+	printf("pattern : %d\n", obj.pattern);
+	printf("specu : %d\n", obj.spec);
+	printf("radius : %.1f\n", obj.radius);
+	printf("hight : %.1f\n", obj.height);
+	print_argb(obj.reflect, "reflective");
+	print_argb(obj.color, "color");
 	print_vec4(obj.scale, "scale:");
 	printf("\n");
 }
@@ -39,8 +39,8 @@ void	print_cam(t_camera camera)
 {
 	printf("camera :\n");
 	print_mat4(camera.t_m);
-	printf("\tyaw : %.1f", camera.yaw);
-	printf("\tpitch : %.1f\n", camera.pitch);
+	printf("yaw : %.1f, ", camera.yaw);
+	printf("pitch : %.1f\n", camera.pitch);
 }
 
 void	print_mat4(t_mat4 matrix)

@@ -16,7 +16,7 @@
 //# include <semaphore.h>
 # include <sys/time.h>
 //#include <atomic.h>
-# define THREAD_NB 1 
+# define THREAD_NB 8 
 # define MAX_SCALE 1000
 # define T_MAX 1600
 # define HEIGHT 800
@@ -125,7 +125,6 @@ typedef struct s_camera
 
 typedef struct s_viewport
 {
-//	t_vec4		pos;
 	t_vec4		loc;
 	int			h;
 	int			w;
@@ -274,8 +273,8 @@ t_mat4		mat_orthogonal(t_vec4 dir);
 t_mat4		mat_inverse(t_mat4 matrix);
 
 //img.c
-void		rt_rect(t_img *img, t_vec2 pos, t_vec2 size, int color);
-void		rt_put_pixel(t_img *img, int x, int y, int color);
+void		rt_rect(const t_img *img, t_vec2 pos, t_vec2 size, int color);
+void		rt_put_pixel(const t_img *img, int x, int y, int color);
 uint8_t		rt_get_pixel(t_img img, int x, int y);
 t_argb		extract_argb(int color);
 
@@ -330,7 +329,7 @@ void		limit_color(t_argb *color);
 t_argb		ease_color(t_argb reflective, uint8_t factor);
 t_argb		mult_colors(t_argb color1, t_argb intensity);
 t_argb		add_colors(t_argb c1, t_argb c2);
-uint8_t		encode_argb(t_argb color);
+uint32_t		encode_argb(t_argb color);
 t_argb		apply_brightness(t_argb color);
 
 //light.c

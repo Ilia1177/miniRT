@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   canvas_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/05 15:35:26 by npolack           #+#    #+#             */
+/*   Updated: 2025/05/05 16:35:13 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 // get location of the point in the viemport from canvas'location
@@ -8,7 +20,7 @@ t_vec4 throught_vp(t_vec2 cnv, t_viewport vp)
 	dir.x = (float)cnv.x * vp.w / WIDTH;
 	dir.y = (float)cnv.y * vp.h / HEIGHT;
 	dir.z = 1.0f;
-	dir.w = 0;
+	dir.w = 0.0f;
 	dir = normalize_vec4(dir);
 	return (dir);
 }
@@ -22,11 +34,11 @@ t_vec2 cnv_to_screen(t_vec2 cnv)
 	screen.y = (HEIGHT / 2) - cnv.y;
 	return (screen);
 }
+
 void	reset_painter(t_painter *painter, t_vec2 cnv)
 {
-	t_data	*scene;
+	const t_data	*scene = painter->sceneref;
 
-	scene = painter->sceneref;
 	painter->lim[0] = 1.0f;
 	painter->lim[1] = T_MAX;
 	painter->lim[2] = R_LIMIT;
@@ -34,22 +46,16 @@ void	reset_painter(t_painter *painter, t_vec2 cnv)
 	painter->ray.d = throught_vp(cnv, scene->viewport);
 	painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
 }
-// throw ray for every point of the canvas
+
+// throw ray for every pixel of the canvas
 void	display_color(t_painter *painter)
 {
-	t_data			*scene;
+	const t_data	*scene = painter->sceneref;
+	const char		res = scene->res;
 	t_vec2			pix;
-	char			res;
 	t_vec2			cnv;
-	t_viewport		vp;
 	t_argb			color;
-	//int				x;
-	//int				y;
 
-	scene = painter->sceneref;
-	//cnv = scene->cnv;
-	vp = scene->viewport;
-	res = scene->res;
 	ft_bzero(&painter->ray, sizeof(t_ray));
 	cnv.x = (-WIDTH / 2) + ((painter->id - 1) * (WIDTH / THREAD_NB));
 	while (cnv.x < painter->id * (HEIGHT / THREAD_NB))
