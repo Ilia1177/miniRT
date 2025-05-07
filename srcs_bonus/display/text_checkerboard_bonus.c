@@ -96,7 +96,7 @@ t_uv	sphere_map(t_vec4 point, float radius)
 	return (uv);
 }
 
-t_uv cylinder_maplast(t_vec4 point, t_vec4 axis, float radius, float height)
+t_uv cylinder_map(t_vec4 point, t_vec4 axis, float radius, float height)
 {
     t_uv uv;
     float scale;
@@ -105,7 +105,7 @@ t_uv cylinder_maplast(t_vec4 point, t_vec4 axis, float radius, float height)
     
     // 1. Projection verticale (V)
     float h = dot_vec3(point, axis); // Position le long de l'axe
-    uv.v = fmodf(fabs(h / height * scale*4.0f), 1.0f);
+    uv.v = fmodf(fabs(h / height * scale * 4.0f), 1.0f);
 
     // 2. Projection horizontale (U) - version corrigée
     t_vec4 radial = sub_vec4(point, mult_vec4(axis, h));
@@ -113,7 +113,6 @@ t_uv cylinder_maplast(t_vec4 point, t_vec4 axis, float radius, float height)
     
     // Compensation de la courbure
     uv.u = fmodf(fabs(theta * radius * scale / (2.0f * M_PI)), 1.0f);
-
     return uv;
 }
 
@@ -126,25 +125,30 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 	t_argb	color;
 	t_vec4	hp;
 
-	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
+//	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
+	hp = ray->o;
 	(void)scene;
 	if (obj->type == SPHERE && obj->pattern)
 	{
 		hp = sub_vec4(hp, obj->t_m.p);
 		uv = sphere_map(hp, obj->radius);
-		//color = checkerboard_at(uv.u, uv.v, obj->color);
-		color = text_img_at(uv.u, uv.v, obj->img);
+		color = checkerboard_at(uv.u, uv.v, obj->color);
+		//color = text_img_at(uv.u, uv.v, obj->img);
 		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else if (obj->type == PLANE && obj->pattern)
 	{
+	//	uv = plane_map(hp);
+	//	color = checkerboard_at(uv.u, uv.v, obj->color);
+
+
 		color = checkerboard_plane(hp, obj);
 	    //printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else if (obj->type == CYLINDER && obj->pattern)
 	{
 		//hp = sub_vec4(hp, obj->pos);
-		uv = cylinder_maplast(hp, normalize_vec4(obj->t_m.k), obj->radius, obj->height);
+		uv = cylinder_map(hp, normalize_vec4(obj->t_m.k), obj->radius, obj->height);
 		color = checkerboard_at(uv.u, uv.v, obj->color);
 		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}

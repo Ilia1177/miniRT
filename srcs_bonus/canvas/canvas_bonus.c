@@ -57,8 +57,8 @@ void	display_color(t_painter *painter)
 	t_argb			color;
 
 	ft_bzero(&painter->ray, sizeof(t_ray));
-	cnv.x = (-WIDTH / 2) + ((painter->id - 1) * (WIDTH / THREAD_NB));
-	while (cnv.x < painter->id * (HEIGHT / THREAD_NB))
+	cnv.x = -WIDTH / 2;
+	while (cnv.x < WIDTH)
 	{
 		cnv.y = -HEIGHT / 2;
 		while (cnv.y < (HEIGHT / 2))
