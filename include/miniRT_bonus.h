@@ -24,8 +24,8 @@
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
-# define CBOARD_W 400
-# define CBOARD_H 400
+# define CBOARD_W 40
+# define CBOARD_H 40
 # define CBOARD_SCALE 1.0f
 //# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 //# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden

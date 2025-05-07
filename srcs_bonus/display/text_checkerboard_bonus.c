@@ -130,7 +130,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 	(void)scene;
 	if (obj->type == SPHERE && obj->pattern)
 	{
-		hp = sub_vec4(hp, obj->t_m.p);
+		hp = sub_vec4(ray->o, obj->t_m.p);
 		uv = sphere_map(hp, obj->radius);
 		color = checkerboard_at(uv.u, uv.v, obj->color);
 		//color = text_img_at(uv.u, uv.v, obj->img);
@@ -142,13 +142,16 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 	//	color = checkerboard_at(uv.u, uv.v, obj->color);
 
 
-		color = checkerboard_plane(hp, obj);
+		color = checkerboard_plane(ray->o, obj);
 	    //printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
 	else if (obj->type == CYLINDER && obj->pattern)
 	{
-		//hp = sub_vec4(hp, obj->pos);
-		uv = cylinder_map(hp, normalize_vec4(obj->t_m.k), obj->radius, obj->height);
+		hp = ray->o;
+		hp = sub_vec4(mat_apply(mat_inverse(obj->t_m), ray->o), obj->t_m.p);
+		//hp = mat_apply(mat_inverse(obj->t_m), ray->o);
+		//hp = sub_vec4(obj->t_m.p, mat_apply(mat_inverse(obj->t_m), ray->o));
+		uv = cylinder_map(hp, normalize_vec4(obj->t_m.k), mag_vec4(obj->t_m.i), mag_vec4(obj->t_m.k));
 		color = checkerboard_at(uv.u, uv.v, obj->color);
 		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
 	}
