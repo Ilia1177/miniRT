@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/vector.h"
-#include <math.h>
+#include "../../include/libft.h"
 
 float	mag_vec4(t_vec4 a)
 {
