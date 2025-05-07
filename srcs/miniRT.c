@@ -63,7 +63,6 @@ int	main(int ac, char **av)
 	t_data		scene;
 
 	ft_bzero(&scene, sizeof(t_data));
-	print_input();
 	if (ac != 2 || ft_strlen(av[1]) <= 3
 		|| ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt")
 		|| !ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
@@ -71,9 +70,11 @@ int	main(int ac, char **av)
 	scene.map_name = av[1];
 	status = rt_init(&scene);
 	if (!status)
-	{
 		status = build_scene(&scene);
+	if (!status)
+	{
 		display_scene(&scene);
+		print_input();
 	}
 	rt_shut_down(&scene);
 	return (status);

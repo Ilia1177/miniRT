@@ -54,6 +54,10 @@ int	ambient_exist(t_data *scene)
 	return (0);
 }
 
+/*****************************************************************************
+*	choose the good elem 
+*	if is not a elem or newline print_error_mlx
+*****************************************************************************/
 int	register_line_into_scene(char *line, t_data *scene, int status)
 {
 	line += skip_space(line);

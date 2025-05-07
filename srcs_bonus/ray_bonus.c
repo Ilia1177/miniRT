@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_bonus.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 13:00:39 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 13:01:27 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 static void	ray_reflect(t_ray *ray)
@@ -7,6 +19,7 @@ static void	ray_reflect(t_ray *ray)
 	ray->d = mult_vec4(mult_vec4(ray->n, 2), n_dot_d);
 	ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
 }
+
 // 1. Compute new origin of ray = hit point in world space
 // 2. Get the vector to camera
 // 3. Compute normal of object
@@ -28,12 +41,12 @@ static void	ray_update(t_painter *painter, t_object *obj)
 	else
 		hyperboloid_normal(ray, obj);
 	if (dot_vec3(ray->n, ray->v) < 0)
-		ray->n = mult_vec4(ray->n, -1);	
+		ray->n = mult_vec4(ray->n, -1);
 }
 
 t_argb	get_reflected_color(t_painter *painter)
 {
-	t_argb reflected_color;
+	t_argb	reflected_color;
 
 	ft_bzero(&reflected_color, sizeof(reflected_color));
 	ray_reflect(&painter->ray);
@@ -52,14 +65,14 @@ t_argb	get_reflected_color(t_painter *painter)
 * 5) return color if no reflective or recursive <= 0
 * 6) reflect ray and throw new ray to get reflections
 *******************************************************************************/
-//t_argb	throw_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
+//t_argbthrow_ray(t_ray *ray, float t_min, float t_max, int rec, t_data *scene)
 t_argb	throw_ray(t_painter *painter)
 {
 	t_object	*obj;
-	t_data	*scene;
-	t_argb	local_color;
-	t_argb	reflected_color;
-	t_argb	lumen;
+	t_data		*scene;
+	t_argb		local_color;
+	t_argb		reflected_color;
+	t_argb		lumen;
 
 	scene = painter->sceneref;
 	ft_bzero(&local_color, sizeof(t_argb));
@@ -76,5 +89,3 @@ t_argb	throw_ray(t_painter *painter)
 	reflected_color = mult_colors(reflected_color, obj->reflect);
 	return (add_colors(local_color, reflected_color));
 }
-
-

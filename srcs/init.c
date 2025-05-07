@@ -67,6 +67,8 @@ int	rt_init(t_data *scene)
 				&img->llen, &img->endian);
 	if (!img->addr)
 		status = -14;
+	if (status)
+		print_error_msg(status, scene);
 	return (status);
 }
 

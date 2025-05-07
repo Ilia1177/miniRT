@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:54:30 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 12:54:55 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 /*******************************************************************************
@@ -17,8 +29,8 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	t_argb			specular;
 
 	(void)spec;
-	diffuse = (t_argb) {0, 0, 0, 0};
-	specular = (t_argb) {0, 0, 0, 0};
+	diffuse = (t_argb){0, 0, 0, 0};
+	specular = (t_argb){0, 0, 0, 0};
 	if (ndl > 0)
 	{
 		diffuse = diffuse_reflect(ray, lumen, ndl);
@@ -37,7 +49,7 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 {
 	const float	coeff = n_dot_l / (mag_vec4(ray->n) * mag_vec4(ray->d));
-	t_argb	luminosity;
+	t_argb		luminosity;
 
 	luminosity.a = lumen.a * coeff;
 	luminosity.r = lumen.r * coeff;
@@ -55,9 +67,9 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lume
 	t_argb			luminosity;
 
 	luminosity.a = lumen.a * coeff;
-	luminosity.r = lumen.r * coeff;	
-	luminosity.g = lumen.g * coeff; 
-	luminosity.b = lumen.b * coeff; 
+	luminosity.r = lumen.r * coeff;
+	luminosity.g = lumen.g * coeff;
+	luminosity.b = lumen.b * coeff;
 	return (luminosity);
 }
 
@@ -103,7 +115,7 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 
 	lim = painter->lim;
 	ray = &painter->ray;
-	lumen = (t_argb) {0, 0, 0, 0};
+	lumen = (t_argb){0, 0, 0, 0};
 	light = painter->sceneref->lights;
 	while (light)
 	{

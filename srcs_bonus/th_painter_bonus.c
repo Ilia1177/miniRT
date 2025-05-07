@@ -1,17 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   th_painter_bonus.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 13:35:36 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 13:37:07 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
+
 void	th_annouce(char *msg, t_painter *painter)
 {
 	t_data			*scene;
 
 	scene = (t_data *)painter->sceneref;
 	pthread_mutex_lock(&scene->announce);
-	printf("%lld painter %d: %s", time_from(&scene->start) / 1000, painter->id, msg);
+	printf("%lld painter %d: %s",
+		time_from(&scene->start) / 1000, painter->id, msg);
 	pthread_mutex_unlock(&scene->announce);
 }
 
 void	*th_mastering(void *sceneref)
 {
-	t_data *scene;
+	t_data	*scene;
 
 	scene = (t_data *)sceneref;
 	mlx_loop(scene->mlx);
@@ -21,7 +35,7 @@ void	*th_mastering(void *sceneref)
 int	th_master_start(t_data *scene)
 {
 	pthread_t	master;
-	
+
 	if (pthread_create(&master, NULL, &th_mastering, scene))
 	{
 		perror("master start:");
@@ -33,8 +47,8 @@ int	th_master_start(t_data *scene)
 
 void	*th_painter_draw(void *worker)
 {
-	t_painter *painter;
-	t_data	*scene;
+	t_painter	*painter;
+	t_data		*scene;
 
 	painter = (t_painter *)worker;
 	scene = painter->sceneref;
@@ -55,13 +69,11 @@ void	*th_painter_draw(void *worker)
 		th_annouce("done\n", painter);													// 
 		if (scene->at_rest == THREAD_NB)			// last thread send signal to unlock master
 			pthread_cond_signal(&scene->master_rest);
-
 		th_annouce("wait\n", painter);
 		while (scene->processing && scene->at_rest)	// threads wait until master unlock them (if scene->at_rest == 0)
 			pthread_cond_wait(&scene->painter_rest, &scene->print);
 		pthread_mutex_unlock(&scene->print);
 	}
-
 	return NULL;
 }
 
@@ -71,10 +83,9 @@ void	th_painer_quit(t_data *scene)
 	return ;
 }
 
-
 t_painter	th_painter_init(t_data *scene, int i)
 {
-	t_painter new;
+	t_painter	new;
 
 	ft_bzero(&new, sizeof(new));
 	new.sceneref = (t_data *)scene;

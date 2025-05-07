@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:46:17 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 14:46:30 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 void	print_light(t_light light)
@@ -53,7 +65,8 @@ void	print_mat4(t_mat4 matrix)
 
 void	print_painter(t_painter *painter)
 {
-	printf("PAINTER %d\n --> lim[0]: %f lim[1]: %f\n", painter->id, painter->lim[0], painter->lim[1]);
+	printf("PAINTER %d\n --> lim[0]: %f lim[1]: %f\n",
+		painter->id, painter->lim[0], painter->lim[1]);
 	print_vec4(painter->ray.o, "ray->o:");
 	print_vec4(painter->ray.d, "ray->d:");
 	print_vec4(painter->ray.v, "ray->v:");

@@ -62,6 +62,7 @@ SRCS_BONUS = 	miniRT\
 		canvas\
 		clean\
 		color\
+		color_2\
 		debug\
 		dl_img\
 		img\

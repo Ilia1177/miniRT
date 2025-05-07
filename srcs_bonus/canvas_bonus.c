@@ -13,9 +13,9 @@
 #include <miniRT_bonus.h>
 
 // get location of the point in the viemport from canvas'location
-t_vec4 throught_vp(t_vec2 cnv, t_viewport vp)
+t_vec4	throught_vp(t_vec2 cnv, t_viewport vp)
 {
-	t_vec4 dir;
+	t_vec4	dir;
 
 	dir.x = (float)cnv.x * vp.w / WIDTH;
 	dir.y = (float)cnv.y * vp.h / HEIGHT;
@@ -26,9 +26,9 @@ t_vec4 throught_vp(t_vec2 cnv, t_viewport vp)
 }
 
 // get screen's pixel from canvas's point
-t_vec2 cnv_to_screen(t_vec2 cnv)
+t_vec2	cnv_to_screen(t_vec2 cnv)
 {
-	t_vec2 screen;
+	t_vec2	screen;
 
 	screen.x = (WIDTH / 2) + cnv.x;
 	screen.y = (HEIGHT / 2) - cnv.y;

@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersection_bonus.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:53:44 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 12:54:11 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 //t_object	*closest_intersect(t_ray *ray, int shw, float *lim, t_object *obj)
 t_object	*closest_intersect(t_painter *painter, int shadow, t_object *obj)
 {
-	t_object		*closest_obj;
-	float			closest_t;
-	float	  		curr_t;
-	const float		*lim = painter->lim;
+	t_object	*closest_obj;
+	float		closest_t;
+	float		curr_t;
+	const float	*lim = painter->lim;
 
 	closest_t = INFINITY;
 	curr_t = INFINITY;

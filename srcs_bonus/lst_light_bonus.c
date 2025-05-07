@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_light_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:55:36 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 12:55:40 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 static int	make_light(t_light light, t_light **lights)
@@ -16,14 +28,7 @@ static int	make_light(t_light light, t_light **lights)
 	{
 		curr_light = *lights;
 		while (curr_light->next)
-		{
 			curr_light = curr_light->next;
-		//	if (curr_light->type == new_light->type)
-		//	{
-		//		free(new_light);
-		//		return (-5);
-		//	}
-		}
 		curr_light->next = new_light;
 	}
 	return (0);

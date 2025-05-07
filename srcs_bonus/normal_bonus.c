@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   normal_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:57:59 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 12:58:26 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
+
 void	triangle_normal(t_ray *ray, t_object *tr)
 {
 	t_vec4	edge1;
@@ -9,16 +22,13 @@ void	triangle_normal(t_ray *ray, t_object *tr)
 	// 1. Compute edges in OBJECT SPACE (original vertices)
 	edge1 = sub_vec4(tr->vertice[1], tr->vertice[0]);
 	edge2 = sub_vec4(tr->vertice[2], tr->vertice[0]);
-
 	// 2. Calculate object-space normal via cross product
 	normal_obj = cross_vec4(edge1, edge2);
 	normal_obj = normalize_vec4(normal_obj);
-
 	// 3. Transform normal to WORLD SPACE using inverse transpose matrix
 	normal_matrix = mat_transpose(mat_inverse(tr->t_m)); // Inverse transpose = transpose of inverse
 	//normal_matrix = mat_transpose(tr->i_m); // Inverse transpose = normal matrix
 	ray->n = mat_apply(normal_matrix, normal_obj);
-
 	// 4. Ensure final normal is unit length
 	ray->n = normalize_vec4(ray->n);
 }
@@ -31,7 +41,7 @@ void	plane_normal(t_ray *ray, t_object *pl)
 void	sphere_normal(t_ray *ray, t_object *sp)
 {
 	const t_mat4	inv = mat_inverse(sp->t_m);
-	t_vec4	o = mat_apply(inv, ray->o);
+	t_vec4		o = mat_apply(inv, ray->o);
 	const t_vec4	normal = sub_vec4(o, (t_vec4){0,0,0,0});
 
 	o.w = 0.0f;

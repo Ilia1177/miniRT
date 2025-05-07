@@ -40,6 +40,10 @@ int	place_camera(char **line, t_data *scene)
 	return (status);
 }
 
+/*****************************************************************************
+*	choose the good elem 
+*	if is not a elem or newline print_error_mlx
+*****************************************************************************/
 int	register_line_into_scene(char *line, t_data *scene)
 {
 	line += skip_space(line);
@@ -64,7 +68,7 @@ int	register_line_into_scene(char *line, t_data *scene)
 		else if (!ft_strncmp("tr", line, 2))
 			scene->status = create_triangle(&line, scene);
 		else if (ft_strcmp("\n", line))
-			scene->status = -4; // ???
+			scene->status = -4;
 		else
 			return (0);
 	}
@@ -113,7 +117,6 @@ int	build_scene(t_data *scene)
 	//if (status)
 		gnl_clear_buffer(map);
 	close(map);
-
 	if (!scene->status)
 		print_all(scene);
 	//status = check_map_elem(status, scene);

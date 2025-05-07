@@ -2,10 +2,10 @@
 
 void	rt_put_pixel(const t_img *img, int x, int y, int color)
 {
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
-		return ;
 	char	*dst;
 
+	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
+		return ;
 	dst = img->addr + (y * img->llen + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
 }

@@ -86,7 +86,7 @@ int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t)
 		return (0);
 	hit = add_vec4(ray->o, mult_vec4(ray->d, temp));
 	hit_vec = sub_vec4(hit, center);
-	if (dot_vec4(hit_vec, hit_vec) <= (cyl->radius * cyl->radius * 1.01f))
+	if (dot_vec4(hit_vec, hit_vec) <= (cyl->radius * cyl->radius * 1.001f))
 	{
 		*t = temp;
 		return (1);

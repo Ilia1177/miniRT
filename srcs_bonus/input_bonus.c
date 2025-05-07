@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:00:48 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/11 17:52:24 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:06:17 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,16 @@ void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 {
 	t_vec4	s;
 	t_mat4	new;
+	t_mat4	m;
 
-	t_mat4 m = *tm;
+	m = *tm;
 	s.x = mag_vec4(m.i);
 	s.y = mag_vec4(m.j);
 	s.z = mag_vec4(m.k);
 	new.i = normalize_vec4(m.i);
 	new.j = normalize_vec4(m.j);
 	new.k = normalize_vec4(m.k);
-	new.p = (t_vec4) {0, 0, 0, 1};
+	new.p = (t_vec4){0, 0, 0, 1};
 	mat_translate(&new, m.p.x, m.p.y, m.p.z);
 	mat_rotate(&new, dx, dy, dz);
 	mat_scale(&new, s.x, s.y, s.z);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:58:57 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 12:59:18 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 int	skip_space(char *str)
@@ -33,6 +45,7 @@ int	get_random_vec4(char **line, t_vec4 *v, float w)
 	}
 	return (0);
 }
+
 /*****************************************************************************
 * convert a string to a vector 3 an assign w component
 * if str = "   ran3.0   " -->  get a random vector of magnitude 3.0 

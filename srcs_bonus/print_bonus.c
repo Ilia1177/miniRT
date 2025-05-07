@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:53:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/05 16:27:55 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:00:15 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT_bonus.h>
+
 void	print_error_arg(int status)
 {
 	if (status == 11)

@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dl_img_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:46:47 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 12:47:38 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
-
-void save_pixel_data(t_img *img, int width, int height, int fd)
+void    save_pixel_data(t_img *img, int width, int height, int fd)
 {
     int x, y;
     int color;
@@ -23,12 +34,12 @@ void save_pixel_data(t_img *img, int width, int height, int fd)
         }
     }
 }
-void save_as_ppm(t_img *img, char *filename)
+void    save_as_ppm(t_img *img, char *filename)
 {
     int fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+
     if (fd < 0)
         return;
-    
     ft_dprintf(fd, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
     save_pixel_data(img, WIDTH, HEIGHT, fd);
     close(fd);

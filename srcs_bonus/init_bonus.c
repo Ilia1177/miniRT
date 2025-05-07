@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/05 14:40:03 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:15:30 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,18 @@
 int	rt_scene_init(t_data *scene, char **av, int ac)
 {
 	if (ac < 2)
-	   return (11);
-	else if	(ft_strlen(av[1]) <= 3)
+	{
+		printf("test:%d", ac);
+		return (11);
+	}
+	else if (ft_strlen(av[1]) <= 3)
 		return (12);
 	else if (ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt"))
 		return (13);
 	else if (!ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
 		return (14);
 	ft_bzero(scene, sizeof(t_data));
-   	scene->map_name = av[1];
+	scene->map_name = av[1];
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
 	scene->processing = 1;
@@ -39,7 +42,6 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 	scene->viewport.w = 1;
 	return (0);
 }
-
 
 int	rt_init(t_data *scene, char **av, int ac)
 {
@@ -60,7 +62,8 @@ int	rt_init(t_data *scene, char **av, int ac)
 	if (!img->ptr && !scene->status)
 		scene->status = 23;
 	else if (!scene->status)
-		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
+		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen,
+				&img->endian);
 	if (!img->addr && !scene->status)
 		scene->status = 24;
 	return (scene->status);

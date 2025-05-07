@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   text_checkerboard_bonus.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 13:01:42 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 13:35:00 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 t_argb	checkerboard_plane(t_vec4 hit_point, t_object *obj)
@@ -9,7 +21,7 @@ t_argb	checkerboard_plane(t_vec4 hit_point, t_object *obj)
 
 	x = floor(hit_point.x * CBOARD_SCALE);
 	z = floor(hit_point.z * CBOARD_SCALE);
-	if (fabs(obj->t_m.k.y)> 0.9f)
+	if (fabs(obj->t_m.k.y) > 0.9f)
 		y = z;
 	else
 		y = floor(hit_point.y * CBOARD_SCALE) + z;
@@ -45,10 +57,10 @@ t_board	checkerboard(t_argb color1, t_argb color2)
 
 t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 {
-	t_argb	color;
+	t_argb			color;
 	const t_board	tab = checkerboard(obj_color, invert_color(obj_color));
-	int		u2;
-	int		v2;
+	int				u2;
+	int				v2;
 
 	v2 = fmin(floor(v * CBOARD_H), CBOARD_H - 1);
 	//printf("v = %d\t", v);
@@ -104,6 +116,7 @@ t_uv cylinder_maplast(t_vec4 point, t_vec4 axis, float radius, float height)
 
     return uv;
 }
+
 /*****************************************************************************
  	* hp = hit point
 ******************************************************************************/
@@ -139,4 +152,3 @@ t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
 		color = obj->color;
 	return (color);
 }
-

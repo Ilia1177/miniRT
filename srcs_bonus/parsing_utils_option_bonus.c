@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils_option_bonus.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 12:59:23 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 13:00:04 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 int	get_int_opt(char **line, int *num, int nb_char)
@@ -16,7 +28,7 @@ int	get_int_opt(char **line, int *num, int nb_char)
 	return (status);
 }
 
-int assign_opt(char **line, int *opt, int nb_char)
+int	assign_opt(char **line, int *opt, int nb_char)
 {
 	*opt = 1;
 	*line = *line + nb_char;
@@ -42,7 +54,7 @@ int	get_str_opt(char **line, char **opt, int nb_char)
 	return (0);
 }
 
-int get_reflective(char **line, t_argb *c, int nb_char)
+int	get_reflective(char **line, t_argb *c, int nb_char)
 {
 	char	*str;
 	int		status;
@@ -65,7 +77,7 @@ int	get_options(char **line, t_object *obj)
 	str = *line;
 	str += skip_space(str);
 	status = 0;
-	while (str && *str && !status && ft_strcmp(str,"\n"))
+	while (str && *str && !status && ft_strcmp(str, "\n"))
 	{
 		if (!ft_strncmp("-p", str, 2))
 			status = assign_opt(&str, &obj->pattern, 2);
@@ -80,7 +92,7 @@ int	get_options(char **line, t_object *obj)
 		else if (ft_strcmp("\n", str))
 			status = -8;
 		str += skip_space(str);
-    }
-    *line = str;
-    return (status);
+	}
+	*line = str;
+	return (status);
 }

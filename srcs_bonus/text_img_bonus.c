@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   text_img_bonus.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 13:35:08 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/07 13:35:23 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT_bonus.h>
 
 t_img	*text_img(t_data *scene, char *path)
@@ -10,7 +22,7 @@ t_img	*text_img(t_data *scene, char *path)
 	img->ptr = mlx_xpm_file_to_image(scene->mlx, path, &img->w, &img->h);
 	if (img->ptr)
 		img->addr = mlx_get_data_addr(img->ptr,
-			&img->bpp, &img->llen, &img->endian);
+				&img->bpp, &img->llen, &img->endian);
 	return (img);
 }
 
