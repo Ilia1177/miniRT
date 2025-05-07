@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/05/07 15:24:59 by jhervoch          #+#    #+#              #
+#    Updated: 2025/05/07 15:30:14 by jhervoch         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = miniRT
 NAME_BONUS = Hazardous_miniRT
 
@@ -54,46 +66,44 @@ SRCS = 	miniRT\
 		rgb\
 		rotation_object\
 
-SRCS_BONUS = 	miniRT\
-		build_scene\
-		build_scene_utils\
-		camera\
-		camera_move\
-		canvas\
-		clean\
-		color\
-		color_2\
-		debug\
-		dl_img\
-		img\
-		init\
-		input\
-		intersection\
+SRCS_BONUS = 	minirt\
+		init/build_scene\
+		init/build_scene_utils\
+		display/camera\
+		canvas/canvas\
+		utils/clean\
+		display/color\
+		display/color_2\
+		utils/debug\
+		display/dl_img\
+		display/img\
+		init/init\
+		input/input\
+		intersection/intersection\
 		th_painter\
-		intersect_cylinder\
-		intersect_sphere\
-		intersect_plane\
-		intersect_hyperboloid\
-		intersect_triangle\
-		light\
-		lst_cylinder\
-		lst_hyperboloid\
-		lst_light\
-		lst_plane\
-		lst_sphere\
-		lst_triangle\
-		matrix\
-		norm_utils\
-		normal\
-		parsing_utils_2\
-		parsing_utils\
-		parsing_utils_option\
-		print\
-		ray\
-		rotation_object\
-		text_checkerboard\
-		text_img\
-		vector\
+		intersection/intersect_cylinder\
+		intersection/intersect_sphere\
+		intersection/intersect_plane\
+		intersection/intersect_hyperboloid\
+		intersection/intersect_triangle\
+		display/light\
+		list/lst_cylinder\
+		list/lst_hyperboloid\
+		list/lst_light\
+		list/lst_plane\
+		list/lst_sphere\
+		list/lst_triangle\
+		utils/matrix\
+		init/norm_utils\
+		intersection/normal\
+		init/parsing_utils_2\
+		init/parsing_utils\
+		init/parsing_utils_option\
+		utils/print\
+		display/ray\
+		display/text_checkerboard\
+		display/text_img\
+		utils/vector\
 
 SRCS := $(addsuffix .c, $(SRCS))
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
@@ -114,11 +124,11 @@ all : $(LIBFT) $(MLX_LIB) $(NAME)
 bonus :  $(LIBFT) $(MLX_LIB) $(NAME_BONUS)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	mkdir -p $(OBJS_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(OBJS_BONUS_DIR)/%.o: $(SRCS_BONUS_DIR)/%.c
-	mkdir -p $(OBJS_BONUS_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(NAME): $(OBJS)
