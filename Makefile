@@ -80,7 +80,6 @@ SRCS_BONUS = 	minirt\
 		init/init\
 		input/input\
 		intersection/intersection\
-		th_painter\
 		intersection/intersect_cylinder\
 		intersection/intersect_sphere\
 		intersection/intersect_plane\

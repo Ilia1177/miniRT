@@ -34,42 +34,13 @@ void	print_timestamp(struct timeval *last_time, t_data *scene)
 	mlx_string_put(scene->mlx, scene->win, 90, 10, 0, str);
 }
 
-int	rt_multi_thread(t_data *scene)
+int	rt_render(t_data *scene)
 {
 	struct timeval	last_time;
 	const t_vec2	pos = {0, 0};
-	t_painter		master;
-	//char			*str;
-	//char			*tmp;
-
-	master = th_painter_init(scene, -1);
-	gettimeofday(&last_time, NULL);	// Timestamp 
-	pthread_mutex_lock(&scene->print);
-	th_annouce("Master wait\n", &master);
-	while (scene->at_rest < THREAD_NB)							// wait until all thread are done (scene->at_rest)	
-		pthread_cond_wait(&scene->master_rest, &scene->print);	
-	pthread_mutex_unlock(&scene->print);
-	th_annouce("Master start\n", &master);
-	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);	
-	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-	handle_input(scene);
-	print_timestamp(&last_time, scene);
-	scene->at_rest = 0;											// set at_rest = 0 to unlock thread "painters"
-	th_annouce("Master DONE\n", &master);
-	pthread_cond_broadcast(&scene->painter_rest);				// send signal to unlock them
-	pthread_mutex_unlock(&scene->print);
-	return (0);
-}
-
-int	rt_mono_thread(t_data *scene)
-{
-	struct timeval	last_time;
-	const t_vec2	pos = {0, 0};
-	t_painter		painter;
 
 	gettimeofday(&last_time, NULL);
-	painter = th_painter_init(scene, 0);
-	display_color(&painter);
+	display_color(&scene->painter);
 	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);
 	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
 	handle_input(scene);
@@ -99,23 +70,8 @@ int	display_scene(t_data *scene)
 	mlx_hook(scene->win, 4, 1L << 2, &mouse_press, scene);
 	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
 	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
-	if (THREAD_NB == 1)
-	{
-		printf("starting mono-thread RT\n");
-		mlx_loop_hook(scene->mlx, &rt_mono_thread, scene);
-	}
-	else if (THREAD_NB > 1)
-	{
-		printf("Start multi-thread RT\n");
-		mlx_loop_hook(scene->mlx, &rt_multi_thread, scene);
-		scene->status = th_painter_start(scene);
-		if (!scene->status)
-			th_master_start(scene);
-		else
-			rt_shut_down(scene);
-	}
-	if (!scene->status)
-		mlx_loop(scene->mlx);
+	mlx_loop_hook(scene->mlx, &rt_render, scene);
+	mlx_loop(scene->mlx);
 	return (scene->status);
 }
 

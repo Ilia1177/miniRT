@@ -16,7 +16,6 @@
 //# include <semaphore.h>
 # include <sys/time.h>
 //#include <atomic.h>
-# define THREAD_NB 8 
 # define MAX_SCALE 1000
 # define T_MAX 1600
 # define HEIGHT 800
@@ -25,9 +24,9 @@
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
-# define CBOARD_W 24
-# define CBOARD_H 24
-# define CBOARD_SCALE 0.22f
+# define CBOARD_W 400
+# define CBOARD_H 400
+# define CBOARD_SCALE 1.0f
 //# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 //# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
 //# define EPSILON 1.0e-6
@@ -227,7 +226,7 @@ typedef struct s_data
 	char			*map_name;
 	char			rend;
 	char			res;
-	t_painter		painter[THREAD_NB];
+	t_painter		painter;
 //	pthread_t	listener;
 //	float		intersec_p[2];
 	t_img			img;

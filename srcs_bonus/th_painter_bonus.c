@@ -83,15 +83,7 @@ void	th_painer_quit(t_data *scene)
 	return ;
 }
 
-t_painter	th_painter_init(t_data *scene, int i)
-{
-	t_painter	new;
 
-	ft_bzero(&new, sizeof(new));
-	new.sceneref = (t_data *)scene;
-	new.id = i + 1;
-	return (new);
-}
 
 void	th_painter_kill(t_data *scene)
 {

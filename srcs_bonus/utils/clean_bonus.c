@@ -49,15 +49,6 @@ void	free_data(t_data *scene)
 
 int	rt_shut_down(t_data *scene)
 {
-	if (THREAD_NB > 1)
-	{
-		pthread_mutex_lock(&scene->print);
-		th_painter_kill(scene);
-		scene->processing = 0;
-		pthread_cond_broadcast(&scene->painter_rest);
-		pthread_mutex_unlock(&scene->print);
-		th_painter_wait(scene);
-	}
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
@@ -68,9 +59,6 @@ int	rt_shut_down(t_data *scene)
 		free(scene->mlx);
 	}
 	free_data(scene);
-	if (THREAD_NB > 1)
-		pthread_exit(NULL);
-	else
-		exit(scene->status);
+	exit(scene->status);
 	return (scene->status);
 }
