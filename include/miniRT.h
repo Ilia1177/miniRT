@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:36:35 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/05 14:29:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:49:10 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define MSG_BAD_ELEM "Error\nWrong number of element: \
 	at least one sphere, one cylinder, one plane\n"
 # define MSG_BAD_OPT "Error\nWrong options arguments\n"
-# define MSG_BAD_CAM "Error\nNeed one camera\n"
+# define MSG_BAD_CAM "Error\nNeed one camera fov[0-180]\n"
 # define MSG_BAD_MALL "Error\nMalloc error\n"
 # define MSG_BAD_MLX "Error\nMlx init\n"
 # define MSG_BAD_WIN "Error\nMlx window\n"

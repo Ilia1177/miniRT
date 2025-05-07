@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:32:49 by npolack           #+#    #+#             */
-/*   Updated: 2025/04/29 19:03:44 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:26:30 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,6 @@ t_argb	throw_ray(t_painter *painter)
 	reflected_color = mult_colors(reflected_color, obj->reflect);
 	return (add_colors(local_color, reflected_color));
 }
-
-//t_quad	solve_quadratic(t_vec4 oc, t_vec4 dir, float radius)
-//{
-//	t_quad	quad;
-//	float	square_root;
-//
-//	quad.a = dot_vec4(dir, dir);
-//	quad.b = 2.0f * dot_vec4(oc, dir);
-//	quad.c = dot_vec4(oc, oc) - radius * radius;
-//	quad.delta = quad.b * quad.b - 4.0f * quad.a * quad.c;
-//	if (quad.delta < 0)
-//	{
-//		quad.t[0] = FLT_MAX;
-//		quad.t[1] = FLT_MAX;
-//		return (quad);
-//	}
-//	square_root = sqrtf(quad.delta);
-//	quad.t[0] = (-quad.b - square_root) / (2.0f * quad.a);
-//	quad.t[1] = (-quad.b + square_root) / (2.0f * quad.a);
-//	return (quad);
-//}
 
 int	solve_gen_quad(t_quad *quad)
 {

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:24:26 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:24:27 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:10:08 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,7 @@ static int	make_light(t_light light, t_light **lights)
 	{
 		curr_light = *lights;
 		while (curr_light->next)
-		{
 			curr_light = curr_light->next;
-			if (curr_light->type == new_light->type)
-			{
-				free(new_light);
-				return (-5);
-			}
-		}
 		curr_light->next = new_light;
 	}
 	return (0);
@@ -50,17 +43,20 @@ void	init_light(t_light *light, t_type type)
 	light->next = NULL;
 }
 
-int	clean_lights(t_data *scene)
-{
-	t_light	light;
-
-	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
-		(t_vec4){-2, 0, 0, 0}, (t_vec4){1, 1, 0, 0}, DIRECTIONAL};
-	if (make_light(light, &scene->lights) == -109)
-		return (-109);
-	return (0);
-}
-
+//
+// int	clean_lights(t_data *scene)
+// {
+// 	t_light	light;
+//
+// 	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
+// 		(t_vec4){-2, 0, 0, 0}, (t_vec4){1, 1, 0, 0}, DIRECTIONAL};
+// 	if (make_light(light, &scene->lights) == -109)
+// 		return (-109);
+// 	return (0);
+// }
+//
+//
+//
 /*****************************************************************************
 *  Check if the map file corresponding to the correct format
 *  plane is sp		0.0,0.0,0.0		1.0			10,20,255
@@ -85,7 +81,6 @@ int	create_light(char **line, t_data *scene, t_type type)
 			return (status);
 	}
 	status = str_to_argb(&str, &light.intensity, 1);
-	print_argb(light.intensity, "light");
 	if (status != 0)
 		return (status);
 	*line = str + skip_space(str);

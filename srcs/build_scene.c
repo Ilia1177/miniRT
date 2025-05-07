@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:59:39 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/03 19:37:22 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:47:23 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	place_camera(char **line, t_data *scene)
 		return (status);
 	fov = (int)f_fov;
 	scene->cam.fov = fov;
+	scene->viewport.w = calc_vp_width(fov, 2);
 	*line = str + skip_space(str);
 	return (status);
 }
@@ -87,7 +88,7 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 
 int	check_map_elem(int status, t_data *scene)
 {
-	if (scene->cam.fov == -1)
+	if (scene->cam.fov == -1 || scene->cam.fov > 180 || scene->cam.fov < 0)
 		status = -10;
 	if (status)
 		print_error_msg(status, scene);

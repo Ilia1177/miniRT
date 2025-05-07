@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:24:43 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/04/14 11:34:52 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:23:50 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,4 @@ t_vec4	mat_apply(t_matrix mat, t_vec4 v)
 	res.z = dot_vec4(v, z);
 	res.w = dot_vec4(v, w);
 	return (res);
-}
-
-void	inverse_matrix(t_matrix matrix, t_matrix *inv_matrix)
-{
-	inv_matrix->i = (t_vec4){matrix.i.x, matrix.j.x, matrix.k.x, 0};
-	inv_matrix->j = (t_vec4){matrix.i.y, matrix.j.y, matrix.k.y, 0};
-	inv_matrix->k = (t_vec4){matrix.i.z, matrix.j.z, matrix.k.z, 0};
-	inv_matrix->p.x = -(inv_matrix->i.x * matrix.p.x + inv_matrix->i.y
-			* matrix.p.y + inv_matrix->i.z * matrix.p.z);
-	inv_matrix->p.y = -(inv_matrix->j.x * matrix.p.x + inv_matrix->j.y
-			* matrix.p.y + inv_matrix->j.z * matrix.p.z);
-	inv_matrix->p.z = -(inv_matrix->k.x * matrix.p.x + inv_matrix->k.y
-			* matrix.p.y + inv_matrix->k.z * matrix.p.z);
-	inv_matrix->p.w = 1;
 }
