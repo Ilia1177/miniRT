@@ -12,26 +12,6 @@
 
 #include <miniRT_bonus.h>
 
-t_argb	checkerboard_plane(t_vec4 hit_point, t_object *obj)
-{
-	int		x;
-	int		y;
-	int		z;
-	t_argb	color;
-
-	x = floor(hit_point.x * CBOARD_SCALE);
-	z = floor(hit_point.z * CBOARD_SCALE);
-	if (fabs(obj->t_m.k.y) > 0.9f)
-		y = z;
-	else
-		y = floor(hit_point.y * CBOARD_SCALE) + z;
-	if ((x + y) % 2 == 0)
-		color = invert_color(obj->color);
-	else
-		color = obj->color;
-	return (color);
-}
-
 t_board	checkerboard(t_argb color1, t_argb color2)
 {
 	t_board	tab;
@@ -63,99 +43,82 @@ t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 	int				v2;
 
 	v2 = fmin(floor(v * CBOARD_H), CBOARD_H - 1);
-	//printf("v = %d\t", v);
-	//u = round(x);
 	u2 = fmin(floor(u * CBOARD_W), CBOARD_H - 1);
-	//printf("u = %d\n", u);
-	//tab = checkerboard(obj_color, CBOARD_COLOR);
 	color = tab.color[v2][u2];
 	return (color);
 }
 
-t_uv	sphere_map(t_vec4 point, float radius)
+float clamp(float x, float min_val, float max_val) // doublons ///
 {
-	t_uv		uv;
-	/* const float	theta = atan2(point.x, point.z); */
-	/* const float	radius = mag_vec4(point); */
-	/* const float	phi = acos(point.y / radius); */
-	/* const float	raw_u = theta / (2 * M_PI); */
-	/**/
-	/* uv.u = 1 - (raw_u + 0.5); */
-	/* uv.u = ABS(uv.u); */
-	/* uv.v = 1 - phi / M_PI; */
-	/* uv.v = ABS(uv.v); */
-	const float	theta = atan2(point.z, point.x);
-	//const float	radius = mag_vec4(point);
-	const float	phi = asin(point.y / radius);
-	const float	raw_u = theta / (2 * M_PI);
-
-	uv.u = raw_u + 0.5f;
-	uv.u = fabs(uv.u);
-	uv.v = 0.5f - phi / M_PI;
-	uv.v = fabs(uv.v);
-	return (uv);
+    if (x < min_val) return min_val;
+    if (x > max_val) return max_val;
+    return x;
 }
 
-t_uv cylinder_map(t_vec4 point, t_vec4 axis, float radius, float height)
+t_uv plane_map(t_vec4 local_point)
 {
     t_uv uv;
-    float scale;
 
-    scale = 0.1f;
-    
-    // 1. Projection verticale (V)
-    float h = dot_vec3(point, axis); // Position le long de l'axe
-    uv.v = fmodf(fabs(h / height * scale * 4.0f), 1.0f);
+    uv.u = fmodf(local_point.x, 1.0f);
+    uv.v = fmodf(local_point.y, 1.0f);
+    if (uv.u < EPSILON)
+		uv.u += 1.0f;
+    if (uv.v < EPSILON)
+		uv.v += 1.0f;
+    return uv;
+}
 
-    // 2. Projection horizontale (U) - version corrigée
-    t_vec4 radial = sub_vec4(point, mult_vec4(axis, h));
-    float theta = atan2(radial.z, radial.x);
-    
-    // Compensation de la courbure
-    uv.u = fmodf(fabs(theta * radius * scale / (2.0f * M_PI)), 1.0f);
+// Convert to direction vector on unit sphere
+// u: longitude (angle around Y axis), from -π to π
+// v: latitude (angle from -Y to +Y), from -1 to 1
+// acos(p.y) gives angle from Y axis in [0, π]
+t_uv sphere_map(t_vec4 local_point)
+{
+    const t_vec4	p = normalize_vec4(local_point); 
+    const float 	theta = atan2(p.z, p.x);
+    const float		phi = acosf(clamp(p.y, -1.0f, 1.0f)); 
+    t_uv			uv;
+
+    uv.u = theta / (2.0f * M_PI);
+    if (uv.u < 0.0f)
+		uv.u += 1.0f;
+    uv.v = phi / M_PI; 
+    return uv;
+}
+
+t_uv cylinder_map(t_vec4 local_point)
+{
+    const float theta = atan2(local_point.x, local_point.y);
+    t_uv		uv;
+
+    uv.u = theta / (2.0f * M_PI);
+    if (uv.u < EPSILON)
+		uv.u += 1.0f;
+    uv.v = local_point.z;
+    uv.v = fmodf(uv.v, 1.0f);
+    if (uv.v < EPSILON)
+		uv.v += 1.0f;
     return uv;
 }
 
 /*****************************************************************************
  	* hp = hit point
 ******************************************************************************/
-t_argb	pattern_color(t_ray *ray, t_object *obj, t_data *scene)
+t_argb	pattern_color(t_ray *ray, t_object *obj)
 {
 	t_uv	uv;
 	t_argb	color;
 	t_vec4	hp;
 
-//	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
-	hp = ray->o;
-	(void)scene;
+	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
 	if (obj->type == SPHERE && obj->pattern)
-	{
-		hp = sub_vec4(ray->o, obj->t_m.p);
-		uv = sphere_map(hp, obj->radius);
-		color = checkerboard_at(uv.u, uv.v, obj->color);
-		//color = text_img_at(uv.u, uv.v, obj->img);
-		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
-	}
+		uv = sphere_map(hp);
 	else if (obj->type == PLANE && obj->pattern)
-	{
-	//	uv = plane_map(hp);
-	//	color = checkerboard_at(uv.u, uv.v, obj->color);
-
-
-		color = checkerboard_plane(ray->o, obj);
-	    //printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
-	}
+		uv = plane_map(hp);
 	else if (obj->type == CYLINDER && obj->pattern)
-	{
-		hp = ray->o;
-		hp = sub_vec4(mat_apply(mat_inverse(obj->t_m), ray->o), obj->t_m.p);
-		//hp = mat_apply(mat_inverse(obj->t_m), ray->o);
-		//hp = sub_vec4(obj->t_m.p, mat_apply(mat_inverse(obj->t_m), ray->o));
-		uv = cylinder_map(hp, normalize_vec4(obj->t_m.k), mag_vec4(obj->t_m.i), mag_vec4(obj->t_m.k));
-		color = checkerboard_at(uv.u, uv.v, obj->color);
-		//printf("color [%.2f] [%.2f]\n", uv.u, uv.v);
-	}
+		uv = cylinder_map(hp);
 	else
-		color = obj->color;
+		return (obj->color);
+	color = checkerboard_at(uv.u, uv.v, obj->color);
 	return (color);
 }

@@ -24,8 +24,8 @@
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
-# define CBOARD_W 40
-# define CBOARD_H 40
+# define CBOARD_W 8 
+# define CBOARD_H 8
 # define CBOARD_SCALE 1.0f
 //# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 //# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
@@ -432,7 +432,7 @@ void		rotate_on_y(t_object *obj, float theta);
 void		rotate_on_x(t_object *obj, float theta);
 
 //text_checkerboard.c
-t_argb		pattern_color(t_ray *ray, t_object *obj, t_data *scene);
+t_argb		pattern_color(t_ray *ray, t_object *obj);
 
 //text_img
 t_argb		text_img_at(float u, float v, t_img *img);
