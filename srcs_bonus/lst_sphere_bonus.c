@@ -56,24 +56,23 @@ int	create_sphere(char **line, t_data *scene)
 {
 	char		*str;
 	t_object	sphere;
-	int			status;
 
 	str = *line + 2 ;
 	init_obj(&sphere, SPHERE);
 	sphere.t_m.k = (t_vec4){0, 0, 1, 0};
-	status = str_to_vec4(&str, &sphere.t_m.p, 1.0f);
-	if (!status)
-		status = str_to_float(&str, &sphere.radius);
-	if (!status)
-		status = str_to_argb(&str, &sphere.color, 0);
-	if (!status)
-		status = get_options(&str, &sphere);
+	scene->status = str_to_vec4(&str, &sphere.t_m.p, 1.0f);
+	if (!scene->status)
+		scene->status = str_to_float(&str, &sphere.radius);
+	if (!scene->status)
+		scene->status = str_to_argb(&str, &sphere.color, 0);
+	if (!scene->status)
+		scene->status = get_options(&str, &sphere);
 	if (sphere.path)
 		sphere.img = text_img(scene, sphere.path);
 	if (sphere.path && !sphere.img)
 		return (-9);
-	if (!status)
-		status = make_object(sphere, &scene->objects);
+	if (!scene->status)
+		scene->status = make_object(sphere, &scene->objects);
 	*line = str + skip_space(str);
-	return (status);
+	return (scene->status);
 }

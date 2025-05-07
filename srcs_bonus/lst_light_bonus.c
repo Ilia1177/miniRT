@@ -38,7 +38,7 @@ void	init_light(t_light *light, t_type type)
 	light->next = NULL;
 }
 
-int	clean_lights(t_data *scene)
+int	clean_lights(t_data *scene) // ???
 {
 	t_light	light;
 
@@ -62,29 +62,24 @@ int	create_light(char **line, t_data *scene, t_type type)
 {
 	char		*str;
 	t_light		light;
-	int			status;
-	//t_argb		color;
-	//float		bright;
-	//float		brightness;
 
 	str = *line + 1 ;
 	init_light(&light, type);
 	if (type == POINT)
+		scene->status = str_to_vec4(&str, &light.pos, 1.0f);
+	if (!scene->status)
+		scene->status = str_to_argb(&str, &light.intensity, 1);
+	if (!scene->status)
 	{
-		status = str_to_vec4(&str, &light.pos, 1.0f);
-		if (status != 0)
-			return (status);
+		str = str + skip_space(str);
+		if (ft_strnstr(str, "-d", ft_strlen(str)))
+		{
+			light.type = DIRECTIONAL;
+			light.pos.w = 0.0f;
+			str += 2;
+		}
+		*line = str + skip_space(str);
+		scene->status = make_light(light, &scene->lights);
 	}
-	status = str_to_argb(&str, &light.intensity, 1);
-	if (status != 0)
-		return (status);
-	str = str + skip_space(str);
-	if (ft_strnstr(str, "-d", ft_strlen(str)))
-	{
-		light.type = DIRECTIONAL;
-		light.pos.w = 0.0f;
-		str += 2;
-	}
-	*line = str + skip_space(str);
-	return (make_light(light, &scene->lights));
+	return (scene->status);
 }

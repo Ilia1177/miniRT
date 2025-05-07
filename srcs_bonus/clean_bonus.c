@@ -37,7 +37,6 @@ void	free_data(t_data *scene)
 
 int	rt_shut_down(t_data *scene)
 {
-	//printf("Shutdown with status: %d.\n", scene->status);
 	if (THREAD_NB > 1)
 	{
 		pthread_mutex_lock(&scene->print);

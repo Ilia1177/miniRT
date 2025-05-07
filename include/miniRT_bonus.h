@@ -32,16 +32,14 @@
 //# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
 //# define EPSILON 1.0e-6
 # define EPSILON 0.001f
-# define MSG_BAD_FILE "Error\nNeed one file *.rt\n"
-# define MSG_BAD_POS "Error\nBad position arguments\n"
-# define MSG_BAD_RGB "Error\nBad rgb arguments\n"
-# define MSG_BAD_FLT "Error\nBad float arguments\n"
-# define MSG_BAD_TYPE "Error\nBad type arguments, only A,C,L,sp,pl,cy allowed\n"
-# define MSG_BAD_LGHT "Error\nWrong number of light:\
-	need one ambient and one spot\n"
-# define MSG_BAD_ELEM "Error\nWrong number of element:\
-	at least one sphere, one cylinder, one plane\n"
-# define MSG_BAD_OPT "Error\nWrong options arguments\n"
+# define MSG_BAD_FILE	"Error\nNeed one file *.rt\n"
+# define MSG_BAD_POS	"Bad position arguments.\n"
+# define MSG_BAD_RGB	"Bad rgb arguments.\n"
+# define MSG_BAD_FLT	"Bad float arguments.\n"
+# define MSG_BAD_TYPE	"Bad type arguments, only A,C,L,sp,pl,cy allowed\n"
+# define MSG_BAD_LGHT	"Error\nWrong number of light:need one ambient and one spot\n"
+# define MSG_BAD_ELEM	"Error\nWrong number of element:at least one sphere, one cylinder, one plane\n"
+# define MSG_BAD_OPT 	"Wrong options arguments\n"
 # define MSG_BAD_CAM "Error\nNeed one camera\n"
 # define MSG_BAD_MALL "Error\nMalloc error\n"
 # define MSG_BAD_MLX "Error\nMlx init\n"
@@ -410,7 +408,7 @@ int			make_object(t_object data, t_object **objects);
 
 //int		rt_scene_tozero(t_data *scene);
 //void	mlx_tozero(t_data *scene);
-int			rt_init(t_data *scene, char **av);
+int			rt_init(t_data *scene, char **av, int ac);
 
 //lst_sphere.c
 int			create_sphere(char **line, t_data *scene);

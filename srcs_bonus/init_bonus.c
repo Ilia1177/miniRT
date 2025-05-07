@@ -12,14 +12,17 @@
 
 #include <miniRT_bonus.h>
 
-int	rt_scene_init(t_data *scene, char **av)
+int	rt_scene_init(t_data *scene, char **av, int ac)
 {
-//	int	i;
-
+	if (ac < 2)
+	   return (11);
+	else if	(ft_strlen(av[1]) <= 3)
+		return (12);
+	else if (ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt"))
+		return (13);
+	else if (!ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
+		return (14);
 	ft_bzero(scene, sizeof(t_data));
-   // if (ac < 1)
-   // 	return (1);
-   // else if (ac > 1)
    	scene->map_name = av[1];
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
@@ -29,55 +32,38 @@ int	rt_scene_init(t_data *scene, char **av)
 	scene->painter_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->master_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->cam.yaw = 90.0f;
-	scene->cam.fov = -1;
+	scene->cam.fov = -1; //input to get// return status
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->viewport.h = 1;
 	scene->viewport.w = 1;
- //   i = -1;
- //   while (++i < 99999)
- //   	scene->key_state[i] = 0;
- //   //scene->viewport.w = calc_vp_width(53, 2);
 	return (0);
 }
 
-void	mlx_tozero(t_data *scene) //not used
-{
-	int	i;
 
-	scene->mlx = NULL;
-	scene->win = NULL;
-	i = -1;
-	while (++i < 99999)
-		scene->key_state[i] = 0;
-}
-
-int	rt_init(t_data *scene, char **av)
+int	rt_init(t_data *scene, char **av, int ac)
 {
 	t_img	*img;
-	int		status;
 
-	status = 0;
-	status = rt_scene_init(scene, av);
-	//mlx_tozero(scene);
+	scene->status = rt_scene_init(scene, av, ac);
 	img = &scene->img;
-	if (!status)
+	if (!scene->status)
 		scene->mlx = mlx_init();
-	if (!scene->mlx && !status)
-		status = -11;
-	else if (!status)
-		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "Hazardous RAY TRACER");
-	if (!scene->win && !status)
-		status = -12;
-	else if (!status)
+	if (!scene->mlx && !scene->status)
+		scene->status = 21;
+	else if (!scene->status)
+		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "RT");
+	if (!scene->win && !scene->status)
+		scene->status = 22;
+	else if (!scene->status)
 		img->ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
-	if (!img->ptr && !status)
-		status = -13;
-	else if (!status)
+	if (!img->ptr && !scene->status)
+		scene->status = 23;
+	else if (!scene->status)
 		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
-	if (!img->addr && !status)
-		status = -14;
-	return (status);
+	if (!img->addr && !scene->status)
+		scene->status = 24;
+	return (scene->status);
 }
 
 void	init_obj(t_object *obj, t_type type)

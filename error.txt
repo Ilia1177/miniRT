@@ -1,0 +1,13 @@
+mini RAYTRACER ERROR CODE
+
+rt_scene_init:
+11: not enought args
+12: need more than 3 length
+13: need ".rt" format
+14: ???
+
+rt_init (mlx):
+21: mlx_init() failure
+22: new_windows() failure
+23: mlx_new_image() failure
+24: mlx_get_data_addr() failure

@@ -13,23 +13,18 @@ int	create_plane(char **line, t_data *scene)
 {
 	char		*str;
 	t_object	plane;
-	int			status;
 
 	str = *line + 2 ;
 	init_obj(&plane, PLANE);
-	status = str_to_vec4(&str, &plane.t_m.p, 1.0f);
-	if (status != 0)
-		return (status);
-	status = str_to_vecdir(&str, &plane.t_m.k);
-	if (status != 0)
-		return (status);
-	status = str_to_argb(&str, &plane.color, 0);
-	if (status != 0)
-		return (status);
-	if (!status)
-		status = get_options(&str, &plane);
-	if (!status)
-		status = make_object(plane, &scene->objects);
+	scene->status = str_to_vec4(&str, &plane.t_m.p, 1.0f);
+	if (!scene->status)
+		scene->status = str_to_vecdir(&str, &plane.t_m.k);
+	if (!scene->status)
+		scene->status = str_to_argb(&str, &plane.color, 0);
+	if (!scene->status)
+		scene->status = get_options(&str, &plane);
+	if (!scene->status)
+		scene->status = make_object(plane, &scene->objects);
 	*line = str + skip_space(str);
-	return (status);
+	return (scene->status);
 }

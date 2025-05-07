@@ -124,23 +124,14 @@ int	main(int ac, char **av, char **envp)
 	t_data		scene;
 	t_painter	painter;
 
-	(void)envp;
 	if (!envp)
-	{
-		printf("no environnemnt\n");
-		return (0);
-	}
-	ft_bzero(&scene, sizeof(t_data));
-	if (ac > 3 || ft_strlen(av[1]) <= 3
-		|| ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt")
-		|| !ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
-		print_error_msg(-9, &scene);
-	print_input();
-	scene.status = rt_init(&scene, av);
+		scene.status = 99;
+	if (!scene.status)
+		scene.status = rt_init(&scene, av, ac);
 	if (!scene.status)
 		scene.status = build_scene(&scene);
 	if (scene.status)
-		free_data(&scene);
+		print_error_msg(scene.status, &scene);
 	else if (ac == 3)
 	{
 		scene.res = 1;
@@ -149,6 +140,9 @@ int	main(int ac, char **av, char **envp)
 		rt_shut_down(&scene);
 	}
 	else if (ac == 2)
+	{
+		print_input();
 		display_scene(&scene);
+	}
 	return (scene.status);
 }

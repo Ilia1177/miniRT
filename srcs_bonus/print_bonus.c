@@ -11,16 +11,27 @@
 /* ************************************************************************** */
 
 #include <miniRT_bonus.h>
+void	print_error_arg(int status)
+{
+	if (status == 11)
+		printf("not enought args. Usage: ..."); // describe usage
+	if (status == 12)
+		printf("map name not conform.");
+	if (status == 13)
+		printf("map in \".rt\" format needed.");
+	if (status == 14)
+		printf("???"); // to be explicit
+}
 
 void	print_error_mlx(int status)
 {
-	if (status == -11)
+	if (status == 21)
 		printf(MSG_BAD_MLX);
-	if (status == -12)
+	if (status == 22)
 		printf(MSG_BAD_WIN);
-	if (status == -13)
+	if (status == 23)
 		printf(MSG_BAD_IMG);
-	if (status == -14)
+	if (status == 24)
 		printf(MSG_BAD_ADD);
 }
 
@@ -53,6 +64,7 @@ void	print_error_msg(int status, t_data *scene)
 	if (status == -10)
 		printf(MSG_BAD_CAM);
 	print_error_mlx(status);
+	print_error_arg(status);
 	rt_shut_down(scene);
 	exit (EXIT_FAILURE);
 }
@@ -71,13 +83,15 @@ void	print_argb(t_argb color, char *msg)
 void	print_input(void)
 {
 	printf("+=============+\n\
-|     MENU    |\n\
-+=============+=============+=============+=============+\n\
-|    CAM      | translation |  rotation   | scale (obj) |\n\
-|-------------|-------------|-------------|-------------|\n\
-|w : forward  |u/o: +/- (y) |z: + on x    |r/f: +/- (x) |\n\
-|a : left     |i/k: +/- (z) |x: + on y    |t/g: +/- (y) |\n\
-|d : right    |h/k: +/- (x) |c: + on z    |y/h: +/- (z) |\n\
-|s : backward |             |             | 			|\n\
-+=============+=============+=============+=============+\n");
+	|     MENU    |\n\
+	+=============+=============+=============+=============+\n\
+	|    CAM      | translation |  rotation   | scale (obj) |\n\
+	|-------------|-------------|-------------|-------------|\n\
+	|w: forward   |u/o: +/- (y) |z: + on x    |r/f: +/- (x) |\n\
+	|a: left      |i/k: +/- (z) |x: + on y    |t/g: +/- (y) |\n\
+	|d: right     |h/k: +/- (x) |c: + on z    |y/h: +/- (z) |\n\
+	|s: backward  |             |             | 			|\n\
+	|q: up	      |             |             | 			|\n\
+	|e: down	  |             |             | 			|\n\
+	+=============+=============+=============+=============+\n");
 }

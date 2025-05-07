@@ -21,7 +21,7 @@ int	place_camera(char **line, t_data *scene)
 	t_vec4	pos;
 
 	if (scene->cam.fov != -1)
-		return (-10);
+		return (32);
 	str = *line + 1;
 	status = str_to_vec4(&str, &pos, 1.0f);
 	if (status != 0)
@@ -40,36 +40,37 @@ int	place_camera(char **line, t_data *scene)
 	return (status);
 }
 
-int	register_line_into_scene(char *line, t_data *scene, int status)
+int	register_line_into_scene(char *line, t_data *scene)
 {
 	line += skip_space(line);
-	while (line && *line && !status)
+	while (line && *line && !scene->status)
 	{
 		if (*line == '#')
 			line += go_to_endl(line);
 		if (*line == 'A')
-			status = create_light(&line, scene, AMBIENT);
+			scene->status = create_light(&line, scene, AMBIENT);
 		else if (*line == 'L')
-			status = create_light(&line, scene, POINT);
+			scene->status = create_light(&line, scene, POINT);
 		else if (*line == 'C')
-			status = place_camera(&line, scene);
+			scene->status = place_camera(&line, scene);
 		else if (!ft_strncmp("sp", line, 2))
-			status = create_sphere(&line, scene);
+			scene->status = create_sphere(&line, scene);
 		else if (!ft_strncmp("pl", line, 2))
-			status = create_plane(&line, scene);
+			scene->status = create_plane(&line, scene);
 		else if (!ft_strncmp("cy", line, 2))
-			status = create_cylinder(&line, scene);
+			scene->status = create_cylinder(&line, scene);
 		else if (!ft_strncmp("hy", line, 2))
-			status = create_hyperboloid(&line, scene);
+			scene->status = create_hyperboloid(&line, scene);
 		else if (!ft_strncmp("tr", line, 2))
-			status = create_triangle(&line, scene);
+			scene->status = create_triangle(&line, scene);
 		else if (ft_strcmp("\n", line))
-			status = -4;
+			scene->status = -4; // ???
 		else
 			return (0);
 	}
-	//print_error_msg(status, line);
-	return (status);
+	if (scene->status)
+		printf("Error\nOn line: %s\n", line);
+	return (scene->status);
 }
 
 int	check_map_elem(int status, t_data *scene)
@@ -93,29 +94,28 @@ int	build_scene(t_data *scene)
 {
 	char		*line;
 	int			map;
-	int			status;
 
-	status = 0;
 	map = open(scene->map_name, O_RDONLY);
 	if (map == -1)
 	{
 		perror("miniRT: open_map");
-		return (2);
+		return (30);
 	}
 	line = get_next_line(map);
-	while (!status && line)
+	while (!scene->status && line)
 	{
-		status = register_line_into_scene(line, scene, status);
+		scene->status = register_line_into_scene(line, scene);
 		free(line);
 		line = get_next_line(map);
 	}
 	free(line);
-	line = NULL;
-	if (status)
+	//line = NULL;
+	//if (status)
 		gnl_clear_buffer(map);
 	close(map);
 
-	print_all(scene);
+	if (!scene->status)
+		print_all(scene);
 	//status = check_map_elem(status, scene);
-	return (status);
+	return (scene->status);
 }
