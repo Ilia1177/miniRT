@@ -28,7 +28,6 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	t_argb			diffuse;
 	t_argb			specular;
 
-	(void)spec;
 	diffuse = (t_argb){0, 0, 0, 0};
 	specular = (t_argb){0, 0, 0, 0};
 	if (ndl > 0)
@@ -115,7 +114,7 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 
 	lim = painter->lim;
 	ray = &painter->ray;
-	lumen = (t_argb){0, 0, 0, 0};
+	lumen = (t_argb) {0, 0, 0, 0};
 	light = painter->sceneref->lights;
 	while (light)
 	{

@@ -41,7 +41,15 @@ SRCS		=	ft_printf/ft_printf.c\
 				ft_vector/ft_mult_vector.c\
 				ft_vector/ft_normalize_vector.c\
 				ft_vector/ft_sub_vector.c\
-				ft_vector/ft_add_vector.c
+				ft_vector/ft_add_vector.c\
+				matrix/mat_adjugate.c\
+				matrix/mat_apply.c\
+				matrix/mat_compose.c\
+				matrix/mat_init.c\
+				matrix/mat_inverse.c\
+				matrix/mat_orthogonal.c\
+				matrix/mat_transform.c\
+				matrix/mat_transpose.c
 
 SRCS 		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		=	$(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

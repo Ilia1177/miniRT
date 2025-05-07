@@ -43,7 +43,7 @@ void	change_axis(t_object *obj)
 
 void	rotate_on_x(t_object *obj, float theta)
 {
-	t_matrix	mat;
+	t_mat4	mat;
 
 	theta = theta * (M_PI / 180.0f);
 	mat.j = (t_vec4){0, cos(theta), sin(theta), 0};
@@ -56,7 +56,7 @@ void	rotate_on_x(t_object *obj, float theta)
 
 void	rotate_on_y(t_object *obj, float theta)
 {
-	t_matrix	mat;
+	t_mat4	mat;
 
 	theta = theta * (M_PI / 180.0f);
 	mat.i = (t_vec4){cos(theta), 0, -sin(theta), 0};
@@ -69,7 +69,7 @@ void	rotate_on_y(t_object *obj, float theta)
 
 void	rotate_on_z(t_object *obj, float theta)
 {
-	t_matrix	mat;
+	t_mat4	mat;
 
 	theta = theta * (M_PI / 180.0f);
 	mat.i = (t_vec4){cos(theta), sin(theta), 0, 0};

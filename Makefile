@@ -92,7 +92,6 @@ SRCS_BONUS = 	minirt\
 		list/lst_plane\
 		list/lst_sphere\
 		list/lst_triangle\
-		utils/matrix\
 		init/norm_utils\
 		intersection/normal\
 		init/parsing_utils_2\
@@ -102,7 +101,7 @@ SRCS_BONUS = 	minirt\
 		display/ray\
 		display/text_checkerboard\
 		display/text_img\
-		utils/vector\
+		utils/vector
 
 SRCS := $(addsuffix .c, $(SRCS))
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))

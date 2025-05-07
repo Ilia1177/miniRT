@@ -18,6 +18,7 @@
 # include "ft_printf.h"
 # include "get_next_line_bonus.h"
 # include "ft_math.h"
+# include "matrix.h"
 
 ///////////// PART 1 ///////////////////////////////////////////////////////////
 

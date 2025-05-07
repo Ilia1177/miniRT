@@ -34,3 +34,14 @@ t_argb	invert_color(t_argb color)
 	new_color.b = 255 - color.b;
 	return (new_color);
 }
+
+t_argb	extract_argb(int color)
+{
+	t_argb	argb_color;
+
+	argb_color.a = (color >> 24) & 0xFF;
+	argb_color.r = (color >> 16) & 0xFF;
+	argb_color.g = (color >> 8) & 0xFF;
+	argb_color.b = color & 0xFF;
+	return (argb_color);
+}
