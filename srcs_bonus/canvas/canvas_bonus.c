@@ -39,7 +39,7 @@ void	reset_painter(t_painter *painter, t_vec2 cnv)
 {
 	const t_data	*scene = painter->sceneref;
 
-	painter->lim[0] = 1.0f;
+	painter->lim[0] = scene->viewport.pos.z;
 	painter->lim[1] = T_MAX;
 	painter->lim[2] = R_LIMIT;
 	painter->ray.o = scene->cam.t_m.p;
