@@ -50,55 +50,57 @@ t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 
 float clamp(float x, float min_val, float max_val) // doublons ///
 {
-    if (x < min_val) return min_val;
-    if (x > max_val) return max_val;
-    return x;
+	if (x < min_val)
+		return (min_val);
+	if (x > max_val)
+		return (max_val);
+	return (x);
 }
 
-t_uv plane_map(t_vec4 local_point)
+t_uv	plane_map(t_vec4 local_point)
 {
-    t_uv uv;
+	t_uv		uv;
 
-    uv.u = fmodf(local_point.x, 1.0f);
-    uv.v = fmodf(local_point.y, 1.0f);
-    if (uv.u < EPSILON)
+	uv.u = fmodf(local_point.x, 1.0f);
+	uv.v = fmodf(local_point.y, 1.0f);
+	if (uv.u < EPSILON)
 		uv.u += 1.0f;
-    if (uv.v < EPSILON)
+	if (uv.v < EPSILON)
 		uv.v += 1.0f;
-    return uv;
+	return (uv);
 }
 
 // Convert to direction vector on unit sphere
 // u: longitude (angle around Y axis), from -π to π
 // v: latitude (angle from -Y to +Y), from -1 to 1
 // acos(p.y) gives angle from Y axis in [0, π]
-t_uv sphere_map(t_vec4 local_point)
+t_uv	sphere_map(t_vec4 local_point)
 {
-    const t_vec4	p = normalize_vec4(local_point); 
-    const float 	theta = atan2(p.z, p.x);
-    const float		phi = acosf(clamp(p.y, -1.0f, 1.0f)); 
-    t_uv			uv;
+	const t_vec4	p = normalize_vec4(local_point);
+	const float		theta = atan2(p.z, p.x);
+	const float		phi = acosf(clamp(p.y, -1.0f, 1.0f));
+	t_uv			uv;
 
-    uv.u = theta / (2.0f * M_PI);
-    if (uv.u < 0.0f)
+	uv.u = theta / (2.0f * M_PI);
+	if (uv.u < 0.0f)
 		uv.u += 1.0f;
-    uv.v = phi / M_PI; 
-    return uv;
+	uv.v = phi / M_PI;
+	return (uv);
 }
 
-t_uv cylinder_map(t_vec4 local_point)
+t_uv	cylinder_map(t_vec4 local_point)
 {
-    const float theta = atan2(local_point.x, local_point.y);
-    t_uv		uv;
+	const float	theta = atan2(local_point.x, local_point.y);
+	t_uv		uv;
 
-    uv.u = theta / (2.0f * M_PI);
-    if (uv.u < EPSILON)
+	uv.u = theta / (2.0f * M_PI);
+	if (uv.u < EPSILON)
 		uv.u += 1.0f;
-    uv.v = local_point.z;
-    uv.v = fmodf(uv.v, 1.0f);
-    if (uv.v < EPSILON)
+	uv.v = local_point.z;
+	uv.v = fmodf(uv.v, 1.0f);
+	if (uv.v < EPSILON)
 		uv.v += 1.0f;
-    return uv;
+	return (uv);
 }
 
 /*****************************************************************************
