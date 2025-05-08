@@ -29,10 +29,6 @@ SRCS		=	ft_printf/ft_printf.c\
 				ft_printf/get_intlen.c\
 				get_next_line/get_next_line_bonus.c\
 				get_next_line/get_next_line_utils_bonus.c\
-				ft_math/ft_sqrt.c\
-				ft_math/ft_expf.c\
-				ft_math/ft_logf.c\
-				ft_math/ft_pow.c\
 				ft_vector/ft_cross_vector.c\
 				ft_vector/ft_dist_vector.c\
 				ft_vector/ft_div_vector.c\

@@ -111,7 +111,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 	t_vec4	hp;
 
 	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
-	if (obj->type == SPHERE && obj->pattern)
+	if (obj->type == SPHERE && (obj->pattern || obj->path))
 		uv = sphere_map(hp);
 	else if (obj->type == PLANE && obj->pattern)
 		uv = plane_map(hp);
@@ -119,6 +119,9 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 		uv = cylinder_map(hp);
 	else
 		return (obj->color);
-	color = checkerboard_at(uv.u, uv.v, obj->color);
+	if (obj->path)
+		color = text_img_at(uv.u, uv.v, obj->img);
+	else if (obj->pattern)
+		color = checkerboard_at(uv.u, uv.v, obj->color);
 	return (color);
 }
