@@ -12,6 +12,20 @@
 
 #include <miniRT.h>
 
+t_viewport	build_viewport(t_data *scene, float fov_degrees)
+{
+	const float	fov_radians = fov_degrees * (float)M_PI / 180.0f;
+	t_viewport	vp;
+
+	vp = scene->viewport;
+	vp.w = 1;
+	vp.h = 1;
+	vp.loc.z = vp.w / (2.0f * tanf(fov_radians / 2.0f));
+	vp.loc.x = 0.0f;
+	vp.loc.y = 0.0f;
+	return (vp);
+}
+
 int	place_camera(char **line, t_data *scene)
 {
 	char	*str;
@@ -36,7 +50,7 @@ int	place_camera(char **line, t_data *scene)
 		return (status);
 	fov = (int)f_fov;
 	scene->cam.fov = fov;
-	scene->viewport.w = calc_vp_width(fov);
+	scene->viewport = build_viewport(scene, fov);
 	*line = str + skip_space(str);
 	return (status);
 }

@@ -20,7 +20,7 @@ t_vec4	get_viewport_loc(t_canvas cnv, t_viewport vp)
 	ft_bzero(&vp_loc, sizeof(t_vec4));
 	vp_loc.x = cnv.loc.x * vp.w / cnv.w;
 	vp_loc.y = cnv.loc.y * vp.h / cnv.h;
-	vp_loc.z = 1;
+	vp_loc.z = vp.loc.z;
 	return (vp_loc);
 }
 

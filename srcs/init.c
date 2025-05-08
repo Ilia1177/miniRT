@@ -24,8 +24,8 @@ int	rt_scene_tozero(t_data *scene)
 	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.h = 1;
-	scene->viewport.w = calc_vp_width(53);
+	//scene->viewport.h = 1;
+	//scene->viewport.w = calc_vp_width(53);
 	scene->objects = NULL;
 	scene->lights = NULL;
 	scene->selected = NULL;
@@ -80,18 +80,18 @@ void	init_painter(t_painter *painter, t_data *scene, t_ray *ray)
 		painter->ray = *ray;
 }
 
-void	apply_fov(t_painter *painter)
-{
-	t_data		*scene;
-	t_viewport	vp;
-	float		fov;
-
-	scene = painter->scene;
-	vp = scene->viewport;
-	fov = scene->cam.fov;
-	fov = fov * (M_PI / 180.0f);
-	painter->ray.d.z = (0.5f * vp.w) / tanf(0.5f * fov);
-}
+// void	apply_fov(t_painter *painter)
+// {
+// 	t_data		*scene;
+// 	t_viewport	vp;
+// 	float		fov;
+//
+// 	scene = painter->scene;
+// 	vp = scene->viewport;
+// 	fov = scene->cam.fov;
+// 	fov = fov * (M_PI / 180.0f);
+// 	painter->ray.d.z = (0.5f * vp.w) / tanf(0.5f * fov);
+// }
 
 void	reset_painter(t_painter *painter, t_canvas cnv)
 {
@@ -108,7 +108,7 @@ void	reset_painter(t_painter *painter, t_canvas cnv)
 		painter->rec = R_LIMIT;
 		painter->ray.o = scene->cam.pos;
 		painter->ray.d = get_viewport_loc(cnv, vp);
-		apply_fov(painter);
+		//apply_fov(painter);
 		//float fov_radians = scene->cam.fov * (M_PI / 180.0f);
 		//painter->ray.d.z = (((scene->cam.fov / 180.0f) * lim) + 1.0f);
 		//painter->ray.d.z = 0.5 * cnv.w / tanf(0.5f *fov_radians);

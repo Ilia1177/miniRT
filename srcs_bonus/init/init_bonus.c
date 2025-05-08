@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <miniRT_bonus.h>
+
 t_painter	th_painter_init(t_data *scene, int i)
 {
 	t_painter	new;
@@ -40,11 +41,9 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 	scene->res = 5;
 	scene->processing = 1;
 	scene->cam.yaw = 90.0f;
-	scene->cam.fov = -1; //input to get// return status
+	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.h = 1;
-	scene->viewport.w = 1;
 	scene->painter = th_painter_init(scene, 0);
 	return (0);
 }

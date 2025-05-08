@@ -64,29 +64,29 @@ void	mouse_move(t_camera *cam, float delta_x, float delta_y)
 	update_camera_vectors(cam);
 }
 
-// Calculate viewport width from FOV and focal length
-float	calc_vp_width(float fov_degrees)
-{
-	float		vp_w;
-	float		focal_length;
-	const float	fov_radians = fov_degrees * (M_PI / 180.0f);
-
-	if (fov_degrees >= 178)
-		focal_length = 2.0f;
-	else if (fov_degrees >= 32)
-		focal_length = 3.5f;
-	else
-		focal_length = 3.5f + (((38.0f - fov_degrees)*(1/fov_degrees*100))/10.0f);
-	vp_w = tanf(0.5f * fov_radians) / (1.0f / focal_length);
-	return (vp_w);
-}
-
-float	calc_vp_widthold(float fov_degrees)
-{
-	float		vp_w;
-	float		focal_length;
-
-	focal_length = 2.0f;
-	vp_w = 2.0f * focal_length * tan((fov_degrees / 2.0f) * (M_PI / 180.0f));
-	return (vp_w);
-}
+// // Calculate viewport width from FOV and focal length
+// float	calc_vp_width(float fov_degrees)
+// {
+// 	float		vp_w;
+// 	float		focal_length;
+// 	const float	fov_radians = fov_degrees * (M_PI / 180.0f);
+//
+// 	if (fov_degrees >= 178)
+// 		focal_length = 2.0f;
+// 	else if (fov_degrees >= 32)
+// 		focal_length = 3.5f;
+// 	else
+// 		focal_length = 3.5f + (((38.0f - fov_degrees)*(1/fov_degrees*100))/10.0f);
+// 	vp_w = tanf(0.5f * fov_radians) / (1.0f / focal_length);
+// 	return (vp_w);
+// }
+//
+// float	calc_vp_widthold(float fov_degrees)
+// {
+// 	float		vp_w;
+// 	float		focal_length;
+//
+// 	focal_length = 2.0f;
+// 	vp_w = 2.0f * focal_length * tan((fov_degrees / 2.0f) * (M_PI / 180.0f));
+// 	return (vp_w);
+// }
