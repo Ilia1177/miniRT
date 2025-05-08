@@ -19,8 +19,7 @@ int	intersect_sphere(t_ray *ray, t_object *sp, float *t)
 	t_quad			quad;
 	const t_vec4	o = ray->o;
 	const t_vec4	d = ray->d;
-	//const float 	r = sp->radius;
-	const float 	r = 1.0f;
+	const float		r = 1.0f;
 
 	(void)sp;
 	quad.a = dot_vec3(d, d);
