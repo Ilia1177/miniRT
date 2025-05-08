@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 // static void check_hyper_cap(float cap_z, t_vec4 o, t_vec4 d, t_vec4 s, float *t_min)
 // {

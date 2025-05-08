@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   norm_utils_bonus.c                                 :+:      :+:    :+:   */
+/*   print_2_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 12:57:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:57:55 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/05/08 15:10:26 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/08 15:10:50 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minirt_bonus.h>
 
-void	norm_float(float *f, float min, float max)
+void	print_vec4(t_vec4 v, char *msg)
 {
-	*f = fmin(max, fmax(min, *f));
+	printf("%s{x: %.3f, y: %.3f, z:%.3f, w:%.3f}\n", msg, v.x, v.y, v.z, v.w);
 }
 
-void	norm_int(int *num, int min, int max)
+void	print_argb(t_argb color, char *msg)
 {
-	*num = fmin(max, fmax(min, *num));
+	printf("%s: a: %d, r: %d, g: %d, b %d\n", msg,
+		color.a, color.r, color.g, color.b);
 }

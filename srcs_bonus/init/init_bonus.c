@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 14:15:30 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:57:36 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
+
 t_painter	th_painter_init(t_data *scene, int i)
 {
 	t_painter	new;
@@ -24,27 +25,22 @@ t_painter	th_painter_init(t_data *scene, int i)
 int	rt_scene_init(t_data *scene, char **av, int ac)
 {
 	if (ac < 2)
-	{
-		printf("test:%d", ac);
 		return (11);
-	}
 	else if (ft_strlen(av[1]) <= 3)
 		return (12);
 	else if (ft_strcmp(av[1] + ft_strlen(av[1]) - 3, ".rt"))
 		return (13);
 	else if (!ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
-		return (14);
+		return (13);
 	ft_bzero(scene, sizeof(t_data));
 	scene->map_name = av[1];
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
 	scene->processing = 1;
 	scene->cam.yaw = 90.0f;
-	scene->cam.fov = -1; //input to get// return status
+	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
-	scene->viewport.h = 1;
-	scene->viewport.w = 1;
 	scene->painter = th_painter_init(scene, 0);
 	return (0);
 }

@@ -6,11 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:54:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:54:55 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:24:21 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 /*******************************************************************************
 * Return reflexions of diffuse and/or specular
@@ -72,17 +72,17 @@ t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lume
 	return (luminosity);
 }
 
-t_argb	compute_light_reflection(t_painter *painter, t_light *light, t_object *obj)
+t_argb	compute_light_reflection(t_painter *pntr, t_light *light, t_object *obj)
 {
 	float	*lim;
 	t_ray	*ray;
 	t_argb	lumen;
 	t_data	*scene;
 
-	scene = painter->sceneref;
+	scene = pntr->sceneref;
 	ft_bzero(&lumen, sizeof(t_argb));
-	lim = painter->lim;
-	ray = &painter->ray;
+	lim = pntr->lim;
+	ray = &pntr->ray;
 	lim[0] = EPSILON;
 	if (light->type == POINT)
 	{
@@ -94,7 +94,7 @@ t_argb	compute_light_reflection(t_painter *painter, t_light *light, t_object *ob
 		ray->d = normalize_vec4(light->pos);
 		lim[1] = T_MAX;
 	}
-	if (!closest_intersect(painter, 1, scene->objects))
+	if (!closest_intersect(pntr, 1, scene->objects))
 		lumen = reflections(ray, apply_brightness(light->intensity), obj->spec);
 	return (lumen);
 }
@@ -114,7 +114,7 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 
 	lim = painter->lim;
 	ray = &painter->ray;
-	lumen = (t_argb) {0, 0, 0, 0};
+	lumen = (t_argb){0, 0, 0, 0};
 	light = painter->sceneref->lights;
 	while (light)
 	{

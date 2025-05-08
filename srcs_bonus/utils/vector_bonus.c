@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 t_vec4 random_vec4(float magnitude)
 {

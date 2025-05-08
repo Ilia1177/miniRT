@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 t_mat4	mat_compose(t_mat4 m2, t_mat4 m1)
 {
-	t_mat4		res;
+	t_mat4			res;
 	const t_vec4	x = {m2.i.x, m2.j.x, m2.k.x, m2.p.x};
 	const t_vec4	y = {m2.i.y, m2.j.y, m2.k.y, m2.p.y};
 	const t_vec4	z = {m2.i.z, m2.j.z, m2.k.z, m2.p.z};
@@ -42,7 +42,7 @@ t_mat4	mat_compose(t_mat4 m2, t_mat4 m1)
 // Make a transform matrix from axis and position of object
 t_mat4	mat_generate(t_object *obj)
 {
-	t_mat4		trans_mat;
+	t_mat4			trans_mat;
 	const t_vec4	world_up = (t_vec4){0, 1, 0, 0};
 
 	trans_mat.k = obj->axis;

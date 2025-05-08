@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 void	mat_rotate(t_mat4 *m, float dx, float dy, float dz)
 {

@@ -6,22 +6,20 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:53:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 13:00:15 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:14:06 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 void	print_error_arg(int status)
 {
 	if (status == 11)
-		printf("not enought args. Usage: ..."); // describe usage
+		printf("not enought args. Usage: *.rt files needed");
 	if (status == 12)
 		printf("map name not conform.");
 	if (status == 13)
-		printf("map in \".rt\" format needed.");
-	if (status == 14)
-		printf("???"); // to be explicit
+		printf("map in \"*.rt\" format needed.");
 }
 
 void	print_error_mlx(int status)
@@ -36,6 +34,20 @@ void	print_error_mlx(int status)
 		printf(MSG_BAD_ADD);
 }
 
+void	print_error_elem(int status)
+{
+	if (status == -4)
+		printf(MSG_BAD_TYPE);
+	if (status == -5)
+		printf(MSG_BAD_LGHT);
+	if (status == -6)
+		printf(MSG_BAD_ELEM);
+	if (status == -7)
+		printf(MSG_BAD_LGHT);
+	if (status == -8)
+		printf(MSG_BAD_OPT);
+}
+
 /*****************************************************************************
 * Print message when an error is catched
 * 109 is ascii code of m firt letter of malloc
@@ -48,37 +60,17 @@ void	print_error_msg(int status, t_data *scene)
 		printf(MSG_BAD_RGB);
 	if (status == -3)
 		printf(MSG_BAD_FLT);
-	if (status == -4)
-		printf(MSG_BAD_TYPE);
-	if (status == -5)
-		printf(MSG_BAD_LGHT);
-	if (status == -6)
-		printf(MSG_BAD_ELEM);
-	if (status == -7)
-		printf(MSG_BAD_LGHT);
-	if (status == -8)
-		printf(MSG_BAD_OPT);
 	if (status == -109)
 		printf(MSG_BAD_MALL);
 	if (status == -9)
 		printf(MSG_BAD_FILE);
 	if (status == -10)
 		printf(MSG_BAD_CAM);
+	print_error_elem(status);
 	print_error_mlx(status);
 	print_error_arg(status);
 	rt_shut_down(scene);
 	exit (EXIT_FAILURE);
-}
-
-void	print_vec4(t_vec4 v, char *msg)
-{
-	printf("%s{x: %.3f, y: %.3f, z:%.3f, w:%.3f}\n", msg, v.x, v.y, v.z, v.w);
-}
-
-void	print_argb(t_argb color, char *msg)
-{
-	printf("%s: a: %d, r: %d, g: %d, b %d\n", msg,
-		color.a, color.r, color.g, color.b);
 }
 
 void	print_input(void)

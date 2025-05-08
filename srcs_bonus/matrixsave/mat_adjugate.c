@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 static t_vec4	cofactor_column1(t_mat4 m)
 {

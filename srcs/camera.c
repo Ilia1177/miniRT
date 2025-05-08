@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 // Convert yaw & pitch to direction, right, and up vectors
 // Compute new direction vector
@@ -64,29 +64,48 @@ void	mouse_move(t_camera *cam, float delta_x, float delta_y)
 	update_camera_vectors(cam);
 }
 
-// Calculate viewport width from FOV and focal length
-float	calc_vp_width(float fov_degrees)
+/******************************************************************************
+ * calculate focal lenght from the fov
+ * **************************************************************************/
+t_viewport	build_viewport(t_data *scene, float fov_degrees)
 {
-	float		vp_w;
-	float		focal_length;
-	const float	fov_radians = fov_degrees * (M_PI / 180.0f);
+	const float	fov_radians = fov_degrees * (float)M_PI / 180.0f;
+	t_viewport	vp;
 
-	if (fov_degrees >= 178)
-		focal_length = 2.0f;
-	else if (fov_degrees >= 32)
-		focal_length = 3.5f;
-	else
-		focal_length = 3.5f + (((38.0f - fov_degrees)*(1/fov_degrees*100))/10.0f);
-	vp_w = tanf(0.5f * fov_radians) / (1.0f / focal_length);
-	return (vp_w);
+	vp = scene->viewport;
+	vp.w = 1;
+	vp.h = 1;
+	vp.loc.z = vp.w / (2.0f * tanf(fov_radians / 2.0f));
+	vp.loc.x = 0.0f;
+	vp.loc.y = 0.0f;
+	return (vp);
 }
 
-float	calc_vp_widthold(float fov_degrees)
+int	place_camera(char **line, t_data *scene)
 {
-	float		vp_w;
-	float		focal_length;
+	char	*str;
+	int		status;
+	float	f_fov;
+	int		fov;
 
-	focal_length = 2.0f;
-	vp_w = 2.0f * focal_length * tan((fov_degrees / 2.0f) * (M_PI / 180.0f));
-	return (vp_w);
+	status = 0;
+	if (scene->cam.fov != -1)
+		status = -10;
+	if (status != 0)
+		return (status);
+	str = *line + 1;
+	status = str_to_vec3(&str, &scene->cam.pos);
+	if (status != 0)
+		return (status);
+	status = str_to_vecdir(&str, &scene->cam.dir);
+	if (status != 0)
+		return (status);
+	status = str_to_float(&str, &f_fov);
+	if (status != 0)
+		return (status);
+	fov = (int)f_fov;
+	scene->cam.fov = fov;
+	scene->viewport = build_viewport(scene, fov);
+	*line = str + skip_space(str);
+	return (status);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 // same as limit_color(t_argb *color) --> in color.c
 void	norm_rgb(t_rgb *c)

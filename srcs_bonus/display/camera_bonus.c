@@ -6,11 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:03:04 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 14:04:23 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:18:30 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
 {
@@ -52,16 +52,4 @@ void	update_camera_rotation(t_camera *cam)
 	dir.w = 0;
 	cam->t_m = mat_orthogonal(normalize_vec4(dir));
 	cam->t_m.p = pos;
-}
-
-// Calculate viewport width from FOV and focal length
-float	calc_vp_width(float fov_degrees, float focal_length)
-{
-	float	vp_width;
-
-
-	vp_width = 2.0f * focal_length * tanf((fov_degrees * (float)M_PI / 180.0f) / 2.0f);
-//	vp_width = 2.0f * focal_length * tanf((fov_degrees / 2.0f)
-//			* (M_PI / 180.0f));
-	return (vp_width);
 }

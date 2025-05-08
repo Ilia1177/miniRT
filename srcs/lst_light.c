@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 static int	make_light(t_light light, t_light **lights)
 {
@@ -43,20 +43,6 @@ void	init_light(t_light *light, t_type type)
 	light->next = NULL;
 }
 
-//
-// int	clean_lights(t_data *scene)
-// {
-// 	t_light	light;
-//
-// 	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
-// 		(t_vec4){-2, 0, 0, 0}, (t_vec4){1, 1, 0, 0}, DIRECTIONAL};
-// 	if (make_light(light, &scene->lights) == -109)
-// 		return (-109);
-// 	return (0);
-// }
-//
-//
-//
 /*****************************************************************************
 *  Check if the map file corresponding to the correct format
 *  plane is sp		0.0,0.0,0.0		1.0			10,20,255

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 // get location of the point in the viemport from canvas'location
 t_vec4	throught_vp(t_vec2 cnv, t_viewport vp)

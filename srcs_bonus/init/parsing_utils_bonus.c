@@ -6,21 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:57 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:59:18 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:15:58 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
-
-int	skip_space(char *str)
-{
-	int	space;
-
-	space = 0;
-	while (ft_isspace(str[space]))
-		space++;
-	return (space);
-}
+#include <minirt_bonus.h>
 
 int	get_random_vec4(char **line, t_vec4 *v, float w)
 {
@@ -78,27 +68,6 @@ int	str_to_vec4(char **line, t_vec4 *v, float w)
 		return (-1);
 	v->w = w;
 	*line = end;
-	return (0);
-}
-
-int	get_alpha(char **line, int *color, int alpha)
-{
-	char	*str;
-	char	*end;
-	float	brightness;
-
-	str = *line;
-	end = str;
-	if (alpha)
-	{
-		if (str_to_float(&str, &brightness))
-			return (-2);
-		*color = fmin(brightness, 1) * 255;
-	}
-	else
-		*color = 255;
-	str += skip_space(str);
-	*line = str;
 	return (0);
 }
 

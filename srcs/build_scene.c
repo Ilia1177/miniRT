@@ -10,36 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
-
-int	place_camera(char **line, t_data *scene)
-{
-	char	*str;
-	int		status;
-	float	f_fov;
-	int		fov;
-
-	status = 0;
-	if (scene->cam.fov != -1)
-		status = -10;
-	if (status != 0)
-		return (status);
-	str = *line + 1;
-	status = str_to_vec3(&str, &scene->cam.pos);
-	if (status != 0)
-		return (status);
-	status = str_to_vecdir(&str, &scene->cam.dir);
-	if (status != 0)
-		return (status);
-	status = str_to_float(&str, &f_fov);
-	if (status != 0)
-		return (status);
-	fov = (int)f_fov;
-	scene->cam.fov = fov;
-	scene->viewport.w = calc_vp_width(fov);
-	*line = str + skip_space(str);
-	return (status);
-}
+#include <minirt.h>
 
 int	ambient_exist(t_data *scene)
 {

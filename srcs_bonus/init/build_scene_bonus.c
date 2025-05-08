@@ -10,7 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
+
+t_viewport	build_viewport(t_data *scene, float fov_degrees)
+{
+	const float	fov_radians = fov_degrees * (float)M_PI / 180.0f;
+	t_viewport	vp;
+
+	vp = scene->viewport;
+	vp.w = 1;
+	vp.h = 1;
+	vp.pos.z = vp.w / (2.0f * tanf(fov_radians / 2.0f));
+	vp.pos.x = 0.0f;
+	vp.pos.y = 0.0f;
+	return (vp);
+}
 
 int	place_camera(char **line, t_data *scene)
 {
@@ -36,13 +50,14 @@ int	place_camera(char **line, t_data *scene)
 		return (status);
 	fov = (int)f_fov;
 	scene->cam.fov = fov;
+	scene->viewport = build_viewport(scene, fov);
 	*line = str + skip_space(str);
 	return (status);
 }
 
 void	choose_object(char **curr_line, t_data *scene)
 {
-	char *line;
+	char	*line;
 
 	line = *curr_line;
 	if (!ft_strncmp("sp", line, 2))
@@ -55,7 +70,7 @@ void	choose_object(char **curr_line, t_data *scene)
 		scene->status = create_hyperboloid(&line, scene);
 	else if (!ft_strncmp("tr", line, 2))
 		scene->status = create_triangle(&line, scene);
-	*curr_line=line;
+	*curr_line = line;
 	printf("each line:%d\n", *line);
 }
 
@@ -88,29 +103,6 @@ int	register_line_into_scene(char *line, t_data *scene)
 	return (scene->status);
 }
 
-int	check_map_elem(int status, t_data *scene) /// maybe delete
-{
-	if (!status)
-		print_all(scene);
-	if (scene->cam.fov == -1)
-		status = -10;
-	if (status)
-		print_error_msg(status, scene);
-	status = check_nb_obj(scene);
-	if (status)
-		print_error_msg(status, scene);
-	status = check_nb_light(scene);
-	if (status)
-		print_error_msg(status, scene);
-	return (status);
-}
-
-float calc_focal_length(float fov_degrees, float vp_width)
-{
-    float fov_radians = fov_degrees * (float)M_PI / 180.0f;
-    return vp_width / (2.0f * tanf(fov_radians / 2.0f));
-}
-
 int	build_scene(t_data *scene)
 {
 	char		*line;
@@ -132,14 +124,6 @@ int	build_scene(t_data *scene)
 	free(line);
 	gnl_clear_buffer(map);
 	close(map);
-
-	//scene->viewport.w = calc_vp_width(scene->cam.fov, 1.0f);
-	scene->viewport.w = 1;
-	scene->viewport.h = 1;
-	scene->viewport.pos.z = calc_focal_length(scene->cam.fov, 1.0f);
-	scene->viewport.pos.x = 0.0f;
-	scene->viewport.pos.y = 0.0f;
-	//get_viewport_size(scene->cam.fov, 1, &scene->viewport.w, &scene->viewport.h);
 	if (!scene->status)
 		print_all(scene);
 	return (scene->status);
