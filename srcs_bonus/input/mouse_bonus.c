@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   img_bonus.c                                        :+:      :+:    :+:   */
+/*   mouse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 14:50:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 14:50:32 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/05/08 15:30:57 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/08 15:31:39 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT_bonus.h>
 
-void	rt_put_pixel(const t_img *img, int x, int y, int color)
+int	mouse_pos(int x, int y, t_data *scene)
 {
-	char	*dst;
-
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
-		return ;
-	dst = img->addr + (y * img->llen + x * (img->bpp / 8));
-	*(unsigned int *)dst = color;
+	(void)scene;
+	(void)x;
+	(void)y;
+	return (0);
 }
 
-uint32_t	rt_get_pixel(t_img img, int x, int y)
+int	mouse_press(int keycode, int x, int y, t_data *scene)
 {
-	uint32_t	p;
+	(void)keycode;
+	select_object(scene, x, y);
+	return (0);
+}
 
-	p = *(uint32_t *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
-	return (p);
+int	mouse_release(int keycode, int x, int y, t_data *scene)
+{
+	(void)x;
+	(void)y;
+	(void)keycode;
+	scene->mouse_state = 0;
+	return (0);
 }

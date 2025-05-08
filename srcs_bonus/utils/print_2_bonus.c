@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   img_bonus.c                                        :+:      :+:    :+:   */
+/*   print_2_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 14:50:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 14:50:32 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/05/08 15:10:26 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/08 15:10:50 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT_bonus.h>
 
-void	rt_put_pixel(const t_img *img, int x, int y, int color)
+void	print_vec4(t_vec4 v, char *msg)
 {
-	char	*dst;
-
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
-		return ;
-	dst = img->addr + (y * img->llen + x * (img->bpp / 8));
-	*(unsigned int *)dst = color;
+	printf("%s{x: %.3f, y: %.3f, z:%.3f, w:%.3f}\n", msg, v.x, v.y, v.z, v.w);
 }
 
-uint32_t	rt_get_pixel(t_img img, int x, int y)
+void	print_argb(t_argb color, char *msg)
 {
-	uint32_t	p;
-
-	p = *(uint32_t *)((img.addr + (y * img.llen) + (x * img.bpp / 8)));
-	return (p);
+	printf("%s: a: %d, r: %d, g: %d, b %d\n", msg,
+		color.a, color.r, color.g, color.b);
 }

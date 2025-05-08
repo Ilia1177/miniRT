@@ -1,5 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   miniRT_bonus.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 14:47:20 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/08 15:33:41 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_BONUS_H
 # define MINIRT_BONUS_H
+
 # include <mlx.h>
 # include <libft.h>
 # include <X11/keysym.h>
@@ -7,16 +20,10 @@
 # include <X11/X.h>
 # include <math.h>
 # include <stdio.h>
-//# include <float.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-//# include "matrix.h"
-//# include <stdatomic.h>
-//# include <semaphore.h>
 # include <sys/time.h>
-//#include <atomic.h>
-//# define MAX_SCALE 1000
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800 
@@ -27,18 +34,17 @@
 # define CBOARD_W 8 
 # define CBOARD_H 8
 # define CBOARD_SCALE 1.0f
-//# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
-//# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
-//# define EPSILON 1.0e-6
 # define EPSILON 0.001f
-# define MSG_BAD_FILE	"Error\nNeed one file *.rt\n"
-# define MSG_BAD_POS	"Bad position arguments.\n"
-# define MSG_BAD_RGB	"Bad rgb arguments.\n"
-# define MSG_BAD_FLT	"Bad float arguments.\n"
-# define MSG_BAD_TYPE	"Bad type arguments, only A,C,L,sp,pl,cy allowed\n"
-# define MSG_BAD_LGHT	"Error\nWrong number of light:need one ambient and one spot\n"
-# define MSG_BAD_ELEM	"Error\nWrong number of element:at least one sphere, one cylinder, one plane\n"
-# define MSG_BAD_OPT 	"Wrong options arguments\n"
+# define MSG_BAD_FILE "Error\nNeed one file *.rt\n"
+# define MSG_BAD_POS "Bad position arguments.\n"
+# define MSG_BAD_RGB "Bad rgb arguments.\n"
+# define MSG_BAD_FLT "Bad float arguments.\n"
+# define MSG_BAD_TYPE "Bad type arguments, only A,C,L,sp,pl,cy allowed\n"
+# define MSG_BAD_LGHT "Error\nWrong number of light:\
+need one ambient and one spot\n"
+# define MSG_BAD_ELEM "Error\nWrong number of element:\
+at least one sphere, one cylinder, one plane\n"
+# define MSG_BAD_OPT  "Wrong options arguments\n"
 # define MSG_BAD_CAM "Error\nNeed one camera\n"
 # define MSG_BAD_MALL "Error\nMalloc error\n"
 # define MSG_BAD_MLX "Error\nMlx init\n"
@@ -46,35 +52,11 @@
 # define MSG_BAD_IMG "Error\nMlx image\n"
 # define MSG_BAD_ADD "Error\nMlx image address\n"
 
-//add w for the structure to be aligned on 16 bytes properly;
-//	typedef struct s_vec4
-//	{
-//		float		x;
-//		float		y;
-//		float		z;
-//		float		w;
-//	}				t_vec4;
-//
-//	typedef struct s_vec3
-//	{
-//		float		x;
-//		float		y;
-//		float		z;
-//	}				t_vec3;
-//
-	typedef struct s_vec2
-	{
-		int			x;
-		int			y;
-	}				t_vec2;
-
-
-typedef struct s_rgb
+typedef struct s_vec2
 {
-	int	r;
-	int	g;
-	int	b;
-}	t_rgb;
+	int	x;
+	int	y;
+}	t_vec2;
 
 typedef struct s_argb
 {
@@ -179,7 +161,6 @@ typedef struct s_object
 	t_vec4			vertice[3];
 	t_mat4			t_m;
 	float			t;
-//	t_mat4			i_m;
 	t_vec4			scale;
 	float			radius;
 	float			height;
@@ -194,8 +175,6 @@ typedef struct s_object
 typedef struct s_painter
 {
 	float			lim[3];
-//	pthread_mutex_t	brush;
-//	int			ready;
 	float			t;
 	t_ray			ray;
 	pthread_t		itself;
@@ -216,18 +195,13 @@ typedef struct s_data
 	char			rend;
 	char			res;
 	t_painter		painter;
-//	pthread_t	listener;
-//	float		intersec_p[2];
 	t_img			img;
-	//t_img		earth;
 	t_canvas		cnv;
 	t_camera		cam;
-//	t_vec4		rotation_matrix[3];
 	t_viewport		viewport;
 	t_object		*selected;
 	t_object		*objects;
 	t_light			*lights;
-//	t_vec2		mouse;
 	int				mouse_state;
 	char			key_state[99999];
 }				t_data;
@@ -244,53 +218,35 @@ void		th_painter_kill(t_data *scene);
 //camera move
 void		rotate_y(t_camera *cam, float theta);
 void		rotate_x(t_camera *cam, float theta);
-//matrix.c
-
-//	t_mat4		adjugate(t_mat4 m);
-//	void		mat_scale(t_mat4 *m, float sx, float sy, float sz);
-//	void		mat_transpose_inverse(t_mat4 mat);
-//	void		mat_rotate(t_mat4 *m, float dx, float dy, float dz);
-//	void		mat_translate(t_mat4 *m, float dx, float dy, float dz);
-//	t_vec4		mat_apply(t_mat4 mat, t_vec4 v);
-//	t_mat4		mat_generate(t_object *obj);
-//	t_mat4		mat_compose(t_mat4 m2, t_mat4 m1);
-//	t_mat4		mat_transpose(t_mat4 m);
-//	t_mat4		mat_init_id(void);
-//	t_mat4		mat_orthogonal(t_vec4 dir);
-//	t_mat4		mat_inverse(t_mat4 matrix);
 
 //img.c
 void		rt_rect(const t_img *img, t_vec2 pos, t_vec2 size, int color);
 void		rt_put_pixel(const t_img *img, int x, int y, int color);
-uint32_t		rt_get_pixel(t_img img, int x, int y);
+uint32_t	rt_get_pixel(t_img img, int x, int y);
 t_argb		extract_argb(int color);
 
 //norm_utils.c
-void		norm_rgb(t_rgb *c);
 void		norm_float(float *f, float min, float max);
 void		norm_int(int *num, int min, int max);
 
 //input.c
-int			mouse_press(int keycode, int x, int y, t_data *scene);
-int			mouse_release(int keycode, int x, int y, t_data *scene);
 int			key_release(int keycode, t_data *scene);
 int			key_press(int keycode, t_data *scene);
-int			handle_input(t_data *scene);
+void		select_object(t_data *scene, int x, int y);
+
+//mouse.c
+int			mouse_press(int keycode, int x, int y, t_data *scene);
+int			mouse_release(int keycode, int x, int y, t_data *scene);
 int			mouse_pos(int x, int y, t_data *scene);
+
+//handle.c
+void		rotate_obj(t_mat4 *tm, float dx, float dy, float dz);
+int			handle_input(t_data *scene);
 
 //canvas.c
 t_vec4		throught_vp(t_vec2 cnv, t_viewport vp);
 void		display_color(t_painter *painter);
 t_vec2		cnv_to_screen(t_vec2 cnv);
-
-//ray
-
-//inter_utils.c
-//int	intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
-//int	intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
-//int check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad quad);
-//void get_min_t(float *t_min, float t_tmp, int *hit);
-//int	min_pos(float *t, float t1, float t2);
 
 //ray && intersection.c
 t_argb		throw_ray(t_painter *painter);
@@ -316,7 +272,7 @@ void		limit_color(t_argb *color);
 t_argb		ease_color(t_argb reflective, uint8_t factor);
 t_argb		mult_colors(t_argb color1, t_argb intensity);
 t_argb		add_colors(t_argb c1, t_argb c2);
-uint32_t		encode_argb(t_argb color);
+uint32_t	encode_argb(t_argb color);
 t_argb		apply_brightness(t_argb color);
 
 //light.c
@@ -342,8 +298,6 @@ float		dist_vec4(t_vec4 a, t_vec4 b);
 
 //camera_vectors.c
 void		update_camera_rotation(t_camera *cam);
-//t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v);
-//void	mouse_move(t_camera *cam, float delta_x, float delta_y);
 float		calc_vp_width(float fov_degrees, float focal_length);
 
 //camera_move.c
@@ -391,12 +345,10 @@ int			get_options(char **line, t_object *obj);
 //Parsing_utils_2
 int			check_nb_obj(t_data *scene);
 int			check_nb_light(t_data *scene);
-
 int			make_object(t_object data, t_object **objects);
-//init.c
+int			get_alpha(char **line, int *color, int alpha);
 
-//int		rt_scene_tozero(t_data *scene);
-//void	mlx_tozero(t_data *scene);
+//init.c
 int			rt_init(t_data *scene, char **av, int ac);
 
 //lst_sphere.c

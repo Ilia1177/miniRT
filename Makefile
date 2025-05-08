@@ -6,7 +6,7 @@
 #    By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/07 15:24:59 by jhervoch          #+#    #+#              #
-#    Updated: 2025/05/07 15:30:14 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/05/08 15:32:01 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ endif
 
 LIBFT = libft/bin/libft.a
 
-SRCS = 	miniRT\
+SRCS = 	minirt\
 		build_scene\
 		camera\
 		camera_move\
@@ -79,6 +79,8 @@ SRCS_BONUS = 	minirt\
 		display/img\
 		init/init\
 		input/input\
+		input/handle\
+		input/mouse\
 		intersection/intersection\
 		intersection/intersect_cylinder\
 		intersection/intersect_sphere\
@@ -98,6 +100,7 @@ SRCS_BONUS = 	minirt\
 		init/parsing_utils\
 		init/parsing_utils_option\
 		utils/print\
+		utils/print_2\
 		display/ray\
 		display/text_checkerboard\
 		display/text_img\

@@ -12,49 +12,6 @@
 
 #include <miniRT.h>
 
-t_viewport	build_viewport(t_data *scene, float fov_degrees)
-{
-	const float	fov_radians = fov_degrees * (float)M_PI / 180.0f;
-	t_viewport	vp;
-
-	vp = scene->viewport;
-	vp.w = 1;
-	vp.h = 1;
-	vp.loc.z = vp.w / (2.0f * tanf(fov_radians / 2.0f));
-	vp.loc.x = 0.0f;
-	vp.loc.y = 0.0f;
-	return (vp);
-}
-
-int	place_camera(char **line, t_data *scene)
-{
-	char	*str;
-	int		status;
-	float	f_fov;
-	int		fov;
-
-	status = 0;
-	if (scene->cam.fov != -1)
-		status = -10;
-	if (status != 0)
-		return (status);
-	str = *line + 1;
-	status = str_to_vec3(&str, &scene->cam.pos);
-	if (status != 0)
-		return (status);
-	status = str_to_vecdir(&str, &scene->cam.dir);
-	if (status != 0)
-		return (status);
-	status = str_to_float(&str, &f_fov);
-	if (status != 0)
-		return (status);
-	fov = (int)f_fov;
-	scene->cam.fov = fov;
-	scene->viewport = build_viewport(scene, fov);
-	*line = str + skip_space(str);
-	return (status);
-}
-
 int	ambient_exist(t_data *scene)
 {
 	t_light	*light;

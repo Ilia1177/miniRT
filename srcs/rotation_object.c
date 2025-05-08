@@ -12,22 +12,6 @@
 
 #include <miniRT.h>
 
-// not used
-t_vec4	compose_quater(t_vec4 after, t_vec4 before)
-{
-	t_vec4	q;
-
-	q.x = after.w * before.x + after.x * before.w + after.y
-		* before.z - after.z * before.y;
-	q.y = after.w * before.y - after.x * before.z + after.y
-		* before.w + after.z * before.x;
-	q.z = after.w * before.z + after.x * before.y - after.y
-		* before.x + after.z * before.w;
-	q.w = after.w * before.w - after.x * before.x - after.y
-		* before.y - after.z * before.z;
-	return (q);
-}
-
 void	change_axis(t_object *obj)
 {
 	t_vec4	new_axis;

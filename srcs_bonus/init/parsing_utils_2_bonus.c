@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:46 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:58:48 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:17:25 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,36 @@ int	check_nb_light(t_data *scene)
 	}
 	if (nb_point != 1 || nb_ambient != 1)
 		return (-7);
+	return (0);
+}
+
+int	skip_space(char *str)
+{
+	int	space;
+
+	space = 0;
+	while (ft_isspace(str[space]))
+		space++;
+	return (space);
+}
+
+int	get_alpha(char **line, int *color, int alpha)
+{
+	char	*str;
+	char	*end;
+	float	brightness;
+
+	str = *line;
+	end = str;
+	if (alpha)
+	{
+		if (str_to_float(&str, &brightness))
+			return (-2);
+		*color = fmin(brightness, 1) * 255;
+	}
+	else
+		*color = 255;
+	str += skip_space(str);
+	*line = str;
 	return (0);
 }

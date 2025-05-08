@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <miniRT.h>
+
 /****************************************************************************
  * check if rau intersect the cylinder
  * first intersect the lateral surface of cylinder 

@@ -93,13 +93,13 @@ typedef struct s_camera
 {
 	t_mat4	t_m;
 	t_mat4	i_m;
-	t_vec4		pos;
-	t_vec4		dir;
-	t_vec4		right;
-	t_vec4		up;
-	float		yaw;
-	float		pitch;
-	int			fov;
+	t_vec4	pos;
+	t_vec4	dir;
+	t_vec4	right;
+	t_vec4	up;
+	float	yaw;
+	float	pitch;
+	int		fov;
 }	t_camera;
 
 typedef struct s_viewport
@@ -163,9 +163,9 @@ typedef struct s_object
 	t_argb			reflect;
 	t_argb			color;
 	char			mat[4][4];
-	t_mat4		t_m;
-	t_mat4		i_m;
-	t_mat4		id_matrix;
+	t_mat4			t_m;
+	t_mat4			i_m;
+	t_mat4			id_matrix;
 	t_vec4			pos;
 	t_vec4			axis;
 	t_vec4			scale;
@@ -222,8 +222,7 @@ void		move_camera_right(t_camera *cam, float speed);
 void		move_camera_left(t_camera *cam, float speed);
 
 //camera move
-void		rotate_y(t_camera *cam, float theta);
-void		rotate_x(t_camera *cam, float theta);
+int			place_camera(char **line, t_data *scene);
 
 //canvas.c
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
@@ -342,10 +341,7 @@ int			clean_lights(t_data *scene);
 int			make_hyperboloid(t_object data, t_object **objects);
 
 //matrix.c
-//t_vec4		mat_apply(t_mat4 mat, t_vec4 v);
-t_mat4	mat_generate(t_object *obj);
-//t_mat4	mat_compose(t_mat4 m2, t_mat4 m1);
-//t_mat4	mat_inverse(t_mat4 matrix);
+t_mat4		mat_generate(t_object *obj);
 
 //norm_utils.c
 void		norm_rgb(t_rgb *c);
