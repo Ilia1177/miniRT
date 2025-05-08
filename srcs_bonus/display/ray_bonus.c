@@ -81,8 +81,8 @@ t_argb	throw_ray(t_painter *painter)
 		return (local_color);
 	ray_update(painter, obj);
 	lumen = compute_lighting(painter, obj);
-	local_color = mult_colors(pattern_color(&painter->ray, obj, scene), lumen);
-	if (painter->lim[2] <= 0 || obj->reflect.a <= 0)
+	local_color = mult_colors(pattern_color(&painter->ray, obj), lumen);
+	if (painter->lim[2] <= 0.0f || obj->reflect.a <= 0)
 		return (local_color);
 	reflected_color = get_reflected_color(painter);
 	local_color = mult_colors(local_color, ease_color(obj->reflect, 255));

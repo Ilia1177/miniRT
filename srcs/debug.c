@@ -57,7 +57,7 @@ void	print_cam(t_camera camera)
 	printf("\tpitch : %.1f\n", camera.pitch);
 }
 
-void	print_matrix(t_matrix matrix)
+void	print_mat4(t_mat4 matrix)
 {
 	print_vec4(matrix.i, "i:");
 	printf("\n");

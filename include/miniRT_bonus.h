@@ -11,12 +11,12 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include <pthread.h>
+//# include "matrix.h"
 //# include <stdatomic.h>
 //# include <semaphore.h>
 # include <sys/time.h>
 //#include <atomic.h>
-# define MAX_SCALE 1000
+//# define MAX_SCALE 1000
 # define T_MAX 1600
 # define HEIGHT 800
 # define WIDTH 800 
@@ -24,8 +24,8 @@
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
-# define CBOARD_W 400
-# define CBOARD_H 400
+# define CBOARD_W 8 
+# define CBOARD_H 8
 # define CBOARD_SCALE 1.0f
 //# define CBOARD_COLOR (t_argb){0, 255, 255, 255}
 //# define ABS(x) ((x<0)*-x)+((x>0)*x) //forbiden
@@ -47,34 +47,27 @@
 # define MSG_BAD_ADD "Error\nMlx image address\n"
 
 //add w for the structure to be aligned on 16 bytes properly;
-typedef struct s_vec4
-{
-	float		x;
-	float		y;
-	float		z;
-	float		w;
-}				t_vec4;
+//	typedef struct s_vec4
+//	{
+//		float		x;
+//		float		y;
+//		float		z;
+//		float		w;
+//	}				t_vec4;
+//
+//	typedef struct s_vec3
+//	{
+//		float		x;
+//		float		y;
+//		float		z;
+//	}				t_vec3;
+//
+	typedef struct s_vec2
+	{
+		int			x;
+		int			y;
+	}				t_vec2;
 
-typedef struct s_vec3
-{
-	float		x;
-	float		y;
-	float		z;
-}				t_vec3;
-
-typedef struct s_vec2
-{
-	int			x;
-	int			y;
-}				t_vec2;
-
-typedef struct s_mat4
-{
-	t_vec4	i;
-	t_vec4	j;
-	t_vec4	k;
-	t_vec4	p;
-}	t_mat4;
 
 typedef struct s_rgb
 {
@@ -213,10 +206,6 @@ typedef struct s_painter
 
 typedef struct s_data
 {
-	pthread_mutex_t	print;
-	pthread_mutex_t	announce;
-	pthread_cond_t	painter_rest;
-	pthread_cond_t	master_rest;
 	struct timeval	start;
 	int				processing;
 	int				at_rest;
@@ -257,22 +246,23 @@ void		rotate_y(t_camera *cam, float theta);
 void		rotate_x(t_camera *cam, float theta);
 //matrix.c
 
-void		mat_scale(t_mat4 *m, float sx, float sy, float sz);
-void		mat_transpose_inverse(t_mat4 mat);
-void		mat_rotate(t_mat4 *m, float dx, float dy, float dz);
-void		mat_translate(t_mat4 *m, float dx, float dy, float dz);
-t_vec4		mat_apply(t_mat4 mat, t_vec4 v);
-t_mat4		mat_generate(t_object *obj);
-t_mat4		mat_compose(t_mat4 m2, t_mat4 m1);
-t_mat4		mat_transpose(t_mat4 m);
-t_mat4		mat_init_id(void);
-t_mat4		mat_orthogonal(t_vec4 dir);
-t_mat4		mat_inverse(t_mat4 matrix);
+//	t_mat4		adjugate(t_mat4 m);
+//	void		mat_scale(t_mat4 *m, float sx, float sy, float sz);
+//	void		mat_transpose_inverse(t_mat4 mat);
+//	void		mat_rotate(t_mat4 *m, float dx, float dy, float dz);
+//	void		mat_translate(t_mat4 *m, float dx, float dy, float dz);
+//	t_vec4		mat_apply(t_mat4 mat, t_vec4 v);
+//	t_mat4		mat_generate(t_object *obj);
+//	t_mat4		mat_compose(t_mat4 m2, t_mat4 m1);
+//	t_mat4		mat_transpose(t_mat4 m);
+//	t_mat4		mat_init_id(void);
+//	t_mat4		mat_orthogonal(t_vec4 dir);
+//	t_mat4		mat_inverse(t_mat4 matrix);
 
 //img.c
 void		rt_rect(const t_img *img, t_vec2 pos, t_vec2 size, int color);
 void		rt_put_pixel(const t_img *img, int x, int y, int color);
-uint8_t		rt_get_pixel(t_img img, int x, int y);
+uint32_t		rt_get_pixel(t_img img, int x, int y);
 t_argb		extract_argb(int color);
 
 //norm_utils.c
@@ -432,7 +422,7 @@ void		rotate_on_y(t_object *obj, float theta);
 void		rotate_on_x(t_object *obj, float theta);
 
 //text_checkerboard.c
-t_argb		pattern_color(t_ray *ray, t_object *obj, t_data *scene);
+t_argb		pattern_color(t_ray *ray, t_object *obj);
 
 //text_img
 t_argb		text_img_at(float u, float v, t_img *img);

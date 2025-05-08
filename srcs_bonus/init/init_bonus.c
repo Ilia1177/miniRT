@@ -39,10 +39,6 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
 	scene->processing = 1;
-	scene->print = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-	scene->announce = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-	scene->painter_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
-	scene->master_rest = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	scene->cam.yaw = 90.0f;
 	scene->cam.fov = -1; //input to get// return status
 	scene->cnv.w = WIDTH;

@@ -62,13 +62,3 @@ void	print_mat4(t_mat4 matrix)
 	print_vec4(matrix.k, "k:");
 	print_vec4(matrix.p, "p:");
 }
-
-void	print_painter(t_painter *painter)
-{
-	printf("PAINTER %d\n --> lim[0]: %f lim[1]: %f\n",
-		painter->id, painter->lim[0], painter->lim[1]);
-	print_vec4(painter->ray.o, "ray->o:");
-	print_vec4(painter->ray.d, "ray->d:");
-	print_vec4(painter->ray.v, "ray->v:");
-	print_vec4(painter->ray.n, "ray->n:");
-}
