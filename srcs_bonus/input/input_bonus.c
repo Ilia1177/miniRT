@@ -59,16 +59,12 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 			last_obj->color = last_color;
 		last_color = scene->selected->color;
 		scene->selected->color = invert_color(scene->selected->color);
-		printf("selection transform matrix:\n");
 		print_mat4(scene->selected->t_m);
-		printf("selection invers matrix:\n");
 		print_mat4(mat_inverse(scene->selected->t_m));
 	}
 	else if (scene->selected && scene->selected == last_obj)
 	{
-		printf("selection transform matrix:\n");
 		print_mat4(scene->selected->t_m);
-		printf("selection invers matrix:\n");
 		print_mat4(mat_inverse(scene->selected->t_m));
 		scene->selected->color = last_color;
 		scene->selected = NULL;

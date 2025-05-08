@@ -60,6 +60,7 @@ t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 
 // Diffusion of the light on the surface.
 // more the specular, better the shiny 
+// vector v =  inverse direction (hit point to camera)
 t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lumen)
 {
 	const float		coeff = powf(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
