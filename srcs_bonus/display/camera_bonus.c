@@ -59,7 +59,9 @@ float	calc_vp_width(float fov_degrees, float focal_length)
 {
 	float	vp_width;
 
-	vp_width = 2.0f * focal_length * tan((fov_degrees / 2.0f)
-			* (M_PI / 180.0f));
+
+	vp_width = 2.0f * focal_length * tanf((fov_degrees * (float)M_PI / 180.0f) / 2.0f);
+//	vp_width = 2.0f * focal_length * tanf((fov_degrees / 2.0f)
+//			* (M_PI / 180.0f));
 	return (vp_width);
 }

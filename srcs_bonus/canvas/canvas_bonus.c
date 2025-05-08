@@ -19,7 +19,7 @@ t_vec4	throught_vp(t_vec2 cnv, t_viewport vp)
 
 	dir.x = (float)cnv.x * vp.w / WIDTH;
 	dir.y = (float)cnv.y * vp.h / HEIGHT;
-	dir.z = 1.0f;
+	dir.z = vp.pos.z;
 	dir.w = 0.0f;
 	dir = normalize_vec4(dir);
 	return (dir);

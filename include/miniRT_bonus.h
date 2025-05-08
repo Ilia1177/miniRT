@@ -115,7 +115,7 @@ typedef struct s_camera
 
 typedef struct s_viewport
 {
-	t_vec4		loc;
+	t_vec4		pos;
 	int			h;
 	int			w;
 }	t_viewport;

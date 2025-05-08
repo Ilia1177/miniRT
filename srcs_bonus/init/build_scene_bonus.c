@@ -105,6 +105,12 @@ int	check_map_elem(int status, t_data *scene) /// maybe delete
 	return (status);
 }
 
+float calc_focal_length(float fov_degrees, float vp_width)
+{
+    float fov_radians = fov_degrees * (float)M_PI / 180.0f;
+    return vp_width / (2.0f * tanf(fov_radians / 2.0f));
+}
+
 int	build_scene(t_data *scene)
 {
 	char		*line;
@@ -126,6 +132,14 @@ int	build_scene(t_data *scene)
 	free(line);
 	gnl_clear_buffer(map);
 	close(map);
+
+	//scene->viewport.w = calc_vp_width(scene->cam.fov, 1.0f);
+	scene->viewport.w = 1;
+	scene->viewport.h = 1;
+	scene->viewport.pos.z = calc_focal_length(scene->cam.fov, 1.0f);
+	scene->viewport.pos.x = 0.0f;
+	scene->viewport.pos.y = 0.0f;
+	//get_viewport_size(scene->cam.fov, 1, &scene->viewport.w, &scene->viewport.h);
 	if (!scene->status)
 		print_all(scene);
 	return (scene->status);
