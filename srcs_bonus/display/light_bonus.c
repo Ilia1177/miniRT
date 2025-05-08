@@ -37,7 +37,7 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 			specular = specular_reflect(ray->v, r, rdv, spec, lumen);
 	}
 	if (diffuse.a > 0 && specular.a > 0)
-		return (add_colors(diffuse, specular));
+		return (argb_add(diffuse, specular));
 	else if (diffuse.a > 0)
 		return (diffuse);
 	return (specular);
@@ -54,7 +54,7 @@ t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 	luminosity.r = lumen.r * coeff;
 	luminosity.g = lumen.g * coeff;
 	luminosity.b = lumen.b * coeff;
-	limit_color(&luminosity);
+	argb_clamp(&luminosity);
 	return (luminosity);
 }
 
@@ -96,7 +96,7 @@ t_argb	compute_light_reflection(t_painter *pntr, t_light *light, t_object *obj)
 		lim[1] = T_MAX;
 	}
 	if (!closest_intersect(pntr, 1, scene->objects))
-		lumen = reflections(ray, apply_brightness(light->intensity), obj->spec);
+		lumen = reflections(ray, argb_applyalpha(light->intensity), obj->spec);
 	return (lumen);
 }
 
@@ -120,11 +120,11 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 	while (light)
 	{
 		if (light->type == AMBIENT)
-			lumen = add_colors(lumen, apply_brightness(light->intensity));
+			lumen = argb_add(lumen, argb_applyalpha(light->intensity));
 		else
 		{
 			reflection = compute_light_reflection(painter, light, obj);
-			lumen = add_colors(reflection, lumen);
+			lumen = argb_add(reflection, lumen);
 		}
 		light = light->next;
 	}

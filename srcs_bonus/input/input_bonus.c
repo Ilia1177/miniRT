@@ -58,7 +58,7 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 		if (last_obj)
 			last_obj->color = last_color;
 		last_color = scene->selected->color;
-		scene->selected->color = invert_color(scene->selected->color);
+		scene->selected->color = argb_inverse(scene->selected->color);
 		print_mat4(scene->selected->t_m);
 		print_mat4(mat_inverse(scene->selected->t_m));
 	}

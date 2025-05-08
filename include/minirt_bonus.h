@@ -58,14 +58,14 @@ typedef struct s_vec2
 	int	y;
 }	t_vec2;
 
-typedef struct s_argb
-{
-	int	a;
-	int	r;
-	int	g;
-	int	b;
-}	t_argb;
-
+//	typedef struct s_argb
+//	{
+//		int	a;
+//		int	r;
+//		int	g;
+//		int	b;
+//	}	t_argb;
+//
 typedef struct s_quad
 {
 	float	t[2];

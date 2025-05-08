@@ -38,7 +38,7 @@ t_board	checkerboard(t_argb color1, t_argb color2)
 t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 {
 	t_argb			color;
-	const t_board	tab = checkerboard(obj_color, invert_color(obj_color));
+	const t_board	tab = checkerboard(obj_color, argb_inverse(obj_color));
 	int				u2;
 	int				v2;
 

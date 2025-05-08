@@ -100,7 +100,7 @@ int	str_to_argb(char **line, t_argb *c, int alpha)
 	c->b = (int)ft_strtof(str, &end);
 	if (str == end)
 		return (-2);
-	limit_color(c);
+	argb_clamp(c);
 	*line = end;
 	return (0);
 }

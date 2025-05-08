@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-t_argb	apply_brightness(t_argb color)
+t_argb	argb_applyalpha(t_argb color)
 {
 	const float	brightness = (float)color.a / 255;
 	t_argb		real_color;
@@ -24,7 +24,7 @@ t_argb	apply_brightness(t_argb color)
 	return (real_color);
 }
 
-t_argb	invert_color(t_argb color)
+t_argb	argb_inverse(t_argb color)
 {
 	t_argb	new_color;
 

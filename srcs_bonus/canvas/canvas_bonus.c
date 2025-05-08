@@ -66,7 +66,7 @@ void	display_color(t_painter *painter)
 			reset_painter(painter, cnv);
 			color = throw_ray(painter);
 			pix = cnv_to_screen(cnv);
-			rt_rect(&scene->img, pix, (t_vec2){res, res}, encode_argb(color));
+			rt_rect(&scene->img, pix, (t_vec2){res, res}, argb_toint(color));
 			cnv.y += res;
 		}
 		cnv.x += res;
