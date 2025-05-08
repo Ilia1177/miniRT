@@ -2,11 +2,11 @@
 
 t_mat4	mat_orthogonal(t_vec4 dir)
 {
-	const float		mag = mag_vec4(dir);
-	const t_vec4	up = {0, 1, 0, 0};
-	const t_vec4	normalized_dir = normalize_vec4(dir); ;
 	t_mat4			orthogonal;
 	float			dir_dot_up;
+	const float		mag = mag_vec4(dir);
+	const t_vec4	up = {0, 1, 0, 0};
+	const t_vec4	normalized_dir = normalize_vec4(dir);
 
 	orthogonal = mat_init_id();
 	if (mag < EPSILON)

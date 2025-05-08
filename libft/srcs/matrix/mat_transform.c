@@ -21,6 +21,7 @@ void	mat_rotate(t_mat4 *m, float dx, float dy, float dz)
 	r.k = normalize_vec4((t_vec4){0, 0, 1, 0});
 	*m = mat_compose(*m, r);
 }
+
 void	mat_scale(t_mat4 *m, float sx, float sy, float sz)
 {
 	t_vec4	vec;
