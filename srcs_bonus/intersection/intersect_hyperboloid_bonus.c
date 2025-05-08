@@ -79,8 +79,6 @@ int intersect_hyperboloid(t_ray *ray, t_object *hy, float *t)
 			*t = eq.t[1];
 	check_hyper_cap(- hy->height / 2, o, d, s, t);
 	check_hyper_cap(hy->height / 2, o, d, s, t);
-//	check_hyper_cap(-0.5f / 2, o, d, s, t);
-//	check_hyper_cap(0.5f / 2, o, d, s, t);
 	if (*t == T_MAX)
 		return (0);
 	return (1);
