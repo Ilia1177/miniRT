@@ -226,8 +226,10 @@ uint32_t	rt_get_pixel(t_img img, int x, int y);
 t_argb		extract_argb(int color);
 
 //norm_utils.c
-void		norm_float(float *f, float min, float max);
-void		norm_int(int *num, int min, int max);
+//void		norm_float(float *f, float min, float max);
+//void		norm_int(int *num, int min, int max);
+float		clampf(float f, float min, float max);
+void		clamp(int *num, int min, int max);
 
 //input.c
 int			key_release(int keycode, t_data *scene);

@@ -48,15 +48,6 @@ t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 	return (color);
 }
 
-float clamp(float x, float min_val, float max_val) // doublons ///
-{
-	if (x < min_val)
-		return (min_val);
-	if (x > max_val)
-		return (max_val);
-	return (x);
-}
-
 t_uv	plane_map(t_vec4 local_point)
 {
 	t_uv		uv;
@@ -78,7 +69,7 @@ t_uv	sphere_map(t_vec4 local_point)
 {
 	const t_vec4	p = normalize_vec4(local_point);
 	const float		theta = atan2(p.z, p.x);
-	const float		phi = acosf(clamp(p.y, -1.0f, 1.0f));
+	const float		phi = acosf(clampf(p.y, -1.0f, 1.0f));
 	t_uv			uv;
 
 	uv.u = theta / (2.0f * M_PI);
@@ -125,5 +116,7 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 		color = text_img_at(uv.u, uv.v, obj->img);
 	else if (obj->pattern)
 		color = checkerboard_at(uv.u, uv.v, obj->color);
+	else
+		color = obj->color;
 	return (color);
 }

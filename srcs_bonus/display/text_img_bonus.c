@@ -30,7 +30,6 @@ t_argb	text_img_at(float u, float v, t_img *img)
 {
 	t_argb		color;
 	t_uv		uv2;
-	//const t_img	img = text_img(scene);
 
 	uv2.u = fmin(floor(u * img->w), img->w);
 	uv2.v = fmin(floor(v * img->h), img->h);

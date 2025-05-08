@@ -12,12 +12,18 @@
 
 #include <minirt_bonus.h>
 
-void	norm_float(float *f, float min, float max)
+float	clampf(float f, float min, float max)
 {
-	*f = fmin(max, fmax(min, *f));
+	float	r_float;
+
+	r_float = fminf(max, fmaxf(min, f));
+	return (r_float);
 }
 
-void	norm_int(int *num, int min, int max)
+void	clamp(int *num, int min, int max)
 {
-	*num = fmin(max, fmax(min, *num));
+	if (*num < min)
+		*num = min;
+	if (*num > max)
+		*num = max;
 }
