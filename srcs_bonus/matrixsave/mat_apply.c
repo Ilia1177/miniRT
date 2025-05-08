@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 t_vec4	mat_apply(t_mat4 mat, t_vec4 v)
 {

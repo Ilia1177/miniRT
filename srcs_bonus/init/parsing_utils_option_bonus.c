@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 int	get_int_opt(char **line, int *num, int nb_char)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 // Equation of sphere:
 // dist(p, sphere->center) = rayon^2

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 void	print_vec4(t_vec4 v, char *msg)
 {

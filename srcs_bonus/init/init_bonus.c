@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 t_painter	th_painter_init(t_data *scene, int i)
 {

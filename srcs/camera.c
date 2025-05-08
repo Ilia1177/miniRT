@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 // Convert yaw & pitch to direction, right, and up vectors
 // Compute new direction vector

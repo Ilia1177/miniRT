@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 t_board	checkerboard(t_argb color1, t_argb color2)
 {

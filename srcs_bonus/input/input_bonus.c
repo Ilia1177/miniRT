@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 {

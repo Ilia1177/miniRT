@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 int intersect_triangle(t_ray *ray, t_object *tr, float *t)
 {

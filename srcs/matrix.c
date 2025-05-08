@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 t_mat4	mat_compose(t_mat4 m2, t_mat4 m1)
 {

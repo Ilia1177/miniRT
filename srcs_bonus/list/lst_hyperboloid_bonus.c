@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 int	create_hyperboloid(char **line, t_data *scene)
 {

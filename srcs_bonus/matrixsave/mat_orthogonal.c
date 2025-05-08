@@ -1,4 +1,4 @@
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 t_mat4	mat_orthogonal(t_vec4 dir)
 {

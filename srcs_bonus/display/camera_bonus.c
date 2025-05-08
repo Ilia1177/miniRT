@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
 {

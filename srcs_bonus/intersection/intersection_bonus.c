@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 //t_object	*closest_intersect(t_ray *ray, int shw, float *lim, t_object *obj)
 t_object	*closest_intersect(t_painter *painter, int shadow, t_object *obj)
 {

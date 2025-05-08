@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT_bonus.h>
+#include <minirt_bonus.h>
 
 // Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
 // 1. dot_vec3(axis, dir) -> ray perpendiculaire au plan,

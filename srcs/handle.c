@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
+#include <minirt.h>
 
 // translate object on z axis zith i and j
 void	handle_object_translation(t_data *scene)
