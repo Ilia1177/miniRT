@@ -106,9 +106,9 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
 	if (obj->type == SPHERE && (obj->pattern || obj->path))
 		uv = sphere_map(hp);
-	else if (obj->type == PLANE && obj->pattern)
+	else if (obj->type == PLANE && (obj->pattern || obj->path))
 		uv = plane_map(hp);
-	else if (obj->type == CYLINDER && obj->pattern)
+	else if (obj->type == CYLINDER && (obj->pattern || obj->path))
 		uv = cylinder_map(hp);
 	else
 		return (obj->color);
