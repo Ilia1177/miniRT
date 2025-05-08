@@ -36,7 +36,7 @@ int	place_camera(char **line, t_data *scene)
 		return (status);
 	fov = (int)f_fov;
 	scene->cam.fov = fov;
-	scene->viewport.w = calc_vp_width(fov, 2);
+	scene->viewport.w = calc_vp_width(fov);
 	*line = str + skip_space(str);
 	return (status);
 }

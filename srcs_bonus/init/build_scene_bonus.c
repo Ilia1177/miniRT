@@ -40,6 +40,25 @@ int	place_camera(char **line, t_data *scene)
 	return (status);
 }
 
+void	choose_object(char **curr_line, t_data *scene)
+{
+	char *line;
+
+	line = *curr_line;
+	if (!ft_strncmp("sp", line, 2))
+		scene->status = create_sphere(&line, scene);
+	else if (!ft_strncmp("pl", line, 2))
+		scene->status = create_plane(&line, scene);
+	else if (!ft_strncmp("cy", line, 2))
+		scene->status = create_cylinder(&line, scene);
+	else if (!ft_strncmp("hy", line, 2))
+		scene->status = create_hyperboloid(&line, scene);
+	else if (!ft_strncmp("tr", line, 2))
+		scene->status = create_triangle(&line, scene);
+	*curr_line=line;
+	printf("each line:%d\n", *line);
+}
+
 /*****************************************************************************
 *	choose the good elem 
 *	if is not a elem or newline print_error_mlx
@@ -49,25 +68,17 @@ int	register_line_into_scene(char *line, t_data *scene)
 	line += skip_space(line);
 	while (line && *line && !scene->status)
 	{
+		printf("while-line:%s\n", line);
 		if (*line == '#')
 			line += go_to_endl(line);
+		choose_object(&line, scene);
 		if (*line == 'A')
 			scene->status = create_light(&line, scene, AMBIENT);
 		else if (*line == 'L')
 			scene->status = create_light(&line, scene, POINT);
 		else if (*line == 'C')
 			scene->status = place_camera(&line, scene);
-		else if (!ft_strncmp("sp", line, 2))
-			scene->status = create_sphere(&line, scene);
-		else if (!ft_strncmp("pl", line, 2))
-			scene->status = create_plane(&line, scene);
-		else if (!ft_strncmp("cy", line, 2))
-			scene->status = create_cylinder(&line, scene);
-		else if (!ft_strncmp("hy", line, 2))
-			scene->status = create_hyperboloid(&line, scene);
-		else if (!ft_strncmp("tr", line, 2))
-			scene->status = create_triangle(&line, scene);
-		else if (ft_strcmp("\n", line))
+		else if (*line && ft_strcmp("\n", line))
 			scene->status = -4;
 		else
 			return (0);
@@ -77,7 +88,7 @@ int	register_line_into_scene(char *line, t_data *scene)
 	return (scene->status);
 }
 
-int	check_map_elem(int status, t_data *scene)
+int	check_map_elem(int status, t_data *scene) /// maybe delete
 {
 	if (!status)
 		print_all(scene);
@@ -113,12 +124,9 @@ int	build_scene(t_data *scene)
 		line = get_next_line(map);
 	}
 	free(line);
-	//line = NULL;
-	//if (status)
-		gnl_clear_buffer(map);
+	gnl_clear_buffer(map);
 	close(map);
 	if (!scene->status)
 		print_all(scene);
-	//status = check_map_elem(status, scene);
 	return (scene->status);
 }

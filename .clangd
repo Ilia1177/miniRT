@@ -1,2 +1,11 @@
 CompileFlags:
-  Add: [-I./, -I../libft/include, -I../include , -I/usr/include, -I../mlx]
+  Add: 
+  - -I./
+  - -I../libft/include
+  - -I../include
+  - -I/usr/include
+  - -I../mlx
+  - -I../../
+  - -I../../include
+  - -I../../mlx
+  - -I../../libft/include

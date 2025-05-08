@@ -86,5 +86,6 @@ int	create_sphere(char **line, t_data *scene)
 	if (!scene->status)
 		scene->status = make_object(sphere, &scene->objects);
 	*line = str + skip_space(str);
+	printf("create sphere");
 	return (scene->status);
 }

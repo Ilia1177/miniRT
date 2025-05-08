@@ -27,7 +27,7 @@
 
 # define T_MAX 1600
 # define HEIGHT 800
-# define WIDTH 800
+# define WIDTH 1024
 # define R_LIMIT 3
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
@@ -333,7 +333,7 @@ void		update_camera_vectors(t_camera *cam);
 void		update_camera_rotation(t_camera *cam);
 t_vec4		apply_camera_rotation(t_camera cam, t_vec4 v);
 void		mouse_move(t_camera *cam, float delta_x, float delta_y);
-float		calc_vp_width(float fov_degrees, float focal_length);
+float		calc_vp_width(float fov_degrees);
 
 //lst_sphere.c
 int			create_sphere(char **line, t_data *scene);
