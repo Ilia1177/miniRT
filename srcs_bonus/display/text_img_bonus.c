@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   text_img_bonus.c                                   :+:      :+:    :+:   */
+/*   new_img_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,28 +12,53 @@
 
 #include <minirt_bonus.h>
 
-t_img	*text_img(t_data *scene, char *path)
+t_board	checkerboard(t_argb color1, t_argb color2)
 {
-	t_img		*img;
+	t_board	tab;
+	int		i;
+	int		j;
 
-	img = malloc(sizeof(t_img));
-	if (!img)
-		return (NULL);
-	img->ptr = mlx_xpm_file_to_image(scene->mlx, path, &img->w, &img->h);
-	if (img->ptr)
-		img->addr = mlx_get_data_addr(img->ptr,
-				&img->bpp, &img->llen, &img->endian);
-	return (img);
+	j = 0;
+	while (j < CBOARD_H)
+	{
+		i = 0;
+		while (i < CBOARD_W)
+		{
+			if ((i + j) % 2 == 0)
+				tab.color[j][i] = color1;
+			else
+				tab.color[j][i] = color2;
+			i++;
+		}
+		j++;
+	}
+	return (tab);
 }
 
-t_argb	text_img_at(float u, float v, t_img *img)
+t_argb	checkerboard_at(float u, float v, t_argb obj_color)
+{
+	t_argb			color;
+	const t_board	tab = checkerboard(obj_color, argb_inverse(obj_color));
+	int				u2;
+	int				v2;
+
+	v2 = fminf(floorf(v * CBOARD_H), CBOARD_H - 1);
+	u2 = fminf(floorf(u * CBOARD_W), CBOARD_H - 1);
+	color = tab.color[v2][u2];
+	return (color);
+}
+
+t_argb	img_at(float u, float v, t_img *img)
 {
 	t_argb		color;
 	t_uv		uv2;
 
-	uv2.u = fmin(floor(u * img->w), img->w);
-	uv2.v = fmin(floor(v * img->h), img->h);
-	uv2.u = uv2.u + floor(img->w / 4);
-	color = extract_argb(rt_get_pixel(*img, uv2.u, uv2.v));
+	ft_bzero(&color, sizeof(color));
+	if (!img)
+		return (color);
+	uv2.u = fminf(floor(u * img->w), img->w);
+	uv2.v = fminf(floor(v * img->h), img->h);
+	uv2.u = uv2.u + floor(img->w / 1);
+	color = argb_fromint(rt_get_pixel(*img, uv2.u, uv2.v));
 	return (color);
 }

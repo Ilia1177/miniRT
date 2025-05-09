@@ -35,6 +35,10 @@ int	create_plane(char **line, t_data *scene)
 		scene->status = str_to_argb(&str, &plane.color, 0);
 	if (!scene->status)
 		scene->status = get_options(&str, &plane);
+	if (plane.path)
+		plane.img = new_img(scene, plane.path);
+	if (plane.path && !plane.img)
+		return (-9);
 	if (!scene->status)
 		scene->status = make_object(plane, &scene->objects);
 	*line = str + skip_space(str);

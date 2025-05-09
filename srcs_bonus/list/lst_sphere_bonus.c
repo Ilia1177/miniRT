@@ -80,7 +80,7 @@ int	create_sphere(char **line, t_data *scene)
 	if (!scene->status)
 		scene->status = get_options(&str, &sphere);
 	if (sphere.path)
-		sphere.img = text_img(scene, sphere.path);
+		sphere.img = new_img(scene, sphere.path);
 	if (sphere.path && !sphere.img)
 		return (-9);
 	if (!scene->status)

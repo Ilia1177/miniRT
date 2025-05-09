@@ -64,15 +64,6 @@ typedef struct s_rgb
 	int	b;
 }	t_rgb;
 
-//16 bytes aligned: OK
-typedef struct s_argb
-{
-	int	a;
-	int	r;
-	int	g;
-	int	b;
-}	t_argb;
-
 //24 bytes not aligned
 typedef struct s_quad
 {

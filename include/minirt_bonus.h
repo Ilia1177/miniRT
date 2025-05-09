@@ -157,18 +157,18 @@ typedef struct s_object
 	struct s_object	*next;
 	t_argb			reflect;
 	t_argb			color;
-	char			mat[4][4];
 	t_vec4			vertice[3];
-	t_mat4			t_m;
-	float			t;
 	t_vec4			scale;
+	t_mat4			t_m;
+	t_img			*img;
+	float			t;
 	float			radius;
 	float			height;
+	int				normal_map;
 	int				spec;
 	int				pattern;
-	char			*path;
-	t_img			*img;
 	int				opt;
+	char			*path;
 	t_type			type;
 }	t_object;
 
@@ -285,19 +285,20 @@ t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
 t_argb		reflections(t_ray *ray, t_argb intensity, int spec);
 
 //vector_math.c
-t_vec4		random_vec4(float magnitude);
-t_vec4		cross_vec4(t_vec4 a, t_vec4 b);
-float		dot_vec4(t_vec4 a, t_vec4 b);
-float		dot_vec3(t_vec4 a, t_vec4 b);
-float		mag_vec4(t_vec4 a);
-double		dist(t_vec2 a, t_vec2 b);
-t_vec4		sub_vec4(t_vec4 a, t_vec4 b);
-t_vec4		add_vec4(t_vec4 a, t_vec4 b);
-t_vec4		normalize_vec4(t_vec4 vec);
-t_vec4		div_vec4(t_vec4 vec, float d);
-t_vec4		mult_vec4(t_vec4 vec, float a);
-float		dist_vec4(t_vec4 a, t_vec4 b);
+	t_vec4		random_vec4(float magnitude);
+//	t_vec4		cross_vec4(t_vec4 a, t_vec4 b);
+//	float		dot_vec4(t_vec4 a, t_vec4 b);
+//	float		dot_vec3(t_vec4 a, t_vec4 b);
+//	float		mag_vec4(t_vec4 a);
+//	double		dist(t_vec2 a, t_vec2 b);
+//	t_vec4		sub_vec4(t_vec4 a, t_vec4 b);
+//	t_vec4		add_vec4(t_vec4 a, t_vec4 b);
+//	t_vec4		normalize_vec4(t_vec4 vec);
+//	t_vec4		div_vec4(t_vec4 vec, float d);
+//	t_vec4		mult_vec4(t_vec4 vec, float a);
+//	float		dist_vec4(t_vec4 a, t_vec4 b);
 
+t_argb	checkerboard_at(float u, float v, t_argb obj_color);
 //camera_vectors.c
 void		update_camera_rotation(t_camera *cam);
 float		calc_vp_width(float fov_degrees, float focal_length);
@@ -377,10 +378,11 @@ void		rotate_on_x(t_object *obj, float theta);
 
 //text_checkerboard.c
 t_argb		pattern_color(t_ray *ray, t_object *obj);
+t_uv		get_uv(t_object *obj, t_vec4 hitpoint);
 
-//text_img
-t_argb		text_img_at(float u, float v, t_img *img);
-t_img		*text_img(t_data *scene, char *path);
+//new_img
+t_argb		img_at(float u, float v, t_img *img);
+t_img		*new_img(t_data *scene, char *path);
 
 //cylinder_utils.c
 t_vec4		cy_center_to_base(t_object cy);
