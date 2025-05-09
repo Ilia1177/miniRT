@@ -109,11 +109,11 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 	t_argb		lumen;
 	t_argb		reflection;
 	t_light		*light;
-	float		*lim;
-	t_ray		*ray;
+	//float		*lim;
+	//t_ray		*ray;
 
-	lim = painter->lim;
-	ray = &painter->ray;
+	//lim = painter->lim;
+	//ray = &painter->ray;
 	lumen = (t_argb){0, 0, 0, 0};
 	light = painter->sceneref->lights;
 	while (light)
