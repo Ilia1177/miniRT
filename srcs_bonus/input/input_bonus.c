@@ -90,7 +90,7 @@ void	select_object(t_data *scene, int x, int y)
 	vp = scene->viewport;
 	cnv.x = x - (WIDTH / 2);
 	cnv.y = (HEIGHT / 2) - y;
-	catcher.ray.d = throught_vp(cnv, vp);
+	catcher.ray.d = projection(cnv, scene);
 	catcher.ray.d = mat_apply(scene->cam.t_m, catcher.ray.d);
 	catcher.ray.o = scene->cam.t_m.p;
 	catcher.ray.v.w = -1.0f;
