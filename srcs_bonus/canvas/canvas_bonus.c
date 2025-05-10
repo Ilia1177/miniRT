@@ -21,10 +21,10 @@ t_vec4 fisheye_proj(t_vec2 cnv, float fov_degrees)
     float max_fov_rad = fov_degrees * (M_PI / 180.0f) / 2.0f;
 
     // Discard rays outside circular fisheye bounds
- //   if (r > 1.0f) {
- //       ray.x = ray.y = ray.z = ray.w = 0.0f;
- //       return ray;
- //   }
+    if (r > 1.0f) {
+        ray.x = ray.y = ray.z = ray.w = 0.0f;
+        return ray;
+    }
 
     // Angle from center
     float theta = r * max_fov_rad;
@@ -52,6 +52,7 @@ t_vec4  stereographic_proj(t_vec2 cnv, t_viewport vp)
     dir.y = cosf(theta);
     dir.z = sinf(theta) * sinf(phi);
 
+	return (dir);
 }
 t_vec4  equirectangular_proj(t_vec2 cnv, t_viewport vp)
 {
@@ -108,11 +109,11 @@ void	painter_reset(t_painter *painter, t_vec2 cnv)
 	const t_data	*scene = painter->sceneref;
 
 	painter->lim[0] = EPSILON;
-	painter->lim[0] = scene->viewport.pos.z;
+	//painter->lim[0] = scene->viewport.pos.z;
 	painter->lim[1] = T_MAX;
 	painter->lim[2] = R_LIMIT;
 	painter->ray.o = scene->cam.t_m.p;
-	painter->ray.d = projection(cnv, scene);
+	painter->ray.d = projection(cnv, (t_data *) scene);
     painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
 }
 

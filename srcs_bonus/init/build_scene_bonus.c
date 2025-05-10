@@ -52,7 +52,6 @@ int	place_camera(char **line, t_data *scene)
 	char	*str;
 	float	f_fov;
 	t_vec4	pos;
-	t_type	proj;
 
 	if (scene->cam.fov != -1)
 		return (32);
