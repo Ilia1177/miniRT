@@ -46,7 +46,20 @@ t_type	typeof_projection(char **line)
 	printf("projection1 :: %d\n", proj);
 	return (proj);
 }
+void yawpitch_from_dir(t_vec4 dir, float *yaw_deg, float *pitch_deg)
+{
+    dir = normalize_vec4(dir);
 
+    float yaw_rad   = atan2f(dir.x, dir.z);
+    float pitch_rad = asinf(dir.y);
+
+	if (fabsf(dir.x) > EPSILON || fabsf(dir.z) > EPSILON)
+		*yaw_deg = atan2f(dir.x, dir.z) * (180.0f / M_PI);
+	else
+		*yaw_deg = 0.0f; // Default yaw when looking straight up/down
+	//
+    *pitch_deg = pitch_rad * (180.0f / M_PI);
+}
 int	place_camera(char **line, t_data *scene)
 {
 	char	*str;
@@ -63,6 +76,9 @@ int	place_camera(char **line, t_data *scene)
 	if (scene->status)
 		return (scene->status);
 	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k)); //maybe not true ...
+	//
+	yawpitch_from_dir(scene->cam.t_m.k, &scene->cam.yaw, &scene->cam.pitch);
+	update_camera_rotation(&scene->cam);
 	scene->cam.t_m.p = pos;
 	scene->status = str_to_float(&str, &f_fov);
 	if (scene->status)

@@ -69,14 +69,14 @@ void	handle_camera_move(t_data *scene)
 {
 	const float	speed = 2.0f;
 
-	if (scene->key_state[XK_Left] == 1)
-		rotate_camera(&scene->cam, 0, speed, 0);
 	if (scene->key_state[XK_Right] == 1)
-		rotate_camera(&scene->cam, 0, -speed, 0);
-	if (scene->key_state[XK_Down] == 1)
 		rotate_camera(&scene->cam, -speed, 0, 0);
-	if (scene->key_state[XK_Up] == 1)
+	if (scene->key_state[XK_Left] == 1)
 		rotate_camera(&scene->cam, speed, 0, 0);
+	if (scene->key_state[XK_Down] == 1)
+		rotate_camera(&scene->cam, 0, -speed, 0);
+	if (scene->key_state[XK_Up] == 1)
+		rotate_camera(&scene->cam, 0, speed, 0);
 	if (scene->key_state[XK_e] == 1)
 		translate_camera(&scene->cam, 0.0f, -speed, 0.0f);
 	if (scene->key_state[XK_q] == 1)

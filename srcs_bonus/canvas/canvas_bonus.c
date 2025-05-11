@@ -12,32 +12,31 @@
 
 #include <minirt_bonus.h>
 
+	// Discard rays outside circular fisheye bounds
 t_vec4 fisheye_proj(t_vec2 cnv, float fov_degrees)
 {
-    t_vec4 ray;
-    float  x = (((float)cnv.x + WIDTH / 2) / WIDTH * 2.0f) - 1.0f;
-    float  y = (((float)cnv.y + HEIGHT / 2) / HEIGHT * 2.0f) - 1.0f;
-    float r = sqrtf(x * x + y * y);
-    float max_fov_rad = fov_degrees * (M_PI / 180.0f) / 2.0f;
+	t_vec4 ray;
+	float  x = (((float)cnv.x + WIDTH / 2) / WIDTH * 2.0f) - 1.0f;
+	float  y = (((float)cnv.y + HEIGHT / 2) / HEIGHT * 2.0f) - 1.0f;
+	float r = sqrtf(x * x + y * y);
+	float max_fov_rad = fov_degrees * (M_PI / 180.0f) / 2.0f;
 
-    // Discard rays outside circular fisheye bounds
-    if (r > 1.0f) {
-        ray.x = ray.y = ray.z = ray.w = 0.0f;
-        return ray;
-    }
+	if (r > 1.0f) {
+		ray.x = ray.y = ray.z = ray.w = 0.0f;
+		return ray;
+	}
 
-    // Angle from center
-    float theta = r * max_fov_rad;
+	// Angle from center
+	float theta = r * max_fov_rad;
 
-    // Angle of the point in the image plane
-    float phi = atan2f(y, x);
+	// Angle of the point in the image plane
+	float phi = atan2f(y, x);
 
-    // Spherical to Cartesian
-    ray.x = sinf(theta) * cosf(phi);
-    ray.y = sinf(theta) * sinf(phi);
-    ray.z = cosf(theta);
-    ray.w = 0.0f;
-
+	// Spherical to Cartesian
+	ray.x = sinf(theta) * cosf(phi);
+	ray.y = sinf(theta) * sinf(phi);
+	ray.z = cosf(theta);
+	ray.w = 0.0f;
     return ray;
 }
 
