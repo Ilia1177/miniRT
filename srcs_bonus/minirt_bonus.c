@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:54:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 14:54:17 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/11 11:20:48 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,20 @@ void	print_timestamp(struct timeval *last_time, t_data *scene)
 
 int	rt_render(t_data *scene)
 {
+	static int		first_rend;
 	struct timeval	last_time;
 	const t_vec2	pos = {0, 0};
 
-	gettimeofday(&last_time, NULL);
-	display_color(&scene->painter);
-	rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);
-	mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
-	handle_input(scene);
-	print_timestamp(&last_time, scene);
+	if (!first_rend || scene->rend)
+	{
+		gettimeofday(&last_time, NULL);
+		handle_input(scene);
+		display_color(&scene->painter);
+		rt_rect(&scene->img, pos, (t_vec2){150, 20}, 0xFFFFFFFF);
+		mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+		print_timestamp(&last_time, scene);
+		first_rend = 1;
+	}
 	return (0);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT_bonus.h                                     :+:      :+:    :+:   */
+/*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:47:20 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 15:33:41 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/11 11:01:23 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,9 @@ int			mouse_pos(int x, int y, t_data *scene);
 //handle.c
 void		rotate_obj(t_mat4 *tm, float dx, float dy, float dz);
 int			handle_input(t_data *scene);
+
+//handle_2.c
+void		handle_light_move(t_data *scene);
 
 //canvas.c
 t_vec4		throught_vp(t_vec2 cnv, t_viewport vp);

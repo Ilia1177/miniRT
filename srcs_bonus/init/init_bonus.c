@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 14:57:36 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:48:34 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
+	scene->lights = NULL;
 	scene->painter = th_painter_init(scene, 0);
 	return (0);
 }
