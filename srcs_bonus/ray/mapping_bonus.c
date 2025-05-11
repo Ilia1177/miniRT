@@ -76,21 +76,18 @@ t_uv	get_uv(t_object *obj, t_vec4 hp)
 /*****************************************************************************
  	* hp = hit point
 ******************************************************************************/
-t_argb	pattern_color(t_ray *ray, t_object *obj)
+t_argb	mapping(t_ray *ray, t_object *obj)
 {
 	t_uv	uv;
 	t_argb	color;
 	t_vec4	hp;
 
-	if ((obj->pattern))
-	{
-		hp = mat_apply(mat_inverse(obj->t_m), ray->o);
-		uv = get_uv(obj, hp);
-		if (obj->path)
-			color = img_at(uv.u, uv.v, obj->img);
-		else
+	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
+	uv = get_uv(obj, hp);
+	if (obj->pattern)
 			color = checkerboard_at(uv.u, uv.v, obj->color);
-	}
+	else if (obj->img)
+			color = img_at(uv.u, uv.v, obj->img);
 	else
 		return (obj->color);
 	return (color);

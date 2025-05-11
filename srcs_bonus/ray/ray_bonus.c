@@ -42,7 +42,7 @@ void	normal_map(t_ray *ray, t_object *obj)
 // 1. Compute new origin of ray = hit point in world space
 // 2. Get the vector to camera
 // 3. Compute normal of object
-static void	ray_update(t_painter *painter, t_object *obj)
+static void	ray_hitpoint(t_painter *painter, t_object *obj)
 {
 	t_ray	*ray;
 
@@ -100,9 +100,9 @@ t_argb	throw_ray(t_painter *painter)
 	obj = closest_intersect(painter, 0, scene->objects);
 	if (obj == NULL)
 		return (local_color);
-	ray_update(painter, obj);
+	ray_hitpoint(painter, obj);
 	lumen = compute_lighting(painter, obj);
-	local_color = argb_mult(pattern_color(&painter->ray, obj), lumen);
+	local_color = argb_mult(mapping(&painter->ray, obj), lumen);
 	if (painter->lim[2] <= 0.0f || obj->reflect.a <= 0)
 		return (local_color);
 	reflected_color = get_reflected_color(painter);

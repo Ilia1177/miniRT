@@ -15,13 +15,11 @@
 void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
 {
 	(void)dz;
-//	if (cam->pitch + dx < 80.0f && cam->pitch + dx > -80.0f)
-		cam->pitch += dy;
+	cam->pitch += dy;
 	cam->yaw += dx;
-	if (cam->pitch > 89.9f)  cam->pitch = 89.9f;
-	if (cam->pitch < -89.9f) cam->pitch = -89.9f;
+	clampf(cam->pitch, -89.9f, 89.9f);
 	update_camera_rotation(cam);
-	printf("----- CAM angle: yaw: %f, pitch: %f\nmatrix:", cam->yaw, cam->pitch);
+	printf("----- rotate CA with: yaw: %f, pitch: %f\n", cam->yaw, cam->pitch);
 	print_mat4(cam->t_m);
 }
 
@@ -43,40 +41,6 @@ void	translate_camera(t_camera *camera, float dx, float dy, float dz)
 	printf("---- translate CAM ----\n");
 	print_mat4(camera->t_m);
 }
-void	update_camera_rotation2(t_camera *cam)
-{
-	const float rad_yaw = cam->yaw * (M_PI / 180.0f);
-	const float rad_pitch = cam->pitch * (M_PI / 180.0f);
-
-	// Clamp pitch to avoid flipping near vertical
-	cam->pitch = clampf(cam->pitch, -89.9f, 89.0f);
-
-	t_vec4 forward = {
-		cosf(rad_pitch) * sinf(rad_yaw),
-		sinf(rad_pitch),
-		cosf(rad_pitch) * cosf(rad_yaw),
-		0
-	};
-	forward = normalize_vec4(forward);
-
-	t_vec4 up = {0, 1, 0, 0}; // World up
-	t_vec4 right = normalize_vec4(cross_vec4(up, forward));
-
-	// If forward is parallel to up, create a fallback right vector
-	if (mag_vec4(right) < EPSILON)
-		right = (t_vec4){1, 0, 0, 0};
-
-	t_vec4 new_up = normalize_vec4(cross_vec4(forward, right));
-
-	// Compose the camera matrix
-	t_mat4 m = mat_init_id();
-	m.i = right;
-	m.j = new_up;
-	m.k = forward;
-	m.p = cam->t_m.p; // Preserve position
-
-	cam->t_m = m;
-}
 
 void	update_camera_rotation(t_camera *cam)
 {
@@ -89,10 +53,6 @@ void	update_camera_rotation(t_camera *cam)
 	dir.y = sin(rad_pitch);
 	dir.z = sin(rad_yaw) * cos(rad_pitch);
 	dir.w = 0;
-//	dir = mat_apply(cam->t_m, dir);
-	
-	printf("upadate matrix:\n");
-	print_mat4(cam->t_m);
 	cam->t_m = mat_orthogonal(normalize_vec4(dir));
 	cam->t_m.p = pos;
 }

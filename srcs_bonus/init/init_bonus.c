@@ -14,12 +14,12 @@
 
 t_painter	th_painter_init(t_data *scene, int i)
 {
-	t_painter	new;
+	t_painter	painter;
 
-	ft_bzero(&new, sizeof(new));
+	ft_bzero(&painter, sizeof(painter));
 	new.sceneref = (t_data *)scene;
 	new.id = i + 1;
-	return (new);
+	return (painter);
 }
 
 int	rt_scene_init(t_data *scene, char **av, int ac)

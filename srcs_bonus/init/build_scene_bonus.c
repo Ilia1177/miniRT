@@ -12,87 +12,7 @@
 
 #include <minirt_bonus.h>
 
-t_viewport	build_viewport(t_data *scene)
-{
-	const float	fov_radians = scene->cam.fov * (float)M_PI / 180.0f;
-	t_viewport	vp;
-
-	vp.proj = scene->viewport.proj;
-	vp.w = 1.0f;
-	vp.h = 1.0f;
-	vp.pos.z = vp.w / (2.0f * tanf(fov_radians / 2.0f));
-	vp.pos.x = 0.0f;
-	vp.pos.y = 0.0f;
-	return (vp);
-}
-
-t_type	typeof_projection(char **line)
-{
-	t_type	proj;
-
-	printf("LINE: %s", *line);
-	*line += skip_space(*line);
-	printf("LINE: %s", *line);
-	proj = PINHOLE;
-	if (!ft_strncmp(*line, "-equ", 4))
-		proj = EQUIRECT;
-	else if (!ft_strncmp(*line, "-fis", 4))
-		proj = FISHEYE;
-	else if (!ft_strncmp(*line, "-ste", 4))
-		proj = STEREO;
-	if (proj != PINHOLE) 
-		*line += 4;
-	printf("LINE: %s", *line);
-	printf("projection1 :: %d\n", proj);
-	return (proj);
-}
-void yawpitch_from_dir(t_vec4 dir, float *yaw_deg, float *pitch_deg)
-{
-    dir = normalize_vec4(dir);
-
-    float yaw_rad   = atan2f(dir.x, dir.z);
-    float pitch_rad = asinf(dir.y);
-
-	if (fabsf(dir.x) > EPSILON || fabsf(dir.z) > EPSILON)
-		*yaw_deg = atan2f(dir.x, dir.z) * (180.0f / M_PI);
-	else
-		*yaw_deg = 0.0f; // Default yaw when looking straight up/down
-	//
-    *pitch_deg = pitch_rad * (180.0f / M_PI);
-}
-int	place_camera(char **line, t_data *scene)
-{
-	char	*str;
-	float	f_fov;
-	t_vec4	pos;
-
-	if (scene->cam.fov != -1)
-		return (32);
-	str = *line + 1;
-	scene->status = str_to_vec4(&str, &pos, 1.0f);
-	if (scene->status)
-		return (scene->status);
-	scene->status = str_to_vecdir(&str, &scene->cam.t_m.k);
-	if (scene->status)
-		return (scene->status);
-	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k)); //maybe not true ...
-	//
-	yawpitch_from_dir(scene->cam.t_m.k, &scene->cam.yaw, &scene->cam.pitch);
-	update_camera_rotation(&scene->cam);
-	scene->cam.t_m.p = pos;
-	scene->status = str_to_float(&str, &f_fov);
-	if (scene->status)
-		return (scene->status);
-	scene->cam.fov = (int)f_fov;
-	*line = str + skip_space(str);
-	scene->viewport.proj = typeof_projection(line);
-	scene->viewport = build_viewport(scene);
-	printf("projection1 :: %d\n", scene->viewport.proj);
-	*line += skip_space(*line);
-	return (scene->status);
-}
-
-void	choose_object(char **curr_line, t_data *scene)
+static void	choose_object(char **curr_line, t_data *scene)
 {
 	char	*line;
 
@@ -108,20 +28,20 @@ void	choose_object(char **curr_line, t_data *scene)
 	else if (!ft_strncmp("tr", line, 2))
 		scene->status = create_triangle(&line, scene);
 	*curr_line = line;
-	printf("each line:%d\n", *line);
+	//printf("each line:%d\n", *line);
 }
 
 /*****************************************************************************
 *	choose the good elem 
 *	if is not a elem or newline print_error_mlx
 *****************************************************************************/
-int	register_line_into_scene(char *line, t_data *scene)
+static int	register_line_into_scene(char *line, t_data *scene)
 {
 	line += skip_space(line);
  
 	while (line && *line && !scene->status)
 	{
-		printf("while-line:%s\n", line);
+		//printf("while-line:%s\n", line);
 		if (*line == '#')
 			line += go_to_endl(line);
 		choose_object(&line, scene);
@@ -153,12 +73,6 @@ int	build_scene(t_data *scene)
 		return (30);
 	}
 	line = get_next_line(map);
-   if (!ft_strncmp(line, "equirectangular", 15))
-    {
-        scene->rect_proj = 1;
-        free(line);
-        line = get_next_line(map);
-    }
 	while (!scene->status && line)
 	{
 		scene->status = register_line_into_scene(line, scene);

@@ -10,20 +10,4 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt_bonus.h>
 
-float	clampf(float f, float min, float max)
-{
-	float	r_float;
-
-	r_float = fminf(max, fmaxf(min, f));
-	return (r_float);
-}
-
-void	clamp(int *num, int min, int max)
-{
-	if (*num < min)
-		*num = min;
-	if (*num > max)
-		*num = max;
-}
