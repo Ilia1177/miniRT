@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:46:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 14:46:30 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:03:39 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void	print_light(t_light light)
 {
 	if (light.type == POINT)
-		printf("type : %s", "point");
+		printf("type : %s\n", "point");
 	if (light.type == AMBIENT)
-		printf("type : %s", "ambient");
+		printf("type : %s\n", "ambient");
 	if (light.type == DIRECTIONAL)
-		printf("type : %s", "directionnal\n");
+		printf("type : %s\n", "directionnal\n");
 	print_argb(light.intensity, "intensity");
 	print_vec4(light.pos, "pos");
 	print_vec4(light.dir, "dir");

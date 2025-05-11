@@ -6,7 +6,7 @@
 #    By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/07 15:24:59 by jhervoch          #+#    #+#              #
-#    Updated: 2025/05/08 15:32:01 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/05/09 11:41:36 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,7 @@ SRCS_BONUS = 	minirt\
 		init/init\
 		input/input\
 		input/handle\
+		input/handle_2\
 		input/mouse\
 		intersection/intersection\
 		intersection/intersect_cylinder\

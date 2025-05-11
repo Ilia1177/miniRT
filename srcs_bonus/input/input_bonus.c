@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:00:48 by npolack           #+#    #+#             */
-/*   Updated: 2025/05/08 15:32:50 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/11 11:37:21 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,27 @@ void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 	*tm = new;
 	print_mat4(*tm);
 }
-
+/*****************************************************************************
+* the variable rend allow to not render all the times
+* the rendering is only when you press a key
+* +=1 and -=1 allow to press to key and when release one the rendering continue
+******************************************************************************/
 int	key_press(int keysym, t_data *scene)
 {
 	if (keysym == XK_Escape)
 		rt_shut_down(scene);
 	else if (keysym >= 0 && keysym < 99999)
+	{
+		scene->rend += 1;
 		scene->key_state[keysym] = 1;
+	}
 	return (keysym);
 }
 
 int	key_release(int keysym, t_data *scene)
 {
+	if (scene->rend > 0)
+		scene->rend -= 1;
 	if (keysym >= 0 && keysym < 99999)
 		scene->key_state[keysym] = 0;
 	return (keysym);
@@ -80,14 +89,14 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 void	select_object(t_data *scene, int x, int y)
 {
 	t_vec2		cnv;
-	t_viewport	vp;
+	//t_viewport	vp;
 	t_object	*last_obj;
 	t_painter	catcher;
 
 	catcher.lim[0] = EPSILON;
 	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
-	vp = scene->viewport;
+	//vp = scene->viewport;
 	cnv.x = x - (WIDTH / 2);
 	cnv.y = (HEIGHT / 2) - y;
 	catcher.ray.d = projection(cnv, scene);

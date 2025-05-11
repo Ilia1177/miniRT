@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:26:20 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 15:27:59 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/11 11:12:34 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	handle_input(t_data *scene)
 		handle_object_rotation(scene, tm);
 		handle_object_scaling(scene, tm);
 	}
+	handle_light_move(scene);
 	handle_camera_move(scene);
 	if (scene->key_state[XK_space] == 1)
 		save_as_ppm(&scene->img, "img.ppm");
@@ -109,5 +110,9 @@ int	handle_input(t_data *scene)
 		scene->res++;
 	if (scene->key_state[XK_F2] == 1 && scene->res > 1)
 		scene->res--;
+	if (scene->key_state[XK_F3] == 1)
+		scene->res = 10;
+	if (scene->key_state[XK_F4] == 1)
+		scene->res = 1;
 	return (0);
 }
