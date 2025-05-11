@@ -80,14 +80,14 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 void	select_object(t_data *scene, int x, int y)
 {
 	t_vec2		cnv;
-	t_viewport	vp;
+	//t_viewport	vp;
 	t_object	*last_obj;
 	t_painter	catcher;
 
 	catcher.lim[0] = EPSILON;
 	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
-	vp = scene->viewport;
+	//vp = scene->viewport;
 	cnv.x = x - (WIDTH / 2);
 	cnv.y = (HEIGHT / 2) - y;
 	catcher.ray.d = projection(cnv, scene);
