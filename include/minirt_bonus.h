@@ -106,8 +106,8 @@ typedef struct s_viewport
 {
 	t_vec4		pos;
 	t_type		proj;
-	float			h;
-	float			w;
+	float		h;
+	float		w;
 }	t_viewport;
 
 typedef struct s_canvas
@@ -127,7 +127,6 @@ typedef struct s_img
 	int		w;
 	int		h;	
 }			t_img;
-
 
 typedef struct s_light
 {
@@ -186,7 +185,7 @@ typedef struct s_data
 	int				processing;
 	int				at_rest;
 	int				status;
-    int             rect_proj;
+	int				rect_proj;
 	void			*mlx;
 	void			*win;
 	char			*map_name;
@@ -204,7 +203,7 @@ typedef struct s_data
 	char			key_state[99999];
 }				t_data;
 
-t_vec4	projection(t_vec2 cnv, t_data *scene);
+t_vec4		projection(t_vec2 cnv, t_data *scene);
 
 //camera move
 void		rotate_y(t_camera *cam, float theta);
@@ -279,7 +278,7 @@ t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
 t_argb		reflections(t_ray *ray, t_argb intensity, int spec);
 
 //vector_math.c
-	t_vec4		random_vec4(float magnitude);
+t_vec4		random_vec4(float magnitude);
 //	t_vec4		cross_vec4(t_vec4 a, t_vec4 b);
 //	float		dot_vec4(t_vec4 a, t_vec4 b);
 //	float		dot_vec3(t_vec4 a, t_vec4 b);
@@ -292,7 +291,7 @@ t_argb		reflections(t_ray *ray, t_argb intensity, int spec);
 //	t_vec4		mult_vec4(t_vec4 vec, float a);
 //	float		dist_vec4(t_vec4 a, t_vec4 b);
 
-t_argb	checkerboard_at(float u, float v, t_argb obj_color);
+t_argb		checkerboard_at(float u, float v, t_argb obj_color);
 //camera_vectors.c
 void		update_camera_rotation(t_camera *cam);
 float		calc_vp_width(float fov_degrees, float focal_length);
