@@ -53,7 +53,8 @@ SRCS		=	ft_printf/ft_printf.c\
 				ft_argb/argb_add.c\
 				ft_argb/argb_inverse.c\
 				ft_argb/argb_fromint.c\
-				ft_argb/argb_applyalpha.c
+				ft_argb/argb_applyalpha.c\
+				ft_utils/ft_clamp.c
 
 SRCS 		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		=	$(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

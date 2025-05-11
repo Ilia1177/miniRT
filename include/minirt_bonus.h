@@ -238,11 +238,12 @@ int			handle_input(t_data *scene);
 //handle_2.c
 void		handle_light_move(t_data *scene);
 
+int	place_camera(char **line, t_data *scene);
+t_vec4	projection(t_vec2 cnv, t_data *scene);
 //canvas.c
-t_vec4		pinhole_proj(t_vec2 cnv, t_viewport vp);
 void		display_color(t_painter *painter);
-t_vec2		cnv_to_screen(t_vec2 cnv);
 
+t_argb	mapping(t_ray *ray, t_object *obj);
 //ray && intersection.c
 t_argb		throw_ray(t_painter *painter);
 t_object	*closest_intersect(t_painter *painter, int shadow, t_object *obj);

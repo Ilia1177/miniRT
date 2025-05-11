@@ -12,7 +12,10 @@ t_mat4	mat_orthogonal(t_vec4 forward)
 	right = normalize_vec4(cross_vec4(up, forward));
 	// If forward is parallel to up, create a fallback right vector
 	if (mag_vec4(right) < EPSILON)
+	{
 		right = (t_vec4){1, 0, 0, 0};
+		ft_printf("right:1, 0, 0\n");
+	}
 //	if (mag_vec4(right) < EPSILON)
 //		right = normalize_vec4(cross_vec4(forward, (t_vec4){1, 0, 0, 0}));
 
@@ -43,11 +46,11 @@ t_mat4	mat_orthogonal2(t_vec4 dir)
 	if (fabsf(dir_dot_up) >= 1.0f - EPSILON)
 	{
 		orthogonal.i = normalize_vec4(cross_vec4((t_vec4){1, 0, 0, 0}, normalized_dir));
-		ft_printf("switch vector base\n");
+		//ft_printf("switch vector base\n");
 	//	return (orthogonal);
 	}
 	else
-{
+	{
 		orthogonal.i = cross_vec4(up, normalized_dir);
 		ft_printf("up = 0, 1, 0\n");
 		

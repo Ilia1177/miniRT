@@ -68,13 +68,16 @@ SRCS = 	minirt\
 
 SRCS_BONUS = 	minirt\
 		init/build_scene\
+		init/place_camera\
 		init/build_scene_utils\
-		display/camera\
-		canvas/canvas\
+		input/camera\
+		display/canvas\
+		display/projection\
 		utils/clean\
 		utils/debug\
-		display/dl_img\
-		display/img\
+		ray/dl_img\
+		ray/img\
+		ray/light\
 		init/init\
 		input/input\
 		input/handle\
@@ -86,7 +89,6 @@ SRCS_BONUS = 	minirt\
 		intersection/intersect_plane\
 		intersection/intersect_hyperboloid\
 		intersection/intersect_triangle\
-		display/light\
 		list/lst_cylinder\
 		list/lst_hyperboloid\
 		list/lst_light\
@@ -100,9 +102,9 @@ SRCS_BONUS = 	minirt\
 		init/parsing_utils_option\
 		utils/print\
 		utils/print_2\
-		display/ray\
-		display/text_checkerboard\
-		display/text_img\
+		ray/ray\
+		ray/mapping\
+		ray/text_img\
 		utils/vector
 
 SRCS := $(addsuffix .c, $(SRCS))
