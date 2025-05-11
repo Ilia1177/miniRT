@@ -87,6 +87,11 @@ int	get_options(char **line, t_object *obj)
 			status = assign_opt(&str, &obj->opt, 4);
 		else if (!ft_strncmp("-img", str, 4))
 			status = get_str_opt(&str, &obj->path, 4);
+		else if (!ft_strncmp("-map", str, 4))
+		{
+			obj->normal_map = 1;
+			status = get_str_opt(&str, &obj->path, 4);
+		}
 		else if (!ft_strncmp("-ref", str, 4))
 			status = get_reflective(&str, &obj->reflect, 4);
 		else if (ft_strcmp("\n", str))

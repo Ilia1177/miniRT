@@ -25,8 +25,8 @@ static void	make_matrix(t_object data, t_object *new)
 	else if (data.type == PLANE)
 		mat_scale(&new->t_m, 1, 1, 1);
 	else if (data.type == HYPERBOL)
-		mat_scale(&new->t_m, 1.0f, 1.0f, 1.0f);
-	//	new->i_m = mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
+		//mat_scale(&new->t_m, 1.0f, 1.0f, 1.0f);
+		mat_scale(&new->t_m, data.scale.x, data.scale.y, data.scale.z);
 	else if (data.type == TRIANGLE)
 		new->t_m = mat_init_id();
 }
@@ -80,7 +80,7 @@ int	create_sphere(char **line, t_data *scene)
 	if (!scene->status)
 		scene->status = get_options(&str, &sphere);
 	if (sphere.path)
-		sphere.img = text_img(scene, sphere.path);
+		sphere.img = new_img(scene, sphere.path);
 	if (sphere.path && !sphere.img)
 		return (-9);
 	if (!scene->status)

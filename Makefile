@@ -72,8 +72,6 @@ SRCS_BONUS = 	minirt\
 		display/camera\
 		canvas/canvas\
 		utils/clean\
-		display/color\
-		display/color_2\
 		utils/debug\
 		display/dl_img\
 		display/img\

@@ -67,7 +67,7 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 		if (last_obj)
 			last_obj->color = last_color;
 		last_color = scene->selected->color;
-		scene->selected->color = invert_color(scene->selected->color);
+		scene->selected->color = argb_inverse(scene->selected->color);
 		print_mat4(scene->selected->t_m);
 		print_mat4(mat_inverse(scene->selected->t_m));
 	}
@@ -89,17 +89,17 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 void	select_object(t_data *scene, int x, int y)
 {
 	t_vec2		cnv;
-	t_viewport	vp;
+	//t_viewport	vp;
 	t_object	*last_obj;
 	t_painter	catcher;
 
 	catcher.lim[0] = EPSILON;
 	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
-	vp = scene->viewport;
+	//vp = scene->viewport;
 	cnv.x = x - (WIDTH / 2);
 	cnv.y = (HEIGHT / 2) - y;
-	catcher.ray.d = throught_vp(cnv, vp);
+	catcher.ray.d = projection(cnv, scene);
 	catcher.ray.d = mat_apply(scene->cam.t_m, catcher.ray.d);
 	catcher.ray.o = scene->cam.t_m.p;
 	catcher.ray.v.w = -1.0f;

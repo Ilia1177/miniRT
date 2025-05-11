@@ -30,7 +30,7 @@ int	create_triangle(char **line, t_data *scene)
 	if (!status)
 		status = get_options(&str, &triangle);
 	if (triangle.path)
-		triangle.img = text_img(scene, triangle.path);
+		triangle.img = new_img(scene, triangle.path);
 	if (triangle.path && !triangle.img)
 		return (-9);
 	if (!status)

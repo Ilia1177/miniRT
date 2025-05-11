@@ -12,41 +12,6 @@
 
 #include <minirt_bonus.h>
 
-t_board	checkerboard(t_argb color1, t_argb color2)
-{
-	t_board	tab;
-	int		i;
-	int		j;
-
-	j = 0;
-	while (j < CBOARD_H)
-	{
-		i = 0;
-		while (i < CBOARD_W)
-		{
-			if ((i + j) % 2 == 0)
-				tab.color[j][i] = color1;
-			else
-				tab.color[j][i] = color2;
-			i++;
-		}
-		j++;
-	}
-	return (tab);
-}
-
-t_argb	checkerboard_at(float u, float v, t_argb obj_color)
-{
-	t_argb			color;
-	const t_board	tab = checkerboard(obj_color, invert_color(obj_color));
-	int				u2;
-	int				v2;
-
-	v2 = fmin(floor(v * CBOARD_H), CBOARD_H - 1);
-	u2 = fmin(floor(u * CBOARD_W), CBOARD_H - 1);
-	color = tab.color[v2][u2];
-	return (color);
-}
 
 t_uv	plane_map(t_vec4 local_point)
 {
@@ -94,6 +59,20 @@ t_uv	cylinder_map(t_vec4 local_point)
 	return (uv);
 }
 
+t_uv	get_uv(t_object *obj, t_vec4 hp)
+{
+	t_uv	uv;
+
+	ft_bzero(&uv, sizeof(uv));
+	if (obj->type == SPHERE)
+		uv = sphere_map(hp);
+	else if (obj->type == PLANE)
+		uv = plane_map(hp);
+	else if (obj->type == CYLINDER)
+		uv = cylinder_map(hp);
+	return (uv);
+}
+
 /*****************************************************************************
  	* hp = hit point
 ******************************************************************************/
@@ -103,20 +82,16 @@ t_argb	pattern_color(t_ray *ray, t_object *obj)
 	t_argb	color;
 	t_vec4	hp;
 
-	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
-	if (obj->type == SPHERE && (obj->pattern || obj->path))
-		uv = sphere_map(hp);
-	else if (obj->type == PLANE && obj->pattern)
-		uv = plane_map(hp);
-	else if (obj->type == CYLINDER && obj->pattern)
-		uv = cylinder_map(hp);
+	if ((obj->pattern))
+	{
+		hp = mat_apply(mat_inverse(obj->t_m), ray->o);
+		uv = get_uv(obj, hp);
+		if (obj->path)
+			color = img_at(uv.u, uv.v, obj->img);
+		else
+			color = checkerboard_at(uv.u, uv.v, obj->color);
+	}
 	else
 		return (obj->color);
-	if (obj->path)
-		color = text_img_at(uv.u, uv.v, obj->img);
-	else if (obj->pattern)
-		color = checkerboard_at(uv.u, uv.v, obj->color);
-	else
-		color = obj->color;
 	return (color);
 }

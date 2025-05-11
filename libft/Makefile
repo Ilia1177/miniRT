@@ -45,7 +45,15 @@ SRCS		=	ft_printf/ft_printf.c\
 				matrix/mat_inverse.c\
 				matrix/mat_orthogonal.c\
 				matrix/mat_transform.c\
-				matrix/mat_transpose.c
+				matrix/mat_transpose.c\
+				ft_argb/argb_toint.c\
+				ft_argb/argb_ease.c\
+				ft_argb/argb_clamp.c\
+				ft_argb/argb_mult.c\
+				ft_argb/argb_add.c\
+				ft_argb/argb_inverse.c\
+				ft_argb/argb_fromint.c\
+				ft_argb/argb_applyalpha.c
 
 SRCS 		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		=	$(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
@@ -74,7 +82,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 test	: $(TEST_OBJS) $(NAME) 
 		$(CC) $(CFLAGS) $(TEST_OBJS) $(NAME) -Lbin -lft -lm -o test
 		
-clean	:	
+clean	:
 			rm -f test
 			make clean -C srcs
 

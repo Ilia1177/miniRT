@@ -38,9 +38,11 @@ void	print_obj(t_object obj)
 		printf("type : hyperboloid\n");
 	print_mat4(obj.t_m);
 	printf("pattern : %d\n", obj.pattern);
-	printf("specu : %d\n", obj.spec);
-	printf("radius : %.1f\n", obj.radius);
-	printf("hight : %.1f\n", obj.height);
+	printf("specu   : %d\n", obj.spec);
+	printf("radius  : %.1f\n", obj.radius);
+	printf("height  : %.1f\n", obj.height);
+	printf("img     : %s\n", obj.path);
+	printf("option  : %d\n", obj.opt);
 	print_argb(obj.reflect, "reflective");
 	print_argb(obj.color, "color");
 	print_vec4(obj.scale, "scale:");
