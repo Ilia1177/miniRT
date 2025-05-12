@@ -1,40 +1,40 @@
 
 #include <minirt_bonus.h>
 
-	// Discard rays outside circular fisheye bounds
-t_vec4 fisheye_proj(t_vec2 cnv, float fov_degrees)
+// Discard rays outside circular fisheye bounds
+// Angle from center
+// Angle of the point in the image plane
+// Spherical to Cartesian
+t_vec4	fisheye_proj(t_vec2 cnv, float fov)
 {
-	t_vec4 ray;
-	float  x = (((float)cnv.x + WIDTH / 2) / WIDTH * 2.0f) - 1.0f;
-	float  y = (((float)cnv.y + HEIGHT / 2) / HEIGHT * 2.0f) - 1.0f;
-	float r = sqrtf(x * x + y * y);
-	float max_fov_rad = fov_degrees * (M_PI / 180.0f) / 2.0f;
+	t_vec4		ray;
+	const float	x = (((float)cnv.x + WIDTH / 2) / WIDTH * 2.0f) - 1.0f;
+	const float	y = (((float)cnv.y + HEIGHT / 2) / HEIGHT * 2.0f) - 1.0f;
+	const float	r = sqrtf(x * x + y * y);
+	float		theta;
+	float		phi;
 
-	if (r > 1.0f) {
-		ray.x = ray.y = ray.z = ray.w = 0.0f;
-		return ray;
+	fov = fov * (M_PI / 180.0f) / 2.0f;
+	if (r > 1.0f)
+	{
+		ray = (t_vec4){0.0f, 0.0f, 0.0f, 0.0f};
+		return (ray);
 	}
-
-	// Angle from center
-	float theta = r * max_fov_rad;
-
-	// Angle of the point in the image plane
-	float phi = atan2f(y, x);
-
-	// Spherical to Cartesian
+	theta = r * fov;
+	phi = atan2f(y, x);
 	ray.x = sinf(theta) * cosf(phi);
 	ray.y = sinf(theta) * sinf(phi);
 	ray.z = cosf(theta);
 	ray.w = 0.0f;
-    return ray;
+	return (ray);
 }
 
-t_vec4  stereographic_proj(t_vec2 cnv, t_viewport vp)
+t_vec4	stereographic_proj(t_vec2 cnv, t_viewport vp)
 {
 	(void)vp;
-	t_vec4      dir;
-	const float phi = (((float)cnv.x + WIDTH / 2) / WIDTH) * 2 * M_PI;
-	const float theta = (((float)cnv.y + HEIGHT / 2) / HEIGHT) * M_PI;
+	const float	phi = (((float)cnv.x + WIDTH / 2) / WIDTH) * 2 * M_PI;
+	const float	theta = (((float)cnv.y + HEIGHT / 2) / HEIGHT) * M_PI;
+	t_vec4		dir;
 
 	dir.x = sinf(theta) * cosf(phi);
 	dir.y = cosf(theta);
@@ -67,18 +67,18 @@ t_vec4	pinhole_proj(t_vec2 cnv, t_viewport vp)
 	dir = normalize_vec4(dir);
 	return (dir);
 }
+
 t_vec4	projection(t_vec2 cnv, t_data *scene)
 {
 	t_vec4	dir;
 
-    if (scene->viewport.proj == STEREO)
+	if (scene->viewport.proj == STEREO)
 		dir = stereographic_proj(cnv, scene->viewport);
 	else if (scene->viewport.proj == EQUIRECT)
 		dir = equirectangular_proj(cnv, scene->viewport);
 	else if (scene->viewport.proj == FISHEYE)
 		dir = fisheye_proj(cnv, scene->cam.fov);
-	else 
+	else
 		dir = pinhole_proj(cnv, scene->viewport);
 	return (dir);
-
 }

@@ -61,8 +61,6 @@ int		ft_atoi(const char *nptr);
 char	*ft_strdup(const char *s);
 void	*ft_calloc(size_t nmemb, size_t size);
 
-//added after moulinette
-float	ft_strtof(char *str, char **end);
 ///////////// PART 2 ///////////////////////////////////////////////////////////
 
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -96,4 +94,8 @@ void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
+//added after moulinette (in ft_utils)
+float	ft_strtof(char *str, char **end);
+float	ft_clampf(float f, float min, float max);
+int		ft_clamp(int num, int min, int max);
 #endif

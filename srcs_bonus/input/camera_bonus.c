@@ -17,7 +17,7 @@ void	rotate_camera(t_camera *cam, float dx, float dy, float dz)
 	(void)dz;
 	cam->pitch += dy;
 	cam->yaw += dx;
-	clampf(cam->pitch, -89.9f, 89.9f);
+	cam->pitch = ft_clampf(cam->pitch, -89.9f, 89.9f);
 	update_camera_rotation(cam);
 	printf("----- rotate CA with: yaw: %f, pitch: %f\n", cam->yaw, cam->pitch);
 	print_mat4(cam->t_m);
@@ -33,9 +33,6 @@ void	translate_camera(t_camera *camera, float dx, float dy, float dz)
 	world_x = mult_vec4(camera->t_m.i, dx);
 	world_y = mult_vec4(camera->t_m.j, dy);
 	world_z = mult_vec4(camera->t_m.k, dz);
-	//world_x = mult_vec4(mat_apply(camera->t_m, (t_vec4){1, 0, 0, 0}), dx);
-	//world_y = mult_vec4(mat_apply(camera->t_m, (t_vec4){0, 1, 0, 0}), dy);
-	//world_z = mult_vec4(mat_apply(camera->t_m, (t_vec4){0, 0, 1, 0}), dz);
 	world_move = add_vec4(world_x, add_vec4(world_y, world_z));
 	camera->t_m.p = add_vec4(camera->t_m.p, world_move);
 	printf("---- translate CAM ----\n");

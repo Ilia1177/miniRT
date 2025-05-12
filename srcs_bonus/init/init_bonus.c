@@ -17,8 +17,8 @@ t_painter	th_painter_init(t_data *scene, int i)
 	t_painter	painter;
 
 	ft_bzero(&painter, sizeof(painter));
-	new.sceneref = (t_data *)scene;
-	new.id = i + 1;
+	painter.sceneref = (t_data *)scene;
+	painter.id = i + 1;
 	return (painter);
 }
 

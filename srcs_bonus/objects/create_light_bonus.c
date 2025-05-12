@@ -34,15 +34,6 @@ static int	make_light(t_light light, t_light **lights)
 	return (0);
 }
 
-void	init_light(t_light *light, t_type type)
-{
-	light->type = type;
-	light->pos = (t_vec4){0, 0, 0, 1};
-	light->dir = (t_vec4){0, 0, 0, 0};
-	light->intensity = (t_argb){0, 0, 0, 0};
-	light->next = NULL;
-}
-
 int	clean_lights(t_data *scene) // ???
 {
 	t_light	light;
@@ -69,7 +60,8 @@ int	create_light(char **line, t_data *scene, t_type type)
 	t_light		light;
 
 	str = *line + 1 ;
-	init_light(&light, type);
+	ft_bzero(&light, sizeof(light));
+	light.type = type;
 	if (type == POINT)
 		scene->status = str_to_vec4(&str, &light.pos, 1.0f);
 	if (!scene->status)

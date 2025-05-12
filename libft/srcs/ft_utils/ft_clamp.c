@@ -1,9 +1,7 @@
-#include <minirt_bonus.h>
+#include "../../include/libft.h"
 
 float	ft_clampf(float f, float min, float max)
 {
-	float	r_float;
-
 	if (f > max)
 		return (max);
 	else if (f < min)
@@ -11,10 +9,11 @@ float	ft_clampf(float f, float min, float max)
 	return (f);
 }
 
-void	ft_clamp(int *num, int min, int max)
+int	ft_clamp(int num, int min, int max)
 {
-	if (*num < min)
-		*num = min;
-	if (*num > max)
-		*num = max;
+	if (num > max)
+		return (max);
+	else if (num < min)
+		return (min);
+	return (num);
 }

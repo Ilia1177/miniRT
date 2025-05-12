@@ -27,7 +27,7 @@ ifeq ($(shell uname), Linux)
 	INCLUDES = -I/usr/include -I./mlx -I./libft/include -I./include
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm 
 else
-	CFLAGS = -g #-Wall -Wextra -Werror -g 
+	CFLAGS = -g -Wall -Wextra -Werror -g 
 	INCLUDES =  -I./mlx -I./libft/include -I./include# -I/opt/X11/include 
 	MLX_FLAGS = -L./libft/bin -L./mlx -L/usr/X11/lib -lft -lmlx -lXext -lX11 -lm -framework OpenGL -framework AppKit
 endif
@@ -71,12 +71,11 @@ SRCS_BONUS = 	minirt\
 		init/place_camera\
 		init/build_scene_utils\
 		input/camera\
-		display/canvas\
+		display/display\
 		display/projection\
 		utils/clean\
 		utils/debug\
-		ray/dl_img\
-		ray/img\
+		ray/save_screen\
 		ray/light\
 		init/init\
 		input/input\
@@ -89,22 +88,19 @@ SRCS_BONUS = 	minirt\
 		intersection/intersect_plane\
 		intersection/intersect_hyperboloid\
 		intersection/intersect_triangle\
-		list/lst_cylinder\
-		list/lst_hyperboloid\
-		list/lst_light\
-		list/lst_plane\
-		list/lst_sphere\
-		list/lst_triangle\
-		init/norm_utils\
+		objects/create_object\
+		objects/make_object\
+		objects/create_light\
 		intersection/normal\
 		init/parsing_utils_2\
 		init/parsing_utils\
 		init/parsing_utils_option\
 		utils/print\
 		utils/print_2\
+		utils/img_utils\
 		ray/ray\
 		ray/mapping\
-		ray/text_img\
+		ray/get_uv\
 		utils/vector
 
 SRCS := $(addsuffix .c, $(SRCS))

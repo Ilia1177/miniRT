@@ -12,65 +12,55 @@
 
 #include <minirt_bonus.h>
 
-
-t_uv	plane_map(t_vec4 local_point)
+t_board	checkerboard(t_argb color1, t_argb color2)
 {
-	t_uv		uv;
+	t_board	tab;
+	int		i;
+	int		j;
 
-	uv.u = fmodf(local_point.x, 1.0f);
-	uv.v = fmodf(local_point.y, 1.0f);
-	if (uv.u < EPSILON)
-		uv.u += 1.0f;
-	if (uv.v < EPSILON)
-		uv.v += 1.0f;
-	return (uv);
+	j = 0;
+	while (j < CBOARD_H)
+	{
+		i = 0;
+		while (i < CBOARD_W)
+		{
+			if ((i + j) % 2 == 0)
+				tab.color[j][i] = color1;
+			else
+				tab.color[j][i] = color2;
+			i++;
+		}
+		j++;
+	}
+	return (tab);
 }
 
-// Convert to direction vector on unit sphere
-// u: longitude (angle around Y axis), from -π to π
-// v: latitude (angle from -Y to +Y), from -1 to 1
-// acos(p.y) gives angle from Y axis in [0, π]
-t_uv	sphere_map(t_vec4 local_point)
+t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 {
-	const t_vec4	p = normalize_vec4(local_point);
-	const float		theta = atan2(p.z, p.x);
-	const float		phi = acosf(clampf(p.y, -1.0f, 1.0f));
-	t_uv			uv;
+	t_argb			color;
+	const t_board	tab = checkerboard(obj_color, argb_inverse(obj_color));
+	int				u2;
+	int				v2;
 
-	uv.u = theta / (2.0f * M_PI);
-	if (uv.u < 0.0f)
-		uv.u += 1.0f;
-	uv.v = phi / M_PI;
-	return (uv);
+	v2 = fminf(floorf(v * CBOARD_H), CBOARD_H - 1);
+	u2 = fminf(floorf(u * CBOARD_W), CBOARD_H - 1);
+	color = tab.color[v2][u2];
+	return (color);
 }
 
-t_uv	cylinder_map(t_vec4 local_point)
+t_argb	img_at(float u, float v, t_img *img)
 {
-	const float	theta = atan2(local_point.x, local_point.y);
-	t_uv		uv;
+	t_argb		color;
+	t_uv		uv2;
 
-	uv.u = theta / (2.0f * M_PI);
-	if (uv.u < EPSILON)
-		uv.u += 1.0f;
-	uv.v = local_point.z;
-	uv.v = fmodf(uv.v, 1.0f);
-	if (uv.v < EPSILON)
-		uv.v += 1.0f;
-	return (uv);
-}
-
-t_uv	get_uv(t_object *obj, t_vec4 hp)
-{
-	t_uv	uv;
-
-	ft_bzero(&uv, sizeof(uv));
-	if (obj->type == SPHERE)
-		uv = sphere_map(hp);
-	else if (obj->type == PLANE)
-		uv = plane_map(hp);
-	else if (obj->type == CYLINDER)
-		uv = cylinder_map(hp);
-	return (uv);
+	ft_bzero(&color, sizeof(color));
+	if (!img)
+		return (color);
+	uv2.u = fminf(floor(u * img->w), img->w);
+	uv2.v = fminf(floor(v * img->h), img->h);
+	uv2.u = uv2.u + floor(img->w / 1);
+	color = argb_fromint(rt_get_pixel(*img, uv2.u, uv2.v));
+	return (color);
 }
 
 /*****************************************************************************
@@ -85,9 +75,9 @@ t_argb	mapping(t_ray *ray, t_object *obj)
 	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
 	uv = get_uv(obj, hp);
 	if (obj->pattern)
-			color = checkerboard_at(uv.u, uv.v, obj->color);
-	else if (obj->img)
-			color = img_at(uv.u, uv.v, obj->img);
+		color = checkerboard_at(uv.u, uv.v, obj->color);
+	else if (obj->path && !obj->normal_map)
+		color = img_at(uv.u, uv.v, obj->img);
 	else
 		return (obj->color);
 	return (color);

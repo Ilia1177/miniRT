@@ -41,20 +41,20 @@ void	print_all(t_data *scene)
 	t_object	*obj;
 	t_light		*light;
 
-	printf("**************************linked list OBJECT**************\n");
+	printf("************************* linked-list OBJECT ***********\n");
 	obj = scene->objects;
 	while (obj)
 	{
 		print_obj(*obj);
 		obj = obj->next;
 	}
-	printf("**************************linked list LIGHT**************\n");
+	printf("************************* linked-list LIGHT ************\n");
 	light = scene->lights;
 	while (light)
 	{
 		print_light(*light);
 		light = light->next;
 	}
-	printf("****************************CAMERA **********************\n");
+	printf("************************** CAMERA **********************\n");
 	print_cam(scene->cam);
 }

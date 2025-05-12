@@ -4,9 +4,7 @@ static t_type	typeof_projection(char **line)
 {
 	t_type	proj;
 
-	printf("LINE: %s", *line);
 	*line += skip_space(*line);
-	printf("LINE: %s", *line);
 	proj = PINHOLE;
 	if (!ft_strncmp(*line, "-equ", 4))
 		proj = EQUIRECT;
@@ -14,7 +12,7 @@ static t_type	typeof_projection(char **line)
 		proj = FISHEYE;
 	else if (!ft_strncmp(*line, "-ste", 4))
 		proj = STEREO;
-	if (proj != PINHOLE) 
+	if (proj != PINHOLE)
 		*line += 4;
 	return (proj);
 }
@@ -33,11 +31,9 @@ static t_viewport	build_viewport(t_data *scene, char **line)
 	return (vp);
 }
 
-
-static void yawpitch_from_dir(t_vec4 dir, float *yaw, float *pitch)
+static void	yawpitch_from_dir(t_vec4 dir, float *yaw, float *pitch)
 {
-    dir = normalize_vec4(dir);
-
+	dir = normalize_vec4(dir);
 	*pitch = asinf(dir.y) * (180.0f / M_PI);
 	*yaw = atan2f(dir.z, dir.x) * (180.0f / M_PI);
 }
@@ -57,7 +53,7 @@ int	place_camera(char **line, t_data *scene)
 	scene->status = str_to_vecdir(&str, &scene->cam.t_m.k);
 	if (scene->status)
 		return (scene->status);
-	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k)); //maybe not true ...
+	scene->cam.t_m = mat_orthogonal(normalize_vec4(scene->cam.t_m.k));
 	yawpitch_from_dir(scene->cam.t_m.k, &scene->cam.yaw, &scene->cam.pitch);
 	update_camera_rotation(&scene->cam);
 	scene->cam.t_m.p = pos;

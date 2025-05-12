@@ -65,32 +65,7 @@ int	rt_render(t_data *scene)
 	return (0);
 }
 
-void	rt_rect(const t_img *img, t_vec2 pos, t_vec2 size, int color)
-{
-	int	i;
-	int	j;
 
-	i = -1;
-	while (++i < size.x)
-	{
-		j = -1;
-		while (++j < size.y)
-			rt_put_pixel(img, pos.x + i, pos.y + j, color);
-	}
-}
-
-int	display_scene(t_data *scene)
-{
-	mlx_hook(scene->win, 2, 1L << 0, &key_press, scene);
-	mlx_hook(scene->win, 3, 1L << 1, &key_release, scene);
-	mlx_hook(scene->win, 17, 1L << 2, &rt_shut_down, scene);
-	mlx_hook(scene->win, 4, 1L << 2, &mouse_press, scene);
-	mlx_hook(scene->win, 5, 1L << 3, &mouse_release, scene);
-	mlx_hook(scene->win, 6, 1L << 6, &mouse_pos, scene);
-	mlx_loop_hook(scene->mlx, &rt_render, scene);
-	mlx_loop(scene->mlx);
-	return (scene->status);
-}
 
 int	main(int ac, char **av, char **envp)
 {

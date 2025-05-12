@@ -133,17 +133,17 @@ int	str_to_vecdir(char **line, t_vec4 *v)
 	v->x = ft_strtof(str, &end);
 	if (*end != ',' || str == end)
 		return (-2);
-	v->x = clampf(v->x, -1.0f, 1.0f);
+	v->x = ft_clampf(v->x, -1.0f, 1.0f);
 	str = end + 1;
 	v->y = ft_strtof(str, &end);
 	if (*end != ',' || str == end)
 		return (-2);
-	v->y = clampf(v->y, -1.0f, 1.0f);
+	v->y = ft_clampf(v->y, -1.0f, 1.0f);
 	str = end + 1;
 	v->z = ft_strtof(str, &end);
 	if (str == end)
 		return (-2);
-	v->z = clampf(v->z, -1.0f, 1.0f);
+	v->z = ft_clampf(v->z, -1.0f, 1.0f);
 	v->w = 0;
 	*v = normalize_vec4(*v);
 	*line = end;

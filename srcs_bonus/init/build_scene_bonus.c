@@ -28,7 +28,6 @@ static void	choose_object(char **curr_line, t_data *scene)
 	else if (!ft_strncmp("tr", line, 2))
 		scene->status = create_triangle(&line, scene);
 	*curr_line = line;
-	//printf("each line:%d\n", *line);
 }
 
 /*****************************************************************************
@@ -38,10 +37,8 @@ static void	choose_object(char **curr_line, t_data *scene)
 static int	register_line_into_scene(char *line, t_data *scene)
 {
 	line += skip_space(line);
- 
 	while (line && *line && !scene->status)
 	{
-		//printf("while-line:%s\n", line);
 		if (*line == '#')
 			line += go_to_endl(line);
 		choose_object(&line, scene);

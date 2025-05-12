@@ -206,20 +206,15 @@ typedef struct s_data
 t_vec4		projection(t_vec2 cnv, t_data *scene);
 
 //camera move
-void		rotate_y(t_camera *cam, float theta);
-void		rotate_x(t_camera *cam, float theta);
 
+int	rt_render(t_data *scene);
+int	display_scene(t_data *scene);
+//utils 
 //img.c
 void		rt_rect(const t_img *img, t_vec2 pos, t_vec2 size, int color);
 void		rt_put_pixel(const t_img *img, int x, int y, int color);
 uint32_t	rt_get_pixel(t_img img, int x, int y);
 t_argb		extract_argb(int color);
-
-//norm_utils.c
-//void		norm_float(float *f, float min, float max);
-//void		norm_int(int *num, int min, int max);
-float		clampf(float f, float min, float max);
-void		clamp(int *num, int min, int max);
 
 //input.c
 int			key_release(int keycode, t_data *scene);
