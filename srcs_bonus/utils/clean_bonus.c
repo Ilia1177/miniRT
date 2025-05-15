@@ -24,17 +24,32 @@ void	free_light(t_light *light)
 	}
 }
 
-void	free_objects(t_object **obj)
+void	remove_obj(t_object *obj, t_data *scene)
 {
-	t_object	*temp_obj;
-
 	if (!obj)
 		return ;
-	while (*obj)
+	if (obj->img)
 	{
-		temp_obj = (*obj)->next;
-		free(*obj);
-		*obj = temp_obj;
+		mlx_destroy_image(scene->mlx, obj->img->ptr);
+		free(obj->img);
+		free(obj->path);
+	}
+	free(obj);
+}
+
+void	free_objects(t_data *scene)
+{
+	t_object	*curr_obj;
+	t_object	*old_obj;
+
+	curr_obj = scene->objects;
+	if (!curr_obj)
+		return ;
+	while (curr_obj)
+	{
+		old_obj = curr_obj;
+		curr_obj = curr_obj->next;
+		remove_obj(old_obj, scene);
 	}
 }
 
@@ -43,12 +58,14 @@ void	free_data(t_data *scene)
 	if (scene)
 	{
 		free_light(scene->lights);
-		free_objects(&scene->objects);
+		free_objects(scene);
 	}
 }
 
 int	rt_shut_down(t_data *scene)
 {
+	printf("Shutdown now\n");
+	free_data(scene);
 	if (scene->win)
 		mlx_destroy_window(scene->mlx, scene->win);
 	if (scene->img.ptr)
@@ -58,7 +75,6 @@ int	rt_shut_down(t_data *scene)
 		mlx_destroy_display(scene->mlx);
 		free(scene->mlx);
 	}
-	free_data(scene);
 	exit(scene->status);
 	return (scene->status);
 }

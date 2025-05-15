@@ -18,26 +18,30 @@ static void	make_matrix(t_object data, t_object *new)
 		new->t_m = mat_init_id();
 }
 
-int	make_object(t_object data, t_object **objects)
+int	make_object(t_object *data, t_data *scene)
 {
-	t_object	*curr_object;
+	t_object	**curr_object;
 	t_object	*new_object;
 
+	if (data->path && !data->img)
+	{	
+		free(data->path);
+		return (-109);
+	}
 	new_object = malloc(sizeof(t_object));
 	if (!new_object)
 		return (-109);
-	ft_memcpy(new_object, &data, sizeof(t_object));
-	make_matrix(data, new_object);
+	ft_memcpy(new_object, data, sizeof(t_object));
+	make_matrix(*data, new_object);
 	new_object->next = NULL;
-	curr_object = NULL;
-	if (*objects == NULL)
-		*objects = new_object;
+	curr_object = &scene->objects;
+	if (*curr_object == NULL)
+		*curr_object = new_object;
 	else
 	{
-		curr_object = *objects;
-		while (curr_object->next)
-			curr_object = curr_object->next;
-		curr_object->next = new_object;
+		while ((*curr_object)->next)
+			*curr_object = (*curr_object)->next;
+		(*curr_object)->next = new_object;
 	}
 	return (0);
 }

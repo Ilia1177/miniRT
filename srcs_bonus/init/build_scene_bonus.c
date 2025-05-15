@@ -42,18 +42,18 @@ static int	register_line_into_scene(char *line, t_data *scene)
 		if (*line == '#')
 			line += go_to_endl(line);
 		choose_object(&line, scene);
-		if (*line == 'A')
+		if (*line == 'A' && !scene->status)
 			scene->status = create_light(&line, scene, AMBIENT);
-		else if (*line == 'L')
+		else if (*line == 'L' && !scene->status)
 			scene->status = create_light(&line, scene, POINT);
-		else if (*line == 'C')
+		else if (*line == 'C' && !scene->status)
 			scene->status = place_camera(&line, scene);
-		else if (*line && ft_strcmp("\n", line))
+		else if (*line && ft_strcmp("\n", line) && !scene->status)
 			scene->status = -4;
-		else
+		else if (!scene->status)
 			return (0);
 	}
-	if (scene->status)
+	if (scene->status && scene->status != -109)
 		printf("Error\nOn line: %s\n", line);
 	return (scene->status);
 }

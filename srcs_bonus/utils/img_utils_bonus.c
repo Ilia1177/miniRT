@@ -35,10 +35,17 @@ t_img	*new_img(t_data *scene, char *path)
 		return (NULL);
 	img->ptr = mlx_xpm_file_to_image(scene->mlx, path, &img->w, &img->h);
 	if (!img->ptr)
+	{
+		free(img);
 		return (NULL);
+	}
 	img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
 	if (!img->addr)
+	{
+		mlx_destroy_image(scene->mlx, img->ptr);
+		free(img);
 		return (NULL);
+	}
 	return (img);
 }
 

@@ -297,6 +297,7 @@ void print_argb(t_argb color, char *msg);
 void print_input(void);
 
 // clean.c
+void	remove_obj(t_object *obj, t_data *scene);
 void free_light(t_light *light);
 void free_data(t_data *scene);
 int rt_shut_down(t_data *scene);
@@ -321,7 +322,7 @@ int get_options(char **line, t_object *obj);
 // Parsing_utils_2
 int check_nb_obj(t_data *scene);
 int check_nb_light(t_data *scene);
-int make_object(t_object data, t_object **objects);
+int make_object(t_object *data, t_data *scene);
 int get_alpha(char **line, int *color, int alpha);
 
 // INIT
