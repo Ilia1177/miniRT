@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   canvas_bonus.c                                     :+:      :+:    :+:   */
+/*   display_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:35:26 by npolack           #+#    #+#             */
-/*   Updated: 2025/05/05 16:35:13 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/12 15:39:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minirt_bonus.h>
 
 // get screen's pixel from canvas's point
-t_vec2	cnv_to_screen(t_vec2 cnv)
+t_vec2	pix_from(t_vec2 cnv)
 {
 	t_vec2	screen;
 
@@ -26,12 +26,32 @@ void	painter_reset(t_painter *painter, t_vec2 cnv)
 {
 	const t_data	*scene = painter->sceneref;
 
-	painter->lim[0] = EPSILON;
+	painter->lim[0] = 0.0f;
 	painter->lim[1] = T_MAX;
 	painter->lim[2] = R_LIMIT;
 	painter->ray.o = scene->cam.t_m.p;
 	painter->ray.d = projection(cnv, (t_data *) scene);
 	painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
+}
+
+int	rt_render(t_data *scene)
+{
+	static int		first_rend;
+	struct timeval	last_time;
+	const t_vec2	pos = {0, 0};
+	const t_vec2	size = {150, 20};
+
+	if (!first_rend || scene->rend)
+	{
+		gettimeofday(&last_time, NULL);
+		handle_input(scene);
+		display_color(&scene->painter);
+		rt_rect(&scene->img, pos, size, 0xFFFFFFFF);
+		mlx_put_image_to_window(scene->mlx, scene->win, scene->img.ptr, 0, 0);
+		print_timestamp(&last_time, scene);
+		first_rend = 1;
+	}
+	return (0);
 }
 
 int	display_scene(t_data *scene)
@@ -46,16 +66,16 @@ int	display_scene(t_data *scene)
 	mlx_loop(scene->mlx);
 	return (scene->status);
 }
+
 // throw ray for every pixel of the canvas
 void	display_color(t_painter *painter)
 {
 	const t_data	*scene = painter->sceneref;
 	const char		res = scene->res;
-	t_vec2			pix;
+	const t_vec2	pix_size = {res, res};
 	t_vec2			cnv;
 	t_argb			color;
 
-	ft_bzero(&painter->ray, sizeof(t_ray));
 	cnv.x = -WIDTH / 2;
 	while (cnv.x < WIDTH)
 	{
@@ -64,8 +84,7 @@ void	display_color(t_painter *painter)
 		{
 			painter_reset(painter, cnv);
 			color = throw_ray(painter);
-			pix = cnv_to_screen(cnv);
-			rt_rect(&scene->img, pix, (t_vec2){res, res}, argb_toint(color));
+			rt_rect(&scene->img, pix_from(cnv), pix_size, argb_toint(color));
 			cnv.y += res;
 		}
 		cnv.x += res;

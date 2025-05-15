@@ -16,6 +16,7 @@ void	handle_light_move(t_data *scene)
 {
 	t_light	*light;
 
+	return ;
 	light = select_light(&scene->lights);
 	if (scene->key_state[XK_KP_Left] == 1)
 		light->pos.x -= 0.3;

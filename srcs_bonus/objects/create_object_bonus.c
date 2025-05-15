@@ -81,7 +81,6 @@ int	create_cylinder(char **line, t_data *scene)
 	return (status);
 }
 
-
 /*****************************************************************************
 *  Check if the map file corresponding to the correct format
 *  plane is sp		0.0,0.0,0.0		1.0			10,20,255

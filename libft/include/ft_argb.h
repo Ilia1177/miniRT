@@ -1,4 +1,7 @@
-#include <stdint.h>
+
+#ifndef FT_ARGB
+# define FT_ARGB
+# include <stdint.h>
 
 typedef struct s_argb
 {
@@ -16,3 +19,5 @@ t_argb		argb_add(t_argb color1, t_argb color2);
 t_argb		argb_inverse(t_argb color);
 t_argb		argb_fromint(int color);
 t_argb		argb_applyalpha(t_argb color);
+
+#endif

@@ -73,11 +73,9 @@ int	skip_space(char *str)
 int	get_alpha(char **line, int *color, int alpha)
 {
 	char	*str;
-	//char	*end;
 	float	brightness;
 
 	str = *line;
-	//end = str;
 	if (alpha)
 	{
 		if (str_to_float(&str, &brightness))

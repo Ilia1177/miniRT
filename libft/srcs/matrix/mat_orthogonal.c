@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mat_orthogonal.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <npolack@student.42angouleme.fr>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/12 14:55:12 by npolack           #+#    #+#             */
+/*   Updated: 2025/05/12 14:55:29 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/matrix.h"
 
 // If forward is parallel to up, create a fallback right vector
@@ -17,6 +29,6 @@ t_mat4	mat_orthogonal(t_vec4 forward)
 	orthogonal.i = right;
 	orthogonal.j = new_up;
 	orthogonal.k = forward;
-	orthogonal.p = (t_vec4) {0, 0, 0, 1};
+	orthogonal.p = (t_vec4){0, 0, 0, 1};
 	return (orthogonal);
 }

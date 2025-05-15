@@ -6,30 +6,29 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:38:13 by npolack           #+#    #+#             */
-/*   Updated: 2025/05/07 14:46:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:46:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minirt_bonus.h>
-	void check_hyper_cap(float zc, t_vec4 o, t_vec4 d, t_vec4 s, float *t)
-	{
-		float t_cap;
-		t_vec4 p;
 
-		if (fabs(d.z) < EPSILON)
-			return; // Ray is parallel to the cap plane
+void check_hyper_cap(float zc, t_vec4 o, t_vec4 d, t_vec4 s, float *t)
+{
+	float t_cap;
+	t_vec4 p;
 
-		t_cap = (zc - o.z) / d.z;
-		if (t_cap < EPSILON || t_cap >= *t)
-			return;
+	if (fabs(d.z) < EPSILON)
+		return ;
 
-		p.x = o.x + t_cap * d.x;
-		p.y = o.y + t_cap * d.y;
+	t_cap = (zc - o.z) / d.z;
+	if (t_cap < EPSILON || t_cap >= *t)
+		return;
 
-		// Check if the point lies within the ellipse cross-section of the cap
-		if ((p.x * p.x) / (s.x * s.x) + (p.y * p.y) / (s.y * s.y) <= 1.0f)
-			*t = t_cap;
-	}
+	p.x = o.x + t_cap * d.x;
+	p.y = o.y + t_cap * d.y;
+	if ((p.x * p.x) / (s.x * s.x) + (p.y * p.y) / (s.y * s.y) <= 1.0f)
+		*t = t_cap;
+}
 
 int intersect_hyperboloid(t_ray *ray, t_object *hy, float *t)
 {

@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   matrix.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npolack <npolack@student.42angouleme.fr>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/12 15:25:33 by npolack           #+#    #+#             */
+/*   Updated: 2025/05/12 15:25:44 by npolack          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MATRIX_H
 # define MATRIX_H
+
 # include <math.h>
 # include "vector.h"
 # define EPSILON 0.001f
 # define MAX_SCALE 1000.0f
+
 typedef struct s_mat4
 {
 	t_vec4	i;

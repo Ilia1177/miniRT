@@ -6,19 +6,18 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/09 11:48:34 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:51:29 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minirt_bonus.h>
 
-t_painter	th_painter_init(t_data *scene, int i)
+t_painter	th_painter_init(t_data *scene)
 {
 	t_painter	painter;
 
 	ft_bzero(&painter, sizeof(painter));
 	painter.sceneref = (t_data *)scene;
-	painter.id = i + 1;
 	return (painter);
 }
 
@@ -36,13 +35,12 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 	scene->map_name = av[1];
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
-	scene->processing = 1;
 	scene->cam.yaw = 90.0f;
 	scene->cam.fov = -1;
 	scene->cnv.w = WIDTH;
 	scene->cnv.h = HEIGHT;
 	scene->lights = NULL;
-	scene->painter = th_painter_init(scene, 0);
+	scene->painter = th_painter_init(scene);
 	return (0);
 }
 
