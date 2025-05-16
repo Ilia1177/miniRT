@@ -48,10 +48,10 @@ static int	register_line_into_scene(char *line, t_data *scene)
 			scene->status = create_light(&line, scene, POINT);
 		else if (*line == 'C' && !scene->status)
 			scene->status = place_camera(&line, scene);
-		else if (*line && ft_strcmp("\n", line) && !scene->status)
-			scene->status = -4;
-		else if (!scene->status)
-			return (0);
+		if (*line && ft_strcmp("\n", line) && !scene->status)
+			return (-4);
+		else
+			return (scene->status);
 	}
 	if (scene->status && scene->status != -109)
 		printf("Error\nOn line: %s\n", line);
@@ -72,6 +72,7 @@ int	build_scene(t_data *scene)
 	line = get_next_line(map);
 	while (!scene->status && line)
 	{
+		printf("curr line: %s\n", line);
 		scene->status = register_line_into_scene(line, scene);
 		free(line);
 		line = get_next_line(map);
