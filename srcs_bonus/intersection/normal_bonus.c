@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:57:59 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:58:26 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:05:29 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	triangle_normal(t_ray *ray, t_object *tr)
 {
 	const t_vec4	edge1 = sub_vec4(tr->vertice[1], tr->vertice[0]);
 	const t_vec4	edge2 = sub_vec4(tr->vertice[2], tr->vertice[0]);
-	const t_mat4 	normal_matrix = mat_transpose(mat_inverse(tr->t_m));
+	const t_mat4	normal_matrix = mat_transpose(mat_inverse(tr->t_m));
 	const t_vec4	normal_obj = normalize_vec4(cross_vec4(edge1, edge2));
 
 	ray->n = normalize_vec4(mat_apply(normal_matrix, normal_obj));
@@ -35,9 +35,9 @@ void	plane_normal(t_ray *ray, t_object *pl)
 void	sphere_normal(t_ray *ray, t_object *sp)
 {
 	const t_mat4	inv = mat_inverse(sp->t_m);
-	const t_mat4	normal_matrix = mat_transpose(inv); 
+	const t_mat4	normal_matrix = mat_transpose(inv);
 	const t_vec4	hp = mat_apply(inv, ray->o);
-	const t_vec4	normal = sub_vec4(hp, (t_vec4){0,0,0,0});
+	const t_vec4	normal = sub_vec4(hp, (t_vec4){0, 0, 0, 0});
 
 	ray->n = normalize_vec4(mat_apply(normal_matrix, normal));
 }

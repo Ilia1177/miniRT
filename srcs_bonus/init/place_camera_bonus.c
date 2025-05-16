@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   place_camera_bonus.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 10:58:39 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/16 10:58:49 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minirt_bonus.h>
 
 static t_type	typeof_projection(char **line)
@@ -22,7 +34,7 @@ static t_viewport	build_viewport(t_data *scene, char **line)
 	const float	fov_radians = scene->cam.fov * (float)M_PI / 180.0f;
 	t_viewport	vp;
 
-	scene->viewport.proj = typeof_projection(line);
+	vp.proj = typeof_projection(line);
 	vp.w = 1.0f;
 	vp.h = 1.0f;
 	vp.pos.z = vp.w / (2.0f * tanf(fov_radians / 2.0f));

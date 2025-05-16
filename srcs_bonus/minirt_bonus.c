@@ -51,6 +51,7 @@ int	main(int ac, char **av, char **envp)
 	t_data		scene;
 	t_painter	painter;
 
+	scene.status = 0;
 	if (!envp)
 		scene.status = 99;
 	if (!scene.status)

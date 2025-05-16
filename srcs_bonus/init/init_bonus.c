@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:42:17 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/13 15:51:29 by npolack          ###   ########.fr       */
+/*   Updated: 2025/05/16 15:10:09 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ t_painter	th_painter_init(t_data *scene)
 
 int	rt_scene_init(t_data *scene, char **av, int ac)
 {
+	ft_bzero(scene, sizeof(t_data));
+	scene->mlx = NULL;
+	scene->win = NULL;
 	if (ac < 2)
 		return (11);
 	else if (ft_strlen(av[1]) <= 3)
@@ -31,7 +34,6 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 		return (13);
 	else if (!ft_strcmp(av[1] + ft_strlen(av[1]) - 4, "/.rt"))
 		return (13);
-	ft_bzero(scene, sizeof(t_data));
 	scene->map_name = av[1];
 	gettimeofday(&scene->start, NULL);
 	scene->res = 5;
@@ -41,6 +43,8 @@ int	rt_scene_init(t_data *scene, char **av, int ac)
 	scene->cnv.h = HEIGHT;
 	scene->lights = NULL;
 	scene->painter = th_painter_init(scene);
+	scene->selected = NULL;
+	scene->viewport.proj = PINHOLE;
 	return (0);
 }
 
@@ -52,20 +56,20 @@ int	rt_init(t_data *scene, char **av, int ac)
 	img = &scene->img;
 	if (!scene->status)
 		scene->mlx = mlx_init();
-	if (!scene->mlx && !scene->status)
+	if (!scene->status && !scene->mlx)
 		scene->status = 21;
 	else if (!scene->status)
 		scene->win = mlx_new_window(scene->mlx, WIDTH, HEIGHT, "RT");
-	if (!scene->win && !scene->status)
+	if (!scene->status && !scene->win)
 		scene->status = 22;
 	else if (!scene->status)
 		img->ptr = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
-	if (!img->ptr && !scene->status)
+	if (!scene->status && !img->ptr)
 		scene->status = 23;
 	else if (!scene->status)
 		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen,
 				&img->endian);
-	if (!img->addr && !scene->status)
+	if (!scene->status && !img->addr)
 		scene->status = 24;
 	return (scene->status);
 }

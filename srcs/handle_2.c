@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:19:47 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/02 16:23:50 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:47:37 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	handle_light_move(t_data *scene)
 {
 	t_light	*light;
 
-	return ;
 	light = select_light(&scene->lights);
 	if (scene->key_state[XK_KP_Left] == 1)
 		light->pos.x -= 0.3;

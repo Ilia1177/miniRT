@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   img_bonus.c                                        :+:      :+:    :+:   */
+/*   img_utils_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:50:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 14:50:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:09:17 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ t_img	*new_img(t_data *scene, char *path)
 		free(img);
 		return (NULL);
 	}
-	img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen, &img->endian);
+	img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->llen,
+			&img->endian);
 	if (!img->addr)
 	{
 		mlx_destroy_image(scene->mlx, img->ptr);

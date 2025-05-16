@@ -18,11 +18,11 @@
 // Spherical to Cartesian
 // theta = r * fov
 // phi = atan2f(y, x)
-t_vec4 fisheye_proj(t_vec2 cnv, float fov)
+t_vec4	fisheye_proj(t_vec2 cnv, float fov)
 {
 	t_vec4		dir;
-	const float	x = (((float)cnv.x + WIDTH / 2) / WIDTH * 2.0f) - 1.0f;
-	const float	y = (((float)cnv.y + HEIGHT / 2) / HEIGHT * 2.0f) - 1.0f;
+	const float	x = (((float)cnv.x + WIDTH / 2.0f) / WIDTH * 2.0f) - 1.0f;
+	const float	y = (((float)cnv.y + HEIGHT / 2.0f) / HEIGHT * 2.0f) - 1.0f;
 	const float	r = sqrtf(x * x + y * y);
 	float		phi;
 
@@ -42,11 +42,11 @@ t_vec4 fisheye_proj(t_vec2 cnv, float fov)
 
 t_vec4	stereographic_proj(t_vec2 cnv, t_viewport vp)
 {
-	(void)vp;
-	t_vec4      dir;
-	const float phi = (((float)cnv.x + WIDTH / 2) / WIDTH) * 2 * M_PI;
-	const float theta = (((float)cnv.y + HEIGHT / 2) / HEIGHT) * M_PI;
+	t_vec4		dir;
+	const float	phi = (((float)cnv.x + WIDTH / 2.0f) / WIDTH) * 2 * M_PI;
+	const float	theta = (((float)cnv.y + HEIGHT / 2.0f) / HEIGHT) * M_PI;
 
+	(void)vp;
 	dir.x = sinf(theta) * cosf(phi);
 	dir.y = cosf(theta);
 	dir.z = sinf(theta) * sinf(phi);
@@ -55,11 +55,13 @@ t_vec4	stereographic_proj(t_vec2 cnv, t_viewport vp)
 
 t_vec4	equirectangular_proj(t_vec2 cnv, t_viewport vp)
 {
-	(void)vp;
 	t_vec4		dir;
-	const float	phi = (((float)cnv.x + (float)WIDTH / 2) / (float)WIDTH) * 2 * M_PI;
-	const float	theta = (1.0f - ((float)cnv.y + (float)HEIGHT / 2) / (float)HEIGHT) * M_PI;
+	const float	phi = (((float)cnv.x + (float)WIDTH / 2.0f) / (float)WIDTH)
+		* 2.0f * M_PI;
+	const float	theta = (1.0f - ((float)cnv.y + (float)HEIGHT / 2.0f)
+			/ (float)HEIGHT) * M_PI;
 
+	(void)vp;
 	dir.x = sin(theta) * cos(phi);
 	dir.y = cos(theta);
 	dir.z = sin(theta) * sin(phi);

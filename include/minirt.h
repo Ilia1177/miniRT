@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:36:35 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 15:49:10 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:06:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,6 @@ int			create_plane(char **line, t_data *scene);
 
 //lst_light.c
 int			create_light(char **line, t_data *scene, t_type type);
-int			clean_lights(t_data *scene);
 int			make_hyperboloid(t_object data, t_object **objects);
 
 //matrix.c

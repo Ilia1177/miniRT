@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:59:23 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 13:00:04 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:31:52 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,24 +79,7 @@ int	get_options(char **line, t_object *obj)
 	status = 0;
 	while (str && *str && !status && ft_strcmp(str, "\n"))
 	{
-		if (!ft_strncmp("-p", str, 2))
-			status = assign_opt(&str, &obj->pattern, 2);
-		else if (!ft_strncmp("-spc", str, 4))
-			status = get_int_opt(&str, &obj->spec, 4);
-		else if (!ft_strncmp("-opt", str, 2))
-			status = assign_opt(&str, &obj->opt, 4);
-		else if (!ft_strncmp("-img", str, 4))
-			status = get_str_opt(&str, &obj->path, 4);
-		else if (!ft_strncmp("-map", str, 4))
-		{
-			obj->normal_map = 1;
-			status = get_str_opt(&str, &obj->path, 4);
-		}
-		else if (!ft_strncmp("-ref", str, 4))
-			status = get_reflective(&str, &obj->reflect, 4);
-		else if (ft_strcmp("\n", str))
-			status = -8;
-		str += skip_space(str);
+		choose_options(&str, obj, &status);
 	}
 	*line = str;
 	return (status);

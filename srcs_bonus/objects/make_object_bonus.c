@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_object_bonus.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:06:06 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/16 12:31:34 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minirt_bonus.h>
 
 static void	make_matrix(t_object data, t_object *new)
@@ -18,13 +30,13 @@ static void	make_matrix(t_object data, t_object *new)
 		new->t_m = mat_init_id();
 }
 
-int	make_object(t_object *data, t_data *scene)
+int	make_object(t_object *data, t_object **objects)
 {
-	t_object	**curr_object;
+	t_object	*curr_object;
 	t_object	*new_object;
 
 	if (data->path && !data->img)
-	{	
+	{
 		free(data->path);
 		return (-109);
 	}
@@ -34,14 +46,15 @@ int	make_object(t_object *data, t_data *scene)
 	ft_memcpy(new_object, data, sizeof(t_object));
 	make_matrix(*data, new_object);
 	new_object->next = NULL;
-	curr_object = &scene->objects;
-	if (*curr_object == NULL)
-		*curr_object = new_object;
+	curr_object = NULL;
+	if (*objects == NULL)
+		*objects = new_object;
 	else
 	{
-		while ((*curr_object)->next)
-			*curr_object = (*curr_object)->next;
-		(*curr_object)->next = new_object;
+		curr_object = *objects;
+		while (curr_object->next)
+			curr_object = curr_object->next;
+		curr_object->next = new_object;
 	}
 	return (0);
 }

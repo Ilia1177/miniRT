@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   text_checkerboard_bonus.c                          :+:      :+:    :+:   */
+/*   mapping_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:01:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 13:35:00 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:12:01 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ t_argb	img_at(float u, float v, t_img *img)
 	t_uv		uv2;
 
 	ft_bzero(&color, sizeof(color));
-	if (!img)
+	if (!img || !img->addr)
 		return (color);
 	uv2.u = fminf(floor(u * img->w), img->w);
 	uv2.v = fminf(floor(v * img->h), img->h);
-	uv2.u = uv2.u + floor(img->w / 1);
+	uv2.u = uv2.u + floor(img->w / 1.0f);
 	color = argb_fromint(rt_get_pixel(*img, uv2.u, uv2.v));
 	return (color);
 }
@@ -72,13 +72,13 @@ t_argb	mapping(t_ray *ray, t_object *obj)
 	t_argb	color;
 	t_vec4	hp;
 
+	if (!(obj->pattern || (obj->path && !obj->normal_map)))
+		return (obj->color);
 	hp = mat_apply(mat_inverse(obj->t_m), ray->o);
 	uv = get_uv(obj, hp);
 	if (obj->pattern)
 		color = checkerboard_at(uv.u, uv.v, obj->color);
-	else if (obj->path && !obj->normal_map)
-		color = img_at(uv.u, uv.v, obj->img);
 	else
-		return (obj->color);
+		color = img_at(uv.u, uv.v, obj->img);
 	return (color);
 }

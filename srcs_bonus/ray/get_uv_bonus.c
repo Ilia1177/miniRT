@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_uv_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:06:33 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/16 11:06:40 by jhervoch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <minirt_bonus.h>
 
@@ -25,10 +36,10 @@ t_uv	sphere_map(t_vec4 local_point)
 	const float		phi = acosf(ft_clampf(p.y, -1.0f, 1.0f));
 	t_uv			uv;
 
-	uv.u = theta / (2.0f * M_PI);
-	if (uv.u < 0.0f)
-		uv.u += 1.0f;
+	uv.u = 0.75f + theta / (2.0f * M_PI);
 	uv.v = phi / M_PI;
+	uv.u = fmodf(uv.u + 1.0f, 1.0f);
+	uv.v = fminf(fmaxf(uv.v, 0.0f), 1.0f);
 	return (uv);
 }
 
@@ -60,4 +71,3 @@ t_uv	get_uv(t_object *obj, t_vec4 hp)
 		uv = cylinder_map(hp);
 	return (uv);
 }
-

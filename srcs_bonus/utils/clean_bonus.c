@@ -1,12 +1,12 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   clean_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 12:41:20 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:41:37 by jhervoch         ###   ########.fr       */
+/*   Created: 2025/05/16 11:08:37 by jhervoch          #+#    #+#             */
+/*   Updated: 2025/05/16 11:08:48 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	free_objects(t_data *scene)
 	t_object	*curr_obj;
 	t_object	*old_obj;
 
-	curr_obj = scene->objects;
-	if (!curr_obj)
+	if (!scene || !scene->objects)
 		return ;
+	curr_obj = scene->objects;
 	while (curr_obj)
 	{
 		old_obj = curr_obj;

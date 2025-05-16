@@ -30,7 +30,7 @@ void	painter_reset(t_painter *painter, t_vec2 cnv)
 	painter->lim[1] = T_MAX;
 	painter->lim[2] = R_LIMIT;
 	painter->ray.o = scene->cam.t_m.p;
-	painter->ray.d = projection(cnv, (t_data *) scene);
+	painter->ray.d = projection(cnv, (t_data *)scene);
 	painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
 }
 

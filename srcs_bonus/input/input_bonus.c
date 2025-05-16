@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:00:48 by npolack           #+#    #+#             */
-/*   Updated: 2025/05/11 11:37:21 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:59:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 	*tm = new;
 	print_mat4(*tm);
 }
+
 /*****************************************************************************
 * the variable rend allow to not render all the times
 * the rendering is only when you press a key
@@ -87,14 +88,12 @@ void	show_selected_object(t_data *scene, t_object *last_obj)
 void	select_object(t_data *scene, int x, int y)
 {
 	t_vec2		cnv;
-	//t_viewport	vp;
 	t_object	*last_obj;
 	t_painter	catcher;
 
 	catcher.lim[0] = EPSILON;
 	catcher.lim[1] = T_MAX;
 	last_obj = scene->selected;
-	//vp = scene->viewport;
 	cnv.x = x - (WIDTH / 2);
 	cnv.y = (HEIGHT / 2) - y;
 	catcher.ray.d = projection(cnv, scene);

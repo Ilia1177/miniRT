@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:54:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 15:24:21 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:43:22 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 {
 	const float		ndl = dot_vec3(ray->n, ray->d);
-	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), ndl), ray->d);
-	const float		rdv = dot_vec3(r, ray->v);
+	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), ndl),
+			ray->d);
 	t_argb			diffuse;
 	t_argb			specular;
 
@@ -33,14 +33,33 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	if (ndl > 0)
 	{
 		diffuse = diffuse_reflect(ray, lumen, ndl);
-		if (spec != -1 && rdv > 0)
-			specular = specular_reflect(ray->v, r, rdv, spec, lumen);
+		if (spec != -1)
+			specular = specular_reflect(ray->v, r, spec, lumen);
 	}
 	if (diffuse.a > 0 && specular.a > 0)
 		return (argb_add(diffuse, specular));
 	else if (diffuse.a > 0)
 		return (diffuse);
 	return (specular);
+}
+
+// Diffusion of the light on the surface.
+// more the specular, better the shiny 
+// vector v =  inverse direction (hit point to camera)
+t_argb	specular_reflect(t_vec4 v, t_vec4 r, int spec, t_argb lumen)
+{
+	const float	r_dot_v = dot_vec3 (r, v);
+	float		coeff;
+	t_argb		luminosity;
+
+	if (r_dot_v <= 0)
+		return ((t_argb){0, 0, 0, 0});
+	coeff = powf(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
+	luminosity.a = lumen.a * coeff;
+	luminosity.r = lumen.r * coeff;
+	luminosity.g = lumen.g * coeff;
+	luminosity.b = lumen.b * coeff;
+	return (luminosity);
 }
 
 // More perpendicular the light is, more enlighten the point is.
@@ -55,21 +74,6 @@ t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 	luminosity.g = lumen.g * coeff;
 	luminosity.b = lumen.b * coeff;
 	argb_clamp(&luminosity);
-	return (luminosity);
-}
-
-// Diffusion of the light on the surface.
-// more the specular, better the shiny 
-// vector v =  inverse direction (hit point to camera)
-t_argb	specular_reflect(t_vec4 v, t_vec4 r, float r_dot_v, int spec, t_argb lumen)
-{
-	const float		coeff = powf(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
-	t_argb			luminosity;
-
-	luminosity.a = lumen.a * coeff;
-	luminosity.r = lumen.r * coeff;
-	luminosity.g = lumen.g * coeff;
-	luminosity.b = lumen.b * coeff;
 	return (luminosity);
 }
 
@@ -110,11 +114,7 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 	t_argb		lumen;
 	t_argb		reflection;
 	t_light		*light;
-	//float		*lim;
-	//t_ray		*ray;
 
-	//lim = painter->lim;
-	//ray = &painter->ray;
 	lumen = (t_argb){0, 0, 0, 0};
 	light = painter->sceneref->lights;
 	while (light)

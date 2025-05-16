@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_sphere_bonus.c                                 :+:      :+:    :+:   */
+/*   create_object_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:49 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:55:51 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:31:37 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	create_sphere(char **line, t_data *scene)
 	if (sphere.path && !scene->status)
 		sphere.img = new_img(scene, sphere.path);
 	if (!scene->status)
-		scene->status = make_object(&sphere, scene);
+		scene->status = make_object(&sphere, &scene->objects);
 	*line = str + skip_space(str);
 	return (scene->status);
 }
@@ -72,7 +72,7 @@ int	create_cylinder(char **line, t_data *scene)
 	if (!scene->status)
 		scene->status = get_options(&str, &cylinder);
 	if (!scene->status)
-		scene->status = make_object(&cylinder, scene);
+		scene->status = make_object(&cylinder, &scene->objects);
 	*line = str + skip_space(str);
 	return (scene->status);
 }
@@ -103,7 +103,7 @@ int	create_plane(char **line, t_data *scene)
 	if (plane.path)
 		plane.img = new_img(scene, plane.path);
 	if (!scene->status)
-		scene->status = make_object(&plane, scene);
+		scene->status = make_object(&plane, &scene->objects);
 	*line = str + skip_space(str);
 	return (scene->status);
 }
@@ -127,7 +127,7 @@ int	create_triangle(char **line, t_data *scene)
 	if (triangle.path)
 		triangle.img = new_img(scene, triangle.path);
 	if (!scene->status)
-		scene->status = make_object(&triangle, scene);
+		scene->status = make_object(&triangle, &scene->objects);
 	*line = str + skip_space(str);
 	return (scene->status);
 }
@@ -151,7 +151,7 @@ int	create_hyperboloid(char **line, t_data *scene)
 	if (!scene->status)
 		scene->status = get_options(&str, &hyperb);
 	if (!scene->status)
-		scene->status = make_object(&hyperb, scene);
+		scene->status = make_object(&hyperb, &scene->objects);
 	*line = str + skip_space(str);
 	return (scene->status);
 }

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:46 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/08 15:17:25 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:36:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,30 @@ int	get_alpha(char **line, int *color, int alpha)
 	str += skip_space(str);
 	*line = str;
 	return (0);
+}
+
+void	choose_options(char **line, t_object *obj, int *status)
+{
+	char	*str;
+
+	str = *line;
+	if (!ft_strncmp("-p", str, 2))
+		*status = assign_opt(&str, &obj->pattern, 2);
+	else if (!ft_strncmp("-spc", str, 4))
+		*status = get_int_opt(&str, &obj->spec, 4);
+	else if (!ft_strncmp("-opt", str, 2))
+		*status = assign_opt(&str, &obj->opt, 4);
+	else if (!ft_strncmp("-img", str, 4))
+		*status = get_str_opt(&str, &obj->path, 4);
+	else if (!ft_strncmp("-map", str, 4))
+	{
+		obj->normal_map = 1;
+		*status = get_str_opt(&str, &obj->path, 4);
+	}
+	else if (!ft_strncmp("-ref", str, 4))
+		*status = get_reflective(&str, &obj->reflect, 4);
+	else if (ft_strcmp("\n", str))
+		*status = -8;
+	str += skip_space(str);
+	*line = str;
 }

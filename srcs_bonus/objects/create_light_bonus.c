@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_light_bonus.c                                  :+:      :+:    :+:   */
+/*   create_light_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:36 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/05/07 12:55:40 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:06:01 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,6 @@ static int	make_light(t_light light, t_light **lights)
 			curr_light = curr_light->next;
 		curr_light->next = new_light;
 	}
-	return (0);
-}
-
-int	clean_lights(t_data *scene) // ???
-{
-	t_light	light;
-
-	light = (t_light){NULL, (t_argb){20, 220, 220, 220},
-		(t_vec4){-2, 0, 0, 0}, (t_vec4){1, 1, 0, 0}, DIRECTIONAL};
-	if (make_light(light, &scene->lights) == -109)
-		return (-109);
 	return (0);
 }
 
