@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-long long	time_from(struct timeval *last)
+static long long	time_from(struct timeval *last)
 {
 	struct timeval	current_time;
 	long long		sec;

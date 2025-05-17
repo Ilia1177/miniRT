@@ -12,13 +12,28 @@
 
 #include <minirt.h>
 
+// More perpendicular the light is, more enlighten the point is.
+//t_argb	diffuse_reflect(t_argb lumen, t_vec4 n, t_vec4 l, float n_dot_l)
+static t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
+{
+	const float	coeff = n_dot_l / (mag_vec4(ray->n) * mag_vec4(ray->d));
+	t_argb		luminosity;
+
+	luminosity.a = lumen.a * coeff;
+	luminosity.r = lumen.r * coeff;
+	luminosity.g = lumen.g * coeff;
+	luminosity.b = lumen.b * coeff;
+	limit_color(&luminosity);
+	return (luminosity);
+}
+
 // Return reflexions of diffuse and/or specular
 // d : direction from the point -> light
 // v : vector from point -> camera
 // n : normal of the surface, toward outside the shape
 // n_dot_l > 0 --> light going against the normal (~ outside of the shape)
 // n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
-t_argb	reflections(t_ray *ray, t_argb lumen)
+static t_argb	reflections(t_ray *ray, t_argb lumen)
 {
 	const float		n_dot_l = dot_vec4(ray->n, ray->d);
 	t_argb			diffuse;
@@ -35,22 +50,7 @@ t_argb	reflections(t_ray *ray, t_argb lumen)
 	return (specular);
 }
 
-// More perpendicular the light is, more enlighten the point is.
-//t_argb	diffuse_reflect(t_argb lumen, t_vec4 n, t_vec4 l, float n_dot_l)
-t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
-{
-	const float	coeff = n_dot_l / (mag_vec4(ray->n) * mag_vec4(ray->d));
-	t_argb		luminosity;
-
-	luminosity.a = lumen.a * coeff;
-	luminosity.r = lumen.r * coeff;
-	luminosity.g = lumen.g * coeff;
-	luminosity.b = lumen.b * coeff;
-	limit_color(&luminosity);
-	return (luminosity);
-}
-
-void	add_type_light(t_light *light, t_argb *lumen, t_painter painter)
+static void	add_type_light(t_light *light, t_argb *lumen, t_painter painter)
 {
 	if (light->type == AMBIENT)
 		*lumen = add_colors(*lumen, apply_brightness(light->intensity));

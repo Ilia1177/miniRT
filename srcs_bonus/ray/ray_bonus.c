@@ -20,7 +20,7 @@ static void	ray_reflect(t_ray *ray)
 	ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
 }
 
-void	normal_map(t_ray *ray, t_object *obj)
+static void	normal_map(t_ray *ray, t_object *obj)
 {
 	t_uv			uv;
 	t_argb			color;
@@ -64,7 +64,7 @@ static void	ray_hitpoint(t_painter *painter, t_object *obj)
 		normal_map(ray, obj);
 }
 
-t_argb	get_reflected_color(t_painter *painter)
+static t_argb	get_reflected_color(t_painter *painter)
 {
 	t_argb	reflected_color;
 

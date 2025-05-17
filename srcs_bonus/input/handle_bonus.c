@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-void	handle_object_scaling(t_data *scene, t_mat4 *tm)
+static void	handle_object_scaling(t_data *scene, t_mat4 *tm)
 {
 	const float	pscale = 1.1f;
 	const float	mscale = 0.9f;
@@ -31,7 +31,7 @@ void	handle_object_scaling(t_data *scene, t_mat4 *tm)
 		mat_scale(tm, 1.0f, 1.0f, mscale);
 }
 
-void	handle_object_translation(t_data *scene, t_mat4 *tm)
+static void	handle_object_translation(t_data *scene, t_mat4 *tm)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
 		mat_translate(tm, 0, 0, 0.1f);
@@ -47,7 +47,7 @@ void	handle_object_translation(t_data *scene, t_mat4 *tm)
 		mat_translate(tm, 0, -0.1f, 0);
 }
 
-void	handle_object_rotation(t_data *scene, t_mat4 *tm)
+static void	handle_object_rotation(t_data *scene, t_mat4 *tm)
 {
 	const float	speed = 5.0f;
 
@@ -65,7 +65,7 @@ void	handle_object_rotation(t_data *scene, t_mat4 *tm)
 		mat_rotate(tm, 0, 0, -speed);
 }
 
-void	handle_camera_move(t_data *scene)
+static void	handle_camera_move(t_data *scene)
 {
 	const float	speed = 2.0f;
 

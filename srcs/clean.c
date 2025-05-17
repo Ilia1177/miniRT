@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-void	free_light(t_light *light)
+static void	free_light(t_light *light)
 {
 	t_light	*old_light;
 
@@ -24,7 +24,7 @@ void	free_light(t_light *light)
 	}
 }
 
-void	free_objects(t_object **obj)
+static void	free_objects(t_object **obj)
 {
 	t_object	*temp_obj;
 
@@ -38,7 +38,7 @@ void	free_objects(t_object **obj)
 	}
 }
 
-void	free_data(t_data *scene)
+static void	free_data(t_data *scene)
 {
 	if (scene)
 	{

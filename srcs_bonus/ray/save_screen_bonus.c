@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-void	save_pixel_data(t_img *img, int width, int height, int fd)
+static void	save_pixel_data(t_img *img, int width, int height, int fd)
 {
 	t_vec2	pos;
 	int		color;

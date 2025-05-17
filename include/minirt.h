@@ -32,7 +32,6 @@
 # define SPECULAR 500
 # define MOUSE_SENSITIVITY 0.5f
 # define FLT_MAX     3.40282347E+38F
-//# define EPSILON 0.001f
 # define FLT_EPSILON 1e-6f
 # define MSG_BAD_FILE "Error\nNeed one file *.rt\n"
 # define MSG_BAD_POS "Error\nBad position arguments\n"
@@ -218,12 +217,9 @@ int			place_camera(char **line, t_data *scene);
 //canvas.c
 t_vec4		throught_vp(t_canvas cnv, t_viewport vp);
 void		display_color(t_data *scene);
-t_vec2		cnv_to_screen(t_canvas cnv);
 t_vec4		get_viewport_loc(t_canvas cnv, t_viewport vp);
 
 //clean.c
-void		free_light(t_light *light);
-void		free_data(t_data *scene);
 int			rt_shut_down(t_data *scene);
 
 //color.c
@@ -257,8 +253,6 @@ void		handle_light_move(t_data *scene);
 void		rt_put_pixel(t_img *img, int x, int y, int color);
 
 //init.c
-int			rt_scene_tozero(t_data *scene);
-void		mlx_tozero(t_data *scene);
 int			rt_init(t_data *scene);
 void		init_painter(t_painter *painter, t_data *scene, t_ray *ray);
 void		reset_painter(t_painter *painter, t_canvas cnv);
@@ -284,7 +278,6 @@ int			intersect_disk(t_ray *ray, t_vec4 center, t_object *cyl, float *t);
 int			intersect_cylinder_lateral(t_ray *ray, t_object *cy, float *t);
 int			check_height_cylinder(t_ray *ray, t_object *cy, float *t, t_quad q);
 void		get_min_t(float *t_min, float t_tmp, int *hit);
-int			min_pos(float *t, float t1, float t2);
 
 //cylinder_utils.c
 t_vec4		cy_center_to_base(t_object cy);
@@ -292,9 +285,6 @@ t_vec4		cy_base_to_center(t_vec4 pos, t_vec4 dir, float height);
 
 //intersection.c
 int			intersect_object(t_ray *ray, t_object *obj, float *t);
-int			intersect_sphere(t_ray *ray, t_object *object, float *t);
-int			intersect_cylinder(t_ray *ray, t_object *cylinder, float *t);
-int			intersect_plane(t_ray *ray, t_object *plane, float *t);
 int			intersect_hyperboloid(t_ray *ray, t_object *hyperb, float *t);
 
 //normal.c
@@ -306,8 +296,6 @@ void		hyperboloid_normal(t_ray *ray, t_object *object);
 //light.c
 t_argb		compute_lighting(t_ray *ray, t_data *scene);
 void		reflect_ray(t_ray *ray);
-t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
-t_argb		reflections(t_ray *ray, t_argb intensity);
 t_light		*select_light(t_light **lights);
 
 //camera_vectors.c

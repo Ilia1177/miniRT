@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-int	rt_scene_tozero(t_data *scene)
+static int	rt_scene_tozero(t_data *scene)
 {
 	scene->res = 5;
 	scene->cam.pos = (t_vec4){0, 0, 0, 0};
@@ -30,7 +30,7 @@ int	rt_scene_tozero(t_data *scene)
 	return (0);
 }
 
-void	mlx_tozero(t_data *scene)
+static void	mlx_tozero(t_data *scene)
 {
 	int	i;
 

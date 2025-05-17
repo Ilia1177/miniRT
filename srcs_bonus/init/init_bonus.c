@@ -21,7 +21,7 @@ t_painter	th_painter_init(t_data *scene)
 	return (painter);
 }
 
-int	rt_scene_init(t_data *scene, char **av, int ac)
+static int	rt_scene_init(t_data *scene, char **av, int ac)
 {
 	ft_bzero(scene, sizeof(t_data));
 	scene->mlx = NULL;

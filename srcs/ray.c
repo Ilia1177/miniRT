@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-void	r_reflect(t_ray *ray)
+static void	r_reflect(t_ray *ray)
 {
 	const float	n_dot_d = dot_vec4(ray->n, ray->v);
 
@@ -20,7 +20,7 @@ void	r_reflect(t_ray *ray)
 	ray->d = sub_vec4(ray->d, ray->v);
 }
 
-void	r_update(t_ray *ray, t_object *obj)
+static void	r_update(t_ray *ray, t_object *obj)
 {
 	ray->o = add_vec4(mult_vec4(ray->d, obj->t), ray->o);
 	ray->v = mult_vec4(ray->d, -1);

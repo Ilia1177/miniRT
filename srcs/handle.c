@@ -13,7 +13,7 @@
 #include <minirt.h>
 
 // translate object on z axis zith i and j
-void	handle_object_translation(t_data *scene)
+static void	handle_object_translation(t_data *scene)
 {
 	if (scene->key_state[XK_i] == 1 && scene->selected)
 		scene->selected->pos.z += 0.1;
@@ -29,7 +29,7 @@ void	handle_object_translation(t_data *scene)
 		scene->selected->pos.y -= 0.1;
 }
 
-void	handle_object_rotation(t_data *scene)
+static void	handle_object_rotation(t_data *scene)
 {
 	if (scene->key_state[XK_z] == 1 && scene->selected)
 		rotate_on_x(scene->selected, 1.0f);
@@ -40,7 +40,7 @@ void	handle_object_rotation(t_data *scene)
 }
 
 // translate object on z axis zith i and j
-void	handle_object_resize(t_data *scene)
+static void	handle_object_resize(t_data *scene)
 {
 	if (scene->key_state[XK_v] == 1 && scene->selected)
 		scene->selected->radius += 0.1;
@@ -55,7 +55,7 @@ void	handle_object_resize(t_data *scene)
 	}
 }
 
-void	handle_camera_move(t_data *scene)
+static void	handle_camera_move(t_data *scene)
 {
 	if (scene->key_state[XK_Left] == 1)
 		scene->cam.yaw += 5;

@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-t_light	*select_light(t_light **lights)
+static t_light	*select_light(t_light **lights)
 {
 	t_light	*curr_light;
 

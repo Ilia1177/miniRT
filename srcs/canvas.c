@@ -25,7 +25,7 @@ t_vec4	get_viewport_loc(t_canvas cnv, t_viewport vp)
 }
 
 // get screen's pixel from canvas's point
-t_vec2	cnv_to_screen(t_canvas cnv)
+static t_vec2	cnv_to_screen(t_canvas cnv)
 {
 	t_vec2	screen;
 
@@ -35,7 +35,7 @@ t_vec2	cnv_to_screen(t_canvas cnv)
 }
 
 //void	color_screen(t_img *img, int x, int y, int res, t_argb color)
-void	color_screen(t_img *img, t_vec2 pix, int res, t_argb color)
+static void	color_screen(t_img *img, t_vec2 pix, int res, t_argb color)
 {
 	int	i;
 	int	j;

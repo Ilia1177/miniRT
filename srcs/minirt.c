@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-int	render(t_data *scene)
+static int	render(t_data *scene)
 {
 	static int	first_rend;
 
@@ -26,7 +26,7 @@ int	render(t_data *scene)
 	return (0);
 }
 
-int	display_scene(t_data *scene)
+static int	display_scene(t_data *scene)
 {
 	mlx_hook(scene->win, 2, 1L << 0, &key_press, scene);
 	mlx_hook(scene->win, 3, 1L << 1, &key_release, scene);

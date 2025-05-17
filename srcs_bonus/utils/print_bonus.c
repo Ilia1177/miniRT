@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-void	print_error_arg(int status)
+static void	print_error_arg(int status)
 {
 	if (status == 11)
 		printf("not enought args. Usage: *.rt files needed");
@@ -22,7 +22,7 @@ void	print_error_arg(int status)
 		printf("map in \"*.rt\" format needed.");
 }
 
-void	print_error_mlx(int status)
+static void	print_error_mlx(int status)
 {
 	if (status == 21)
 		printf(MSG_BAD_MLX);
@@ -34,7 +34,7 @@ void	print_error_mlx(int status)
 		printf(MSG_BAD_ADD);
 }
 
-void	print_error_elem(int status)
+static void	print_error_elem(int status)
 {
 	if (status == -4)
 		printf(MSG_BAD_TYPE);

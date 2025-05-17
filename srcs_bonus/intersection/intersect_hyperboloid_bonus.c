@@ -13,7 +13,7 @@
 #include <minirt_bonus.h>
 
 //void	check_hyper_cap(float zc, t_vec4 o, t_vec4 d, t_vec4 s, float *t)
-void	check_hyper_cap(float zc, t_ray *ray, t_vec4 s, float *t)
+static void	check_hyper_cap(float zc, t_ray *ray, t_vec4 s, float *t)
 {
 	const t_vec4		o = ray->o;
 	const t_vec4		d = ray->d;

@@ -39,3 +39,26 @@ void	move_camera_left(t_camera *cam, float speed)
 	cam->pos.y -= cam->right.y * speed;
 	cam->pos.z -= cam->right.z * speed;
 }
+
+// Adjust yaw and pitch
+// Clamp pitch to avoid flipping (restrict between -89° and 89°)
+// Invert for correct movement
+// Update camera vectors based on new angles
+void	mouse_move(t_camera *cam, float delta_x, float delta_y)
+{
+	const float	sensitivity = MOUSE_SENSITIVITY;
+
+	cam->yaw += delta_x * sensitivity;
+	cam->pitch -= delta_y * sensitivity;
+	if (cam->pitch > 89.0f)
+	{
+		cam->pitch = 89.0f;
+		return ;
+	}
+	if (cam->pitch < -89.0f)
+	{
+		cam->pitch = -89.0f;
+		return ;
+	}
+	update_camera_vectors(cam);
+}

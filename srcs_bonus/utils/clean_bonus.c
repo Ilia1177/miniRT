@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-void	free_light(t_light *light)
+static void	free_light(t_light *light)
 {
 	t_light	*old_light;
 
@@ -24,7 +24,7 @@ void	free_light(t_light *light)
 	}
 }
 
-void	remove_obj(t_object *obj, t_data *scene)
+static void	remove_obj(t_object *obj, t_data *scene)
 {
 	if (!obj)
 		return ;
@@ -37,7 +37,7 @@ void	remove_obj(t_object *obj, t_data *scene)
 	free(obj);
 }
 
-void	free_objects(t_data *scene)
+static void	free_objects(t_data *scene)
 {
 	t_object	*curr_obj;
 	t_object	*old_obj;
@@ -53,7 +53,7 @@ void	free_objects(t_data *scene)
 	}
 }
 
-void	free_data(t_data *scene)
+static void	free_data(t_data *scene)
 {
 	if (scene)
 	{

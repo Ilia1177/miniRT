@@ -18,7 +18,7 @@
 // Spherical to Cartesian
 // theta = r * fov
 // phi = atan2f(y, x)
-t_vec4	fisheye_proj(t_vec2 cnv, float fov)
+static t_vec4	fisheye_proj(t_vec2 cnv, float fov)
 {
 	t_vec4		dir;
 	const float	x = (((float)cnv.x + WIDTH / 2.0f) / WIDTH * 2.0f) - 1.0f;
@@ -40,7 +40,7 @@ t_vec4	fisheye_proj(t_vec2 cnv, float fov)
 	return (dir);
 }
 
-t_vec4	stereographic_proj(t_vec2 cnv, t_viewport vp)
+static t_vec4	stereographic_proj(t_vec2 cnv, t_viewport vp)
 {
 	t_vec4		dir;
 	const float	phi = (((float)cnv.x + WIDTH / 2.0f) / WIDTH) * 2 * M_PI;
@@ -53,7 +53,7 @@ t_vec4	stereographic_proj(t_vec2 cnv, t_viewport vp)
 	return (dir);
 }
 
-t_vec4	equirectangular_proj(t_vec2 cnv, t_viewport vp)
+static t_vec4	equirectangular_proj(t_vec2 cnv, t_viewport vp)
 {
 	t_vec4		dir;
 	const float	phi = (((float)cnv.x + (float)WIDTH / 2.0f) / (float)WIDTH)
@@ -69,7 +69,7 @@ t_vec4	equirectangular_proj(t_vec2 cnv, t_viewport vp)
 }
 
 // get location of the point in the viemport from canvas'location
-t_vec4	pinhole_proj(t_vec2 cnv, t_viewport vp)
+static t_vec4	pinhole_proj(t_vec2 cnv, t_viewport vp)
 {
 	t_vec4	dir;
 

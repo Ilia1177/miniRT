@@ -12,25 +12,11 @@
 
 #include <minirt.h>
 
-int	ambient_exist(t_data *scene)
-{
-	t_light	*light;
-
-	light = scene->lights;
-	while (light)
-	{
-		if (light->type == AMBIENT)
-			return (1);
-		light = light->next;
-	}
-	return (0);
-}
-
 /*****************************************************************************
 *	choose the good elem 
 *	if is not a elem or newline print_error_mlx
 *****************************************************************************/
-int	register_line_into_scene(char *line, t_data *scene, int status)
+static int	register_line_into_scene(char *line, t_data *scene, int status)
 {
 	line += skip_space(line);
 	while (line && *line && !status)
@@ -57,7 +43,7 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 	return (status);
 }
 
-int	check_map_elem(int status, t_data *scene)
+static int	check_map_elem(int status, t_data *scene)
 {
 	if (scene->cam.fov == -1 || scene->cam.fov > 180 || scene->cam.fov < 0)
 		status = -10;

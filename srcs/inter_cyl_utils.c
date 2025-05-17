@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-int	min_pos(float *t, float t1, float t2)
+static int	min_pos(float *t, float t1, float t2)
 {
 	*t = fminf(t1, t2);
 	if (*t < 0)

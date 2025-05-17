@@ -34,7 +34,7 @@ static int	make_light(t_light light, t_light **lights)
 	return (0);
 }
 
-void	init_light(t_light *light, t_type type)
+static void	init_light(t_light *light, t_type type)
 {
 	light->type = type;
 	light->pos = (t_vec4){0, 0, 0, 0};

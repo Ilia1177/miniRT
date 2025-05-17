@@ -12,6 +12,40 @@
 
 #include <minirt_bonus.h>
 
+// More perpendicular the light is, more enlighten the point is.
+//t_argb	diffuse_reflect(t_argb lumen, t_vec4 n, t_vec4 l, float n_dot_l)
+static t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
+{
+	const float	coeff = n_dot_l / (mag_vec4(ray->n) * mag_vec4(ray->d));
+	t_argb		luminosity;
+
+	luminosity.a = lumen.a * coeff;
+	luminosity.r = lumen.r * coeff;
+	luminosity.g = lumen.g * coeff;
+	luminosity.b = lumen.b * coeff;
+	argb_clamp(&luminosity);
+	return (luminosity);
+}
+
+// Diffusion of the light on the surface.
+// more the specular, better the shiny 
+// vector v =  inverse direction (hit point to camera)
+static t_argb	specular_reflect(t_vec4 v, t_vec4 r, int spec, t_argb lumen)
+{
+	const float	r_dot_v = dot_vec3 (r, v);
+	float		coeff;
+	t_argb		luminosity;
+
+	if (r_dot_v <= 0)
+		return ((t_argb){0, 0, 0, 0});
+	coeff = powf(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
+	luminosity.a = lumen.a * coeff;
+	luminosity.r = lumen.r * coeff;
+	luminosity.g = lumen.g * coeff;
+	luminosity.b = lumen.b * coeff;
+	return (luminosity);
+}
+
 /*******************************************************************************
 * Return reflexions of diffuse and/or specular
 * d : direction from the point -> light
@@ -20,7 +54,7 @@
 * n_dot_l > 0 --> light going against the normal (~ outside of the shape)
 * n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
 *******************************************************************************/
-t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
+static t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 {
 	const float		ndl = dot_vec3(ray->n, ray->d);
 	const t_vec4	r = sub_vec4(mult_vec4(mult_vec4(ray->n, 2.0f), ndl),
@@ -43,41 +77,7 @@ t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	return (specular);
 }
 
-// Diffusion of the light on the surface.
-// more the specular, better the shiny 
-// vector v =  inverse direction (hit point to camera)
-t_argb	specular_reflect(t_vec4 v, t_vec4 r, int spec, t_argb lumen)
-{
-	const float	r_dot_v = dot_vec3 (r, v);
-	float		coeff;
-	t_argb		luminosity;
-
-	if (r_dot_v <= 0)
-		return ((t_argb){0, 0, 0, 0});
-	coeff = powf(r_dot_v / (mag_vec4(r) * mag_vec4(v)), spec);
-	luminosity.a = lumen.a * coeff;
-	luminosity.r = lumen.r * coeff;
-	luminosity.g = lumen.g * coeff;
-	luminosity.b = lumen.b * coeff;
-	return (luminosity);
-}
-
-// More perpendicular the light is, more enlighten the point is.
-//t_argb	diffuse_reflect(t_argb lumen, t_vec4 n, t_vec4 l, float n_dot_l)
-t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
-{
-	const float	coeff = n_dot_l / (mag_vec4(ray->n) * mag_vec4(ray->d));
-	t_argb		luminosity;
-
-	luminosity.a = lumen.a * coeff;
-	luminosity.r = lumen.r * coeff;
-	luminosity.g = lumen.g * coeff;
-	luminosity.b = lumen.b * coeff;
-	argb_clamp(&luminosity);
-	return (luminosity);
-}
-
-t_argb	compute_light_reflection(t_painter *pntr, t_light *light, t_object *obj)
+static t_argb	cpt_lgt_reflec(t_painter *pntr, t_light *light, t_object *obj)
 {
 	float	*lim;
 	t_ray	*ray;
@@ -123,7 +123,7 @@ t_argb	compute_lighting(t_painter *painter, t_object *obj)
 			lumen = argb_add(lumen, argb_applyalpha(light->intensity));
 		else
 		{
-			reflection = compute_light_reflection(painter, light, obj);
+			reflection = cpt_lgt_reflec(painter, light, obj);
 			lumen = argb_add(reflection, lumen);
 		}
 		light = light->next;

@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-t_uv	plane_map(t_vec4 local_point)
+static t_uv	plane_map(t_vec4 local_point)
 {
 	t_uv		uv;
 
@@ -29,7 +29,7 @@ t_uv	plane_map(t_vec4 local_point)
 // u: longitude (angle around Y axis), from -π to π
 // v: latitude (angle from -Y to +Y), from -1 to 1
 // acos(p.y) gives angle from Y axis in [0, π]
-t_uv	sphere_map(t_vec4 local_point)
+static t_uv	sphere_map(t_vec4 local_point)
 {
 	const t_vec4	p = normalize_vec4(local_point);
 	const float		theta = atan2(p.z, p.x);
@@ -43,7 +43,7 @@ t_uv	sphere_map(t_vec4 local_point)
 	return (uv);
 }
 
-t_uv	cylinder_map(t_vec4 local_point)
+static t_uv	cylinder_map(t_vec4 local_point)
 {
 	const float	theta = atan2(local_point.x, local_point.y);
 	t_uv		uv;

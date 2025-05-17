@@ -59,7 +59,7 @@ int	key_release(int keysym, t_data *scene)
 	return (keysym);
 }
 
-void	show_selected_object(t_data *scene, t_object *last_obj)
+static void	show_selected_object(t_data *scene, t_object *last_obj)
 {
 	static t_argb	last_color;
 

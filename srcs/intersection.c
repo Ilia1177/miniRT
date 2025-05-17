@@ -18,7 +18,7 @@
  * second intersect the top of the cylinder add_vec3
  * third intersect the bottom of the cylinder sub_vev3
  ****************************************************************************/
-int	intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
+static int	intersect_cylinder(t_ray *ray, t_object *cyl, float *t)
 {
 	float	t_tmp;
 	float	t_min;
@@ -73,7 +73,7 @@ t_object	*closest_intersect(t_painter *painter, int shadow, t_object *obj)
 
 // Equation of sphere:
 // dist(p, sphere->center) = rayon^2
-int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
+static int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 {
 	t_quad	quad;
 	t_vec4	oc;
@@ -101,7 +101,7 @@ int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 // Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
 // 1. dot(axis, dir) -> ray perpendiculaire au plan, == we dont see the plane
 // 2 
-int	intersect_plane(t_ray *ray, t_object *plane, float *t)
+static int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 {
 	const float	denom = dot_vec4(plane->axis, ray->d);
 	t_vec4		diff;

@@ -12,20 +12,6 @@
 
 #include <minirt_bonus.h>
 
-int	ambient_exist(t_data *scene)
-{
-	t_light	*light;
-
-	light = scene->lights;
-	while (light)
-	{
-		if (light->type == AMBIENT)
-			return (1);
-		light = light->next;
-	}
-	return (0);
-}
-
 int	go_to_endl(char *str)
 {
 	int	c;

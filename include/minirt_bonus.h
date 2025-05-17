@@ -203,10 +203,7 @@ void		print_timestamp(struct timeval *last_time, t_data *scene);
 t_vec4		projection(t_vec2 cnv, t_data *scene);
 //// display.c
 void		display_color(t_painter *painter);
-int			rt_render(t_data *scene);
 int			display_scene(t_data *scene);
-void		painter_reset(t_painter *painter, t_vec2 cnv);
-t_vec2		pix_from(t_vec2 cnv);
 
 // UTILS //
 //// img.c
@@ -261,16 +258,10 @@ t_argb		apply_brightness(t_argb color);
 
 // light.c
 t_argb		compute_lighting(t_painter *painter, t_object *obj);
-void		reflect_ray(t_ray *ray);
-t_argb		specular_reflect(t_vec4 v, t_vec4 r, int spec, t_argb intensity);
-t_argb		diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l);
-t_argb		reflections(t_ray *ray, t_argb intensity, int spec);
 
 // vector_math.c
 t_vec4		random_vec4(float magnitude);
 
-// get_uv_bonus.c
-t_argb		checkerboard_at(float u, float v, t_argb obj_color);
 // camera_vectors.c
 void		update_camera_rotation(t_camera *cam);
 float		calc_vp_width(float fov_degrees, float focal_length);
@@ -293,9 +284,6 @@ void		print_argb(t_argb color, char *msg);
 void		print_input(void);
 
 // clean.c
-void		remove_obj(t_object *obj, t_data *scene);
-void		free_light(t_light *light);
-void		free_data(t_data *scene);
 int			rt_shut_down(t_data *scene);
 
 // build_scene.c
@@ -303,7 +291,6 @@ int			build_scene(t_data *scene);
 void		init_obj(t_object *obj, t_type type);
 
 // build_scene_utils.c
-int			ambient_exist(t_data *scene);
 int			go_to_endl(char *str);
 void		print_all(t_data *scene);
 

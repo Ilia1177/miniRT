@@ -13,7 +13,7 @@
 #include <minirt_bonus.h>
 
 // get screen's pixel from canvas's point
-t_vec2	pix_from(t_vec2 cnv)
+static t_vec2	pix_from(t_vec2 cnv)
 {
 	t_vec2	screen;
 
@@ -22,7 +22,7 @@ t_vec2	pix_from(t_vec2 cnv)
 	return (screen);
 }
 
-void	painter_reset(t_painter *painter, t_vec2 cnv)
+static void	painter_reset(t_painter *painter, t_vec2 cnv)
 {
 	const t_data	*scene = painter->sceneref;
 
@@ -34,7 +34,7 @@ void	painter_reset(t_painter *painter, t_vec2 cnv)
 	painter->ray.d = normalize_vec4(mat_apply(scene->cam.t_m, painter->ray.d));
 }
 
-int	rt_render(t_data *scene)
+static int	rt_render(t_data *scene)
 {
 	static int		first_rend;
 	struct timeval	last_time;

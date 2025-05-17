@@ -41,29 +41,6 @@ t_vec4	apply_camera_rotation(t_camera cam, t_vec4 v)
 	return (result);
 }
 
-// Adjust yaw and pitch
-// Clamp pitch to avoid flipping (restrict between -89° and 89°)
-// Invert for correct movement
-// Update camera vectors based on new angles
-void	mouse_move(t_camera *cam, float delta_x, float delta_y)
-{
-	const float	sensitivity = MOUSE_SENSITIVITY;
-
-	cam->yaw += delta_x * sensitivity;
-	cam->pitch -= delta_y * sensitivity;
-	if (cam->pitch > 89.0f)
-	{
-		cam->pitch = 89.0f;
-		return ;
-	}
-	if (cam->pitch < -89.0f)
-	{
-		cam->pitch = -89.0f;
-		return ;
-	}
-	update_camera_vectors(cam);
-}
-
 /******************************************************************************
  * calculate focal lenght from the fov
  * **************************************************************************/
@@ -81,6 +58,13 @@ t_viewport	build_viewport(t_data *scene, float fov_degrees)
 	return (vp);
 }
 
+static void	yawpitch_from_dir(t_vec4 dir, float *yaw, float *pitch)
+{
+	dir = normalize_vec4(dir);
+	*pitch = asinf(dir.y) * (180.0f / M_PI);
+	*yaw = atan2f(dir.z, dir.x) * (180.0f / M_PI);
+}
+
 /******************************************************************************
 * save the camera data in the general struct
 * if cam.fov=-1 there is already a cam so generate an error
@@ -90,7 +74,6 @@ int	place_camera(char **line, t_data *scene)
 	char	*str;
 	int		status;
 	float	f_fov;
-	int		fov;
 
 	status = 0;
 	if (scene->cam.fov != -1)
@@ -104,12 +87,13 @@ int	place_camera(char **line, t_data *scene)
 	status = str_to_vecdir(&str, &scene->cam.dir);
 	if (status != 0)
 		return (status);
+	yawpitch_from_dir(scene->cam.dir, &scene->cam.yaw, &scene->cam.pitch);
+	update_camera_vectors(&scene->cam);
 	status = str_to_float(&str, &f_fov);
 	if (status != 0)
 		return (status);
-	fov = (int)f_fov;
-	scene->cam.fov = fov;
-	scene->viewport = build_viewport(scene, fov);
+	scene->cam.fov = (int)f_fov;
+	scene->viewport = build_viewport(scene, (int)f_fov);
 	*line = str + skip_space(str);
 	return (status);
 }

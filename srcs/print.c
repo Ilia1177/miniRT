@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-void	print_error_mlx(int status)
+static void	print_error_mlx(int status)
 {
 	if (status == -11)
 		printf(MSG_BAD_MLX);

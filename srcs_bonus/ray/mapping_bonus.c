@@ -12,7 +12,7 @@
 
 #include <minirt_bonus.h>
 
-t_board	checkerboard(t_argb color1, t_argb color2)
+static t_board	checkerboard(t_argb color1, t_argb color2)
 {
 	t_board	tab;
 	int		i;
@@ -35,7 +35,7 @@ t_board	checkerboard(t_argb color1, t_argb color2)
 	return (tab);
 }
 
-t_argb	checkerboard_at(float u, float v, t_argb obj_color)
+static t_argb	checkerboard_at(float u, float v, t_argb obj_color)
 {
 	t_argb			color;
 	const t_board	tab = checkerboard(obj_color, argb_inverse(obj_color));
