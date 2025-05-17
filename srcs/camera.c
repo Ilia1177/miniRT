@@ -81,6 +81,10 @@ t_viewport	build_viewport(t_data *scene, float fov_degrees)
 	return (vp);
 }
 
+/******************************************************************************
+* save the camera data in the general struct
+* if cam.fov=-1 there is already a cam so generate an error
+*******************************************************************************/
 int	place_camera(char **line, t_data *scene)
 {
 	char	*str;

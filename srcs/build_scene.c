@@ -49,7 +49,7 @@ int	register_line_into_scene(char *line, t_data *scene, int status)
 			status = create_plane(&line, scene);
 		else if (!ft_strncmp("cy", line, 2))
 			status = create_cylinder(&line, scene);
-		else if (ft_strcmp("\n", line))
+		if (!status && *line && ft_strcmp("\n", line))
 			status = -4;
 		else
 			return (0);
