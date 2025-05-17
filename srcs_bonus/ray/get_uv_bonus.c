@@ -43,17 +43,19 @@ static t_uv	sphere_map(t_vec4 local_point)
 	return (uv);
 }
 
-static t_uv	cylinder_map(t_vec4 local_point)
+static t_uv	cylinder_map(t_vec4 local_point, t_object *cyl)
 {
-	const float	theta = atan2(local_point.x, local_point.y);
 	t_uv		uv;
+	const float	half_height = cyl->height / 2.0f;
+	const float	theta = atan2(local_point.x, local_point.y);
 
-	uv.u = theta / (2.0f * M_PI);
-	if (uv.u < EPSILON)
-		uv.u += 1.0f;
-	uv.v = local_point.z;
+	uv.u = 0.5f + theta / (2.0f * M_PI);
+	uv.v = (local_point.z + half_height) / cyl->height;
+	uv.u = fmodf(uv.u, 1.0f);
 	uv.v = fmodf(uv.v, 1.0f);
-	if (uv.v < EPSILON)
+	if (uv.u < 0.0f)
+		uv.u += 1.0f;
+	if (uv.v < 0.0f)
 		uv.v += 1.0f;
 	return (uv);
 }
@@ -68,6 +70,6 @@ t_uv	get_uv(t_object *obj, t_vec4 hp)
 	else if (obj->type == PLANE)
 		uv = plane_map(hp);
 	else if (obj->type == CYLINDER)
-		uv = cylinder_map(hp);
+		uv = cylinder_map(hp, obj);
 	return (uv);
 }
