@@ -26,7 +26,8 @@ static void	normal_map(t_ray *ray, t_object *obj)
 	t_argb			color;
 	t_vec4			normal;
 	const t_mat4	inv = mat_inverse(obj->t_m);
-	const t_mat4	orthogonal = mat_orthogonal(mat_apply(inv, ray->n));
+//	const t_mat4	orthogonal = mat_orthogonal(mat_apply(inv, ray->n));
+	const t_mat4	orthogonal = mat_orthogonal(ray->n));
 
 	uv = get_uv(obj, mat_apply(inv, ray->o));
 	color = img_at(uv.u, uv.v, obj->img);
@@ -62,6 +63,7 @@ static void	ray_hitpoint(t_painter *painter, t_object *obj)
 		ray->n = mult_vec4(ray->n, -1);
 	if (obj->normal_map)
 		normal_map(ray, obj);
+
 }
 
 static t_argb	get_reflected_color(t_painter *painter)

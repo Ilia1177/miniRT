@@ -32,7 +32,7 @@ static t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 // vector v =  inverse direction (hit point to camera)
 static t_argb	specular_reflect(t_vec4 v, t_vec4 r, int spec, t_argb lumen)
 {
-	const float	r_dot_v = dot_vec3 (r, v);
+	const float	r_dot_v = dot_vec4(r, v);
 	float		coeff;
 	t_argb		luminosity;
 
@@ -43,6 +43,7 @@ static t_argb	specular_reflect(t_vec4 v, t_vec4 r, int spec, t_argb lumen)
 	luminosity.r = lumen.r * coeff;
 	luminosity.g = lumen.g * coeff;
 	luminosity.b = lumen.b * coeff;
+	argb_clamp(&luminosity);
 	return (luminosity);
 }
 
@@ -67,7 +68,7 @@ static t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 	if (ndl > 0)
 	{
 		diffuse = diffuse_reflect(ray, lumen, ndl);
-		if (spec != -1)
+		if (spec > 0)
 			specular = specular_reflect(ray->v, r, spec, lumen);
 	}
 	if (diffuse.a > 0 && specular.a > 0)
