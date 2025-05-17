@@ -87,7 +87,7 @@ void	reset_painter(t_painter *painter, t_canvas cnv)
 	{
 		scene = painter->scene;
 		vp = scene->viewport;
-		painter->tmin = 1.0f;
+		painter->tmin = 0.001f;
 		painter->tmax = T_MAX;
 		painter->rec = R_LIMIT;
 		painter->ray.o = scene->cam.pos;

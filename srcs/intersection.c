@@ -85,13 +85,17 @@ int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 	quad.c = dot_vec4(oc, oc) - sphere->radius * sphere->radius;
 	if (!solve_gen_quad(&quad))
 		return (0);
-	else if (quad.t[0] < EPSILON && quad.t[1] < EPSILON)
-		return (0);
-	else if (quad.t[0] > EPSILON && quad.t[0] < quad.t[1])
+	if (quad.t[0] > EPSILON && quad.t[0] < *t)
+	{
 		*t = quad.t[0];
-	else if (quad.t[1] > EPSILON)
+		return (1);
+	}
+	if (quad.t[1] > EPSILON && quad.t[1] < *t)
+	{
 		*t = quad.t[1];
-	return (1);
+		return (1);
+	}
+	return (0);
 }
 
 // Si denom ≈ 0, le rayon est parallèle au plan => pas d'intersection
