@@ -41,7 +41,6 @@ void	sphere_normal(t_ray *ray, t_object *sp)
 	const t_vec4	normal = sub_vec4(hp, (t_vec4){0.0f, 0.0f, 0.0f, 1.0f});
 
 	ray->n = normalize_vec4(mat_apply(normal_matrix, normal));
-	print_vec4(ray->n, "sphere 2 - normal:");
 	ray->n.w = 0.0f;
 }
 

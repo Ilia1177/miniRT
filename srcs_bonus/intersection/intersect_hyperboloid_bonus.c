@@ -31,6 +31,15 @@ static void	check_hyper_cap(float zc, t_ray *ray, t_vec4 s, float *t)
 		*t = t_cap;
 }
 
+static void	check_both_cap(t_object *hy, t_ray *ray, t_vec4 s, float *t)
+{
+	if (hy->opt)
+	{
+		check_hyper_cap(-(hy->height / 2), ray, s, t);
+		check_hyper_cap(hy->height / 2, ray, s, t);
+	}
+}
+
 int	intersect_hyperboloid(t_ray *ray, t_object *hy, float *t)
 {
 	const t_vec4	o = ray->o;
@@ -52,8 +61,7 @@ int	intersect_hyperboloid(t_ray *ray, t_object *hy, float *t)
 	if (eq.t[1] > EPSILON && eq.t[1] < *t)
 		if (fabs(o.z + eq.t[1] * d.z) <= hy->height / 2.0f)
 			*t = eq.t[1];
-	check_hyper_cap(-(hy->height / 2), ray, s, t);
-	check_hyper_cap(hy->height / 2, ray, s, t);
+	check_both_cap(hy, ray, s, t);
 	if (*t == T_MAX)
 		return (0);
 	return (1);

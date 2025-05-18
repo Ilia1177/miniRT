@@ -153,6 +153,7 @@ clean	:
 fclean	: clean
 	@echo "Full cleaning..."
 	-make fclean -C libft
+	@rm -fr $(MLX_DIR)
 	@rm -f $(NAME) $(NAME_BONUS) 2>/dev/null || true
 
 re		: fclean all

@@ -51,8 +51,7 @@ static t_uv	cylinder_map(t_vec4 local_point, t_object *cyl)
 
 	uv.u = 0.5f + theta / (2.0f * M_PI);
 	uv.v = (local_point.z + half_height) / cyl->height;
-	uv.u *= 3.0f;
-	uv.v *= 3.0f;
+	uv.v *= 15.0f;
 	uv.u = fmodf(uv.u, 1.0f);
 	uv.v = fmodf(uv.v, 1.0f);
 	if (uv.u < 0.0f)
