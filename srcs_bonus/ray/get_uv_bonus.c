@@ -67,9 +67,9 @@ t_uv	get_uv(t_object *obj, t_vec4 hp)
 	ft_bzero(&uv, sizeof(uv));
 	if (obj->type == SPHERE)
 		uv = sphere_map(hp);
-	else if (obj->type == PLANE)
+	else if (obj->type == PLANE || obj->type == TRIANGLE)
 		uv = plane_map(hp);
-	else if (obj->type == CYLINDER)
+	else if (obj->type == CYLINDER || obj->type == HYPERB)
 		uv = cylinder_map(hp, obj);
 	return (uv);
 }

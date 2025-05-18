@@ -71,6 +71,8 @@ int	create_cylinder(char **line, t_data *scene)
 		scene->status = str_to_argb(&str, &cylinder.color, 0);
 	if (!scene->status)
 		scene->status = get_options(&str, &cylinder);
+	if (cylinder.path && !scene->status)
+		cylinder.img = new_img(scene, cylinder.path);
 	if (!scene->status)
 		scene->status = make_object(&cylinder, &scene->objects);
 	*line = str + skip_space(str);
@@ -100,7 +102,7 @@ int	create_plane(char **line, t_data *scene)
 		scene->status = str_to_argb(&str, &plane.color, 0);
 	if (!scene->status)
 		scene->status = get_options(&str, &plane);
-	if (plane.path)
+	if (plane.path && !scene->status)
 		plane.img = new_img(scene, plane.path);
 	if (!scene->status)
 		scene->status = make_object(&plane, &scene->objects);
@@ -124,7 +126,7 @@ int	create_triangle(char **line, t_data *scene)
 		scene->status = str_to_argb(&str, &triangle.color, 0);
 	if (!scene->status)
 		scene->status = get_options(&str, &triangle);
-	if (triangle.path)
+	if (triangle.path && !scene->status)
 		triangle.img = new_img(scene, triangle.path);
 	if (!scene->status)
 		scene->status = make_object(&triangle, &scene->objects);
@@ -150,6 +152,8 @@ int	create_hyperboloid(char **line, t_data *scene)
 		scene->status = str_to_argb(&str, &hyperb.color, 0);
 	if (!scene->status)
 		scene->status = get_options(&str, &hyperb);
+	if (hyperb.path && !scene->status)
+		hyperb.img = new_img(scene, hyperb.path);
 	if (!scene->status)
 		scene->status = make_object(&hyperb, &scene->objects);
 	*line = str + skip_space(str);

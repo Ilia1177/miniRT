@@ -30,6 +30,7 @@ void	rotate_obj(t_mat4 *tm, float dx, float dy, float dz)
 	mat_rotate(&new, dx, dy, dz);
 	mat_scale(&new, s.x, s.y, s.z);
 	*tm = new;
+	printf("---- rotate object:\n");
 	print_mat4(*tm);
 }
 

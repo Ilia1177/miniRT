@@ -20,23 +20,21 @@ static void	ray_reflect(t_ray *ray)
 	ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
 }
 
-static void	normal_map(t_ray *ray, t_object *obj)
-{
-	t_uv			uv;
-	t_argb			color;
-	t_vec4			normal;
-	const t_mat4	inv = mat_inverse(obj->t_m);
-//	const t_mat4	orthogonal = mat_orthogonal(mat_apply(inv, ray->n));
-	const t_mat4	orthogonal = mat_orthogonal(ray->n));
 
-	uv = get_uv(obj, mat_apply(inv, ray->o));
-	color = img_at(uv.u, uv.v, obj->img);
-	normal.x = (color.r / 255.0f) * 2.0f - 1.0f;
-	normal.y = (color.g / 255.0f) * 2.0f - 1.0f;
-	normal.z = (color.b / 255.0f) * 2.0f - 1.0f;
+void	normal_map(t_ray *ray, t_object *obj)
+{
+	const t_mat4	orthogonal = mat_orthogonal(ray->n);
+	const t_mat4	inv = mat_inverse(obj->t_m);
+	const t_uv		uv = get_uv(obj, mat_apply(inv, ray->o));
+	const t_argb	color = img_at(uv.u, uv.v, obj->img);;
+	t_vec4			normal;
+
+	normal.x = (color.r / 255.0f)* 2.0f - 1.0f;
+	normal.y = (color.g / 255.0f)* 2.0f - 1.0f;
+	normal.z = (color.b / 255.0f)* 2.0f - 1.0f;
 	normal.w = 0.0f;
 	normal = mat_apply(orthogonal, normalize_vec4(normal));
-	ray->n = normalize_vec4(mat_apply(mat_transpose(inv), normal));
+	ray->n = normalize_vec4(normal);
 }
 
 // 1. Compute new origin of ray = hit point in world space
@@ -59,11 +57,10 @@ static void	ray_hitpoint(t_painter *painter, t_object *obj)
 		triangle_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
-	if (dot_vec3(ray->n, ray->v) < 0)
+	if (dot_vec3(ray->n, ray->v) < EPSILON)
 		ray->n = mult_vec4(ray->n, -1);
 	if (obj->normal_map)
 		normal_map(ray, obj);
-
 }
 
 static t_argb	get_reflected_color(t_painter *painter)

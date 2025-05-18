@@ -28,18 +28,27 @@
 #------- CAMERA --------------------#
 C	0,0,-10 		0,0,1 		53
 L	0, 9, 0	0.8		255, 255, 255   
+L	0, 9, 0	0.8		255, 255, 255  -d 
 A			0.2		250, 250, 250    
 #------- LIGHTS --------------------#
 #------- OBJECTS ---------------------------------------------------------------------------------------------------------#
-#			   pos		  axis		radius height			color	option [ -p -spc <int> -opt -ref <float int, int, int> -img <char *.xpm>]
-
-sp		-8,0,0						1				255,  76, 101 -spc 1000	-map ./img/normal2.xpm
-sp		-6,0,0						1				255,  76, 101 -spc 10	-map ./img/normal2.xpm
-sp		-4,0,0						1				255,  76, 101 -spc 10	-img ./img/normal2.xpm
-sp		-2,0,0						1				255,  76, 101 -spc 0
-sp		0,0,0						1				255,  76, 101 -spc 1
-sp		2,0,0						1				255,  76, 101 -spc 10 
-sp		4,0,0						1				255,  76, 101 -spc 100
-sp		6,0,0						1				255,  76, 101 -spc 1000
-sp		8,0,0						1				255,  76, 101 -spc 10000
+#hy	pos		axis	scale				height	color
+#cy	pos		axis				radius	height	color
+#sp	pos							raidus	height	color
+#pl	pos		axis								color
+#tr	pos1 pos2 pos3								color
+# opt: -spc[int] -img[path] -map[path -opt[1/0] -ref[float[0;1], int,int,int] 
+pl	0,-1,0		0,1,0							0, 131, 138		-spc 0 -map ./img/normal2.xpm
+tr	10,0,0 11,0,0 10.5,3,2						255, 232,   0	-img ./img/uranusmap.xpm
+hy	0,5,0	0,1,0	0.5,.6,.6	1				255, 232,	0	
+cy	0,3,3	1,0,0				1		16		118,  91, 167	-map ./img/normal2.xpm	
+sp	-8,0,0						1				255,  76, 101 	-spc 5000		-map ./img/normal2.xpm
+sp	-6,0,0						1				255,  76, 101 	-spc 1			-map ./img/normal2.xpm
+sp	-4,0,0						1				255,  76, 101 	-spc 10			-img ./img/normal2.xpm
+sp	-2,0,0						1				255,  76, 101 	-spc 0
+sp	0,0,0						1				255,  76, 101 	-spc 1
+sp	2,0,0						1				255,  76, 101 	-spc 10 
+sp	4,0,0						1				255,  76, 101 	-spc 100
+sp	6,0,0						1				255,  76, 101 	-spc 1000
+sp	8,0,0						1				255,  76, 101 	-spc 10000
 
