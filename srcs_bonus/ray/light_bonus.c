@@ -80,12 +80,11 @@ static t_argb	reflections(t_ray *ray, t_argb lumen, int spec)
 
 static t_argb	cpt_lgt_reflec(t_painter *pntr, t_light *light, t_object *obj)
 {
-	float	*lim;
-	t_ray	*ray;
-	t_argb	lumen;
-	t_data	*scene;
+	float			*lim;
+	t_ray			*ray;
+	t_argb			lumen;
+	const t_data	*scene = pntr->sceneref;
 
-	scene = pntr->sceneref;
 	ft_bzero(&lumen, sizeof(t_argb));
 	lim = pntr->lim;
 	ray = &pntr->ray;
