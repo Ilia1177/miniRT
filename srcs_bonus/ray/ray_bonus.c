@@ -12,14 +12,20 @@
 
 #include <minirt_bonus.h>
 
-static void	ray_reflect(t_ray *ray)
+void	ray_reflect(t_ray *ray)
 {
 	const float	n_dot_d = dot_vec3(ray->n, ray->v);
 
-	ray->d = mult_vec4(mult_vec4(ray->n, 2), n_dot_d);
-	ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
+	ray->d = mult_vec4(mult_vec4(ray->n, 2.0f), n_dot_d);
+	ray->d = normalize_vec4(sub_vec4(ray->n, ray->v));
 }
 
+void	ray_reflect2(t_ray *ray)
+{
+	const float n_dot_v = dot_vec3(ray->n, ray->v);
+	t_vec4 scaled_normal = mult_vec4(ray->n, 2.0f * n_dot_v);
+	ray->d = normalize_vec4(sub_vec4(ray->v, scaled_normal));
+}
 
 void	normal_map(t_ray *ray, t_object *obj)
 {
@@ -46,7 +52,7 @@ static void	ray_hitpoint(t_painter *painter, t_object *obj)
 
 	ray = &painter->ray;
 	ray->o = add_vec4(mult_vec4(ray->d, painter->t), ray->o);
-	ray->v = mult_vec4(ray->d, -1);
+	ray->v = mult_vec4(ray->d, -1.0f);
 	if (obj->type == CYLINDER)
 		cylinder_normal(ray, obj);
 	else if (obj->type == SPHERE)
@@ -68,7 +74,7 @@ static t_argb	get_reflected_color(t_painter *painter)
 	t_argb	reflected_color;
 
 	ft_bzero(&reflected_color, sizeof(reflected_color));
-	ray_reflect(&painter->ray);
+	//ray_reflect(&painter->ray);
 	painter->lim[0] = EPSILON;
 	painter->lim[2] -= 1.0f;
 	reflected_color = throw_ray(painter);
@@ -103,6 +109,26 @@ t_argb	throw_ray(t_painter *painter)
 	local_color = argb_mult(mapping(&painter->ray, obj), lumen);
 	if (painter->lim[2] <= 0.0f || obj->reflect.a <= 0)
 		return (local_color);
+
+	//	reflect ray
+	t_ray *ray = &painter->ray;
+
+	t_vec4 normal = normalize_vec4(ray->n);  // Ensure normal is unit length
+	t_vec4 view = normalize_vec4(ray->v);    // Ensure incoming vector is unit length
+
+	float n_dot_v = dot_vec4(normal, view);
+
+	t_vec4 scaled_normal = mult_vec4(normal, 2.0f * n_dot_v);
+	ray->d = normalize_vec4(sub_vec4(view, scaled_normal));  // reflected = view - 2*(n.v)*n
+
+
+	//t_vec4 normal = ray->n;
+	//const float	n_dot_d = dot_vec4(normal, ray->v);
+
+	//ray->d = mult_vec4(mult_vec4(normal, 2.0f), n_dot_d);
+	//ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
+
+
 	reflected_color = get_reflected_color(painter);
 	local_color = argb_mult(local_color, argb_ease(obj->reflect, 255));
 	reflected_color = argb_mult(reflected_color, obj->reflect);

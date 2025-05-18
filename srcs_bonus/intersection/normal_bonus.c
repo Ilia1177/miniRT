@@ -29,7 +29,13 @@ void	triangle_normal(t_ray *ray, t_object *tr)
 
 void	plane_normal(t_ray *ray, t_object *pl)
 {
-	ray->n = normalize_vec4(pl->t_m.k);
+
+	t_mat4 normal_matrix = mat_transpose(mat_inverse(pl->t_m));
+	t_vec4 n_world = mat_apply(normal_matrix, (t_vec4){0,0,1,0});
+	n_world = normalize_vec4(n_world);
+
+	ray->n = normalize_vec4(n_world);
+	//ray->n = normalize_vec4(pl->t_m.k);
 }
 
 void	sphere_normal(t_ray *ray, t_object *sp)
@@ -39,7 +45,9 @@ void	sphere_normal(t_ray *ray, t_object *sp)
 	const t_vec4	hp = mat_apply(inv, ray->o);
 	const t_vec4	normal = sub_vec4(hp, (t_vec4){0, 0, 0, 0});
 
+	//ray->n = normalize_vec4(mat_apply(sp->t_m, normal));
 	ray->n = normalize_vec4(mat_apply(normal_matrix, normal));
+	//ray->n = normalize_vec4(normal);
 }
 
 /*******************************************************************************
@@ -69,6 +77,7 @@ void	cylinder_normal(t_ray *ray, t_object *cy)
 		normal_obj = normalize_vec4(normal_obj);
 	}
 	ray->n = normalize_vec4(mat_apply(normal_matrix, normal_obj));
+	//ray->n = normalize_vec4(normal_obj);
 }
 
 // 1. Calculate hit point in world space

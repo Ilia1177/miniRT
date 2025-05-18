@@ -1,0 +1,18 @@
+C	0,0,-10 		0,0,1 		53
+#------- LIGHTS --------------------#
+L	0, 9, 0	0.8		255, 255, 255   
+L	0, 9, 0	0.8		255, 255, 255  -d 
+A			0.2		250, 250, 250    
+# opt:	-spc[int] -img[path] -map[path -opt[1/0] -ref[float[0;1], int,int,int]
+#hy	pos		axis	scale				height	color
+#cy	pos		axis				radius	height	color
+#sp	pos							raidus	height	color
+#pl	pos		axis								color
+#tr	pos1 pos2 pos3								color
+cy	-8,3,3	0,1,0				1		6		118,  91, 167	-opt
+cy	-4,3,3	0,1,0				1		6		118,  91, 167	-opt
+cy	0,3,3	0,1,0				1		6		118,  91, 167	-opt
+cy	4,3,3	0,1,0				1		6		118,  91, 167	-opt
+cy	8,3,3	0,1,0				1		6		118,  91, 167	-opt
+cy	12,3,3	0,1,0				1		6		118,  91, 167	-opt -ref 0.8 255,255,255 -spc 0
+cy	16,3,3	0,1,0				1		6		118,  91, 167
