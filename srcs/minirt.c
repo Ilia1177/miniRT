@@ -73,8 +73,8 @@ int	main(int ac, char **av)
 		status = build_scene(&scene);
 	if (!status)
 	{
-		display_scene(&scene);
 		print_input();
+		display_scene(&scene);
 	}
 	rt_shut_down(&scene);
 	return (status);

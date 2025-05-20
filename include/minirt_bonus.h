@@ -27,7 +27,7 @@
 # define T_MAX			1600
 # define HEIGHT			800
 # define WIDTH			800
-# define R_LIMIT 		3.0f // limit to recursion (reflect ray)
+# define R_LIMIT 		3.0f
 # define SPECULAR		500
 # define FLT_MAX 		3.40282347E+38F
 # define CBOARD_W		8
@@ -229,6 +229,7 @@ void		handle_light_move(t_data *scene);
 int			place_camera(char **line, t_data *scene);
 
 t_argb		mapping(t_ray *ray, t_object *obj);
+
 // ray && intersection.c
 t_argb		throw_ray(t_painter *painter);
 t_object	*closest_intersect(t_painter *painter, int shadow, t_object *obj);
