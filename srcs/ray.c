@@ -14,7 +14,7 @@
 
 static void	r_reflect(t_ray *ray)
 {
-	const float	n_dot_d = dot_vec4(ray->n, ray->v);
+	const float	n_dot_d = dot_vec3(ray->n, ray->v);
 
 	ray->d = mult_vec4(mult_vec4(ray->n, 2), n_dot_d);
 	ray->d = sub_vec4(ray->d, ray->v);
@@ -30,7 +30,7 @@ static void	r_update(t_ray *ray, t_object *obj)
 		sphere_normal(ray, obj);
 	else if (obj->type == PLANE)
 		plane_normal(ray, obj);
-	if (dot_vec4(ray->n, ray->v) < 0)
+	if (dot_vec3(ray->n, ray->v) < 0)
 		ray->n = mult_vec4(ray->n, -1);
 }
 

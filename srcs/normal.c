@@ -17,7 +17,7 @@ t_vec4	compute_normal(t_vec4 P, t_object *cylinder)
 	const t_vec4	center = sub_vec4(cylinder->pos,
 			mult_vec4(cylinder->axis, cylinder->height / 2.0f));
 	const t_vec4	x = sub_vec4(P, center);
-	const float		m = dot_vec4(x, cylinder->axis);
+	const float		m = dot_vec3(x, cylinder->axis);
 	const t_vec4	n = normalize_vec4(sub_vec4(x,
 				mult_vec4(cylinder->axis, m)));
 
@@ -26,7 +26,7 @@ t_vec4	compute_normal(t_vec4 P, t_object *cylinder)
 
 void	plane_normal(t_ray *ray, t_object *plane)
 {
-	if (dot_vec4(plane->axis, ray->d) > 0.0f)
+	if (dot_vec3(plane->axis, ray->d) > 0.0f)
 		ray->n = mult_vec4(plane->axis, -1.0f);
 	else
 		ray->n = plane->axis;
@@ -49,7 +49,7 @@ void	cylinder_normal(t_ray *ray, t_object *cylinder)
 	const float		half_height = cylinder->height / 2.0f;
 	const t_vec4	axis = normalize_vec4(cylinder->axis);
 	const t_vec4	pt_to_center = sub_vec4(ray->o, cylinder->pos);
-	const float		projection = dot_vec4(pt_to_center, axis);
+	const float		projection = dot_vec3(pt_to_center, axis);
 	const float		disk_margin = cylinder->radius * EPSILON;
 
 	if (fabsf(projection) >= half_height - disk_margin)

@@ -80,9 +80,9 @@ static int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 
 	oc = sub_vec4(ray->o, sphere->pos);
 	ft_bzero(&quad, sizeof(t_quad));
-	quad.a = dot_vec4(ray->d, ray->d);
-	quad.b = 2.0f * dot_vec4(oc, ray->d);
-	quad.c = dot_vec4(oc, oc) - sphere->radius * sphere->radius;
+	quad.a = dot_vec3(ray->d, ray->d);
+	quad.b = 2.0f * dot_vec3(oc, ray->d);
+	quad.c = dot_vec3(oc, oc) - sphere->radius * sphere->radius;
 	if (!solve_gen_quad(&quad))
 		return (0);
 	if (quad.t[0] > EPSILON && quad.t[0] < *t)
@@ -103,14 +103,14 @@ static int	intersect_sphere(t_ray *ray, t_object *sphere, float *t)
 // 2 
 static int	intersect_plane(t_ray *ray, t_object *plane, float *t)
 {
-	const float	denom = dot_vec4(plane->axis, ray->d);
+	const float	denom = dot_vec3(plane->axis, ray->d);
 	t_vec4		diff;
 	float		inter;
 
 	if (fabs(denom) < EPSILON)
 		return (0);
 	diff = sub_vec4(plane->pos, ray->o);
-	inter = dot_vec4(diff, plane->axis) / denom;
+	inter = dot_vec3(diff, plane->axis) / denom;
 	if (inter > EPSILON)
 	{
 		*t = inter;

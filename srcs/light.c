@@ -35,7 +35,7 @@ static t_argb	diffuse_reflect(t_ray *ray, t_argb lumen, float n_dot_l)
 // n_dot_v > 0 --> camera is against the normal (~ outside of the shape)
 static t_argb	reflections(t_ray *ray, t_argb lumen)
 {
-	const float		n_dot_l = dot_vec4(ray->n, ray->d);
+	const float		n_dot_l = dot_vec3(ray->n, ray->d);
 	t_argb			diffuse;
 	t_argb			specular;
 

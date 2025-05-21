@@ -15,7 +15,7 @@
 static void	ray_reflect(t_ray *ray)
 {
 	const t_vec4	normal = normalize_vec4(ray->n);
-	const float		n_dot_d = dot_vec4(normal, ray->v);
+	const float		n_dot_d = dot_vec3(normal, ray->v);
 
 	ray->d = mult_vec4(mult_vec4(normal, 2.0f), n_dot_d);
 	ray->d = normalize_vec4(sub_vec4(ray->d, ray->v));
@@ -57,7 +57,7 @@ static void	ray_hitpoint(t_painter *painter, t_object *obj)
 		triangle_normal(ray, obj);
 	else
 		hyperboloid_normal(ray, obj);
-	if (dot_vec4(ray->n, ray->v) < EPSILON)
+	if (dot_vec3(ray->n, ray->v) < EPSILON)
 		ray->n = mult_vec4(ray->n, -1);
 	if (obj->normal_map)
 		normal_map(ray, obj);
